@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inscrição - Mindset Elite</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+font-family:'Montserrat',sans-serif;
+background:#000;
+color:#fff;
+}
+
+/* PARTICLES */
+#particles-js{
+position:fixed;
+width:100%;
+height:100%;
+z-index:-1;
+top:0;
+left:0;
+}
+
+/* MENU */
+nav{
+position:fixed;
+top:0;
+width:100%;
+display:flex;
+justify-content:center;
+gap:30px;
+padding:18px 0;
+background:rgba(0,0,0,0.75);
+backdrop-filter:blur(14px);
+border-bottom:2px solid #0099FF;
+z-index:1000;
+}
+
+nav a{
+color:#fff;
+text-decoration:none;
+font-weight:600;
+padding:8px 15px;
+border-radius:20px;
+transition:0.3s;
+}
+
+nav a:hover{
+background:#0099FF;
+color:#000;
+}
+
+/* CONTAINER */
+.container{
+max-width:520px;
+margin:auto;
+padding-top:140px;
+padding-bottom:80px;
+padding-left:20px;
+padding-right:20px;
+}
+
+h2{
+margin-bottom:20px;
+border-left:5px solid #0099FF;
+padding-left:10px;
+}
+
+.vagas{
+margin-bottom:25px;
+font-weight:bold;
+color:#00BFFF;
+font-size:18px;
+}
+
+/* CARD */
+.form-card{
+background:rgba(0,0,0,0.55);
+padding:40px;
+border-radius:25px;
+border:2px solid #0099FF;
+box-shadow:0 0 30px rgba(0,153,255,0.25);
+backdrop-filter:blur(14px);
+}
+
+input{
+width:100%;
+padding:15px;
+margin-bottom:20px;
+border-radius:15px;
+border:1px solid #0099FF;
+background:rgba(0,153,255,0.06);
+color:#fff;
+font-size:15px;
+outline:none;
+}
+
+input:focus{
+box-shadow:0 0 18px rgba(0,153,255,0.35);
+}
+
+button{
+width:100%;
+padding:15px;
+border-radius:25px;
+border:none;
+background:linear-gradient(90deg,#0099FF,#00BFFF);
+color:#fff;
+font-weight:bold;
+font-size:16px;
+cursor:pointer;
+transition:0.25s;
+position:relative;
+box-shadow:0 0 18px rgba(0,153,255,0.35);
+}
+
+button:hover{transform:scale(1.03)}
+button:disabled{background:#333;cursor:not-allowed;box-shadow:none}
+
+/* LOADER */
+.loading{
+display:none;
+position:absolute;
+right:20px;
+top:50%;
+transform:translateY(-50%);
+width:18px;
+height:18px;
+border:3px solid #fff;
+border-top:3px solid transparent;
+border-radius:50%;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+0%{transform:translateY(-50%) rotate(0deg);}
+100%{transform:translateY(-50%) rotate(360deg);}
+}
+
+#formMsg{
+margin-top:15px;
+font-weight:600;
+}
+</style>
+</head>
+
+<body>
+
+<div id="particles-js"></div>
+
+<nav>
+  <a href="index.html">Início</a>
+  <a href="membros.html">Membros</a>
+  <a href="participantes.html">Participantes</a>
+  <a href="links.html">Links Oficiais</a>
+  <a href="formulario.html">Formulário</a>
+</nav>
+
+<div class="container">
+  <h2>Inscrição Oficial</h2>
+
+  <div class="vagas" id="vagasInfo">Carregando vagas...</div>
+
+  <div class="form-card">
+    <form id="signupForm">
+      <input type="text" id="telegram" placeholder="@ Seu Telegram" required>
+      <input type="text" id="nome" placeholder="Seu Nome" required>
+      <input type="number" id="idade" placeholder="Sua Idade" required>
+
+      <button type="submit">
+        Enviar Inscrição
+        <div class="loading" id="loading"></div>
+      </button>
+
+      <p id="formMsg"></p>
+
+      <p style="font-size:12px;margin-top:15px;color:#aaa;">
+        Ao enviar seus dados, você concorda que o proprietário poderá entrar em contato.
+      </p>
+    </form>
+  </div>
+</div>
+
+<script>
+/* PARTICLES (igual seu fundo) */
+particlesJS("particles-js",{
+  particles:{
+    number:{ value:80, density:{ enable:true, value_area:900 } },
+    color:{ value:"#0099FF" },
+    shape:{ type:"circle" },
+    opacity:{ value:0.55, random:true },
+    size:{ value:3, random:true },
+    line_linked:{ enable:true, distance:150, color:"#0099FF", opacity:0.35, width:1 },
+    move:{ enable:true, speed:1.2, direction:"none", out_mode:"out" }
+  },
+  interactivity:{
+    detect_on:"canvas",
+    events:{
+      onhover:{ enable:true, mode:"grab" },
+      onclick:{ enable:true, mode:"push" },
+      resize:true
+    },
+    modes:{
+      grab:{ distance:170, line_linked:{ opacity:0.55 } },
+      push:{ particles_nb:2 }
+    }
+  },
+  retina_detect:true
+});
+</script>
+
+<script>
+const form = document.getElementById("signupForm");
+const msg = document.getElementById("formMsg");
+const loading = document.getElementById("loading");
+const vagasInfo = document.getElementById("vagasInfo");
+const button = form.querySelector("button");
+
+/* CARREGAR VAGAS */
+async function carregarVagas(){
+  try{
+    const res = await fetch("/vagas");
+    const data = await res.json();
+
+    vagasInfo.innerText = "Vagas restantes: " + data.vagas;
+
+    if(data.vagas <= 0){
+      button.disabled = true;
+      button.childNodes[0].textContent = "Vagas Encerradas";
+    }
+  }catch{
+    vagasInfo.innerText = "Erro ao carregar vagas";
+  }
+}
+carregarVagas();
+
+/* ENVIO */
+form.addEventListener("submit", async (e)=>{
+  e.preventDefault();
+
+  const telegram = document.getElementById("telegram").value.trim();
+  const nome = document.getElementById("nome").value.trim();
+  const idade = parseInt(document.getElementById("idade").value, 10);
+
+  msg.style.color = "#FF4C4C";
+  msg.innerText = "";
+
+  if(!telegram.startsWith("@")){
+    msg.innerText = "Telegram deve começar com @";
+    return;
+  }
+  if(isNaN(idade) || idade < 16){
+    msg.innerText = "Idade mínima é 16 anos.";
+    return;
+  }
+
+  loading.style.display = "block";
+  button.disabled = true;
+
+  try{
+    const response = await fetch("/inscrever", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nome, idade, telegram })
+    });
+
+    const data = await response.json();
+
+    if(!response.ok){
+      msg.innerText = data.erro || "Erro ao enviar.";
+      loading.style.display = "none";
+      button.disabled = false;
+      return;
+    }
+
+    msg.style.color = "#00FFAA";
+    msg.innerText = "Inscrição confirmada!";
+    await carregarVagas();
+
+    setTimeout(()=> window.location.href = "index.html", 1500);
+  }catch(err){
+    msg.innerText = "Erro ao enviar.";
+    loading.style.display = "none";
+    button.disabled = false;
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Membros - Mindset Elite</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+font-family:'Montserrat',sans-serif;
+background:#000;
+color:#fff;
+}
+
+/* PARTICLES FUNDO */
+#particles-js{
+position:fixed;
+width:100%;
+height:100%;
+top:0;
+left:0;
+z-index:-1;
+}
+
+/* MENU */
+nav{
+position:fixed;
+top:0;
+width:100%;
+display:flex;
+justify-content:center;
+gap:30px;
+padding:18px 0;
+background:#000;
+border-bottom:2px solid #0099FF;
+z-index:1000;
+}
+
+nav a{
+color:#fff;
+text-decoration:none;
+font-weight:600;
+padding:8px 15px;
+border-radius:20px;
+transition:0.3s;
+}
+
+nav a:hover{
+background:#0099FF;
+color:#000;
+}
+
+/* CONTAINER */
+.container{
+max-width:1200px;
+margin:auto;
+padding-top:140px;
+padding-bottom:80px;
+padding-left:20px;
+padding-right:20px;
+}
+
+h2{
+margin-bottom:50px;
+border-left:5px solid #0099FF;
+padding-left:10px;
+}
+
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:50px;
+justify-items:center;
+}
+
+/* CARD */
+.member-card{
+text-align:center;
+transition:0.4s ease;
+cursor:pointer;
+}
+
+.member-card img{
+width:120px;
+height:120px;
+border-radius:50%;
+object-fit:cover;
+border:3px solid #0099FF;
+transition:0.4s ease;
+}
+
+.member-card:hover img{
+transform:scale(1.15);
+box-shadow:0 0 25px #0099FF;
+}
+
+.member-card h3{
+margin-top:15px;
+margin-bottom:5px;
+}
+
+.member-card p{
+opacity:0.7;
+}
+</style>
+</head>
+
+<body>
+
+<div id="particles-js"></div>
+
+<nav>
+<a href="index.html">Início</a>
+<a href="membros.html">Membros</a>
+<a href="participantes.html">Participantes</a>
+<a href="links.html">Links Oficiais</a>
+<a href="formulario.html">Formulário</a>
+</nav>
+
+<div class="container">
+<h2>Membros do Mindset</h2>
+
+<div class="grid">
+
+<div class="member-card">
+<img src="images/luqueta.jpg">
+<h3>Luqueta</h3>
+<p>Ancião</p>
+</div>
+
+<div class="member-card">
+<img src="images/tuzin.jpg">
+<h3>Tuzin</h3>
+<p>Líder</p>
+</div>
+
+<div class="member-card">
+<img src="images/misterio.jpg">
+<h3>Mistério</h3>
+<p>Membro</p>
+</div>
+
+<div class="member-card">
+<img src="images/vini.jpg">
+<h3>Vini</h3>
+<p>Membro</p>
+</div>
+
+<div class="member-card">
+<img src="images/leandro.jpg">
+<h3>Leandro</h3>
+<p>Membro</p>
+</div>
+
+<div class="member-card">
+<img src="images/daniel.jpg">
+<h3>Daniel Nascimento</h3>
+<p>Membro</p>
+</div>
+
+<div class="member-card">
+<img src="images/pandinha.jpg">
+<h3>Pandinha</h3>
+<p>Membro</p>
+</div>
+
+<div class="member-card">
+<img src="images/thzin.jpg">
+<h3>THZIN</h3>
+<p>Possível Novo Membro</p>
+</div>
+
+</div>
+</div>
+
+<script>
+particlesJS("particles-js",{
+particles:{
+number:{value:120},
+color:{value:"#0099FF"},
+shape:{type:"circle"},
+opacity:{value:0.6},
+size:{value:3},
+line_linked:{
+enable:true,
+distance:150,
+color:"#0099FF",
+opacity:0.4,
+width:1
+},
+move:{
+enable:true,
+speed:1
+}
+}
+});
+</script>
+
+</body>
+</html>

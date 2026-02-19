@@ -1,0 +1,18 @@
+{
+  "name": "mindset-elite",
+  "version": "1.0.0",
+  "description": "Backend Mindset Elite",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "-": "^0.0.1",
+    "cors": "^2.8.6",
+    "express": "^4.22.1",
+    "fetch": "^1.1.0",
+    "node": "^25.6.1",
+    "node-fetch": "^3.3.2"
+  }
+}

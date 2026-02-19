@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Participantes - Mindset Elite</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+font-family:'Montserrat',sans-serif;
+background:#000;
+color:#fff;
+}
+
+/* PARTICLES */
+#particles-js{
+position:fixed;
+width:100%;
+height:100%;
+z-index:-1;
+}
+
+/* MENU */
+nav{
+position:fixed;
+top:0;
+width:100%;
+display:flex;
+justify-content:center;
+gap:30px;
+padding:18px 0;
+background:#000;
+border-bottom:2px solid #0099FF;
+z-index:1000;
+}
+
+nav a{
+color:#fff;
+text-decoration:none;
+font-weight:600;
+padding:8px 15px;
+border-radius:20px;
+transition:0.3s;
+}
+
+nav a:hover{
+background:#0099FF;
+color:#000;
+}
+
+/* CONTAINER */
+.container{
+max-width:900px;
+margin:auto;
+padding-top:140px;
+padding-bottom:80px;
+padding-left:20px;
+padding-right:20px;
+}
+
+h2{
+margin-bottom:40px;
+border-left:5px solid #0099FF;
+padding-left:10px;
+}
+
+.card{
+background:#000;
+padding:40px;
+border-radius:25px;
+border:2px solid #0099FF;
+box-shadow:0 0 30px rgba(0,153,255,0.3);
+line-height:2;
+font-size:18px;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+margin-bottom:10px;
+}
+
+.confirmado{color:#00FFAA;}
+.indefinido{color:#00BFFF;}
+.nao{color:#FF4C4C;}
+
+.vagas{
+margin-top:30px;
+text-align:center;
+font-size:20px;
+font-weight:bold;
+color:#0099FF;
+}
+</style>
+</head>
+
+<body>
+
+<div id="particles-js"></div>
+
+<nav>
+<a href="index.html">Início</a>
+<a href="membros.html">Membros</a>
+<a href="participantes.html">Participantes</a>
+<a href="links.html">Links Oficiais</a>
+<a href="formulario.html">Formulário</a>
+</nav>
+
+<div class="container">
+<h2>Participantes Mindset 2029</h2>
+
+<div class="card">
+
+<div class="row"><span>Tuzin</span> <span class="confirmado">✅ Confirmado</span></div>
+<div class="row"><span>Luqueta</span> <span class="confirmado">✅ Confirmado</span></div>
+<div class="row"><span>Vini</span> <span class="confirmado">✅ Confirmado</span></div>
+<div class="row"><span>Thzin</span> <span class="indefinido">❓ Indefinido</span></div>
+<div class="row"><span>Leandro</span> <span class="confirmado">✅ Confirmado</span></div>
+<div class="row"><span>Elizeu</span> <span class="nao">❌ Não Participa</span></div>
+<div class="row"><span>Mistério</span> <span class="confirmado">✅ Confirmado</span></div>
+<div class="row"><span>Pandinha</span> <span class="confirmado">✅ Confirmado</span></div>
+<div class="row"><span>Daniel Nascimento</span> <span class="confirmado">✅ Confirmado</span></div>
+
+<div class="vagas">Vagas disponíveis: 1</div>
+
+</div>
+</div>
+
+<script>
+particlesJS("particles-js",{
+particles:{
+number:{value:120},
+color:{value:"#0099FF"},
+shape:{type:"circle"},
+opacity:{value:0.6},
+size:{value:3},
+line_linked:{enable:true,color:"#0099FF",opacity:0.4},
+move:{enable:true,speed:1}
+}
+});
+</script>
+
+</body>
+</html>

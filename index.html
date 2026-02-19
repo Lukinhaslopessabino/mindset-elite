@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindset Elite</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+<style>
+:root{
+--azul:#0099FF;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+font-family:'Montserrat',sans-serif;
+background:#000;
+color:#fff;
+}
+
+/* MENU */
+nav{
+position:fixed;
+top:0;
+width:100%;
+display:flex;
+justify-content:center;
+gap:30px;
+padding:18px 0;
+background:#000;
+border-bottom:2px solid var(--azul);
+z-index:1000;
+}
+
+nav a{
+color:#fff;
+text-decoration:none;
+font-weight:600;
+padding:8px 15px;
+border-radius:20px;
+transition:0.3s;
+}
+
+nav a:hover{
+background:var(--azul);
+color:#000;
+}
+
+/* HERO */
+.hero{
+padding:160px 20px 100px;
+text-align:center;
+}
+
+.hero h1{
+font-size:4rem;
+background:linear-gradient(90deg,var(--azul),#fff,var(--azul));
+background-size:200%;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+animation:move 6s linear infinite;
+}
+
+@keyframes move{
+0%{background-position:0%}
+100%{background-position:200%}
+}
+
+.countdown{
+display:flex;
+justify-content:center;
+gap:25px;
+margin-top:40px;
+flex-wrap:wrap;
+}
+
+.count-box{
+background:rgba(255,255,255,0.08);
+padding:20px;
+border-radius:20px;
+border:1px solid var(--azul);
+min-width:100px;
+}
+
+/* SECTION */
+section{
+padding:80px 12%;
+}
+
+h2{
+border-left:5px solid var(--azul);
+padding-left:10px;
+margin-bottom:30px;
+}
+
+.box{
+background:#000;
+padding:40px;
+border-radius:25px;
+border:2px solid var(--azul);
+box-shadow:0 0 30px rgba(0,153,255,0.3);
+text-align:center;
+max-width:800px;
+margin:auto;
+}
+
+/* IMAGEM */
+.box img{
+width:100%;
+max-width:500px;
+border-radius:20px;
+border:2px solid var(--azul);
+box-shadow:0 0 25px rgba(0,153,255,0.4);
+transition:0.4s;
+}
+
+.box img:hover{
+transform:scale(1.03);
+}
+
+/* VIDEO */
+.video-container{
+max-width:900px;
+margin:40px auto;
+border-radius:25px;
+overflow:hidden;
+border:2px solid var(--azul);
+box-shadow:0 0 35px rgba(0,153,255,0.4);
+}
+
+video{
+width:100%;
+display:block;
+}
+
+footer{
+text-align:center;
+padding:60px;
+opacity:.6;
+}
+
+#particles-js{
+position:fixed;
+width:100%;
+height:100%;
+z-index:-1;
+}
+</style>
+</head>
+
+<body>
+
+<div id="particles-js"></div>
+
+<nav>
+<a href="index.html">Início</a>
+<a href="membros.html">Membros</a>
+<a href="participantes.html">Participantes</a>
+<a href="links.html">Links Oficiais</a>
+<a href="formulario.html">Formulário</a>
+</nav>
+
+<div class="hero">
+<h1>Mindset Elite</h1>
+<p>Última atualização do site: 14/02/2026</p>
+
+<div class="countdown">
+<div class="count-box"><div id="days">0</div>Dias</div>
+<div class="count-box"><div id="hours">0</div>Horas</div>
+<div class="count-box"><div id="minutes">0</div>Min</div>
+<div class="count-box"><div id="seconds">0</div>Seg</div>
+</div>
+</div>
+
+<section>
+<h2>Valor Médio Estimado</h2>
+
+<div class="box">
+<p style="font-size:20px;margin-bottom:10px;">
+Valor médio estimado que vamos ter ao encerrar o Mindset
+</p>
+
+<p style="font-size:18px;color:#00BFFF;margin-bottom:30px;">
+Atualizado em: <strong>07/02/2026</strong>
+</p>
+
+<img src="images/valor-estimado.jpg" alt="Valor Estimado">
+</div>
+</section>
+
+<section>
+<h2>Tá tudo no Mindset é só querer</h2>
+
+<div class="video-container">
+<video controls>
+<source src="videos/mindset.mp4" type="video/mp4">
+Seu navegador não suporta vídeo.
+</video>
+</div>
+</section>
+
+<footer>
+Mindset Elite © 2026
+</footer>
+
+<script>
+/* CONTADOR */
+const target=new Date("January 29, 2029 00:00:00").getTime();
+setInterval(()=>{
+const now=new Date().getTime();
+const distance=target-now;
+document.getElementById("days").innerText=Math.floor(distance/(1000*60*60*24));
+document.getElementById("hours").innerText=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+document.getElementById("minutes").innerText=Math.floor((distance%(1000*60*60))/(1000*60));
+document.getElementById("seconds").innerText=Math.floor((distance%(1000*60))/1000);
+},1000);
+
+/* PARTICLES */
+particlesJS("particles-js",{
+particles:{
+number:{value:120},
+color:{value:"#0099FF"},
+shape:{type:"circle"},
+opacity:{value:0.6},
+size:{value:3},
+line_linked:{enable:true,color:"#0099FF",opacity:0.4},
+move:{enable:true,speed:1}
+}
+});
+</script>
+
+</body>
+</html>
