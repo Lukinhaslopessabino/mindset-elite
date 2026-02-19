@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("./"));
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // 🔐 COLOQUE SEU TOKEN (sem "bot")
 const TELEGRAM_TOKEN = "8575303881:AAG8eV7o6lZIRghNYWBF4BUQ4QiNwq8lKgw";
