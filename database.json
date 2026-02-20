@@ -3,63 +3,53 @@
   "inscritos": [
     {
       "nome": "Luqueta",
-      "idade": 22,
+      "idade": 25,
       "telegram": "@luqueta",
       "foto": "Luqueta.jpg"
     },
     {
       "nome": "Tuzin",
-      "idade": 21,
+      "idade": 16,
       "telegram": "@tuzin",
       "foto": "Tuzin.jpg"
-    }
- {
-      "nome": "Daniel",
-      "idade": 30,
-      "telegram": "@Daniel",
-      "foto": "Daniel.jpg"
-    }
-
-     {
-      "nome": "Pandinha",
-      "idade": 21,
-      "telegram": "@Pandinha",
-      "foto": "Pandinha.jpg"
-    }
-
-
-     {
+    },
+    {
       "nome": "Arthur",
       "idade": 18,
       "telegram": "@arthur",
       "foto": "THZIN.jpg"
-    }
-
-
-     {
+    },
+    {
+      "nome": "Daniel",
+      "idade": 18,
+      "telegram": "@daniel",
+      "foto": "Daniel.jpg"
+    },
+    {
+      "nome": "Pandinha",
+      "idade": 18,
+      "telegram": "@pandinha",
+      "foto": "Pandinha.jpg"
+    },
+    {
       "nome": "Vini",
-      "idade": 21,
-      "telegram": "@Vini",
+      "idade": 18,
+      "telegram": "@vini",
       "foto": "Vini.jpg"
-    }
-
-     {
+    },
+    {
       "nome": "Leandro",
-      "idade": 21,
-      "telegram": "@Leandro",
+      "idade": 18,
+      "telegram": "@leandro",
       "foto": "leandro.jpg"
-    }
-
-
-     {
-      "nome": "Misterio",
-      "idade": 21,
+    },
+    {
+      "nome": "Mistério",
+      "idade": 18,
       "telegram": "@misterio",
       "foto": "misterio.jpg"
     }
-
   ],
-
-  
-  "ipsBloqueados": []
+  "ipsBloqueados": [],
+  "tentativas": {}
 }
