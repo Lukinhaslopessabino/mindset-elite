@@ -5,18 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Participantes - Mindset Elite</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+
 body{
-font-family:'Montserrat',sans-serif;
-background:#000;
+font-family:'Orbitron',sans-serif;
+background:linear-gradient(135deg,#000,#0a0f1c);
 color:#fff;
+overflow-x:hidden;
+min-height:100vh;
 }
 
-/* PARTICLES */
+/* ================= FUNDO ================= */
+
 #particles-js{
 position:fixed;
 width:100%;
@@ -24,77 +29,130 @@ height:100%;
 z-index:-1;
 }
 
-/* MENU */
+/* ================= MENU ================= */
+
 nav{
 position:fixed;
 top:0;
 width:100%;
 display:flex;
 justify-content:center;
-gap:30px;
-padding:18px 0;
-background:#000;
-border-bottom:2px solid #0099FF;
+gap:20px;
+padding:15px;
+background:rgba(0,0,0,0.85);
+backdrop-filter:blur(15px);
+border-bottom:1px solid rgba(0,153,255,0.4);
 z-index:1000;
+flex-wrap:wrap;
 }
 
 nav a{
 color:#fff;
 text-decoration:none;
 font-weight:600;
-padding:8px 15px;
-border-radius:20px;
+padding:8px 14px;
+border-radius:25px;
 transition:0.3s;
+font-size:14px;
 }
 
 nav a:hover{
-background:#0099FF;
+background:#00F5FF;
 color:#000;
+box-shadow:0 0 15px #00F5FF;
 }
 
-/* CONTAINER */
+/* ================= CONTAINER ================= */
+
 .container{
 max-width:900px;
 margin:auto;
-padding-top:140px;
-padding-bottom:80px;
-padding-left:20px;
-padding-right:20px;
+padding:130px 20px 80px 20px;
 }
 
 h2{
 margin-bottom:40px;
-border-left:5px solid #0099FF;
-padding-left:10px;
+border-left:5px solid #00F5FF;
+padding-left:15px;
+font-size:26px;
 }
 
+/* ================= CARD ================= */
+
 .card{
-background:#000;
+background:rgba(15,20,35,0.95);
 padding:40px;
 border-radius:25px;
-border:2px solid #0099FF;
-box-shadow:0 0 30px rgba(0,153,255,0.3);
+border:1px solid rgba(0,153,255,0.4);
+box-shadow:0 0 40px rgba(0,153,255,0.3);
 line-height:2;
-font-size:18px;
+font-size:16px;
+animation:fadeUp 1s ease;
+}
+
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(40px)}
+to{opacity:1;transform:translateY(0)}
 }
 
 .row{
 display:flex;
 justify-content:space-between;
-margin-bottom:10px;
+align-items:center;
+margin-bottom:12px;
+padding-bottom:8px;
+border-bottom:1px solid rgba(255,255,255,0.05);
 }
 
-.confirmado{color:#00FFAA;}
-.indefinido{color:#00BFFF;}
-.nao{color:#FF4C4C;}
+/* STATUS */
+
+.confirmado{
+color:#00FFAA;
+text-shadow:0 0 8px #00FFAA;
+}
+
+.indefinido{
+color:#00F5FF;
+text-shadow:0 0 8px #00F5FF;
+}
+
+.nao{
+color:#FF4C4C;
+text-shadow:0 0 8px #FF4C4C;
+}
+
+/* ================= VAGAS ================= */
 
 .vagas{
-margin-top:30px;
+margin-top:35px;
 text-align:center;
-font-size:20px;
+font-size:18px;
 font-weight:bold;
-color:#0099FF;
+color:#00F5FF;
+text-shadow:0 0 10px #00F5FF;
 }
+
+/* ================= MOBILE ================= */
+
+@media (max-width:600px){
+
+h2{
+font-size:20px;
+}
+
+.card{
+padding:25px;
+font-size:14px;
+}
+
+.row{
+flex-direction:column;
+align-items:flex-start;
+gap:4px;
+}
+
+}
+
 </style>
 </head>
 
@@ -118,30 +176,48 @@ color:#0099FF;
 <div class="row"><span>Tuzin</span> <span class="confirmado">✅ Confirmado</span></div>
 <div class="row"><span>Luqueta</span> <span class="confirmado">✅ Confirmado</span></div>
 <div class="row"><span>Vini</span> <span class="confirmado">✅ Confirmado</span></div>
-<div class="row"><span>Thzin</span> <span class="indefinido">❓ Indefinido</span></div>
+<div class="row"><span>THZIN</span> <span class="indefinido">❓ Indefinido</span></div>
 <div class="row"><span>Leandro</span> <span class="confirmado">✅ Confirmado</span></div>
 <div class="row"><span>Elizeu</span> <span class="nao">❌ Não Participa</span></div>
 <div class="row"><span>Mistério</span> <span class="confirmado">✅ Confirmado</span></div>
 <div class="row"><span>Pandinha</span> <span class="confirmado">✅ Confirmado</span></div>
 <div class="row"><span>Daniel Nascimento</span> <span class="confirmado">✅ Confirmado</span></div>
 
-<div class="vagas">Vagas disponíveis: 1</div>
+<div class="vagas" id="vagasInfo">Carregando vagas...</div>
 
 </div>
 </div>
 
 <script>
+
+/* ================= PARTÍCULAS OTIMIZADAS ================= */
+
+if(window.innerWidth > 600){
 particlesJS("particles-js",{
 particles:{
-number:{value:120},
-color:{value:"#0099FF"},
-shape:{type:"circle"},
-opacity:{value:0.6},
-size:{value:3},
-line_linked:{enable:true,color:"#0099FF",opacity:0.4},
-move:{enable:true,speed:1}
+number:{value:40},
+color:{value:"#00F5FF"},
+line_linked:{enable:true,color:"#00F5FF"},
+move:{speed:0.8}
 }
 });
+}
+
+/* ================= VAGAS DINÂMICAS ================= */
+
+async function carregarVagas(){
+try{
+const res = await fetch("/vagas");
+const data = await res.json();
+document.getElementById("vagasInfo").innerText =
+"Vagas disponíveis: " + data.vagas;
+}catch{
+document.getElementById("vagasInfo").innerText =
+"Não foi possível carregar vagas.";
+}
+}
+carregarVagas();
+
 </script>
 
 </body>
