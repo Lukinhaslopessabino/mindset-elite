@@ -92,9 +92,13 @@ app.post("/admin/inscritos", (req, res) => {
   res.json({ inscritos: banco.inscritos });
 });
 
+app.get("/admin-dashboard", (req, res) => {
+  res.sendFile(process.cwd() + "/admin.html");
+}
 app.listen(PORT, () => {
   console.log("Servidor rodando");
 });
+
 
 
 
