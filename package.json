@@ -1,55 +1,14 @@
 {
-  "vagas": 1,
-  "inscritos": [
-    {
-      "nome": "Luqueta",
-      "idade": 25,
-      "telegram": "@luqueta",
-      "foto": "Luqueta.jpg"
-    },
-    {
-      "nome": "Tuzin",
-      "idade": 16,
-      "telegram": "@tuzin",
-      "foto": "Tuzin.jpg"
-    },
-    {
-      "nome": "Arthur",
-      "idade": 18,
-      "telegram": "@arthur",
-      "foto": "THZIN.jpg"
-    },
-    {
-      "nome": "Daniel",
-      "idade": 18,
-      "telegram": "@daniel",
-      "foto": "Daniel.jpg"
-    },
-    {
-      "nome": "Pandinha",
-      "idade": 18,
-      "telegram": "@pandinha",
-      "foto": "Pandinha.jpg"
-    },
-    {
-      "nome": "Vini",
-      "idade": 18,
-      "telegram": "@vini",
-      "foto": "Vini.jpg"
-    },
-    {
-      "nome": "Leandro",
-      "idade": 18,
-      "telegram": "@leandro",
-      "foto": "leandro.jpg"
-    },
-    {
-      "nome": "Mistério",
-      "idade": 18,
-      "telegram": "@misterio",
-      "foto": "misterio.jpg"
-    }
-  ],
-  "ipsBloqueados": [],
-  "tentativas": {}
+  "name": "mindset-elite",
+  "version": "1.0.0",
+  "description": "Backend Mindset Elite",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
 }
