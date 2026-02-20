@@ -5,83 +5,51 @@
       "nome": "Luqueta",
       "idade": 25,
       "telegram": "@luqueta",
-      "foto": "Luqueta.jpg",
-      "data": "2026-02-20T00:00:00.000Z"
+      "foto": "Luqueta.jpg"
     },
     {
       "nome": "Tuzin",
-      "idade": 15,
+      "idade": 16,
       "telegram": "@tuzin",
-      "foto": "Tuzin.jpg",
-      "data": "2026-02-20T00:00:00.000Z"
+      "foto": "Tuzin.jpg"
     },
     {
       "nome": "Arthur",
-      "idade": 0,
+      "idade": 18,
       "telegram": "@arthur",
-      "foto": "THZIN.jpg",
-      "data": "2026-02-20T00:00:00.000Z"
+      "foto": "THZIN.jpg"
     },
     {
       "nome": "Daniel",
-      "idade": 0,
+      "idade": 18,
       "telegram": "@daniel",
-      "foto": "Daniel.jpg",
-      "data": "2026-02-20T00:00:00.000Z"
+      "foto": "Daniel.jpg"
     },
     {
       "nome": "Pandinha",
-      "idade": 0,
+      "idade": 18,
       "telegram": "@pandinha",
-      "foto": "Pandinha.jpg",
-      "data": "2026-02-20T00:00:00.000Z"
+      "foto": "Pandinha.jpg"
     },
     {
       "nome": "Vini",
-      "idade": 0,
+      "idade": 18,
       "telegram": "@vini",
-      "foto": "Vini.jpg",
-      "data": "2026-02-20T00:00:00.000Z"
+      "foto": "Vini.jpg"
     },
     {
       "nome": "Leandro",
-      "idade": 0,
+      "idade": 18,
       "telegram": "@leandro",
-      "foto": "leandro.jpg",
-      "data": "2026-02-20T00:00:00.000Z"
+      "foto": "leandro.jpg"
     },
     {
       "nome": "Mistério",
-      "idade": 0,
+      "idade": 18,
       "telegram": "@misterio",
-      "foto": "misterio.jpg",
-      "data": "2026-02-20T00:00:00.000Z"
+      "foto": "misterio.jpg"
     }
   ],
   "ipsBloqueados": [],
   "tentativas": {}
 }
-{
-  "vagas": 1,
-  "inscritos": [
-    {
-      "nome": "Luqueta",
-      "idade": 22,
-      "telegram": "@luqueta",
-      "foto": "Luqueta.jpg",
-      "ip": null,
-      "data": "2026-02-20T00:00:00.000Z"
-    },
-    {
-      "nome": "Tuzin",
-      "idade": 21,
-      "telegram": "@tuzin",
-      "foto": "Tuzin.jpg",
-      "ip": null,
-      "data": "2026-02-20T00:00:00.000Z"
-    }
-  ],
-  "ipsBloqueados": [],
-  "tentativas": {}
-}
-
