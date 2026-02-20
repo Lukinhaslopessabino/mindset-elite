@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(express.static("./"));
 
 const PORT = 3000;
-const ADMIN_PASSWORD = "iu;d@@.&$+0df_a)++k8"; // 🔐 MUDE ISSO
+const ADMIN_PASSWORD = "4741084158774910"; // 🔐 MUDE ISSO
 
 function lerBanco() {
   return JSON.parse(fs.readFileSync("./database.json"));
@@ -95,6 +95,7 @@ app.post("/admin/inscritos", (req, res) => {
 app.listen(PORT, () => {
   console.log("Servidor rodando");
 });
+
 
 
 
