@@ -1,66 +1,120 @@
-import express from "express";
+mport express from "express";
 import fs from "fs";
 import cors from "cors";
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 app.use(express.static("./"));
 
-const PORT = 3000;
-const ADMIN_PASSWORD = "4741084158774910"; // 🔐 MUDE ISSO
+const PORT = process.env.PORT || 3000;
+const ADMIN_PASSWORD = "93724432134183714282"; // 🔐 MUDE ISSO
+
+/* ===================================== */
+/* ========= BANCO SEGURO ============== */
+/* ===================================== */
 
 function lerBanco() {
-  return JSON.parse(fs.readFileSync("./database.json"));
+  if (!fs.existsSync("./database.json")) {
+    fs.writeFileSync("./database.json", JSON.stringify({
+      vagas: 1,
+      inscritos: []
+    }, null, 2));
+  }
+
+  const dados = fs.readFileSync("./database.json");
+  return JSON.parse(dados);
 }
 
 function salvarBanco(dados) {
   fs.writeFileSync("./database.json", JSON.stringify(dados, null, 2));
 }
 
-/* ============================= */
-/* ====== ROTAS PUBLICAS ======= */
-/* ============================= */
+/* ===================================== */
+/* ============ IP REAL ================= */
+/* ===================================== */
+
+function pegarIP(req) {
+  return (
+    req.headers["x-forwarded-for"]?.split(",")[0] ||
+    req.socket.remoteAddress ||
+    "IP_DESCONHECIDO"
+  );
+}
+
+/* ===================================== */
+/* ============ ROTAS PUBLICAS ========= */
+/* ===================================== */
 
 app.get("/vagas", (req, res) => {
-  const banco = lerBanco();
-  res.json({ vagas: banco.vagas });
+  try {
+    const banco = lerBanco();
+    res.json({ vagas: banco.vagas });
+  } catch (err) {
+    res.status(500).json({ erro: "Erro interno ao carregar vagas." });
+  }
 });
 
 app.post("/inscrever", (req, res) => {
-  const { nome, idade, telegram } = req.body;
-  const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+  try {
+    const { nome, idade, telegram } = req.body;
+    const ip = pegarIP(req);
+    const banco = lerBanco();
 
-  const banco = lerBanco();
+    /* 🔒 VALIDAÇÕES */
 
-  if (banco.vagas <= 0) {
-    return res.status(400).json({ erro: "Vagas esgotadas." });
+    if (!nome || nome.length < 2) {
+      return res.status(400).json({ erro: "Nome inválido." });
+    }
+
+    if (!telegram || !telegram.startsWith("@")) {
+      return res.status(400).json({ erro: "Telegram inválido." });
+    }
+
+    if (!idade || idade < 16) {
+      return res.status(400).json({ erro: "Idade mínima é 16 anos." });
+    }
+
+    if (banco.vagas <= 0) {
+      return res.status(400).json({ erro: "Vagas esgotadas." });
+    }
+
+    /* 🔥 EVITAR DUPLICAÇÃO DE TELEGRAM */
+    const jaExiste = banco.inscritos.find(i => i.telegram === telegram);
+    if (jaExiste) {
+      return res.status(400).json({ erro: "Telegram já cadastrado." });
+    }
+
+    /* ✅ REGISTRAR */
+    banco.vagas -= 1;
+
+    banco.inscritos.push({
+      nome,
+      idade,
+      telegram,
+      ip,
+      data: new Date().toISOString()
+    });
+
+    salvarBanco(banco);
+
+    res.json({ sucesso: true });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ erro: "Erro interno no servidor." });
   }
-
-  if (!telegram || !telegram.startsWith("@")) {
-    return res.status(400).json({ erro: "Telegram inválido." });
-  }
-
-  if (!idade || idade < 16) {
-    return res.status(400).json({ erro: "Idade mínima é 16 anos." });
-  }
-
-  banco.vagas -= 1;
-  banco.inscritos.push({ nome, idade, telegram, ip });
-
-  salvarBanco(banco);
-
-  res.json({ sucesso: true });
 });
 
-/* ============================= */
-/* ====== ROTAS ADMIN ========= */
-/* ============================= */
+/* ===================================== */
+/* ============ ROTAS ADMIN ============ */
+/* ===================================== */
 
 app.post("/admin/login", (req, res) => {
   const { senha } = req.body;
 
-  if (senha !== ADMIN_PASSWORD) {
+  if (!senha || senha !== ADMIN_PASSWORD) {
     return res.status(401).json({ erro: "Senha incorreta" });
   }
 
@@ -70,7 +124,7 @@ app.post("/admin/login", (req, res) => {
 app.post("/admin/resetar", (req, res) => {
   const { senha } = req.body;
 
-  if (senha !== ADMIN_PASSWORD) {
+  if (!senha || senha !== ADMIN_PASSWORD) {
     return res.status(401).json({ erro: "Senha incorreta" });
   }
 
@@ -84,20 +138,19 @@ app.post("/admin/resetar", (req, res) => {
 app.post("/admin/inscritos", (req, res) => {
   const { senha } = req.body;
 
-  if (senha !== ADMIN_PASSWORD) {
+  if (!senha || senha !== ADMIN_PASSWORD) {
     return res.status(401).json({ erro: "Senha incorreta" });
   }
 
   const banco = lerBanco();
-  res.json({ inscritos: banco.inscritos });
+  res.json({
+    total: banco.inscritos.length,
+    inscritos: banco.inscritos
+  });
 });
+
+/* ===================================== */
 
 app.listen(PORT, () => {
-  console.log("Servidor rodando");
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
-
-
-
-
-
-
