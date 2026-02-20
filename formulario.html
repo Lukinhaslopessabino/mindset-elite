@@ -7,15 +7,26 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;900&display=swap" rel="stylesheet">
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
 font-family:'Montserrat',sans-serif;
-background:linear-gradient(135deg,#000,#0a0f1c);
+background:#000;
 color:#fff;
 min-height:100vh;
+overflow-x:hidden;
+}
+
+/* ================= FUNDO PARTÍCULAS ================= */
+
+#particles-js{
+position:fixed;
+width:100%;
+height:100%;
+z-index:-1;
 }
 
 /* ================= MENU ================= */
@@ -56,25 +67,31 @@ display:flex;
 justify-content:center;
 align-items:center;
 min-height:100vh;
-padding-top:100px;
+padding-top:120px;
 }
 
 /* ================= CARD ================= */
 
 .form-box{
-background:rgba(15,20,35,0.95);
+background:rgba(10,15,25,0.95);
 padding:45px;
 border-radius:25px;
 width:380px;
-box-shadow:0 0 40px rgba(0,153,255,0.3);
+box-shadow:0 0 40px rgba(0,153,255,0.4);
 border:1px solid rgba(0,153,255,0.4);
+backdrop-filter:blur(10px);
 }
 
 h2{
-margin-bottom:25px;
-font-weight:900;
-letter-spacing:1px;
 text-align:center;
+margin-bottom:10px;
+}
+
+.vagas{
+text-align:center;
+margin-bottom:20px;
+font-size:14px;
+color:#00FFAA;
 }
 
 /* ================= INPUTS ================= */
@@ -87,14 +104,12 @@ border-radius:14px;
 border:1px solid #0099FF;
 background:#0b0f18;
 color:#fff;
-font-size:14px;
 transition:0.3s;
 }
 
 input:focus{
 outline:none;
 box-shadow:0 0 15px rgba(0,153,255,0.5);
-transform:scale(1.02);
 }
 
 /* ================= BOTÃO ================= */
@@ -109,8 +124,6 @@ background-size:200% auto;
 color:#fff;
 font-weight:700;
 cursor:pointer;
-transition:0.3s;
-position:relative;
 animation:btnMove 4s linear infinite;
 }
 
@@ -119,35 +132,9 @@ animation:btnMove 4s linear infinite;
 100%{background-position:200%}
 }
 
-button:hover{
-transform:scale(1.03);
-}
-
 button:disabled{
 background:#333;
 animation:none;
-cursor:not-allowed;
-}
-
-/* ================= LOADER ================= */
-
-.loader{
-display:none;
-width:18px;
-height:18px;
-border:3px solid #fff;
-border-top:3px solid transparent;
-border-radius:50%;
-animation:spin 1s linear infinite;
-position:absolute;
-right:20px;
-top:50%;
-transform:translateY(-50%);
-}
-
-@keyframes spin{
-0%{transform:translateY(-50%) rotate(0deg);}
-100%{transform:translateY(-50%) rotate(360deg);}
 }
 
 /* ================= RECAPTCHA ================= */
@@ -156,33 +143,22 @@ transform:translateY(-50%);
 display:flex;
 justify-content:center;
 margin-top:15px;
-margin-bottom:10px;
 }
 
-/* ================= MENSAGEM ================= */
+/* ================= MSG ================= */
 
 #formMsg{
 margin-top:18px;
-font-weight:600;
-font-size:14px;
-min-height:20px;
 text-align:center;
-}
-
-/* ================= RESPONSIVO ================= */
-
-@media(max-width:500px){
-.form-box{
-width:95%;
-padding:30px;
-}
+min-height:20px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- MENU -->
+<div id="particles-js"></div>
+
 <nav>
 <a href="index.html">Início</a>
 <a href="membros.html">Membros</a>
@@ -195,6 +171,7 @@ padding:30px;
 <div class="form-box">
 
 <h2>Inscrição Oficial</h2>
+<div class="vagas" id="vagasInfo">Carregando vagas...</div>
 
 <form id="signupForm">
 
@@ -202,10 +179,7 @@ padding:30px;
 <input type="text" id="nome" placeholder="Seu Nome" required>
 <input type="number" id="idade" placeholder="Sua Idade" required>
 
-<button type="submit">
-Enviar Inscrição
-<div class="loader" id="loader"></div>
-</button>
+<button type="submit">Enviar Inscrição</button>
 
 <div class="recaptcha-box">
 <div class="g-recaptcha"
@@ -214,22 +188,45 @@ Enviar Inscrição
 </div>
 
 <p id="formMsg"></p>
-
 </form>
+
 </div>
 </div>
 
 <script>
+/* ================= PARTÍCULAS ================= */
+particlesJS("particles-js",{
+particles:{
+number:{value:60},
+color:{value:"#0099FF"},
+line_linked:{enable:true,color:"#0099FF"},
+move:{speed:1}
+}
+});
+
+/* ================= VAGAS DINÂMICAS ================= */
+async function carregarVagas(){
+try{
+const res = await fetch("/vagas");
+const data = await res.json();
+document.getElementById("vagasInfo").innerText =
+"Vagas restantes: " + data.vagas;
+}catch{
+document.getElementById("vagasInfo").innerText =
+"Não foi possível carregar vagas.";
+}
+}
+carregarVagas();
+
+/* ================= ENVIO ================= */
 const form = document.getElementById("signupForm");
 const formMsg = document.getElementById("formMsg");
-const loader = document.getElementById("loader");
-const button = form.querySelector("button");
 
 form.addEventListener("submit", async function(e){
 e.preventDefault();
 
-formMsg.style.color="#FF4C4C";
 formMsg.innerText="";
+formMsg.style.color="#FF4C4C";
 
 const token = grecaptcha.getResponse();
 if(!token){
@@ -241,20 +238,6 @@ const telegram = document.getElementById("telegram").value.trim();
 const nome = document.getElementById("nome").value.trim();
 const idade = parseInt(document.getElementById("idade").value);
 
-const regex = /^@[a-zA-Z0-9_]{5,}$/;
-if(!regex.test(telegram)){
-formMsg.innerText="Telegram inválido.";
-return;
-}
-
-if(!idade || idade < 16){
-formMsg.innerText="Idade mínima é 16 anos.";
-return;
-}
-
-loader.style.display="block";
-button.disabled=true;
-
 try{
 const res = await fetch("/inscrever",{
 method:"POST",
@@ -265,24 +248,19 @@ body: JSON.stringify({ nome, idade, telegram, token })
 const data = await res.json();
 
 if(!res.ok){
-formMsg.innerText=data.erro || "Erro ao enviar.";
-loader.style.display="none";
-button.disabled=false;
+formMsg.innerText=data.erro;
 return;
 }
 
 formMsg.style.color="#00FFAA";
-formMsg.innerText="Inscrição confirmada com sucesso!";
-
+formMsg.innerText="Inscrição confirmada!";
 form.reset();
 grecaptcha.reset();
+carregarVagas();
 
 }catch{
-formMsg.innerText="Erro de conexão com servidor.";
+formMsg.innerText="Erro de conexão.";
 }
-
-loader.style.display="none";
-button.disabled=false;
 });
 </script>
 
