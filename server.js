@@ -1,4 +1,3 @@
-import fetch from "node-fetch";
 import express from "express";
 import fs from "fs";
 import cors from "cors";
@@ -191,6 +190,7 @@ app.post("/admin/inscritos", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
+
 
 
 
