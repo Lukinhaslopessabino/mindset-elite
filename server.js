@@ -1,4 +1,5 @@
-mport express from "express";
+import fetch from "node-fetch";
+import express from "express";
 import fs from "fs";
 import cors from "cors";
 
@@ -10,6 +11,7 @@ app.use(express.static("./"));
 
 const PORT = process.env.PORT || 3000;
 const ADMIN_PASSWORD = "93724432134183714282"; // 🔐 MUDE ISSO
+const RECAPTCHA_SECRE= 6LefpnEsAAAAANEn_ixy3kXuNTGGOmF55ZteFSMP;
 
 /* ===================================== */
 /* ========= BANCO SEGURO ============== */
@@ -58,6 +60,19 @@ app.get("/vagas", (req, res) => {
 
 app.post("/inscrever", (req, res) => {
   try {
+    const { token } = req.body;
+
+const verify = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+  method: "POST",
+  headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  body: `secret=${RECAPTCHA_SECRET}&response=${token}`
+});
+
+const data = await verify.json();
+
+if (!data.success) {
+  return res.status(400).json({ erro: "Falha na verificação de segurança." });
+}
     const { nome, idade, telegram } = req.body;
     const ip = pegarIP(req);
     const banco = lerBanco();
@@ -154,3 +169,4 @@ app.post("/admin/inscritos", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
+
