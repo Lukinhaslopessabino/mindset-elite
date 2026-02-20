@@ -1,6 +1,7 @@
 import express from "express";
 import fs from "fs";
 import cors from "cors";
+import fetch from "node-fetch";
 
 const app = express();
 
@@ -10,15 +11,14 @@ app.use(express.static("./"));
 
 const PORT = process.env.PORT || 3000;
 
-/* 🔐 COLOQUE ISSO COMO VARIÁVEL NO RENDER */
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET;
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
-/* ===================================== */
-/* ========= BANCO SEGURO ============== */
-/* ===================================== */
+/* ============================== */
+/* BANCO */
+/* ============================== */
 
 function lerBanco() {
   if (!fs.existsSync("./database.json")) {
@@ -28,31 +28,30 @@ function lerBanco() {
     }, null, 2));
   }
 
-  const dados = fs.readFileSync("./database.json");
-  return JSON.parse(dados);
+  return JSON.parse(fs.readFileSync("./database.json"));
 }
 
 function salvarBanco(dados) {
   fs.writeFileSync("./database.json", JSON.stringify(dados, null, 2));
 }
 
-/* ===================================== */
-/* ============ ROTAS PUBLICAS ========= */
-/* ===================================== */
+/* ============================== */
+/* ROTAS PUBLICAS */
+/* ============================== */
 
 app.get("/vagas", (req, res) => {
   try {
     const banco = lerBanco();
     res.json({ vagas: banco.vagas });
   } catch {
-    res.status(500).json({ erro: "Erro interno ao carregar vagas." });
+    res.status(500).json({ erro: "Erro ao carregar vagas." });
   }
 });
 
 app.get("/ranking", (req, res) => {
   const banco = lerBanco();
 
-  if (!banco.inscritos || banco.inscritos.length === 0) {
+  if (!banco.inscritos.length) {
     return res.json({ ranking: [] });
   }
 
@@ -66,34 +65,39 @@ app.get("/ranking", (req, res) => {
   res.json({ ranking });
 });
 
-/* ===================================== */
-/* ============ INSCRIÇÃO ============== */
-/* ===================================== */
+/* ============================== */
+/* INSCRIÇÃO */
+/* ============================== */
 
 app.post("/inscrever", async (req, res) => {
   try {
 
     const { nome, idade, telegram, token } = req.body;
 
-    /* ===================== */
+    if (!token) {
+      return res.status(400).json({ erro: "Token reCAPTCHA ausente." });
+    }
+
     /* VALIDAR RECAPTCHA */
-    /* ===================== */
 
-    const verify = await fetch("https://www.google.com/recaptcha/api/siteverify", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: `secret=${RECAPTCHA_SECRET}&response=${token}`
-    });
+    const verify = await fetch(
+      "https://www.google.com/recaptcha/api/siteverify",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `secret=${RECAPTCHA_SECRET}&response=${token}`
+      }
+    );
 
-    const data = await verify.json();
+    const recaptchaData = await verify.json();
 
-    if (!data.success) {
+    if (!recaptchaData.success) {
       return res.status(400).json({ erro: "Falha na verificação de segurança." });
     }
 
     const banco = lerBanco();
 
-    /* 🔒 VALIDAÇÕES */
+    /* VALIDAÇÕES */
 
     if (!nome || nome.length < 2) {
       return res.status(400).json({ erro: "Nome inválido." });
@@ -116,9 +120,7 @@ app.post("/inscrever", async (req, res) => {
       return res.status(400).json({ erro: "Telegram já cadastrado." });
     }
 
-    /* ===================== */
-    /* SALVAR INSCRIÇÃO */
-    /* ===================== */
+    /* SALVAR */
 
     banco.vagas -= 1;
 
@@ -127,16 +129,15 @@ app.post("/inscrever", async (req, res) => {
       idade,
       telegram,
       data: new Date().toISOString()
-      // ❌ IP REMOVIDO
     });
 
     salvarBanco(banco);
 
-    /* ===================== */
-    /* ENVIAR PARA TELEGRAM */
-    /* ===================== */
+    /* TELEGRAM */
 
-    const mensagem = `
+    if (TELEGRAM_TOKEN && TELEGRAM_CHAT_ID) {
+
+      const mensagem = `
 🚀 NOVA INSCRIÇÃO
 
 👤 Nome: ${nome}
@@ -144,26 +145,28 @@ app.post("/inscrever", async (req, res) => {
 📩 Telegram: ${telegram}
 `;
 
-    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text: mensagem
-      })
-    });
+      await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_CHAT_ID,
+          text: mensagem
+        })
+      });
+
+    }
 
     res.json({ sucesso: true });
 
   } catch (err) {
-    console.error(err);
+    console.error("ERRO:", err);
     res.status(500).json({ erro: "Erro interno no servidor." });
   }
 });
 
-/* ===================================== */
-/* ============ ROTAS ADMIN ============ */
-/* ===================================== */
+/* ============================== */
+/* ADMIN */
+/* ============================== */
 
 app.post("/admin/login", (req, res) => {
   const { senha } = req.body;
@@ -204,7 +207,7 @@ app.post("/admin/inscritos", (req, res) => {
   });
 });
 
-/* ===================================== */
+/* ============================== */
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
