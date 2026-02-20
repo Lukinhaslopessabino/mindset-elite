@@ -32,6 +32,7 @@ justify-content:center;
 align-items:center;
 z-index:9999;
 flex-direction:column;
+transition:opacity 0.6s ease;
 }
 
 #loader h1{
@@ -46,19 +47,6 @@ animation:pulse 1.5s infinite;
 100%{opacity:0.4}
 }
 
-/* ================= TRANSITION ================= */
-
-#globalTransition{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:linear-gradient(135deg,#00F5FF,#0099FF);
-transform:translateY(100%);
-z-index:9998;
-}
-
 /* ================= NAV ================= */
 
 nav{
@@ -67,11 +55,12 @@ top:0;
 width:100%;
 display:flex;
 justify-content:center;
-gap:30px;
-padding:20px;
+gap:25px;
+padding:18px;
 background:rgba(0,0,0,0.7);
 backdrop-filter:blur(15px);
 z-index:1000;
+flex-wrap:wrap;
 }
 
 nav a{
@@ -91,16 +80,17 @@ box-shadow:0 0 20px #00F5FF;
 /* ================= HERO ================= */
 
 .hero{
-height:100vh;
+min-height:100vh;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
 text-align:center;
+padding:120px 20px 40px;
 }
 
 .hero h1{
-font-size:4rem;
+font-size:clamp(2.5rem,6vw,4rem);
 background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
 background-size:200%;
 -webkit-background-clip:text;
@@ -144,8 +134,6 @@ z-index:-1;
 <h1>LOADING MINDSET...</h1>
 </div>
 
-<div id="globalTransition"></div>
-
 <canvas id="bg3d"></canvas>
 
 <nav>
@@ -168,32 +156,14 @@ z-index:-1;
 
 <script>
 
-/* ================= LOADER ================= */
-
+/* LOADER */
 window.addEventListener("load",()=>{
-gsap.to("#loader",{opacity:0,duration:1,onComplete:()=>{
+gsap.to("#loader",{opacity:0,duration:0.8,onComplete:()=>{
 document.getElementById("loader").style.display="none";
 }});
 });
 
-/* ================= PAGE TRANSITION ================= */
-
-document.querySelectorAll("a").forEach(link=>{
-if(link.hostname === window.location.hostname){
-link.addEventListener("click",function(e){
-e.preventDefault();
-const href=this.href;
-gsap.to("#globalTransition",{
-y:0,
-duration:0.7,
-ease:"power2.inOut",
-onComplete:()=>window.location.href=href
-});
-});
-}
-});
-
-/* ================= 3D PARTICLES ================= */
+/* 3D PARTICLES */
 
 const canvas = document.getElementById("bg3d");
 const scene = new THREE.Scene();
@@ -255,7 +225,7 @@ camera.updateProjectionMatrix();
 renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-/* ================= SCROLL REVEAL ================= */
+/* SCROLL REVEAL */
 
 const reveals=document.querySelectorAll(".reveal");
 
@@ -268,6 +238,9 @@ el.classList.add("active");
 });
 
 </script>
+
+<!-- GLOBAL TRANSITION -->
+<script src="layout.js"></script>
 
 </body>
 </html>
