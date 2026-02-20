@@ -27,7 +27,7 @@ z-index:-2;
 }
 
 .card{
-width:450px;
+width:500px;
 padding:50px;
 border-radius:25px;
 background:rgba(0,0,0,0.85);
@@ -48,7 +48,7 @@ border-radius:12px;
 border:1px solid #0099FF;
 background:rgba(0,153,255,0.08);
 color:#fff;
-margin-bottom:20px;
+margin-bottom:15px;
 }
 
 button{
@@ -73,7 +73,7 @@ min-height:20px;
 
 .dashboard{
 display:none;
-margin-top:30px;
+margin-top:20px;
 text-align:left;
 }
 
@@ -105,21 +105,11 @@ border-radius:10px;
 max-height:200px;
 overflow:auto;
 font-size:12px;
+margin-bottom:15px;
 }
 
-#matrixLoading{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#000;
-display:none;
-justify-content:center;
-align-items:center;
-color:#00FF00;
-font-size:20px;
-z-index:999;
+.delete-box{
+margin-top:10px;
 }
 </style>
 </head>
@@ -157,50 +147,17 @@ z-index:999;
 
 <div class="resultado" id="resultado"></div>
 
+<!-- 🔥 NOVA PARTE EXCLUIR -->
+<div class="delete-box">
+<input type="number" id="rankDelete" placeholder="Digite o # do ranking para excluir">
+<button onclick="excluir()">Excluir por #</button>
 </div>
 
 </div>
 
-<div id="matrixLoading">ACESSO CONFIRMADO — INICIANDO SISTEMA...</div>
-
-<!-- 🔊 SONS -->
-<audio id="soundSuccess" src="https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3"></audio>
-<audio id="soundError" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-buzz-950.mp3"></audio>
+</div>
 
 <script>
-
-/* MATRIX EFFECT */
-const canvas = document.getElementById("matrix");
-const ctx = canvas.getContext("2d");
-
-canvas.height = window.innerHeight;
-canvas.width = window.innerWidth;
-
-const letters = "01ADMINSECUREACCESS".split("");
-const fontSize = 16;
-const columns = canvas.width / fontSize;
-const drops = [];
-
-for(let x=0;x<columns;x++) drops[x]=1;
-
-function draw(){
-ctx.fillStyle="rgba(0,0,0,0.05)";
-ctx.fillRect(0,0,canvas.width,canvas.height);
-
-ctx.fillStyle="#00FF00";
-ctx.font=fontSize+"px monospace";
-
-for(let i=0;i<drops.length;i++){
-const text=letters[Math.floor(Math.random()*letters.length)];
-ctx.fillText(text,i*fontSize,drops[i]*fontSize);
-
-if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
-drops[i]=0;
-
-drops[i]++;
-}
-}
-setInterval(draw,33);
 
 /* LOGIN */
 async function login(){
@@ -208,9 +165,6 @@ async function login(){
 const senha = document.getElementById("senha").value;
 const statusMsg = document.getElementById("statusMsg");
 const dashboard = document.getElementById("dashboard");
-const matrixLoading = document.getElementById("matrixLoading");
-const success = document.getElementById("soundSuccess");
-const error = document.getElementById("soundError");
 
 statusMsg.innerHTML="Verificando...";
 
@@ -223,18 +177,10 @@ body: JSON.stringify({ senha })
 
 if(!res.ok){
 statusMsg.innerHTML="❌ Acesso Negado";
-error.play().catch(()=>{});
 return;
 }
 
-success.play().catch(()=>{});
 statusMsg.innerHTML="✅ Acesso Autorizado";
-
-matrixLoading.style.display="flex";
-
-await new Promise(r=>setTimeout(r,2000));
-
-matrixLoading.style.display="none";
 
 document.getElementById("senha").style.display="none";
 document.querySelector("button").style.display="none";
@@ -289,8 +235,33 @@ headers:{"Content-Type":"application/json"},
 body: JSON.stringify({ senha })
 });
 
-alert("Vaga resetada para 1");
+alert("Vaga resetada");
+verInscritos();
+}
 
+/* 🔥 EXCLUIR POR RANK */
+async function excluir(){
+
+const senha = document.getElementById("senha").value;
+const rank = parseInt(document.getElementById("rankDelete").value);
+
+if(!rank){
+alert("Digite o número do ranking");
+return;
+}
+
+const res = await fetch("/admin/excluir",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body: JSON.stringify({ senha, rank })
+});
+
+if(!res.ok){
+alert("Erro ao excluir");
+return;
+}
+
+alert("Membro excluído com sucesso");
 verInscritos();
 }
 
