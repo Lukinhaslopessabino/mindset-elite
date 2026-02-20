@@ -2,52 +2,76 @@
   "vagas": 1,
   "inscritos": [
     {
+      "id": 1,
       "nome": "Luqueta",
       "idade": 25,
       "telegram": "@luqueta",
-      "foto": "Luqueta.jpg"
+      "foto": "Luqueta.jpg",
+      "status": "confirmado",
+      "data": "2026-02-20T00:00:00.000Z"
     },
     {
+      "id": 2,
       "nome": "Tuzin",
       "idade": 16,
       "telegram": "@tuzin",
-      "foto": "Tuzin.jpg"
+      "foto": "Tuzin.jpg",
+      "status": "confirmado",
+      "data": "2026-02-20T00:00:00.000Z"
     },
     {
+      "id": 3,
       "nome": "Arthur",
       "idade": 17,
       "telegram": "@arthur",
-      "foto": "THZIN.jpg"
+      "foto": "THZIN.jpg",
+      "status": "confirmado",
+      "data": "2026-02-20T00:00:00.000Z"
     },
     {
+      "id": 4,
       "nome": "Daniel",
       "idade": 21,
       "telegram": "@daniel",
-      "foto": "Daniel.jpg"
+      "foto": "Daniel.jpg",
+      "status": "confirmado",
+      "data": "2026-02-20T00:00:00.000Z"
     },
     {
+      "id": 5,
       "nome": "Pandinha",
       "idade": 24,
       "telegram": "@pandinha",
-      "foto": "Pandinha.jpg"
+      "foto": "Pandinha.jpg",
+      "status": "confirmado",
+      "data": "2026-02-20T00:00:00.000Z"
     },
     {
+      "id": 6,
       "nome": "Vini",
       "idade": 32,
       "telegram": "@vini",
-      "foto": "Vini.jpg"
+      "foto": "Vini.jpg",
+      "status": "confirmado",
+      "data": "2026-02-20T00:00:00.000Z"
     },
     {
+      "id": 7,
       "nome": "Leandro",
       "idade": 18,
       "telegram": "@leandro",
-      "foto": "leandro.jpg"
+      "foto": "leandro.jpg",
+      "status": "confirmado",
+      "data": "2026-02-20T00:00:00.000Z"
     },
     {
+      "id": 8,
       "nome": "Mistério",
       "idade": 18,
       "telegram": "@misterio",
-      "foto": "misterio.jpg"
+      "foto": "misterio.jpg",
+      "status": "confirmado",
+      "data": "2026-02-20T00:00:00.000Z"
     }
   ],
   "ipsBloqueados": [],
