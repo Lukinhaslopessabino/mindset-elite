@@ -57,10 +57,6 @@ app.get("/vagas", (req, res) => {
 app.get("/ranking", (req, res) => {
   const banco = lerBanco();
 
-  if (!banco.inscritos.length) {
-    return res.json({ ranking: [] });
-  }
-
   const ranking = banco.inscritos.map((user, index) => ({
     nome: user.nome,
     idade: user.idade,
@@ -83,8 +79,6 @@ app.post("/inscrever", async (req, res) => {
       return res.status(400).json({ erro: "Token reCAPTCHA ausente." });
     }
 
-    /* VALIDAR RECAPTCHA */
-
     const verify = await fetch(
       "https://www.google.com/recaptcha/api/siteverify",
       {
@@ -97,9 +91,7 @@ app.post("/inscrever", async (req, res) => {
     const recaptchaData = await verify.json();
 
     if (!recaptchaData.success) {
-      return res
-        .status(400)
-        .json({ erro: "Falha na verificação de segurança." });
+      return res.status(400).json({ erro: "Falha na verificação de segurança." });
     }
 
     const banco = lerBanco();
@@ -125,9 +117,7 @@ app.post("/inscrever", async (req, res) => {
     );
 
     if (jaExiste) {
-      return res
-        .status(400)
-        .json({ erro: "Telegram já cadastrado." });
+      return res.status(400).json({ erro: "Telegram já cadastrado." });
     }
 
     banco.vagas -= 1;
@@ -141,8 +131,7 @@ app.post("/inscrever", async (req, res) => {
 
     salvarBanco(banco);
 
-    /* ENVIAR PARA TELEGRAM */
-
+    /* TELEGRAM */
     if (TELEGRAM_TOKEN && TELEGRAM_CHAT_ID) {
       const mensagem = `
 🚀 NOVA INSCRIÇÃO
@@ -177,22 +166,21 @@ app.post("/inscrever", async (req, res) => {
 /* ADMIN */
 /* ============================== */
 
-app.post("/admin/login", (req, res) => {
-  const { senha } = req.body;
-
+function validarAdmin(senha, res) {
   if (!senha || senha !== ADMIN_PASSWORD) {
-    return res.status(401).json({ erro: "Senha incorreta" });
+    res.status(401).json({ erro: "Senha incorreta" });
+    return false;
   }
+  return true;
+}
 
+app.post("/admin/login", (req, res) => {
+  if (!validarAdmin(req.body.senha, res)) return;
   res.json({ sucesso: true });
 });
 
 app.post("/admin/resetar", (req, res) => {
-  const { senha } = req.body;
-
-  if (!senha || senha !== ADMIN_PASSWORD) {
-    return res.status(401).json({ erro: "Senha incorreta" });
-  }
+  if (!validarAdmin(req.body.senha, res)) return;
 
   const banco = lerBanco();
   banco.vagas = 1;
@@ -202,18 +190,42 @@ app.post("/admin/resetar", (req, res) => {
 });
 
 app.post("/admin/inscritos", (req, res) => {
-  const { senha } = req.body;
-
-  if (!senha || senha !== ADMIN_PASSWORD) {
-    return res.status(401).json({ erro: "Senha incorreta" });
-  }
+  if (!validarAdmin(req.body.senha, res)) return;
 
   const banco = lerBanco();
 
   res.json({
     total: banco.inscritos.length,
+    vagas: banco.vagas,
     inscritos: banco.inscritos
   });
+});
+
+/* ============================== */
+/* 🔥 EXCLUIR MEMBRO POR RANK */
+/* ============================== */
+
+app.post("/admin/excluir", (req, res) => {
+  const { senha, rank } = req.body;
+
+  if (!validarAdmin(senha, res)) return;
+
+  const banco = lerBanco();
+
+  const index = parseInt(rank) - 1;
+
+  if (isNaN(index) || index < 0 || index >= banco.inscritos.length) {
+    return res.status(400).json({ erro: "Rank inválido." });
+  }
+
+  banco.inscritos.splice(index, 1);
+
+  // libera vaga automaticamente
+  banco.vagas += 1;
+
+  salvarBanco(banco);
+
+  res.json({ sucesso: true });
 });
 
 /* ============================== */
