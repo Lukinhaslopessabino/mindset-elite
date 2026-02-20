@@ -18,7 +18,7 @@ color:#fff;
 overflow-x:hidden;
 }
 
-/* ================= MENU ================= */
+/* ===== NAV ===== */
 
 nav{
 position:fixed;
@@ -51,7 +51,7 @@ color:#000;
 box-shadow:0 0 20px #0099FF;
 }
 
-/* ================= CONTAINER ================= */
+/* ===== CONTAINER ===== */
 
 .container{
 max-width:1300px;
@@ -66,7 +66,7 @@ border-left:5px solid #0099FF;
 padding-left:15px;
 }
 
-/* ================= GRID ================= */
+/* ===== GRID ===== */
 
 .grid{
 display:grid;
@@ -74,7 +74,7 @@ grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:30px;
 }
 
-/* ================= CARD ================= */
+/* ===== CARD ===== */
 
 .member-card{
 background:rgba(15,20,35,0.95);
@@ -85,7 +85,6 @@ border:1px solid rgba(0,153,255,0.3);
 box-shadow:0 0 20px rgba(0,153,255,0.2);
 transition:0.4s;
 position:relative;
-overflow:hidden;
 }
 
 .member-card:hover{
@@ -107,7 +106,7 @@ animation:pulse 2s infinite;
 100%{transform:scale(1);}
 }
 
-/* ================= AVATAR ================= */
+/* ===== AVATAR ===== */
 
 .avatar-wrapper{
 width:110px;
@@ -131,7 +130,7 @@ border-radius:50%;
 object-fit:cover;
 }
 
-/* ================= FUNDO 3D ================= */
+/* ===== FUNDO 3D ===== */
 
 #bg3d{
 position:fixed;
@@ -140,13 +139,11 @@ left:0;
 z-index:-2;
 }
 
-/* ================= MOBILE ================= */
+/* ===== MOBILE ===== */
 
 @media (max-width:600px){
 
-h2{
-font-size:22px;
-}
+h2{font-size:22px;}
 
 .avatar-wrapper{
 width:90px;
@@ -158,7 +155,6 @@ gap:20px;
 }
 
 }
-
 </style>
 </head>
 
@@ -183,32 +179,45 @@ Carregando ranking...
 
 <script>
 
-/* ================= FUNDO 3D OTIMIZADO ================= */
+/* ================= FUNDO 3D (DESKTOP) ================= */
 
 if(window.innerWidth > 768){
 
 const canvas = document.getElementById("bg3d");
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 2000);
-const renderer = new THREE.WebGLRenderer({ canvas:canvas, alpha:true });
+const camera = new THREE.PerspectiveCamera(
+75,
+window.innerWidth/window.innerHeight,
+0.1,
+2000
+);
+
+const renderer = new THREE.WebGLRenderer({
+canvas:canvas,
+alpha:true
+});
+
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 const geometry = new THREE.BufferGeometry();
 const vertices = [];
 
-for(let i=0;i<1500;i++){
-  vertices.push(
-    THREE.MathUtils.randFloatSpread(2000),
-    THREE.MathUtils.randFloatSpread(2000),
-    THREE.MathUtils.randFloatSpread(2000)
-  );
+for(let i=0;i<1200;i++){
+vertices.push(
+THREE.MathUtils.randFloatSpread(2000),
+THREE.MathUtils.randFloatSpread(2000),
+THREE.MathUtils.randFloatSpread(2000)
+);
 }
 
-geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices,3));
+geometry.setAttribute(
+'position',
+new THREE.Float32BufferAttribute(vertices,3)
+);
 
 const material = new THREE.PointsMaterial({
-  color:0x0099ff,
-  size:2
+color:0x0099ff,
+size:2
 });
 
 const particles = new THREE.Points(geometry, material);
@@ -217,17 +226,17 @@ scene.add(particles);
 camera.position.z = 600;
 
 function animate(){
-  requestAnimationFrame(animate);
-  particles.rotation.x += 0.0003;
-  particles.rotation.y += 0.0003;
-  renderer.render(scene, camera);
+requestAnimationFrame(animate);
+particles.rotation.x += 0.0003;
+particles.rotation.y += 0.0003;
+renderer.render(scene, camera);
 }
 animate();
 
 window.addEventListener("resize", ()=>{
-  camera.aspect = window.innerWidth/window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+camera.aspect = window.innerWidth/window.innerHeight;
+camera.updateProjectionMatrix();
+renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
 }
@@ -235,39 +244,55 @@ window.addEventListener("resize", ()=>{
 /* ================= RANKING ================= */
 
 async function carregarRanking(){
-  const grid = document.getElementById("membersGrid");
 
-  try{
-    const res = await fetch("/ranking");
-    if(!res.ok) throw new Error();
+const grid = document.getElementById("membersGrid");
 
-    const data = await res.json();
-    grid.innerHTML="";
+try{
 
-    data.ranking.forEach(user=>{
+const res = await fetch("/ranking");
+if(!res.ok) throw new Error();
 
-      let medal="";
-      if(user.rank===1) medal="🥇";
-      else if(user.rank===2) medal="🥈";
-      else if(user.rank===3) medal="🥉";
+const data = await res.json();
 
-      const foto = user.foto ? `/images/${user.foto}` : "/images/default.jpg";
+grid.innerHTML="";
 
-      grid.innerHTML += `
-        <div class="member-card">
-          <div class="rank">#${user.rank} ${medal}</div>
-          <div class="avatar-wrapper">
-            <img src="${foto}" onerror="this.src='/images/default.jpg'">
-          </div>
-          <h3>${user.nome}</h3>
-          <p>${user.idade} anos</p>
-        </div>
-      `;
-    });
+data.ranking.forEach(user=>{
 
-  }catch{
-    grid.innerHTML="⚠ Ranking indisponível.";
-  }
+let medal="";
+if(user.rank===1) medal="🥇";
+else if(user.rank===2) medal="🥈";
+else if(user.rank===3) medal="🥉";
+
+const foto = user.foto 
+? `/images/${user.foto}`
+: "/images/default.jpg";
+
+const card = document.createElement("div");
+card.className="member-card";
+
+card.innerHTML=`
+<div class="rank">#${user.rank} ${medal}</div>
+<div class="avatar-wrapper">
+<img src="${foto}" alt="${user.nome}">
+</div>
+<h3>${user.nome}</h3>
+<p>${user.idade} anos</p>
+`;
+
+const img = card.querySelector("img");
+
+img.addEventListener("error", ()=>{
+img.src="/images/default.jpg";
+});
+
+grid.appendChild(card);
+
+});
+
+}catch{
+grid.innerHTML="⚠ Ranking indisponível.";
+}
+
 }
 
 carregarRanking();
