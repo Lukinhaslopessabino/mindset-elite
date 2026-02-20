@@ -1,17 +1,23 @@
 {
-  "name": "mindset-elite",
-  "version": "1.0.0",
-  "description": "Backend Mindset Elite",
-  "main": "server.js",
-  "type": "module",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "cors": "^2.8.6",
-    "express": "^4.22.1",
-    "node-fetch":"^3.3.2"
-  }
+  "vagas": 1,
+  "inscritos": [
+    {
+      "nome": "Luqueta",
+      "idade": 22,
+      "telegram": "@luqueta",
+      "foto": "Luqueta.jpg",
+      "ip": null,
+      "data": "2026-02-20T00:00:00.000Z"
+    },
+    {
+      "nome": "Tuzin",
+      "idade": 21,
+      "telegram": "@tuzin",
+      "foto": "Tuzin.jpg",
+      "ip": null,
+      "data": "2026-02-20T00:00:00.000Z"
+    }
+  ],
+  "ipsBloqueados": [],
+  "tentativas": {}
 }
-
-
