@@ -13,6 +13,53 @@
       "telegram": "@tuzin",
       "foto": "Tuzin.jpg"
     }
+ {
+      "nome": "Daniel",
+      "idade": 30,
+      "telegram": "@Daniel",
+      "foto": "Daniel.jpg"
+    }
+
+     {
+      "nome": "Pandinha",
+      "idade": 21,
+      "telegram": "@Pandinha",
+      "foto": "Pandinha.jpg"
+    }
+
+
+     {
+      "nome": "Arthur",
+      "idade": 18,
+      "telegram": "@arthur",
+      "foto": "THZIN.jpg"
+    }
+
+
+     {
+      "nome": "Vini",
+      "idade": 21,
+      "telegram": "@Vini",
+      "foto": "Vini.jpg"
+    }
+
+     {
+      "nome": "Leandro",
+      "idade": 21,
+      "telegram": "@Leandro",
+      "foto": "leandro.jpg"
+    }
+
+
+     {
+      "nome": "Misterio",
+      "idade": 21,
+      "telegram": "@misterio",
+      "foto": "misterio.jpg"
+    }
+
   ],
+
+  
   "ipsBloqueados": []
 }
