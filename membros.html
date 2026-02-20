@@ -5,26 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Membros - Mindset Elite</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-
 body{
-font-family:'Montserrat',sans-serif;
+font-family:'Orbitron',sans-serif;
 background:#000;
 color:#fff;
-}
-
-/* PARTICLES FUNDO */
-#particles-js{
-position:fixed;
-width:100%;
-height:100%;
-top:0;
-left:0;
-z-index:-1;
+overflow-x:hidden;
 }
 
 /* MENU */
@@ -35,9 +25,10 @@ width:100%;
 display:flex;
 justify-content:center;
 gap:30px;
-padding:18px 0;
-background:#000;
-border-bottom:2px solid #0099FF;
+padding:20px 0;
+background:rgba(0,0,0,0.8);
+backdrop-filter:blur(15px);
+border-bottom:1px solid rgba(0,153,255,0.5);
 z-index:1000;
 }
 
@@ -45,75 +36,125 @@ nav a{
 color:#fff;
 text-decoration:none;
 font-weight:600;
-padding:8px 15px;
-border-radius:20px;
+padding:10px 18px;
+border-radius:30px;
 transition:0.3s;
 }
 
 nav a:hover{
 background:#0099FF;
 color:#000;
+box-shadow:0 0 20px #0099FF;
 }
 
 /* CONTAINER */
 .container{
-max-width:1200px;
+max-width:1300px;
 margin:auto;
-padding-top:140px;
-padding-bottom:80px;
+padding-top:160px;
+padding-bottom:100px;
 padding-left:20px;
 padding-right:20px;
 }
 
 h2{
-margin-bottom:50px;
+font-size:32px;
+margin-bottom:60px;
 border-left:5px solid #0099FF;
-padding-left:10px;
+padding-left:15px;
 }
 
 /* GRID */
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:50px;
-justify-items:center;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:60px;
 }
 
 /* CARD */
 .member-card{
+background:rgba(10,10,20,0.85);
+padding:35px;
+border-radius:25px;
 text-align:center;
-transition:0.4s ease;
-cursor:pointer;
+border:1px solid rgba(0,153,255,0.3);
+box-shadow:0 0 25px rgba(0,153,255,0.2);
+transition:0.4s;
+position:relative;
+overflow:hidden;
 }
 
-.member-card img{
-width:120px;
-height:120px;
+.member-card:hover{
+transform:translateY(-10px);
+box-shadow:0 0 50px rgba(0,153,255,0.6);
+}
+
+/* RANK */
+.rank{
+position:absolute;
+top:15px;
+right:15px;
+font-size:18px;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.15);}
+100%{transform:scale(1);}
+}
+
+/* AVATAR */
+.avatar-wrapper{
+width:130px;
+height:130px;
+margin:auto;
+border-radius:50%;
+padding:4px;
+background:linear-gradient(45deg,#0099FF,#00FFFF,#0099FF);
+animation:rotateAura 6s linear infinite;
+}
+
+@keyframes rotateAura{
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
+}
+
+.avatar-wrapper img{
+width:100%;
+height:100%;
 border-radius:50%;
 object-fit:cover;
-border:3px solid #0099FF;
-transition:0.4s ease;
 }
 
-.member-card:hover img{
-transform:scale(1.15);
-box-shadow:0 0 25px #0099FF;
+/* WAVE NEON */
+.wave{
+position:fixed;
+bottom:0;
+left:0;
+width:200%;
+height:250px;
+background:radial-gradient(circle at 50% 50%, rgba(0,153,255,0.4), transparent 70%);
+animation:waveMove 8s linear infinite;
+z-index:-2;
 }
 
-.member-card h3{
-margin-top:15px;
-margin-bottom:5px;
+@keyframes waveMove{
+0%{transform:translateX(0);}
+100%{transform:translateX(-50%);}
 }
 
-.member-card p{
-opacity:0.7;
+/* THREEJS CANVAS */
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-3;
 }
 </style>
 </head>
 
 <body>
-
-<div id="particles-js"></div>
 
 <nav>
 <a href="index.html">Início</a>
@@ -124,82 +165,93 @@ opacity:0.7;
 </nav>
 
 <div class="container">
-<h2>Membros do Mindset</h2>
+<h2>🏆 Ranking Mindset Elite</h2>
 
-<div class="grid">
-
-<div class="member-card">
-<img src="images/luqueta.jpg">
-<h3>Luqueta</h3>
-<p>Ancião</p>
-</div>
-
-<div class="member-card">
-<img src="images/tuzin.jpg">
-<h3>Tuzin</h3>
-<p>Líder</p>
-</div>
-
-<div class="member-card">
-<img src="images/misterio.jpg">
-<h3>Mistério</h3>
-<p>Membro</p>
-</div>
-
-<div class="member-card">
-<img src="images/vini.jpg">
-<h3>Vini</h3>
-<p>Membro</p>
-</div>
-
-<div class="member-card">
-<img src="images/leandro.jpg">
-<h3>Leandro</h3>
-<p>Membro</p>
-</div>
-
-<div class="member-card">
-<img src="images/daniel.jpg">
-<h3>Daniel Nascimento</h3>
-<p>Membro</p>
-</div>
-
-<div class="member-card">
-<img src="images/pandinha.jpg">
-<h3>Pandinha</h3>
-<p>Membro</p>
-</div>
-
-<div class="member-card">
-<img src="images/thzin.jpg">
-<h3>THZIN</h3>
-<p>Possível Novo Membro</p>
-</div>
-
+<div class="grid" id="membersGrid">
+Carregando ranking...
 </div>
 </div>
+
+<div class="wave"></div>
 
 <script>
-particlesJS("particles-js",{
-particles:{
-number:{value:120},
-color:{value:"#0099FF"},
-shape:{type:"circle"},
-opacity:{value:0.6},
-size:{value:3},
-line_linked:{
-enable:true,
-distance:150,
-color:"#0099FF",
-opacity:0.4,
-width:1
-},
-move:{
-enable:true,
-speed:1
+/* ========================= */
+/* PARTICULAS 3D THREE.JS */
+/* ========================= */
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 2000);
+const renderer = new THREE.WebGLRenderer({ alpha:true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+const geometry = new THREE.BufferGeometry();
+const vertices = [];
+
+for(let i=0;i<3000;i++){
+  vertices.push(
+    THREE.MathUtils.randFloatSpread(2000),
+    THREE.MathUtils.randFloatSpread(2000),
+    THREE.MathUtils.randFloatSpread(2000)
+  );
 }
-}
+
+geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices,3));
+
+const material = new THREE.PointsMaterial({
+  color:0x0099ff,
+  size:2
 });
+
+const particles = new THREE.Points(geometry, material);
+scene.add(particles);
+
+camera.position.z = 600;
+
+function animate(){
+  requestAnimationFrame(animate);
+  particles.rotation.x += 0.0006;
+  particles.rotation.y += 0.0006;
+  renderer.render(scene, camera);
+}
+animate();
+
+/* ========================= */
+/* RANKING BACKEND */
+/* ========================= */
+
+async function carregarRanking(){
+  try{
+    const res = await fetch("/ranking");
+    const data = await res.json();
+
+    const grid = document.getElementById("membersGrid");
+    grid.innerHTML="";
+
+    data.ranking.forEach(user=>{
+      let medal="";
+      if(user.rank===1) medal="🥇";
+      else if(user.rank===2) medal="🥈";
+      else if(user.rank===3) medal="🥉";
+
+      grid.innerHTML+=`
+        <div class="member-card">
+          <div class="rank">#${user.rank} ${medal}</div>
+          <div class="avatar-wrapper">
+            <img src="images/default.jpg">
+          </div>
+          <h3>${user.nome}</h3>
+          <p>${user.idade} anos</p>
+        </div>
+      `;
+    });
+
+  }catch{
+    document.getElementById("membersGrid").innerHTML="Erro ao carregar ranking.";
+  }
+}
+
+carregarRanking();
 </script>
 
 </body>
