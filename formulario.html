@@ -6,272 +6,88 @@
 <title>Inscrição - Mindset Elite</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-
 body{
-font-family:'Montserrat',sans-serif;
+font-family:Montserrat;
 background:#000;
 color:#fff;
-overflow-x:hidden;
-}
-
-#particles-js{
-position:fixed;
-width:100%;
-height:100%;
-z-index:-1;
-}
-
-nav{
-position:fixed;
-top:0;
-width:100%;
 display:flex;
 justify-content:center;
-gap:30px;
-padding:18px 0;
-background:rgba(0,0,0,0.8);
-backdrop-filter:blur(15px);
-border-bottom:2px solid #0099FF;
-z-index:1000;
+align-items:center;
+height:100vh;
 }
 
-nav a{
-color:#fff;
-text-decoration:none;
-font-weight:600;
-padding:8px 15px;
-border-radius:20px;
-transition:0.3s;
-}
-
-nav a:hover{
-background:#0099FF;
-color:#000;
-}
-
-.container{
-max-width:520px;
-margin:auto;
-padding-top:140px;
-padding-bottom:100px;
-padding-left:20px;
-padding-right:20px;
-}
-
-h2{
-margin-bottom:20px;
-border-left:5px solid #0099FF;
-padding-left:10px;
-text-shadow:0 0 20px #0099FF;
-}
-
-.form-card{
-background:rgba(0,0,0,0.65);
+.form-box{
+background:#111;
 padding:40px;
-border-radius:25px;
-border:1px solid rgba(0,153,255,0.4);
-box-shadow:0 0 35px rgba(0,153,255,0.3);
-backdrop-filter:blur(15px);
-position:relative;
+border-radius:20px;
+width:350px;
 }
 
 input{
 width:100%;
-padding:15px;
-margin-bottom:18px;
-border-radius:15px;
+padding:12px;
+margin-bottom:15px;
+border-radius:10px;
 border:1px solid #0099FF;
-background:rgba(0,153,255,0.08);
+background:#000;
 color:#fff;
-font-size:15px;
-outline:none;
-transition:0.3s;
-}
-
-input:focus{
-box-shadow:0 0 20px rgba(0,153,255,0.4);
-transform:scale(1.02);
 }
 
 button{
 width:100%;
-padding:15px;
-border-radius:25px;
+padding:12px;
 border:none;
-background:linear-gradient(90deg,#0099FF,#00BFFF,#0099FF);
-background-size:200% auto;
-color:#fff;
-font-weight:700;
-font-size:16px;
-cursor:pointer;
-transition:0.3s;
-animation:btnMove 3s linear infinite;
-}
-
-@keyframes btnMove{
-0%{background-position:0%}
-100%{background-position:200%}
-}
-
-button:disabled{
-background:#333;
-animation:none;
-cursor:not-allowed;
-}
-
-.progress-bar{
-height:6px;
-width:0%;
-background:#00FFAA;
 border-radius:10px;
-margin-bottom:15px;
-transition:width 0.4s;
-}
-
-.verification-screen{
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#000;
-display:none;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-border-radius:25px;
-}
-
-.verification-screen p{
-margin-bottom:20px;
-}
-
-.loader{
-width:40px;
-height:40px;
-border:4px solid #0099FF;
-border-top:4px solid transparent;
-border-radius:50%;
-animation:spin 1s linear infinite;
-}
-
-@keyframes spin{
-0%{transform:rotate(0)}
-100%{transform:rotate(360deg)}
+background:#0099FF;
+color:#fff;
+font-weight:bold;
+cursor:pointer;
 }
 
 #formMsg{
 margin-top:15px;
-font-weight:600;
 }
 </style>
 </head>
 
 <body>
 
-<div id="particles-js"></div>
-
-<nav>
-<a href="index.html">Início</a>
-<a href="membros.html">Membros</a>
-<a href="participantes.html">Participantes</a>
-<a href="links.html">Links Oficiais</a>
-<a href="formulario.html">Formulário</a>
-</nav>
-
-<div class="container">
+<div class="form-box">
 <h2>Inscrição Oficial</h2>
 
-<div class="form-card">
-
-<div class="progress-bar" id="progressBar"></div>
-
 <form id="signupForm">
-<input type="text" id="telegram" placeholder="@ Seu Telegram" required>
+
+<input type="text" id="telegram" placeholder="@SeuTelegram" required>
 <input type="text" id="nome" placeholder="Seu Nome" required>
 <input type="number" id="idade" placeholder="Sua Idade" required>
 
-<button 
-class="g-recaptcha"
-data-sitekey="6LefpnEsAAAAAE46Eao6qyQQL_6nGBT08Dc3pGTo"
-data-callback="onSubmit"
-data-size="invisible"
->
-Enviar Inscrição
-</button>
+<div class="g-recaptcha" data-sitekey="SUA_SITE_KEY_AQUI"></div>
+
+<button type="submit">Enviar</button>
 
 <p id="formMsg"></p>
 </form>
-
-<div class="verification-screen" id="verificationScreen">
-<p>🔍 Verificando identidade...</p>
-<div class="loader"></div>
-</div>
-
-</div>
 </div>
 
 <script>
-particlesJS("particles-js",{
-particles:{
-number:{value:70},
-color:{value:"#0099FF"},
-shape:{type:"circle"},
-opacity:{value:0.5},
-size:{value:3},
-line_linked:{enable:true,color:"#0099FF",opacity:0.4},
-move:{enable:true,speed:1}
-}
-});
-</script>
-
-<script>
+const form = document.getElementById("signupForm");
 const formMsg = document.getElementById("formMsg");
-const progressBar = document.getElementById("progressBar");
-const verificationScreen = document.getElementById("verificationScreen");
 
-function antifraudeCheck(nome, telegram){
-if(nome.length < 3) return false;
-if(telegram.includes("admin") || telegram.includes("test")) return false;
-return true;
+form.addEventListener("submit", async function(e){
+e.preventDefault();
+
+const token = grecaptcha.getResponse();
+if(!token){
+formMsg.innerText="Confirme o reCAPTCHA.";
+return;
 }
-
-async function onSubmit(token){
 
 const telegram = document.getElementById("telegram").value.trim();
 const nome = document.getElementById("nome").value.trim();
 const idade = parseInt(document.getElementById("idade").value);
-
-formMsg.style.color="#FF4C4C";
-formMsg.innerText="";
-
-const regex = /^@[a-zA-Z0-9_]{5,}$/;
-if(!regex.test(telegram)){
-formMsg.innerText="Telegram inválido.";
-return;
-}
-
-if(idade < 16 || idade > 80){
-formMsg.innerText="Idade inválida.";
-return;
-}
-
-if(!antifraudeCheck(nome,telegram)){
-formMsg.innerText="Comportamento suspeito detectado.";
-return;
-}
-
-verificationScreen.style.display="flex";
-
-for(let i=0;i<=100;i+=10){
-progressBar.style.width=i+"%";
-await new Promise(r=>setTimeout(r,80));
-}
 
 try{
 const res = await fetch("/inscrever",{
@@ -283,22 +99,20 @@ body: JSON.stringify({ nome, idade, telegram, token })
 const data = await res.json();
 
 if(!res.ok){
-verificationScreen.style.display="none";
-formMsg.innerText=data.erro || "Erro.";
+formMsg.innerText=data.erro;
 return;
 }
 
-verificationScreen.innerHTML="<p style='color:#00FFAA'>✅ Verificação concluída</p>";
-setTimeout(()=>window.location.href="index.html",1500);
+formMsg.style.color="#00FFAA";
+formMsg.innerText="Inscrição confirmada!";
+form.reset();
+grecaptcha.reset();
 
 }catch{
-verificationScreen.style.display="none";
-formMsg.innerText="Erro ao conectar.";
+formMsg.innerText="Erro ao enviar.";
 }
-}
+});
 </script>
 
 </body>
 </html>
-
-
