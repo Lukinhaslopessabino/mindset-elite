@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vídeos - Mindset Elite</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+font-family:'Orbitron',sans-serif;
+background:linear-gradient(135deg,#000,#0a0f1c);
+color:#fff;
+overflow-x:hidden;
+}
+
+/* NAV */
+nav{
+position:fixed;
+top:0;
+width:100%;
+display:flex;
+justify-content:center;
+gap:20px;
+padding:15px;
+background:rgba(0,0,0,0.85);
+backdrop-filter:blur(15px);
+border-bottom:1px solid rgba(0,153,255,0.4);
+z-index:1000;
+flex-wrap:wrap;
+}
+
+nav a{
+color:#fff;
+text-decoration:none;
+padding:8px 14px;
+border-radius:25px;
+transition:0.3s;
+font-size:14px;
+}
+
+nav a:hover{
+background:#00F5FF;
+color:#000;
+box-shadow:0 0 15px #00F5FF;
+}
+
+/* CONTAINER */
+.container{
+padding:120px 5% 80px;
+max-width:1400px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+margin-bottom:60px;
+font-size:clamp(1.8rem,4vw,2.8rem);
+background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
+background-size:200%;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+animation:shine 6s linear infinite;
+}
+
+@keyframes shine{
+0%{background-position:0%}
+100%{background-position:200%}
+}
+
+/* GRID */
+.video-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:30px;
+}
+
+/* CARD */
+.video-card{
+background:rgba(15,20,35,0.95);
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 0 25px rgba(0,153,255,0.3);
+transition:0.4s;
+}
+
+.video-card:hover{
+transform:translateY(-6px);
+box-shadow:0 0 40px rgba(0,153,255,0.6);
+}
+
+/* RESPONSIVE IFRAME */
+.video-wrapper{
+position:relative;
+width:100%;
+padding-bottom:177%; /* proporção vertical shorts */
+height:0;
+}
+
+.video-wrapper iframe{
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+border:none;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+h1{margin-bottom:40px;}
+.video-grid{gap:20px;}
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+<a href="index.html">Início</a>
+<a href="membros.html">Membros</a>
+<a href="participantes.html">Participantes</a>
+<a href="links.html">Links</a>
+<a href="formulario.html">Formulário</a>
+<a href="videos.html">Vídeos</a>
+</nav>
+
+<div class="container">
+
+<h1>Alguns vídeos dos Estados Unidos 🇺🇸🗽</h1>
+
+<div class="video-grid">
+
+<!-- VÍDEOS -->
+
+<div class="video-card">
+<div class="video-wrapper">
+<iframe src="https://www.youtube.com/embed/lS8Sdam5pEA" allowfullscreen></iframe>
+</div>
+</div>
+
+<div class="video-card">
+<div class="video-wrapper">
+<iframe src="https://www.youtube.com/embed/v_s2bz8T3a8" allowfullscreen></iframe>
+</div>
+</div>
+
+<div class="video-card">
+<div class="video-wrapper">
+<iframe src="https://www.youtube.com/embed/g-BJOYE_Zj8" allowfullscreen></iframe>
+</div>
+</div>
+
+<div class="video-card">
+<div class="video-wrapper">
+<iframe src="https://www.youtube.com/embed/OJMOJnKw77g" allowfullscreen></iframe>
+</div>
+</div>
+
+<div class="video-card">
+<div class="video-wrapper">
+<iframe src="https://www.youtube.com/embed/NSSgs-AH9vc" allowfullscreen></iframe>
+</div>
+</div>
+
+<div class="video-card">
+<div class="video-wrapper">
+<iframe src="https://www.youtube.com/embed/pX0lkVI1dkg" allowfullscreen></iframe>
+</div>
+</div>
+
+<div class="video-card">
+<div class="video-wrapper">
+<iframe src="https://www.youtube.com/embed/CWGaPBbQI6M" allowfullscreen></iframe>
+</div>
+</div>
+
+<div class="video-card">
+<div class="video-wrapper">
+<iframe src="https://www.youtube.com/embed/QTNoH8Gpho8" allowfullscreen></iframe>
+</div>
+</div>
+
+<div class="video-card">
+<div class="video-wrapper">
+<iframe src="https://www.youtube.com/embed/lxOMW7GOn44" allowfullscreen></iframe>
+</div>
+</div>
+
+<div class="video-card">
+<div class="video-wrapper">
+<iframe src="https://www.youtube.com/embed/wYi4Zvc6uuk" allowfullscreen></iframe>
+</div>
+</div>
+
+<div class="video-card">
+<div class="video-wrapper">
+<iframe src="https://www.youtube.com/embed/tfh5HmCJS0w" allowfullscreen></iframe>
+</div>
+</div>
+
+<div class="video-card">
+<div class="video-wrapper">
+<iframe src="https://www.youtube.com/embed/37D3nHE0Eac" allowfullscreen></iframe>
+</div>
+</div>
+
+</div>
+</div>
+
+</body>
+</html>
