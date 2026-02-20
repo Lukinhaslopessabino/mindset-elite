@@ -9,9 +9,11 @@
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
 <style>
+*{margin:0;padding:0;box-sizing:border-box}
+
 body{
-font-family:Montserrat;
-background:#000;
+font-family:'Montserrat',sans-serif;
+background:linear-gradient(135deg,#000,#0a0f1c);
 color:#fff;
 display:flex;
 justify-content:center;
@@ -19,36 +21,98 @@ align-items:center;
 height:100vh;
 }
 
+/* CARD */
 .form-box{
-background:#111;
-padding:40px;
-border-radius:20px;
-width:350px;
+background:rgba(15,20,35,0.95);
+padding:45px;
+border-radius:25px;
+width:380px;
+box-shadow:0 0 40px rgba(0,153,255,0.3);
+border:1px solid rgba(0,153,255,0.4);
 }
 
+h2{
+margin-bottom:25px;
+font-weight:900;
+letter-spacing:1px;
+}
+
+/* INPUTS */
 input{
 width:100%;
-padding:12px;
-margin-bottom:15px;
-border-radius:10px;
+padding:14px;
+margin-bottom:18px;
+border-radius:14px;
 border:1px solid #0099FF;
-background:#000;
+background:#0b0f18;
 color:#fff;
+font-size:14px;
+transition:0.3s;
 }
 
+input:focus{
+outline:none;
+box-shadow:0 0 15px rgba(0,153,255,0.5);
+transform:scale(1.02);
+}
+
+/* BOTÃO */
 button{
 width:100%;
-padding:12px;
+padding:14px;
 border:none;
-border-radius:10px;
-background:#0099FF;
+border-radius:15px;
+background:linear-gradient(90deg,#0099FF,#00CFFF,#0099FF);
+background-size:200% auto;
 color:#fff;
-font-weight:bold;
+font-weight:700;
 cursor:pointer;
+transition:0.3s;
+position:relative;
+animation:btnMove 4s linear infinite;
 }
 
+@keyframes btnMove{
+0%{background-position:0%}
+100%{background-position:200%}
+}
+
+button:hover{
+transform:scale(1.03);
+}
+
+button:disabled{
+background:#333;
+animation:none;
+cursor:not-allowed;
+}
+
+/* LOADER */
+.loader{
+display:none;
+width:18px;
+height:18px;
+border:3px solid #fff;
+border-top:3px solid transparent;
+border-radius:50%;
+animation:spin 1s linear infinite;
+position:absolute;
+right:20px;
+top:50%;
+transform:translateY(-50%);
+}
+
+@keyframes spin{
+0%{transform:translateY(-50%) rotate(0deg);}
+100%{transform:translateY(-50%) rotate(360deg);}
+}
+
+/* MENSAGEM */
 #formMsg{
-margin-top:15px;
+margin-top:18px;
+font-weight:600;
+font-size:14px;
+min-height:20px;
 }
 </style>
 </head>
@@ -64,20 +128,34 @@ margin-top:15px;
 <input type="text" id="nome" placeholder="Seu Nome" required>
 <input type="number" id="idade" placeholder="Sua Idade" required>
 
-<div class="g-recaptcha" data-sitekey="6LefpnEsAAAAAE46Eao6qyQQL_6nGBT08Dc3pGTo"></div>
+<button type="submit">
+Enviar Inscrição
+<div class="loader" id="loader"></div>
+</button>
 
-<button type="submit">Enviar</button>
+<!-- reCAPTCHA abaixo do botão -->
+<div style="margin-top:18px; display:flex; justify-content:center;">
+<div class="g-recaptcha" 
+     data-sitekey="6LefpnEsAAAAAE46Eao6qyQQL_6nGBT08Dc3pGTo">
+</div>
+</div>
 
 <p id="formMsg"></p>
+
 </form>
 </div>
 
 <script>
 const form = document.getElementById("signupForm");
 const formMsg = document.getElementById("formMsg");
+const loader = document.getElementById("loader");
+const button = form.querySelector("button");
 
 form.addEventListener("submit", async function(e){
 e.preventDefault();
+
+formMsg.style.color="#FF4C4C";
+formMsg.innerText="";
 
 const token = grecaptcha.getResponse();
 if(!token){
@@ -89,6 +167,20 @@ const telegram = document.getElementById("telegram").value.trim();
 const nome = document.getElementById("nome").value.trim();
 const idade = parseInt(document.getElementById("idade").value);
 
+const regex = /^@[a-zA-Z0-9_]{5,}$/;
+if(!regex.test(telegram)){
+formMsg.innerText="Telegram inválido.";
+return;
+}
+
+if(!idade || idade < 16){
+formMsg.innerText="Idade mínima é 16 anos.";
+return;
+}
+
+loader.style.display="block";
+button.disabled=true;
+
 try{
 const res = await fetch("/inscrever",{
 method:"POST",
@@ -99,21 +191,26 @@ body: JSON.stringify({ nome, idade, telegram, token })
 const data = await res.json();
 
 if(!res.ok){
-formMsg.innerText=data.erro;
+formMsg.innerText=data.erro || "Erro ao enviar.";
+loader.style.display="none";
+button.disabled=false;
 return;
 }
 
 formMsg.style.color="#00FFAA";
-formMsg.innerText="Inscrição confirmada!";
+formMsg.innerText="Inscrição confirmada com sucesso!";
+
 form.reset();
 grecaptcha.reset();
 
 }catch{
-formMsg.innerText="Erro ao enviar.";
+formMsg.innerText="Erro de conexão com servidor.";
 }
+
+loader.style.display="none";
+button.disabled=false;
 });
 </script>
 
 </body>
 </html>
-
