@@ -15,13 +15,52 @@ body{
 font-family:'Montserrat',sans-serif;
 background:linear-gradient(135deg,#000,#0a0f1c);
 color:#fff;
+min-height:100vh;
+}
+
+/* ================= MENU ================= */
+
+nav{
+position:fixed;
+top:0;
+width:100%;
+display:flex;
+justify-content:center;
+gap:30px;
+padding:18px 0;
+background:rgba(0,0,0,0.85);
+backdrop-filter:blur(15px);
+border-bottom:1px solid rgba(0,153,255,0.4);
+z-index:1000;
+}
+
+nav a{
+color:#fff;
+text-decoration:none;
+font-weight:600;
+padding:8px 16px;
+border-radius:25px;
+transition:0.3s;
+}
+
+nav a:hover{
+background:#0099FF;
+color:#000;
+box-shadow:0 0 15px #0099FF;
+}
+
+/* ================= CONTAINER ================= */
+
+.container{
 display:flex;
 justify-content:center;
 align-items:center;
-height:100vh;
+min-height:100vh;
+padding-top:100px;
 }
 
-/* CARD */
+/* ================= CARD ================= */
+
 .form-box{
 background:rgba(15,20,35,0.95);
 padding:45px;
@@ -35,9 +74,11 @@ h2{
 margin-bottom:25px;
 font-weight:900;
 letter-spacing:1px;
+text-align:center;
 }
 
-/* INPUTS */
+/* ================= INPUTS ================= */
+
 input{
 width:100%;
 padding:14px;
@@ -56,7 +97,8 @@ box-shadow:0 0 15px rgba(0,153,255,0.5);
 transform:scale(1.02);
 }
 
-/* BOTÃO */
+/* ================= BOTÃO ================= */
+
 button{
 width:100%;
 padding:14px;
@@ -87,7 +129,8 @@ animation:none;
 cursor:not-allowed;
 }
 
-/* LOADER */
+/* ================= LOADER ================= */
+
 .loader{
 display:none;
 width:18px;
@@ -107,19 +150,50 @@ transform:translateY(-50%);
 100%{transform:translateY(-50%) rotate(360deg);}
 }
 
-/* MENSAGEM */
+/* ================= RECAPTCHA ================= */
+
+.recaptcha-box{
+display:flex;
+justify-content:center;
+margin-top:15px;
+margin-bottom:10px;
+}
+
+/* ================= MENSAGEM ================= */
+
 #formMsg{
 margin-top:18px;
 font-weight:600;
 font-size:14px;
 min-height:20px;
+text-align:center;
+}
+
+/* ================= RESPONSIVO ================= */
+
+@media(max-width:500px){
+.form-box{
+width:95%;
+padding:30px;
+}
 }
 </style>
 </head>
 
 <body>
 
+<!-- MENU -->
+<nav>
+<a href="index.html">Início</a>
+<a href="membros.html">Membros</a>
+<a href="participantes.html">Participantes</a>
+<a href="links.html">Links Oficiais</a>
+<a href="formulario.html">Formulário</a>
+</nav>
+
+<div class="container">
 <div class="form-box">
+
 <h2>Inscrição Oficial</h2>
 
 <form id="signupForm">
@@ -133,9 +207,8 @@ Enviar Inscrição
 <div class="loader" id="loader"></div>
 </button>
 
-<!-- reCAPTCHA abaixo do botão -->
-<div style="margin-top:18px; display:flex; justify-content:center;">
-<div class="g-recaptcha" 
+<div class="recaptcha-box">
+<div class="g-recaptcha"
      data-sitekey="6LefpnEsAAAAAE46Eao6qyQQL_6nGBT08Dc3pGTo">
 </div>
 </div>
@@ -143,6 +216,7 @@ Enviar Inscrição
 <p id="formMsg"></p>
 
 </form>
+</div>
 </div>
 
 <script>
