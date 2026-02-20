@@ -155,14 +155,35 @@ z-index:999;
 
 <div class="status" id="statusMsg"></div>
 
-<div id="painel" style="display:none; margin-top:40px; text-align:center;">
+<div id="painel" style="display:none; margin-top:40px;">
 
-  <h2 style="color:#00ffcc;">Dashboard Admin</h2>
+  <div class="dashboard">
 
-  <button onclick="verInscritos()">Ver Inscritos</button>
-  <button onclick="resetar()">Resetar Vaga para 1</button>
+    <div class="top-bar">
+      <h2>🚀 Admin Dashboard</h2>
+      <span class="badge">SECURE MODE</span>
+    </div>
 
-  <div id="resultado" style="margin-top:20px;"></div>
+    <div class="stats">
+      <div class="card-stat">
+        <h3>Vagas Restantes</h3>
+        <p id="vagaCount">--</p>
+      </div>
+
+      <div class="card-stat">
+        <h3>Total Inscritos</h3>
+        <p id="inscritoCount">--</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-primary" onclick="verInscritos()">Ver Inscritos</button>
+      <button class="btn-danger" onclick="resetar()">Resetar Vaga</button>
+    </div>
+
+    <div id="resultado" class="resultado"></div>
+
+  </div>
 
 <div id="matrixLoading">ACESSO CONFIRMADO — INICIANDO SISTEMA...</div>
 
@@ -267,6 +288,7 @@ statusMsg.className="status error";
 
 </body>
 </html>
+
 
 
 
