@@ -58,6 +58,19 @@ app.get("/vagas", (req, res) => {
   }
 });
 
+app.get("/ranking", (req, res) => {
+  const banco = lerBanco();
+
+  const ranking = banco.inscritos
+    .sort((a,b)=> a.idade - b.idade)
+    .map((user,index)=>({
+      ...user,
+      rank:index+1
+    }));
+
+  res.json({ ranking });
+});
+
 app.post("/inscrever", (req, res) => {
   try {
     const { token } = req.body;
@@ -169,4 +182,5 @@ app.post("/admin/inscritos", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
+
 
