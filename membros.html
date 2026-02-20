@@ -10,11 +10,20 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+
 body{
 font-family:'Orbitron',sans-serif;
 background:#000;
 color:#fff;
 overflow-x:hidden;
+}
+
+/* THREE CANVAS */
+#bg3d{
+position:fixed;
+top:0;
+left:0;
+z-index:-3;
 }
 
 /* MENU */
@@ -86,7 +95,7 @@ overflow:hidden;
 
 .member-card:hover{
 transform:translateY(-10px);
-box-shadow:0 0 50px rgba(0,153,255,0.6);
+box-shadow:0 0 60px rgba(0,153,255,0.7);
 }
 
 /* RANK */
@@ -127,7 +136,7 @@ border-radius:50%;
 object-fit:cover;
 }
 
-/* WAVE NEON */
+/* WAVE */
 .wave{
 position:fixed;
 bottom:0;
@@ -143,18 +152,12 @@ z-index:-2;
 0%{transform:translateX(0);}
 100%{transform:translateX(-50%);}
 }
-
-/* THREEJS CANVAS */
-canvas{
-position:fixed;
-top:0;
-left:0;
-z-index:-3;
-}
 </style>
 </head>
 
 <body>
+
+<canvas id="bg3d"></canvas>
 
 <nav>
 <a href="index.html">Início</a>
@@ -175,20 +178,20 @@ Carregando ranking...
 <div class="wave"></div>
 
 <script>
-/* ========================= */
-/* PARTICULAS 3D THREE.JS */
-/* ========================= */
+/* ============================= */
+/* FUNDO 3D REAL PARTICLES */
+/* ============================= */
 
+const canvas = document.getElementById("bg3d");
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 2000);
-const renderer = new THREE.WebGLRenderer({ alpha:true });
+const renderer = new THREE.WebGLRenderer({ canvas:canvas, alpha:true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
 
 const geometry = new THREE.BufferGeometry();
 const vertices = [];
 
-for(let i=0;i<3000;i++){
+for(let i=0;i<2500;i++){
   vertices.push(
     THREE.MathUtils.randFloatSpread(2000),
     THREE.MathUtils.randFloatSpread(2000),
@@ -210,22 +213,34 @@ camera.position.z = 600;
 
 function animate(){
   requestAnimationFrame(animate);
-  particles.rotation.x += 0.0006;
-  particles.rotation.y += 0.0006;
+  particles.rotation.x += 0.0005;
+  particles.rotation.y += 0.0005;
   renderer.render(scene, camera);
 }
 animate();
 
-/* ========================= */
+window.addEventListener("resize", ()=>{
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+/* ============================= */
 /* RANKING BACKEND */
-/* ========================= */
+/* ============================= */
 
 async function carregarRanking(){
+  const grid = document.getElementById("membersGrid");
+
   try{
     const res = await fetch("/ranking");
+
+    if(!res.ok){
+      throw new Error();
+    }
+
     const data = await res.json();
 
-    const grid = document.getElementById("membersGrid");
     grid.innerHTML="";
 
     data.ranking.forEach(user=>{
@@ -238,7 +253,8 @@ async function carregarRanking(){
         <div class="member-card">
           <div class="rank">#${user.rank} ${medal}</div>
           <div class="avatar-wrapper">
-            <img src="images/default.jpg">
+            <img src="/images/${user.foto || 'default.jpg'}" 
+                 onerror="this.src='/images/default.jpg'">
           </div>
           <h3>${user.nome}</h3>
           <p>${user.idade} anos</p>
@@ -247,7 +263,7 @@ async function carregarRanking(){
     });
 
   }catch{
-    document.getElementById("membersGrid").innerHTML="Erro ao carregar ranking.";
+    grid.innerHTML="⚠ Ranking indisponível no momento.";
   }
 }
 
