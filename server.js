@@ -11,7 +11,7 @@ app.use(express.static("./"));
 
 const PORT = process.env.PORT || 3000;
 const ADMIN_PASSWORD = "93724432134183714282"; // 🔐 MUDE ISSO
-const RECAPTCHA_SECRE= 6LefpnEsAAAAANEn_ixy3kXuNTGGOmF55ZteFSMP;
+const RECAPTCHA_SECRET= 6LefpnEsAAAAANEn_ixy3kXuNTGGOmF55ZteFSMP;
 
 /* ===================================== */
 /* ========= BANCO SEGURO ============== */
@@ -191,6 +191,7 @@ app.post("/admin/inscritos", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
+
 
 
 
