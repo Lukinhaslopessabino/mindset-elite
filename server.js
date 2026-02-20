@@ -59,16 +59,25 @@ app.get("/vagas", (req, res) => {
 });
 
 app.get("/ranking", (req, res) => {
+
   const banco = lerBanco();
 
+  // Se não houver inscritos
+  if (!banco.inscritos || banco.inscritos.length === 0) {
+    return res.json({ ranking: [] });
+  }
+
+  // Criar ranking baseado na ordem de inscrição
   const ranking = banco.inscritos
-    .sort((a,b)=> a.idade - b.idade)
-    .map((user,index)=>({
-      ...user,
-      rank:index+1
+    .map((user, index) => ({
+      nome: user.nome,
+      idade: user.idade,
+      rank: index + 1,
+      foto: user.foto || null
     }));
 
   res.json({ ranking });
+
 });
 
 app.post("/inscrever", (req, res) => {
@@ -182,5 +191,6 @@ app.post("/admin/inscritos", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
+
 
 
