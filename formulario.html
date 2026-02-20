@@ -14,13 +14,13 @@
 
 body{
 font-family:'Montserrat',sans-serif;
-background:#000;
+background:linear-gradient(135deg,#000,#0a0f1c);
 color:#fff;
 min-height:100vh;
 overflow-x:hidden;
 }
 
-/* ================= FUNDO PARTÍCULAS ================= */
+/* ================= FUNDO ================= */
 
 #particles-js{
 position:fixed;
@@ -37,21 +37,23 @@ top:0;
 width:100%;
 display:flex;
 justify-content:center;
-gap:30px;
-padding:18px 0;
+gap:20px;
+padding:15px;
 background:rgba(0,0,0,0.85);
 backdrop-filter:blur(15px);
 border-bottom:1px solid rgba(0,153,255,0.4);
 z-index:1000;
+flex-wrap:wrap;
 }
 
 nav a{
 color:#fff;
 text-decoration:none;
 font-weight:600;
-padding:8px 16px;
+padding:8px 14px;
 border-radius:25px;
 transition:0.3s;
+font-size:14px;
 }
 
 nav a:hover{
@@ -67,16 +69,17 @@ display:flex;
 justify-content:center;
 align-items:center;
 min-height:100vh;
-padding-top:120px;
+padding:120px 15px 40px 15px;
 }
 
 /* ================= CARD ================= */
 
 .form-box{
-background:rgba(10,15,25,0.95);
-padding:45px;
+background:rgba(15,20,35,0.95);
+padding:35px;
 border-radius:25px;
-width:380px;
+width:100%;
+max-width:420px;
 box-shadow:0 0 40px rgba(0,153,255,0.4);
 border:1px solid rgba(0,153,255,0.4);
 backdrop-filter:blur(10px);
@@ -85,11 +88,12 @@ backdrop-filter:blur(10px);
 h2{
 text-align:center;
 margin-bottom:10px;
+font-weight:900;
 }
 
 .vagas{
 text-align:center;
-margin-bottom:20px;
+margin-bottom:25px;
 font-size:14px;
 color:#00FFAA;
 }
@@ -105,11 +109,13 @@ border:1px solid #0099FF;
 background:#0b0f18;
 color:#fff;
 transition:0.3s;
+font-size:14px;
 }
 
 input:focus{
 outline:none;
 box-shadow:0 0 15px rgba(0,153,255,0.5);
+transform:scale(1.02);
 }
 
 /* ================= BOTÃO ================= */
@@ -125,6 +131,11 @@ color:#fff;
 font-weight:700;
 cursor:pointer;
 animation:btnMove 4s linear infinite;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.03);
 }
 
 @keyframes btnMove{
@@ -151,6 +162,27 @@ margin-top:15px;
 margin-top:18px;
 text-align:center;
 min-height:20px;
+font-size:14px;
+}
+
+/* ================= MOBILE AJUSTE EXTRA ================= */
+
+@media (max-width:480px){
+
+nav{
+gap:10px;
+padding:10px;
+}
+
+nav a{
+font-size:12px;
+padding:6px 10px;
+}
+
+.form-box{
+padding:25px;
+}
+
 }
 </style>
 </head>
@@ -194,17 +226,21 @@ min-height:20px;
 </div>
 
 <script>
-/* ================= PARTÍCULAS ================= */
+/* ================= PARTÍCULAS OTIMIZADAS ================= */
+
+if(window.innerWidth > 600){
 particlesJS("particles-js",{
 particles:{
-number:{value:60},
+number:{value:50},
 color:{value:"#0099FF"},
 line_linked:{enable:true,color:"#0099FF"},
 move:{speed:1}
 }
 });
+}
 
 /* ================= VAGAS DINÂMICAS ================= */
+
 async function carregarVagas(){
 try{
 const res = await fetch("/vagas");
@@ -219,6 +255,7 @@ document.getElementById("vagasInfo").innerText =
 carregarVagas();
 
 /* ================= ENVIO ================= */
+
 const form = document.getElementById("signupForm");
 const formMsg = document.getElementById("formMsg");
 
