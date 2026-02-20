@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inscrição - Mindset Elite</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
@@ -13,7 +14,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
-font-family:'Montserrat',sans-serif;
+font-family:'Orbitron',sans-serif;
 background:linear-gradient(135deg,#000,#0a0f1c);
 color:#fff;
 min-height:100vh;
@@ -57,9 +58,9 @@ font-size:14px;
 }
 
 nav a:hover{
-background:#0099FF;
+background:#00F5FF;
 color:#000;
-box-shadow:0 0 15px #0099FF;
+box-shadow:0 0 15px #00F5FF;
 }
 
 /* ================= CONTAINER ================= */
@@ -76,13 +77,19 @@ padding:120px 15px 40px 15px;
 
 .form-box{
 background:rgba(15,20,35,0.95);
-padding:35px;
+padding:40px;
 border-radius:25px;
 width:100%;
 max-width:420px;
 box-shadow:0 0 40px rgba(0,153,255,0.4);
 border:1px solid rgba(0,153,255,0.4);
 backdrop-filter:blur(10px);
+animation:fadeUp 1s ease;
+}
+
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(40px)}
+to{opacity:1;transform:translateY(0)}
 }
 
 h2{
@@ -125,17 +132,14 @@ width:100%;
 padding:14px;
 border:none;
 border-radius:15px;
-background:linear-gradient(90deg,#0099FF,#00CFFF,#0099FF);
+background:linear-gradient(90deg,#0099FF,#00F5FF,#0099FF);
 background-size:200% auto;
 color:#fff;
 font-weight:700;
 cursor:pointer;
 animation:btnMove 4s linear infinite;
 transition:0.3s;
-}
-
-button:hover{
-transform:scale(1.03);
+position:relative;
 }
 
 @keyframes btnMove{
@@ -143,9 +147,35 @@ transform:scale(1.03);
 100%{background-position:200%}
 }
 
+button:hover{
+transform:scale(1.03);
+}
+
 button:disabled{
 background:#333;
 animation:none;
+cursor:not-allowed;
+}
+
+/* Loader botão */
+
+.loader{
+display:none;
+position:absolute;
+right:20px;
+top:50%;
+transform:translateY(-50%);
+width:18px;
+height:18px;
+border:3px solid #fff;
+border-top:3px solid transparent;
+border-radius:50%;
+animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+0%{transform:translateY(-50%) rotate(0deg);}
+100%{transform:translateY(-50%) rotate(360deg);}
 }
 
 /* ================= RECAPTCHA ================= */
@@ -153,7 +183,7 @@ animation:none;
 .recaptcha-box{
 display:flex;
 justify-content:center;
-margin-top:15px;
+margin-top:20px;
 }
 
 /* ================= MSG ================= */
@@ -165,7 +195,7 @@ min-height:20px;
 font-size:14px;
 }
 
-/* ================= MOBILE AJUSTE EXTRA ================= */
+/* ================= MOBILE ================= */
 
 @media (max-width:480px){
 
@@ -211,35 +241,39 @@ padding:25px;
 <input type="text" id="nome" placeholder="Seu Nome" required>
 <input type="number" id="idade" placeholder="Sua Idade" required>
 
-<button type="submit">Enviar Inscrição</button>
+<button type="submit">
+Enviar Inscrição
+<div class="loader" id="loader"></div>
+</button>
 
 <div class="recaptcha-box">
 <div class="g-recaptcha"
-     data-sitekey="6LefpnEsAAAAAE46Eao6qyQQL_6nGBT08Dc3pGTo">
+     data-sitekey="SUA_SITE_KEY_AQUI">
 </div>
 </div>
 
 <p id="formMsg"></p>
-</form>
 
+</form>
 </div>
 </div>
 
 <script>
-/* ================= PARTÍCULAS OTIMIZADAS ================= */
+
+/* Partículas leves */
 
 if(window.innerWidth > 600){
 particlesJS("particles-js",{
 particles:{
-number:{value:50},
-color:{value:"#0099FF"},
-line_linked:{enable:true,color:"#0099FF"},
-move:{speed:1}
+number:{value:40},
+color:{value:"#00F5FF"},
+line_linked:{enable:true,color:"#00F5FF"},
+move:{speed:0.8}
 }
 });
 }
 
-/* ================= VAGAS DINÂMICAS ================= */
+/* Vagas */
 
 async function carregarVagas(){
 try{
@@ -254,10 +288,12 @@ document.getElementById("vagasInfo").innerText =
 }
 carregarVagas();
 
-/* ================= ENVIO ================= */
+/* ENVIO */
 
 const form = document.getElementById("signupForm");
 const formMsg = document.getElementById("formMsg");
+const loader = document.getElementById("loader");
+const button = form.querySelector("button");
 
 form.addEventListener("submit", async function(e){
 e.preventDefault();
@@ -275,6 +311,9 @@ const telegram = document.getElementById("telegram").value.trim();
 const nome = document.getElementById("nome").value.trim();
 const idade = parseInt(document.getElementById("idade").value);
 
+loader.style.display="block";
+button.disabled=true;
+
 try{
 const res = await fetch("/inscrever",{
 method:"POST",
@@ -286,6 +325,8 @@ const data = await res.json();
 
 if(!res.ok){
 formMsg.innerText=data.erro;
+loader.style.display="none";
+button.disabled=false;
 return;
 }
 
@@ -298,7 +339,11 @@ carregarVagas();
 }catch{
 formMsg.innerText="Erro de conexão.";
 }
+
+loader.style.display="none";
+button.disabled=false;
 });
+
 </script>
 
 </body>
