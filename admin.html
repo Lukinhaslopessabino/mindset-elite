@@ -2,221 +2,250 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Painel Admin - Mindset Elite</title>
+<title>Admin Secure Access</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Montserrat',sans-serif;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
 
 body{
+height:100vh;
 background:#000;
-color:#fff;
 display:flex;
 justify-content:center;
 align-items:center;
-min-height:100vh;
-overflow-x:hidden;
+color:#fff;
+overflow:hidden;
 }
 
-/* FUNDO GRADIENTE */
-body::before{
-content:"";
+/* MATRIX CANVAS */
+canvas{
 position:fixed;
-width:100%;
-height:100%;
-background:radial-gradient(circle at top,#0099FF20,transparent 70%);
-z-index:-1;
+top:0;
+left:0;
+z-index:-2;
 }
 
-/* CARD PRINCIPAL */
-.container{
+/* CARD */
+.card{
 width:420px;
-background:rgba(0,0,0,0.65);
-backdrop-filter:blur(20px);
-border:2px solid #0099FF;
+padding:50px;
 border-radius:25px;
-padding:40px;
-box-shadow:0 0 40px rgba(0,153,255,0.3);
+background:rgba(0,0,0,0.8);
+border:1px solid rgba(0,153,255,0.5);
+box-shadow:0 0 40px rgba(0,153,255,0.7);
 text-align:center;
+z-index:2;
 }
 
-/* TÍTULO */
 h1{
-font-size:28px;
-margin-bottom:25px;
-color:#0099FF;
-text-shadow:0 0 15px rgba(0,153,255,0.7);
+margin-bottom:30px;
+letter-spacing:2px;
 }
 
-/* INPUT */
+h1 span{
+color:#00BFFF;
+text-shadow:0 0 20px #0099FF;
+}
+
 input{
 width:100%;
 padding:14px;
-margin-bottom:20px;
 border-radius:12px;
 border:1px solid #0099FF;
-background:rgba(0,153,255,0.05);
+background:rgba(0,153,255,0.08);
 color:#fff;
+margin-bottom:20px;
 outline:none;
-transition:0.3s;
 }
 
-input:focus{
-box-shadow:0 0 20px rgba(0,153,255,0.4);
-}
-
-/* BOTÕES */
 button{
 width:100%;
 padding:14px;
-border-radius:20px;
+border-radius:30px;
 border:none;
-margin-top:10px;
+background:linear-gradient(90deg,#0099FF,#00CFFF);
+color:#fff;
 font-weight:600;
 cursor:pointer;
 transition:0.3s;
 }
 
-.btn-primary{
-background:linear-gradient(90deg,#0099FF,#00BFFF);
-color:#fff;
-box-shadow:0 0 20px rgba(0,153,255,0.4);
+button:hover{
+box-shadow:0 0 40px #0099FF;
 }
 
-.btn-primary:hover{
-transform:scale(1.05);
-box-shadow:0 0 35px rgba(0,153,255,0.8);
-}
-
-.btn-action{
-background:#111;
-border:1px solid #0099FF;
-color:#0099FF;
-}
-
-.btn-action:hover{
-background:#0099FF;
-color:#000;
-}
-
-/* PAINEL */
-#painel{
-margin-top:25px;
+/* SCANNER */
+.scanner{
+margin:30px auto;
+width:120px;
+height:120px;
+border-radius:50%;
+border:2px solid #00FFAA;
+position:relative;
 display:none;
-animation:fade 0.5s ease;
+overflow:hidden;
 }
 
-@keyframes fade{
-from{opacity:0;transform:translateY(15px);}
-to{opacity:1;transform:translateY(0);}
+.scan-line{
+position:absolute;
+width:100%;
+height:4px;
+background:#00FFAA;
+top:-4px;
+animation:scan 1.5s linear infinite;
+box-shadow:0 0 20px #00FFAA;
 }
 
-/* BOX RESULTADO */
-.box{
-background:#0a0a0a;
-border:1px solid #0099FF;
-padding:15px;
-border-radius:15px;
-margin-top:15px;
+@keyframes scan{
+0%{top:-4px;}
+100%{top:120px;}
 }
 
-#resultado{
-margin-top:15px;
-max-height:250px;
-overflow:auto;
-font-size:12px;
-text-align:left;
+.status{
+margin-top:20px;
+font-size:14px;
+min-height:24px;
+}
+
+.success{
+color:#00FFAA;
+font-size:18px;
+text-shadow:0 0 15px #00FFAA;
+}
+
+.error{
+color:#FF4C4C;
+}
+
+/* MATRIX LOADING SCREEN */
+#matrixLoading{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
 background:#000;
-padding:15px;
-border-radius:15px;
-border:1px solid #0099FF;
+display:none;
+justify-content:center;
+align-items:center;
+color:#00FF00;
+font-size:22px;
+z-index:999;
 }
-
-pre{
-white-space:pre-wrap;
-word-break:break-word;
-}
-
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<canvas id="matrix"></canvas>
 
-<h1>Painel Admin</h1>
+<div class="card">
 
-<input type="password" id="senha" placeholder="Senha admin">
+<h1><span>Secure</span> Admin</h1>
 
-<button class="btn-primary" onclick="login()">Entrar</button>
+<input type="password" id="senha" placeholder="Digite sua senha segura">
 
-<div id="painel">
+<button onclick="login()">Iniciar Verificação</button>
 
-<div class="box">
-<button class="btn-action" onclick="verInscritos()">Ver Inscritos</button>
-<button class="btn-action" onclick="resetar()">Resetar Vaga para 1</button>
+<div class="scanner" id="scanner">
+<div class="scan-line"></div>
 </div>
 
-<div id="resultado"></div>
+<div class="status" id="statusMsg"></div>
 
 </div>
 
-</div>
+<div id="matrixLoading">ACESSO CONFIRMADO — INICIANDO SISTEMA...</div>
+
+<!-- 🔊 AUDIO -->
+<audio id="successSound" src="https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3"></audio>
+<audio id="errorSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-buzz-950.mp3"></audio>
 
 <script>
 
+/* MATRIX EFFECT */
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+const letters = "01ADMINSECUREACCESS".split("");
+const fontSize = 16;
+const columns = canvas.width / fontSize;
+const drops = [];
+
+for(let x=0;x<columns;x++) drops[x]=1;
+
+function draw(){
+ctx.fillStyle="rgba(0,0,0,0.05)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle="#00FF00";
+ctx.font=fontSize+"px monospace";
+
+for(let i=0;i<drops.length;i++){
+const text=letters[Math.floor(Math.random()*letters.length)];
+ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+
+if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
+drops[i]=0;
+
+drops[i]++;
+}
+}
+setInterval(draw,33);
+
+/* LOGIN */
 async function login(){
-  const senha = document.getElementById("senha").value;
 
-  const res = await fetch("/admin/login", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({ senha })
-  });
+const senha = document.getElementById("senha").value;
+const scanner = document.getElementById("scanner");
+const statusMsg = document.getElementById("statusMsg");
+const successSound = document.getElementById("successSound");
+const errorSound = document.getElementById("errorSound");
 
-  if(!res.ok){
-    alert("Senha incorreta");
-    return;
-  }
+statusMsg.innerHTML="🧠 Decrypting credentials...";
+statusMsg.className="status";
+scanner.style.display="block";
 
-  document.getElementById("painel").style.display="block";
-  alert("Login feito");
+await new Promise(r=>setTimeout(r,2500));
+
+try{
+const res = await fetch("/admin/login",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body: JSON.stringify({ senha })
+});
+
+if(!res.ok){
+scanner.style.display="none";
+statusMsg.innerHTML="❌ ACCESS DENIED";
+statusMsg.className="status error";
+errorSound.play();
+return;
 }
 
-async function verInscritos(){
-  const senha = document.getElementById("senha").value;
+successSound.play();
+statusMsg.innerHTML="✅ ACCESS GRANTED";
+statusMsg.className="status success";
 
-  const res = await fetch("/admin/inscritos", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({ senha })
-  });
+await new Promise(r=>setTimeout(r,1500));
 
-  const data = await res.json();
+document.getElementById("matrixLoading").style.display="flex";
 
-  document.getElementById("resultado").innerHTML =
-    "<pre>"+JSON.stringify(data.inscritos, null, 2)+"</pre>";
+await new Promise(r=>setTimeout(r,2500));
+
+window.location.href="/admin-dashboard";
+
+}catch{
+statusMsg.innerHTML="Erro de conexão.";
+statusMsg.className="status error";
 }
 
-async function resetar(){
-  const senha = document.getElementById("senha").value;
-
-  await fetch("/admin/resetar", {
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({ senha })
-  });
-
-  alert("Vaga resetada para 1");
 }
-
 </script>
 
 </body>
