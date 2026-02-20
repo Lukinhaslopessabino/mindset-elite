@@ -6,8 +6,6 @@
 <title>Mindset Elite</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
 <style>
@@ -20,65 +18,61 @@ color:#fff;
 overflow-x:hidden;
 }
 
-/* ================= LOADER ================= */
-
-#loader{
+/* VIDEO BACKGROUND */
+.video-container{
 position:fixed;
 width:100%;
 height:100%;
-background:#000;
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:9999;
-flex-direction:column;
-transition:opacity 0.6s ease;
+z-index:-2;
+overflow:hidden;
 }
 
-#loader h1{
-font-size:28px;
-letter-spacing:3px;
-animation:pulse 1.5s infinite;
+video{
+width:100%;
+height:100%;
+object-fit:cover;
+filter:brightness(0.7);
 }
 
-@keyframes pulse{
-0%{opacity:0.4}
-50%{opacity:1}
-100%{opacity:0.4}
+/* OVERLAY */
+.overlay{
+position:fixed;
+width:100%;
+height:100%;
+background:linear-gradient(to bottom, rgba(0,0,0,0.4), rgba(0,0,0,0.9));
+z-index:-1;
 }
 
-/* ================= NAV ================= */
-
+/* NAV */
 nav{
 position:fixed;
 top:0;
 width:100%;
 display:flex;
 justify-content:center;
-gap:25px;
-padding:18px;
-background:rgba(0,0,0,0.7);
-backdrop-filter:blur(15px);
-z-index:1000;
+gap:15px;
+padding:15px;
+background:rgba(0,0,0,0.6);
+backdrop-filter:blur(10px);
+z-index:100;
 flex-wrap:wrap;
 }
 
 nav a{
 color:#fff;
 text-decoration:none;
-padding:8px 16px;
-border-radius:25px;
+padding:6px 12px;
+border-radius:20px;
+font-size:14px;
 transition:0.3s;
 }
 
 nav a:hover{
 background:#00F5FF;
 color:#000;
-box-shadow:0 0 20px #00F5FF;
 }
 
-/* ================= HERO ================= */
-
+/* HERO */
 .hero{
 min-height:100vh;
 display:flex;
@@ -90,51 +84,58 @@ padding:120px 20px 40px;
 }
 
 .hero h1{
-font-size:clamp(2.5rem,6vw,4rem);
-background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
-background-size:200%;
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-animation:glowMove 6s linear infinite;
-}
-
-@keyframes glowMove{
-0%{background-position:0%}
-100%{background-position:200%}
-}
-
-.reveal{
+font-size:clamp(2.2rem,7vw,3.5rem);
+color:#00F5FF;
+text-shadow:0 0 15px #00F5FF;
 opacity:0;
-transform:translateY(60px);
-transition:all 1s ease;
 }
 
-.reveal.active{
-opacity:1;
-transform:translateY(0);
+.hero p{
+margin-top:15px;
+font-size:1rem;
+opacity:0;
 }
 
+/* CTA */
+.cta{
+margin-top:30px;
+padding:12px 25px;
+border-radius:25px;
+border:1px solid #00F5FF;
+color:#00F5FF;
+cursor:pointer;
+transition:0.3s;
+}
+
+.cta:hover{
+background:#00F5FF;
+color:#000;
+box-shadow:0 0 15px #00F5FF;
+}
+
+/* SECTION */
 section{
-padding:120px 10%;
-min-height:100vh;
+padding:80px 20px;
+text-align:center;
+background:#000;
 }
 
-canvas{
-position:fixed;
-top:0;
-left:0;
-z-index:-1;
+section h2{
+margin-bottom:20px;
+font-size:1.5rem;
 }
 </style>
 </head>
 
 <body>
 
-<div id="loader">
-<h1>LOADING MINDSET...</h1>
+<div class="video-container">
+<video id="video" autoplay muted loop playsinline preload="metadata">
+<source src="intro.mp4" type="video/mp4">
+</video>
 </div>
 
-<canvas id="bg3d"></canvas>
+<div class="overlay"></div>
 
 <nav>
 <a href="index.html">Início</a>
@@ -145,102 +146,40 @@ z-index:-1;
 </nav>
 
 <div class="hero">
-<h1>Mindset Elite</h1>
-<p class="reveal">Elite não nasce. Elite se constrói.</p>
+<h1 id="title">Mindset Elite</h1>
+<p id="subtitle">Elite não nasce. Elite se constrói.</p>
+<div class="cta" onclick="scrollToSection()">Explorar</div>
 </div>
 
-<section>
-<h2 class="reveal">O Futuro é Agora</h2>
-<p class="reveal">Projeto em evolução constante.</p>
+<section id="about">
+<h2>O Futuro é Agora</h2>
+<p>Projeto em evolução constante.</p>
 </section>
 
 <script>
 
-/* LOADER */
+/* ================= MOBILE DETECT ================= */
+
+const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+if(isMobile){
+console.log("Modo Mobile Ativado — Performance otimizada");
+}
+
+/* ================= ENTRADA CINEMATOGRÁFICA LEVE ================= */
+
 window.addEventListener("load",()=>{
-gsap.to("#loader",{opacity:0,duration:0.8,onComplete:()=>{
-document.getElementById("loader").style.display="none";
-}});
+gsap.to("#title",{opacity:1,y:-20,duration:1});
+gsap.to("#subtitle",{opacity:1,y:-10,duration:1,delay:0.5});
 });
 
-/* 3D PARTICLES */
+/* ================= SCROLL SUAVE ================= */
 
-const canvas = document.getElementById("bg3d");
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 2000);
-const renderer = new THREE.WebGLRenderer({ canvas:canvas, alpha:true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-
-const geometry = new THREE.BufferGeometry();
-const vertices = [];
-
-for(let i=0;i<4000;i++){
-vertices.push(
-THREE.MathUtils.randFloatSpread(2000),
-THREE.MathUtils.randFloatSpread(2000),
-THREE.MathUtils.randFloatSpread(2000)
-);
+function scrollToSection(){
+document.getElementById("about").scrollIntoView({behavior:"smooth"});
 }
-
-geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices,3));
-
-const material = new THREE.PointsMaterial({
-color:0x00f5ff,
-size:2
-});
-
-const particles = new THREE.Points(geometry, material);
-scene.add(particles);
-
-camera.position.z = 700;
-
-document.addEventListener("mousemove",(e)=>{
-let mouseX=(e.clientX/window.innerWidth-0.5)*2;
-let mouseY=(e.clientY/window.innerHeight-0.5)*2;
-
-gsap.to(particles.rotation,{
-x:mouseY*0.4,
-y:mouseX*0.4,
-duration:1
-});
-});
-
-window.addEventListener("scroll",()=>{
-let scroll=window.scrollY;
-particles.rotation.z = scroll*0.0005;
-particles.position.z = 700 - scroll*0.4;
-});
-
-function animate(){
-requestAnimationFrame(animate);
-particles.rotation.x+=0.0002;
-particles.rotation.y+=0.0002;
-renderer.render(scene,camera);
-}
-animate();
-
-window.addEventListener("resize",()=>{
-camera.aspect=window.innerWidth/window.innerHeight;
-camera.updateProjectionMatrix();
-renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
-/* SCROLL REVEAL */
-
-const reveals=document.querySelectorAll(".reveal");
-
-window.addEventListener("scroll",()=>{
-reveals.forEach(el=>{
-if(el.getBoundingClientRect().top < window.innerHeight - 100){
-el.classList.add("active");
-}
-});
-});
 
 </script>
-
-<!-- GLOBAL TRANSITION -->
-<script src="layout.js"></script>
 
 </body>
 </html>
