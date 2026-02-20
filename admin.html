@@ -238,7 +238,9 @@ document.getElementById("matrixLoading").style.display="flex";
 
 await new Promise(r=>setTimeout(r,2500));
 
-window.location.href="/admin.html";
+document.getElementById("matrixLoading").style.display="none";
+document.querySelector(",login-box").style.display="none";
+document.getElementById("painel).style.display="block";
 
 }catch{
 statusMsg.innerHTML="Erro de conexão.";
@@ -250,4 +252,5 @@ statusMsg.className="status error";
 
 </body>
 </html>
+
 
