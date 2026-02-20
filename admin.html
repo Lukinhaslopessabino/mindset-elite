@@ -23,6 +23,8 @@ width:240px;
 background:#0b1220;
 padding:30px 20px;
 border-right:1px solid rgba(255,255,255,0.05);
+display:none;
+flex-direction:column;
 }
 
 .sidebar h2{
@@ -33,7 +35,7 @@ color:#00CFFF;
 
 .sidebar button{
 width:100%;
-margin-bottom:15px;
+margin-bottom:12px;
 padding:12px;
 border:none;
 border-radius:8px;
@@ -107,12 +109,6 @@ text-align:center;
 box-shadow:0 0 30px rgba(0,207,255,0.15);
 }
 
-.stat-card h3{
-font-size:14px;
-opacity:0.7;
-margin-bottom:10px;
-}
-
 .stat-card p{
 font-size:26px;
 font-weight:700;
@@ -134,7 +130,6 @@ border-collapse:collapse;
 
 th,td{
 padding:12px;
-text-align:left;
 font-size:14px;
 }
 
@@ -161,20 +156,23 @@ font-size:12px;
 background:#ff0000;
 }
 
-/* RESPONSIVO */
-@media(max-width:900px){
-.sidebar{display:none;}
-.main{padding:20px;}
+/* UPLOAD */
+.upload-box{
+margin-top:20px;
+padding:15px;
+background:#111827;
+border-radius:12px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="sidebar">
+<div class="sidebar" id="sidebar">
 <h2>Mindset Admin</h2>
 <button onclick="verInscritos()">Ver Inscritos</button>
 <button onclick="resetar()">Resetar Vagas</button>
+<button onclick="logout()">Logout</button>
 </div>
 
 <div class="main">
@@ -183,7 +181,7 @@ background:#ff0000;
 <h2 style="margin-bottom:20px">Acesso Seguro</h2>
 <input type="password" id="senha" placeholder="Digite sua senha">
 <button onclick="login()">Entrar</button>
-<p id="loginMsg" style="margin-top:15px"></p>
+<p id="loginMsg" style="margin-top:15px;color:#ff4d4d"></p>
 </div>
 
 <div class="dashboard" id="dashboard">
@@ -210,9 +208,14 @@ background:#ff0000;
 <th>Ação</th>
 </tr>
 </thead>
-<tbody id="tableBody">
-</tbody>
+<tbody id="tableBody"></tbody>
 </table>
+</div>
+
+<div class="upload-box">
+<h3>Upload de Foto</h3>
+<input type="file" id="fotoInput">
+<button onclick="uploadFoto()">Enviar Foto</button>
 </div>
 
 </div>
@@ -221,13 +224,13 @@ background:#ff0000;
 
 <script>
 
-let senhaGlobal="";
+let tokenAdmin = localStorage.getItem("adminToken") || null;
 
-/* LOGIN */
+/* ================= LOGIN ================= */
+
 async function login(){
 
 const senha = document.getElementById("senha").value;
-senhaGlobal = senha;
 
 const res = await fetch("/admin/login",{
 method:"POST",
@@ -235,25 +238,53 @@ headers:{"Content-Type":"application/json"},
 body: JSON.stringify({ senha })
 });
 
+const data = await res.json();
+
 if(!res.ok){
-document.getElementById("loginMsg").innerText="Senha incorreta";
+document.getElementById("loginMsg").innerText=data.erro;
 return;
 }
 
+tokenAdmin = data.token;
+localStorage.setItem("adminToken", tokenAdmin);
+
+iniciarDashboard();
+}
+
+/* ================= INICIAR DASHBOARD ================= */
+
+function iniciarDashboard(){
 document.getElementById("loginBox").style.display="none";
 document.getElementById("dashboard").style.display="block";
-
+document.getElementById("sidebar").style.display="flex";
 verInscritos();
 }
 
-/* VER INSCRITOS */
+/* ================= LOGOUT ================= */
+
+function logout(){
+localStorage.removeItem("adminToken");
+location.reload();
+}
+
+/* ================= VER INSCRITOS ================= */
+
 async function verInscritos(){
+
+if(!tokenAdmin) return;
 
 const res = await fetch("/admin/inscritos",{
 method:"POST",
-headers:{"Content-Type":"application/json"},
-body: JSON.stringify({ senha: senhaGlobal })
+headers:{
+"Content-Type":"application/json",
+"x-admin-token": tokenAdmin
+}
 });
+
+if(res.status===401){
+logout();
+return;
+}
 
 const data = await res.json();
 
@@ -277,32 +308,72 @@ tbody.innerHTML+=`
 
 }
 
-/* EXCLUIR */
+/* ================= EXCLUIR ================= */
+
 async function excluir(rank){
 
-if(!confirm("Tem certeza que deseja excluir este membro?")) return;
+if(!confirm("Excluir este membro?")) return;
 
 await fetch("/admin/excluir",{
 method:"POST",
-headers:{"Content-Type":"application/json"},
-body: JSON.stringify({ senha: senhaGlobal, rank })
+headers:{
+"Content-Type":"application/json",
+"x-admin-token": tokenAdmin
+},
+body: JSON.stringify({ rank })
 });
 
 verInscritos();
 }
 
-/* RESETAR */
+/* ================= RESETAR ================= */
+
 async function resetar(){
 
 if(!confirm("Resetar vagas para 1?")) return;
 
 await fetch("/admin/resetar",{
 method:"POST",
-headers:{"Content-Type":"application/json"},
-body: JSON.stringify({ senha: senhaGlobal })
+headers:{
+"Content-Type":"application/json",
+"x-admin-token": tokenAdmin
+}
 });
 
 verInscritos();
+}
+
+/* ================= UPLOAD FOTO ================= */
+
+async function uploadFoto(){
+
+const fileInput = document.getElementById("fotoInput");
+if(!fileInput.files.length) return alert("Selecione uma imagem");
+
+const formData = new FormData();
+formData.append("foto", fileInput.files[0]);
+
+const res = await fetch("/admin/upload",{
+method:"POST",
+headers:{
+"x-admin-token": tokenAdmin
+},
+body: formData
+});
+
+if(!res.ok){
+alert("Erro no upload");
+return;
+}
+
+const data = await res.json();
+alert("Upload feito: " + data.arquivo);
+}
+
+/* ================= AUTO LOGIN SE TOKEN EXISTIR ================= */
+
+if(tokenAdmin){
+iniciarDashboard();
 }
 
 </script>
