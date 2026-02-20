@@ -1,5 +1,18 @@
 {
   "vagas": 1,
-  "inscritos": [],
+  "inscritos": [
+    {
+      "nome": "Luqueta",
+      "idade": 22,
+      "telegram": "@luqueta",
+      "foto": "Luqueta.jpg"
+    },
+    {
+      "nome": "Tuzin",
+      "idade": 21,
+      "telegram": "@tuzin",
+      "foto": "Tuzin.jpg"
+    }
+  ],
   "ipsBloqueados": []
 }
