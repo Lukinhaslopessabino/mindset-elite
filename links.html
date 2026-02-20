@@ -5,14 +5,31 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Links Oficiais - Mindset Elite</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Montserrat',sans-serif;background:#000;color:#fff;}
 
-#particles-js{position:fixed;width:100%;height:100%;z-index:-1;}
+body{
+font-family:'Orbitron',sans-serif;
+background:linear-gradient(135deg,#000,#0a0f1c);
+color:#fff;
+min-height:100vh;
+overflow-x:hidden;
+}
+
+/* ================= FUNDO ================= */
+
+#particles-js{
+position:fixed;
+width:100%;
+height:100%;
+z-index:-1;
+}
+
+/* ================= MENU ================= */
 
 nav{
 position:fixed;
@@ -20,57 +37,103 @@ top:0;
 width:100%;
 display:flex;
 justify-content:center;
-gap:30px;
-padding:18px 0;
-background:#000;
-border-bottom:2px solid #0099FF;
+gap:20px;
+padding:15px;
+background:rgba(0,0,0,0.85);
+backdrop-filter:blur(15px);
+border-bottom:1px solid rgba(0,153,255,0.4);
 z-index:1000;
+flex-wrap:wrap;
 }
 
 nav a{
 color:#fff;
 text-decoration:none;
 font-weight:600;
-padding:8px 15px;
-border-radius:20px;
+padding:8px 14px;
+border-radius:25px;
 transition:0.3s;
+font-size:14px;
 }
 
-nav a:hover{background:#0099FF;color:#000;}
+nav a:hover{
+background:#00F5FF;
+color:#000;
+box-shadow:0 0 15px #00F5FF;
+}
+
+/* ================= CONTAINER ================= */
 
 .container{
-max-width:600px;
+max-width:650px;
 margin:auto;
-padding-top:140px;
-padding-bottom:80px;
-padding-left:20px;
-padding-right:20px;
+padding:130px 20px 80px 20px;
 }
 
 h2{
 margin-bottom:40px;
-border-left:5px solid #0099FF;
-padding-left:10px;
+border-left:5px solid #00F5FF;
+padding-left:15px;
+font-size:26px;
 }
+
+/* ================= LINK CARD ================= */
 
 .link-card{
 display:flex;
 align-items:center;
-gap:15px;
-padding:18px;
+gap:18px;
+padding:18px 20px;
 margin-bottom:25px;
-border-radius:15px;
-border:2px solid #0099FF;
+border-radius:18px;
+border:1px solid rgba(0,153,255,0.4);
+background:rgba(15,20,35,0.9);
 text-decoration:none;
 color:#fff;
-transition:0.3s;
+transition:all 0.3s ease;
+box-shadow:0 0 25px rgba(0,153,255,0.2);
+position:relative;
+overflow:hidden;
+}
+
+.link-card img{
+width:30px;
+height:30px;
 }
 
 .link-card:hover{
-background:#0099FF;
+transform:translateY(-5px);
+box-shadow:0 0 40px rgba(0,245,255,0.6);
+background:linear-gradient(90deg,#00F5FF,#0099FF);
 color:#000;
-transform:scale(1.05);
 }
+
+.link-card span{
+font-weight:700;
+letter-spacing:1px;
+}
+
+/* ================= ANIMAÇÃO ENTRADA ================= */
+
+.fadeUp{
+opacity:0;
+transform:translateY(40px);
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width:600px){
+
+h2{
+font-size:20px;
+}
+
+.link-card{
+font-size:14px;
+}
+
+}
+
 </style>
 </head>
 
@@ -87,37 +150,51 @@ transform:scale(1.05);
 </nav>
 
 <div class="container">
+
 <h2>Links Oficiais</h2>
 
-<a href="https://t.me/GuiRayaMindsetOne" target="_blank" class="link-card">
-<img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png" width="30">
-Telegram do Recrutador
+<a href="https://t.me/GuiRayaMindsetOne" target="_blank" class="link-card fadeUp">
+<img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">
+<span>Telegram do Recrutador</span>
 </a>
 
-<a href="https://chat.whatsapp.com/KcjoGvEv2gtAg6oVEB89sU" target="_blank" class="link-card">
-<img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" width="30">
-Grupo do Mindset
+<a href="https://chat.whatsapp.com/KcjoGvEv2gtAg6oVEB89sU" target="_blank" class="link-card fadeUp">
+<img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
+<span>Grupo do Mindset</span>
 </a>
 
-<a href="https://api.whatsapp.com/send/?phone=5531972347144" target="_blank" class="link-card">
-<img src="https://cdn-icons-png.flaticon.com/512/597/597177.png" width="30">
-Contato Direto
+<a href="https://api.whatsapp.com/send/?phone=5531972347144" target="_blank" class="link-card fadeUp">
+<img src="https://cdn-icons-png.flaticon.com/512/597/597177.png">
+<span>Contato Direto</span>
 </a>
 
 </div>
 
 <script>
+
+/* ================= PARTÍCULAS OTIMIZADAS ================= */
+
+if(window.innerWidth > 600){
 particlesJS("particles-js",{
 particles:{
-number:{value:120},
-color:{value:"#0099FF"},
-shape:{type:"circle"},
-opacity:{value:0.6},
-size:{value:3},
-line_linked:{enable:true,color:"#0099FF",opacity:0.4},
-move:{enable:true,speed:1}
+number:{value:40},
+color:{value:"#00F5FF"},
+line_linked:{enable:true,color:"#00F5FF"},
+move:{speed:0.8}
 }
 });
+}
+
+/* ================= ANIMAÇÃO ENTRADA ================= */
+
+gsap.to(".fadeUp",{
+opacity:1,
+y:0,
+duration:1,
+stagger:0.2,
+ease:"power2.out"
+});
+
 </script>
 
 </body>
