@@ -2,155 +2,217 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<title>Secure Admin Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mindset Elite • Admin SaaS</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Orbitron',sans-serif;}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
 
 body{
-background:#000;
+background:#0f172a;
 color:#fff;
-overflow:hidden;
 display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
+min-height:100vh;
 }
 
-canvas{
-position:fixed;
-top:0;
-left:0;
-z-index:-2;
+/* SIDEBAR */
+.sidebar{
+width:240px;
+background:#0b1220;
+padding:30px 20px;
+border-right:1px solid rgba(255,255,255,0.05);
 }
 
-.card{
-width:500px;
-padding:50px;
-border-radius:25px;
-background:rgba(0,0,0,0.85);
-border:1px solid rgba(0,153,255,0.5);
-box-shadow:0 0 50px rgba(0,153,255,0.8);
-text-align:center;
+.sidebar h2{
+margin-bottom:40px;
+font-weight:800;
+color:#00CFFF;
 }
 
-h1 span{
-color:#00BFFF;
-text-shadow:0 0 20px #0099FF;
-}
-
-input{
+.sidebar button{
 width:100%;
-padding:14px;
-border-radius:12px;
-border:1px solid #0099FF;
-background:rgba(0,153,255,0.08);
-color:#fff;
 margin-bottom:15px;
-}
-
-button{
-width:100%;
-padding:14px;
-border-radius:30px;
+padding:12px;
 border:none;
-background:linear-gradient(90deg,#0099FF,#00CFFF);
+border-radius:8px;
+background:#111827;
 color:#fff;
 cursor:pointer;
+transition:0.3s;
+}
+
+.sidebar button:hover{
+background:#00CFFF;
+color:#000;
+}
+
+/* MAIN */
+.main{
+flex:1;
+padding:40px;
+}
+
+/* LOGIN */
+.login-box{
+max-width:400px;
+margin:auto;
+margin-top:100px;
+background:#111827;
+padding:40px;
+border-radius:15px;
+box-shadow:0 0 40px rgba(0,207,255,0.3);
+}
+
+.login-box input{
+width:100%;
+padding:14px;
+border-radius:8px;
+border:none;
+margin-bottom:20px;
+background:#0f172a;
+color:#fff;
+}
+
+.login-box button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:8px;
+background:#00CFFF;
+color:#000;
+font-weight:600;
+cursor:pointer;
+}
+
+/* DASHBOARD */
+.dashboard{
+display:none;
+}
+
+/* STATS */
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:20px;
+margin-bottom:30px;
+}
+
+.stat-card{
+background:#111827;
+padding:25px;
+border-radius:15px;
+text-align:center;
+box-shadow:0 0 30px rgba(0,207,255,0.15);
+}
+
+.stat-card h3{
+font-size:14px;
+opacity:0.7;
 margin-bottom:10px;
 }
 
-button:hover{
-box-shadow:0 0 30px #0099FF;
+.stat-card p{
+font-size:26px;
+font-weight:700;
+color:#00CFFF;
 }
 
-.status{
-margin-top:15px;
-min-height:20px;
-}
-
-.dashboard{
-display:none;
-margin-top:20px;
-text-align:left;
-}
-
-.stats{
-display:flex;
-justify-content:space-between;
-margin-bottom:20px;
-}
-
-.stat-box{
-flex:1;
-margin:5px;
-padding:15px;
-background:#111;
-border-radius:10px;
-border:1px solid #0099FF;
-text-align:center;
-}
-
-.stat-box p{
-font-size:22px;
-color:#00ffcc;
-}
-
-.resultado{
-background:#111;
-padding:10px;
-border-radius:10px;
-max-height:200px;
+/* TABLE */
+.table-container{
+background:#111827;
+border-radius:15px;
+padding:20px;
 overflow:auto;
-font-size:12px;
-margin-bottom:15px;
 }
 
-.delete-box{
-margin-top:10px;
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:12px;
+text-align:left;
+font-size:14px;
+}
+
+th{
+border-bottom:1px solid rgba(255,255,255,0.1);
+opacity:0.7;
+}
+
+tr{
+border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+.delete-btn{
+background:#ff4d4d;
+border:none;
+padding:6px 10px;
+border-radius:6px;
+cursor:pointer;
+color:#fff;
+font-size:12px;
+}
+
+.delete-btn:hover{
+background:#ff0000;
+}
+
+/* RESPONSIVO */
+@media(max-width:900px){
+.sidebar{display:none;}
+.main{padding:20px;}
 }
 </style>
 </head>
 
 <body>
 
-<canvas id="matrix"></canvas>
+<div class="sidebar">
+<h2>Mindset Admin</h2>
+<button onclick="verInscritos()">Ver Inscritos</button>
+<button onclick="resetar()">Resetar Vagas</button>
+</div>
 
-<div class="card">
+<div class="main">
 
-<h1><span>Secure</span> Admin</h1>
-
-<input type="password" id="senha" placeholder="Digite sua senha segura">
-
-<button onclick="login()">Iniciar Verificação</button>
-
-<div class="status" id="statusMsg"></div>
+<div class="login-box" id="loginBox">
+<h2 style="margin-bottom:20px">Acesso Seguro</h2>
+<input type="password" id="senha" placeholder="Digite sua senha">
+<button onclick="login()">Entrar</button>
+<p id="loginMsg" style="margin-top:15px"></p>
+</div>
 
 <div class="dashboard" id="dashboard">
 
 <div class="stats">
-<div class="stat-box">
-<h3>Vagas</h3>
-<p id="vagaCount">--</p>
-</div>
-
-<div class="stat-box">
-<h3>Inscritos</h3>
+<div class="stat-card">
+<h3>Total Inscritos</h3>
 <p id="inscritoCount">--</p>
 </div>
+<div class="stat-card">
+<h3>Vagas Restantes</h3>
+<p id="vagaCount">--</p>
+</div>
 </div>
 
-<button onclick="verInscritos()">Ver Inscritos</button>
-<button onclick="resetar()">Resetar Vaga</button>
-
-<div class="resultado" id="resultado"></div>
-
-<!-- 🔥 NOVA PARTE EXCLUIR -->
-<div class="delete-box">
-<input type="number" id="rankDelete" placeholder="Digite o # do ranking para excluir">
-<button onclick="excluir()">Excluir por #</button>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Nome</th>
+<th>Idade</th>
+<th>Telegram</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody id="tableBody">
+</tbody>
+</table>
 </div>
 
 </div>
@@ -159,16 +221,14 @@ margin-top:10px;
 
 <script>
 
+let senhaGlobal="";
+
 /* LOGIN */
 async function login(){
 
 const senha = document.getElementById("senha").value;
-const statusMsg = document.getElementById("statusMsg");
-const dashboard = document.getElementById("dashboard");
+senhaGlobal = senha;
 
-statusMsg.innerHTML="Verificando...";
-
-try{
 const res = await fetch("/admin/login",{
 method:"POST",
 headers:{"Content-Type":"application/json"},
@@ -176,92 +236,72 @@ body: JSON.stringify({ senha })
 });
 
 if(!res.ok){
-statusMsg.innerHTML="❌ Acesso Negado";
+document.getElementById("loginMsg").innerText="Senha incorreta";
 return;
 }
 
-statusMsg.innerHTML="✅ Acesso Autorizado";
-
-document.getElementById("senha").style.display="none";
-document.querySelector("button").style.display="none";
-statusMsg.style.display="none";
-
-dashboard.style.display="block";
+document.getElementById("loginBox").style.display="none";
+document.getElementById("dashboard").style.display="block";
 
 verInscritos();
-
-}catch{
-statusMsg.innerHTML="Erro de conexão.";
-}
-
 }
 
 /* VER INSCRITOS */
 async function verInscritos(){
 
-const senha = document.getElementById("senha").value;
-
 const res = await fetch("/admin/inscritos",{
 method:"POST",
 headers:{"Content-Type":"application/json"},
-body: JSON.stringify({ senha })
+body: JSON.stringify({ senha: senhaGlobal })
 });
 
 const data = await res.json();
 
-if(!res.ok){
-alert("Erro ao buscar inscritos");
-return;
+document.getElementById("inscritoCount").innerText = data.inscritos.length;
+document.getElementById("vagaCount").innerText = data.vagas;
+
+const tbody = document.getElementById("tableBody");
+tbody.innerHTML="";
+
+data.inscritos.forEach((user,index)=>{
+tbody.innerHTML+=`
+<tr>
+<td>${index+1}</td>
+<td>${user.nome}</td>
+<td>${user.idade}</td>
+<td>${user.telegram}</td>
+<td><button class="delete-btn" onclick="excluir(${index+1})">Excluir</button></td>
+</tr>
+`;
+});
+
 }
 
-document.getElementById("resultado").innerHTML =
-"<pre>"+JSON.stringify(data.inscritos,null,2)+"</pre>";
+/* EXCLUIR */
+async function excluir(rank){
 
-document.getElementById("inscritoCount").innerText =
-data.inscritos.length;
+if(!confirm("Tem certeza que deseja excluir este membro?")) return;
 
-document.getElementById("vagaCount").innerText =
-data.vagas;
+await fetch("/admin/excluir",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body: JSON.stringify({ senha: senhaGlobal, rank })
+});
+
+verInscritos();
 }
 
 /* RESETAR */
 async function resetar(){
 
-const senha = document.getElementById("senha").value;
+if(!confirm("Resetar vagas para 1?")) return;
 
 await fetch("/admin/resetar",{
 method:"POST",
 headers:{"Content-Type":"application/json"},
-body: JSON.stringify({ senha })
+body: JSON.stringify({ senha: senhaGlobal })
 });
 
-alert("Vaga resetada");
-verInscritos();
-}
-
-/* 🔥 EXCLUIR POR RANK */
-async function excluir(){
-
-const senha = document.getElementById("senha").value;
-const rank = parseInt(document.getElementById("rankDelete").value);
-
-if(!rank){
-alert("Digite o número do ranking");
-return;
-}
-
-const res = await fetch("/admin/excluir",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body: JSON.stringify({ senha, rank })
-});
-
-if(!res.ok){
-alert("Erro ao excluir");
-return;
-}
-
-alert("Membro excluído com sucesso");
 verInscritos();
 }
 
