@@ -98,7 +98,6 @@ transform:translateY(-10px);
 box-shadow:0 0 60px rgba(0,153,255,0.7);
 }
 
-/* RANK */
 .rank{
 position:absolute;
 top:15px;
@@ -113,7 +112,6 @@ animation:pulse 2s infinite;
 100%{transform:scale(1);}
 }
 
-/* AVATAR */
 .avatar-wrapper{
 width:130px;
 height:130px;
@@ -136,7 +134,6 @@ border-radius:50%;
 object-fit:cover;
 }
 
-/* WAVE */
 .wave{
 position:fixed;
 bottom:0;
@@ -169,7 +166,6 @@ z-index:-2;
 
 <div class="container">
 <h2>🏆 Ranking Mindset Elite</h2>
-
 <div class="grid" id="membersGrid">
 Carregando ranking...
 </div>
@@ -178,9 +174,7 @@ Carregando ranking...
 <div class="wave"></div>
 
 <script>
-/* ============================= */
-/* FUNDO 3D REAL PARTICLES */
-/* ============================= */
+/* FUNDO 3D */
 
 const canvas = document.getElementById("bg3d");
 const scene = new THREE.Scene();
@@ -219,15 +213,7 @@ function animate(){
 }
 animate();
 
-window.addEventListener("resize", ()=>{
-  camera.aspect = window.innerWidth/window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
-/* ============================= */
-/* RANKING BACKEND */
-/* ============================= */
+/* RANKING */
 
 async function carregarRanking(){
   const grid = document.getElementById("membersGrid");
@@ -235,9 +221,7 @@ async function carregarRanking(){
   try{
     const res = await fetch("/ranking");
 
-    if(!res.ok){
-      throw new Error();
-    }
+    if(!res.ok) throw new Error();
 
     const data = await res.json();
 
@@ -253,8 +237,8 @@ async function carregarRanking(){
         <div class="member-card">
           <div class="rank">#${user.rank} ${medal}</div>
           <div class="avatar-wrapper">
-            <img src="/images/${user.foto || 'default.jpg'}" 
-                 onerror="this.src='/images/default.jpg'">
+            <img src="/${user.foto || 'default.jpg'}"
+                 onerror="this.src='/default.jpg'">
           </div>
           <h3>${user.nome}</h3>
           <p>${user.idade} anos</p>
