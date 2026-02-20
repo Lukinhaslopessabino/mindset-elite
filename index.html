@@ -5,22 +5,62 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mindset Elite</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
 <style>
-:root{
---azul:#0099FF;
-}
-
 *{margin:0;padding:0;box-sizing:border-box}
+
 body{
-font-family:'Montserrat',sans-serif;
+font-family:'Orbitron',sans-serif;
 background:#000;
 color:#fff;
+overflow-x:hidden;
 }
 
-/* MENU */
+/* ================= LOADER ================= */
+
+#loader{
+position:fixed;
+width:100%;
+height:100%;
+background:#000;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+flex-direction:column;
+}
+
+#loader h1{
+font-size:28px;
+letter-spacing:3px;
+animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+0%{opacity:0.4}
+50%{opacity:1}
+100%{opacity:0.4}
+}
+
+/* ================= TRANSITION ================= */
+
+#globalTransition{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:linear-gradient(135deg,#00F5FF,#0099FF);
+transform:translateY(100%);
+z-index:9998;
+}
+
+/* ================= NAV ================= */
+
 nav{
 position:fixed;
 top:0;
@@ -28,123 +68,71 @@ width:100%;
 display:flex;
 justify-content:center;
 gap:30px;
-padding:18px 0;
-background:#000;
-border-bottom:2px solid var(--azul);
+padding:20px;
+background:rgba(0,0,0,0.7);
+backdrop-filter:blur(15px);
 z-index:1000;
 }
 
 nav a{
 color:#fff;
 text-decoration:none;
-font-weight:600;
-padding:8px 15px;
-border-radius:20px;
+padding:8px 16px;
+border-radius:25px;
 transition:0.3s;
 }
 
 nav a:hover{
-background:var(--azul);
+background:#00F5FF;
 color:#000;
+box-shadow:0 0 20px #00F5FF;
 }
 
-/* HERO */
+/* ================= HERO ================= */
+
 .hero{
-padding:160px 20px 100px;
+height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
 text-align:center;
 }
 
 .hero h1{
 font-size:4rem;
-background:linear-gradient(90deg,var(--azul),#fff,var(--azul));
+background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
 background-size:200%;
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-animation:move 6s linear infinite;
+animation:glowMove 6s linear infinite;
 }
 
-@keyframes move{
+@keyframes glowMove{
 0%{background-position:0%}
 100%{background-position:200%}
 }
 
-.countdown{
-display:flex;
-justify-content:center;
-gap:25px;
-margin-top:40px;
-flex-wrap:wrap;
+.reveal{
+opacity:0;
+transform:translateY(60px);
+transition:all 1s ease;
 }
 
-.count-box{
-background:rgba(255,255,255,0.08);
-padding:20px;
-border-radius:20px;
-border:1px solid var(--azul);
-min-width:100px;
+.reveal.active{
+opacity:1;
+transform:translateY(0);
 }
 
-/* SECTION */
 section{
-padding:80px 12%;
+padding:120px 10%;
+min-height:100vh;
 }
 
-h2{
-border-left:5px solid var(--azul);
-padding-left:10px;
-margin-bottom:30px;
-}
-
-.box{
-background:#000;
-padding:40px;
-border-radius:25px;
-border:2px solid var(--azul);
-box-shadow:0 0 30px rgba(0,153,255,0.3);
-text-align:center;
-max-width:800px;
-margin:auto;
-}
-
-/* IMAGEM */
-.box img{
-width:100%;
-max-width:500px;
-border-radius:20px;
-border:2px solid var(--azul);
-box-shadow:0 0 25px rgba(0,153,255,0.4);
-transition:0.4s;
-}
-
-.box img:hover{
-transform:scale(1.03);
-}
-
-/* VIDEO */
-.video-container{
-max-width:900px;
-margin:40px auto;
-border-radius:25px;
-overflow:hidden;
-border:2px solid var(--azul);
-box-shadow:0 0 35px rgba(0,153,255,0.4);
-}
-
-video{
-width:100%;
-display:block;
-}
-
-footer{
-text-align:center;
-padding:60px;
-opacity:.6;
-}
-
-#particles-js{
+canvas{
 position:fixed;
-width:100%;
-height:100%;
+top:0;
+left:0;
 z-index:-1;
 }
 </style>
@@ -152,83 +140,133 @@ z-index:-1;
 
 <body>
 
-<div id="particles-js"></div>
+<div id="loader">
+<h1>LOADING MINDSET...</h1>
+</div>
+
+<div id="globalTransition"></div>
+
+<canvas id="bg3d"></canvas>
 
 <nav>
 <a href="index.html">Início</a>
 <a href="membros.html">Membros</a>
 <a href="participantes.html">Participantes</a>
-<a href="links.html">Links Oficiais</a>
+<a href="links.html">Links</a>
 <a href="formulario.html">Formulário</a>
 </nav>
 
 <div class="hero">
 <h1>Mindset Elite</h1>
-<p>Última atualização do site: 14/02/2026</p>
-
-<div class="countdown">
-<div class="count-box"><div id="days">0</div>Dias</div>
-<div class="count-box"><div id="hours">0</div>Horas</div>
-<div class="count-box"><div id="minutes">0</div>Min</div>
-<div class="count-box"><div id="seconds">0</div>Seg</div>
-</div>
+<p class="reveal">Elite não nasce. Elite se constrói.</p>
 </div>
 
 <section>
-<h2>Valor Médio Estimado</h2>
-
-<div class="box">
-<p style="font-size:20px;margin-bottom:10px;">
-Valor médio estimado que vamos ter ao encerrar o Mindset
-</p>
-
-<p style="font-size:18px;color:#00BFFF;margin-bottom:30px;">
-Atualizado em: <strong>07/02/2026</strong>
-</p>
-
-<img src="images/valor-estimado.jpg" alt="Valor Estimado">
-</div>
+<h2 class="reveal">O Futuro é Agora</h2>
+<p class="reveal">Projeto em evolução constante.</p>
 </section>
-
-<section>
-<h2>Tá tudo no Mindset é só querer</h2>
-
-<div class="video-container">
-<video controls>
-<source src="videos/mindset.mp4" type="video/mp4">
-Seu navegador não suporta vídeo.
-</video>
-</div>
-</section>
-
-<footer>
-Mindset Elite © 2026
-</footer>
 
 <script>
-/* CONTADOR */
-const target=new Date("January 29, 2029 00:00:00").getTime();
-setInterval(()=>{
-const now=new Date().getTime();
-const distance=target-now;
-document.getElementById("days").innerText=Math.floor(distance/(1000*60*60*24));
-document.getElementById("hours").innerText=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-document.getElementById("minutes").innerText=Math.floor((distance%(1000*60*60))/(1000*60));
-document.getElementById("seconds").innerText=Math.floor((distance%(1000*60))/1000);
-},1000);
 
-/* PARTICLES */
-particlesJS("particles-js",{
-particles:{
-number:{value:120},
-color:{value:"#0099FF"},
-shape:{type:"circle"},
-opacity:{value:0.6},
-size:{value:3},
-line_linked:{enable:true,color:"#0099FF",opacity:0.4},
-move:{enable:true,speed:1}
+/* ================= LOADER ================= */
+
+window.addEventListener("load",()=>{
+gsap.to("#loader",{opacity:0,duration:1,onComplete:()=>{
+document.getElementById("loader").style.display="none";
+}});
+});
+
+/* ================= PAGE TRANSITION ================= */
+
+document.querySelectorAll("a").forEach(link=>{
+if(link.hostname === window.location.hostname){
+link.addEventListener("click",function(e){
+e.preventDefault();
+const href=this.href;
+gsap.to("#globalTransition",{
+y:0,
+duration:0.7,
+ease:"power2.inOut",
+onComplete:()=>window.location.href=href
+});
+});
 }
 });
+
+/* ================= 3D PARTICLES ================= */
+
+const canvas = document.getElementById("bg3d");
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 2000);
+const renderer = new THREE.WebGLRenderer({ canvas:canvas, alpha:true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const geometry = new THREE.BufferGeometry();
+const vertices = [];
+
+for(let i=0;i<4000;i++){
+vertices.push(
+THREE.MathUtils.randFloatSpread(2000),
+THREE.MathUtils.randFloatSpread(2000),
+THREE.MathUtils.randFloatSpread(2000)
+);
+}
+
+geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices,3));
+
+const material = new THREE.PointsMaterial({
+color:0x00f5ff,
+size:2
+});
+
+const particles = new THREE.Points(geometry, material);
+scene.add(particles);
+
+camera.position.z = 700;
+
+document.addEventListener("mousemove",(e)=>{
+let mouseX=(e.clientX/window.innerWidth-0.5)*2;
+let mouseY=(e.clientY/window.innerHeight-0.5)*2;
+
+gsap.to(particles.rotation,{
+x:mouseY*0.4,
+y:mouseX*0.4,
+duration:1
+});
+});
+
+window.addEventListener("scroll",()=>{
+let scroll=window.scrollY;
+particles.rotation.z = scroll*0.0005;
+particles.position.z = 700 - scroll*0.4;
+});
+
+function animate(){
+requestAnimationFrame(animate);
+particles.rotation.x+=0.0002;
+particles.rotation.y+=0.0002;
+renderer.render(scene,camera);
+}
+animate();
+
+window.addEventListener("resize",()=>{
+camera.aspect=window.innerWidth/window.innerHeight;
+camera.updateProjectionMatrix();
+renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+/* ================= SCROLL REVEAL ================= */
+
+const reveals=document.querySelectorAll(".reveal");
+
+window.addEventListener("scroll",()=>{
+reveals.forEach(el=>{
+if(el.getBoundingClientRect().top < window.innerHeight - 100){
+el.classList.add("active");
+}
+});
+});
+
 </script>
 
 </body>
