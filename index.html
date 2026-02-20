@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mindset Elite • Interactive Trailer</title>
+<title>Mindset Elite</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
@@ -11,77 +11,113 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+
 body{
 font-family:'Orbitron',sans-serif;
 background:#000;
 color:#fff;
-overflow:hidden;
+overflow-x:hidden;
 }
 
-/* VIDEO */
-.video-container{
+/* LOADER */
+#loader{
 position:fixed;
 width:100%;
 height:100%;
-z-index:-3;
-}
-video{
-width:100%;
-height:100%;
-object-fit:cover;
+background:#000;
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:9999;
+transition:opacity 0.6s ease;
 }
 
-/* OVERLAY */
-.overlay{
+#loader h1{
+font-size:24px;
+letter-spacing:3px;
+animation:pulse 1.5s infinite;
+}
+
+@keyframes pulse{
+0%{opacity:0.4}
+50%{opacity:1}
+100%{opacity:0.4}
+}
+
+/* NAV */
+nav{
 position:fixed;
+top:0;
 width:100%;
-height:100%;
-background:radial-gradient(circle at center, rgba(0,0,0,0.2), rgba(0,0,0,0.9));
-z-index:-2;
+display:flex;
+justify-content:center;
+gap:25px;
+padding:18px;
+background:rgba(0,0,0,0.7);
+backdrop-filter:blur(15px);
+z-index:1000;
+flex-wrap:wrap;
+}
+
+nav a{
+color:#fff;
+text-decoration:none;
+padding:8px 16px;
+border-radius:25px;
+transition:0.3s;
+}
+
+nav a:hover{
+background:#00F5FF;
+color:#000;
+box-shadow:0 0 20px #00F5FF;
 }
 
 /* HERO */
 .hero{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
+min-height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
 text-align:center;
-z-index:10;
+padding:120px 20px 40px;
 }
 
 .hero h1{
-font-size:clamp(3rem,7vw,5rem);
-opacity:0;
-color:#00F5FF;
-text-shadow:0 0 10px #00F5FF, 0 0 30px #00F5FF;
+font-size:clamp(2.5rem,6vw,4rem);
+background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
+background-size:200%;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+animation:glowMove 6s linear infinite;
+}
+
+@keyframes glowMove{
+0%{background-position:0%}
+100%{background-position:200%}
 }
 
 .hero p{
 margin-top:20px;
-font-size:1.3rem;
+font-size:1.2rem;
+opacity:0.8;
+}
+
+.reveal{
 opacity:0;
+transform:translateY(40px);
+transition:all 1s ease;
 }
 
-/* ENTER */
-.enter{
-position:absolute;
-bottom:60px;
-left:50%;
-transform:translateX(-50%);
-cursor:pointer;
-padding:15px 30px;
-border:1px solid #00F5FF;
-border-radius:30px;
-color:#00F5FF;
-z-index:20;
-transition:0.3s;
+.reveal.active{
+opacity:1;
+transform:translateY(0);
 }
 
-.enter:hover{
-background:#00F5FF;
-color:#000;
-box-shadow:0 0 20px #00F5FF;
+section{
+padding:120px 10%;
+min-height:60vh;
 }
 
 canvas{
@@ -92,51 +128,61 @@ z-index:-1;
 }
 </style>
 </head>
+
 <body>
 
-<div class="video-container">
-<video id="video" preload="auto">
-<source src="intro.mp4" type="video/mp4">
-</video>
+<div id="loader">
+<h1>LOADING MINDSET...</h1>
 </div>
 
-<div class="overlay"></div>
 <canvas id="bg3d"></canvas>
 
+<nav>
+<a href="index.html">Início</a>
+<a href="membros.html">Membros</a>
+<a href="participantes.html">Participantes</a>
+<a href="videos.html">Vídeos</a>
+<a href="links.html">Links</a>
+<a href="formulario.html">Formulário</a>
+</nav>
+
 <div class="hero">
-<h1 id="title">Mindset Elite</h1>
-<p id="subtitle">Elite não nasce. Elite se constrói.</p>
+<h1>Mindset Elite</h1>
+<p class="reveal">Elite não nasce. Elite se constrói.</p>
 </div>
 
-<div class="enter" id="enterBtn">INICIAR EXPERIÊNCIA</div>
+<section>
+<h2 class="reveal">Mentalidade Global</h2>
+<p class="reveal">
+Construindo uma elite com visão internacional.
+Conteúdo exclusivo, networking forte e crescimento real.
+</p>
+</section>
 
 <script>
 
-/* ================= TRAVAR SCROLL ================= */
-document.body.style.overflow = "hidden";
-
-/* ================= VIDEO ================= */
-
-const video = document.getElementById("video");
-const enterBtn = document.getElementById("enterBtn");
-
-enterBtn.addEventListener("click",()=>{
-video.play();
-enterBtn.style.display="none";
+/* LOADER */
+window.addEventListener("load",()=>{
+gsap.to("#loader",{opacity:0,duration:0.8,onComplete:()=>{
+document.getElementById("loader").style.display="none";
+}});
 });
 
-/* ================= THREE JS ================= */
+/* FUNDO 3D (DESKTOP) */
+
+if(window.innerWidth > 768){
 
 const canvas = document.getElementById("bg3d");
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 2000);
 const renderer = new THREE.WebGLRenderer({ canvas:canvas, alpha:true });
+
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 const geometry = new THREE.BufferGeometry();
 const vertices = [];
 
-for(let i=0;i<2000;i++){
+for(let i=0;i<1500;i++){
 vertices.push(
 THREE.MathUtils.randFloatSpread(2000),
 THREE.MathUtils.randFloatSpread(2000),
@@ -154,65 +200,15 @@ size:2
 const particles = new THREE.Points(geometry, material);
 scene.add(particles);
 
-camera.position.z = 600;
-
-/* ================= ÁUDIO ANALYSER ================= */
-
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-const analyser = audioCtx.createAnalyser();
-const source = audioCtx.createMediaElementSource(video);
-
-source.connect(analyser);
-analyser.connect(audioCtx.destination);
-
-analyser.fftSize = 64;
-const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-/* ================= ANIMAÇÃO ================= */
+camera.position.z = 700;
 
 function animate(){
 requestAnimationFrame(animate);
-
-analyser.getByteFrequencyData(dataArray);
-let avg = dataArray.reduce((a,b)=>a+b)/dataArray.length;
-
-/* NEON GLOW REAGINDO */
-document.getElementById("title").style.textShadow =
-`0 0 ${10 + avg/5}px #00F5FF,
- 0 0 ${30 + avg/3}px #00F5FF`;
-
-/* PARTÍCULAS REAGINDO */
-particles.rotation.x += 0.0005 + avg/200000;
-particles.rotation.y += 0.0005 + avg/200000;
-
+particles.rotation.x+=0.0003;
+particles.rotation.y+=0.0003;
 renderer.render(scene,camera);
 }
 animate();
-
-/* ================= SINCRONIZAR CÂMERA COM TEMPO ================= */
-
-video.addEventListener("timeupdate",()=>{
-
-let t = video.currentTime;
-
-/* Câmera avança com o tempo */
-camera.position.z = 600 - t*40;
-
-/* Texto aparece em momentos exatos */
-if(t > 1){
-gsap.to("#title",{opacity:1,y:-20,duration:1});
-}
-if(t > 4){
-gsap.to("#subtitle",{opacity:1,y:-10,duration:1});
-}
-
-});
-
-/* ================= AUTO PLAY AUDIO ================= */
-
-document.body.addEventListener("click",()=>{
-audioCtx.resume();
-},{once:true});
 
 window.addEventListener("resize",()=>{
 camera.aspect=window.innerWidth/window.innerHeight;
@@ -220,7 +216,23 @@ camera.updateProjectionMatrix();
 renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
+}
+
+/* SCROLL REVEAL */
+
+const reveals=document.querySelectorAll(".reveal");
+
+window.addEventListener("scroll",()=>{
+reveals.forEach(el=>{
+if(el.getBoundingClientRect().top < window.innerHeight - 100){
+el.classList.add("active");
+}
+});
+});
+
 </script>
+
+<script src="layout.js"></script>
 
 </body>
 </html>
