@@ -170,7 +170,7 @@ border-radius:12px;
 
 <div class="sidebar" id="sidebar">
 <h2>Mindset Admin</h2>
-<button onclick="verInscritos()">Ver Inscritos</button>
+<button onclick="verInscritos()">Atualizar</button>
 <button onclick="resetar()">Resetar Vagas</button>
 <button onclick="logout()">Logout</button>
 </div>
@@ -224,7 +224,29 @@ border-radius:12px;
 
 <script>
 
-let tokenAdmin = localStorage.getItem("adminToken") || null;
+let tokenAdmin = sessionStorage.getItem("adminToken") || null;
+
+/* ================= VALIDA TOKEN ================= */
+
+async function validarSessao(){
+
+if(!tokenAdmin) return false;
+
+const res = await fetch("/admin/inscritos",{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"x-admin-token": tokenAdmin
+}
+});
+
+if(res.status === 401){
+logout();
+return false;
+}
+
+return true;
+}
 
 /* ================= LOGIN ================= */
 
@@ -241,17 +263,17 @@ body: JSON.stringify({ senha })
 const data = await res.json();
 
 if(!res.ok){
-document.getElementById("loginMsg").innerText=data.erro;
+document.getElementById("loginMsg").innerText = data.erro;
 return;
 }
 
 tokenAdmin = data.token;
-localStorage.setItem("adminToken", tokenAdmin);
+sessionStorage.setItem("adminToken", tokenAdmin);
 
 iniciarDashboard();
 }
 
-/* ================= INICIAR DASHBOARD ================= */
+/* ================= INICIAR ================= */
 
 function iniciarDashboard(){
 document.getElementById("loginBox").style.display="none";
@@ -263,7 +285,7 @@ verInscritos();
 /* ================= LOGOUT ================= */
 
 function logout(){
-localStorage.removeItem("adminToken");
+sessionStorage.removeItem("adminToken");
 location.reload();
 }
 
@@ -281,7 +303,7 @@ headers:{
 }
 });
 
-if(res.status===401){
+if(res.status === 401){
 logout();
 return;
 }
@@ -305,7 +327,6 @@ tbody.innerHTML+=`
 </tr>
 `;
 });
-
 }
 
 /* ================= EXCLUIR ================= */
@@ -372,10 +393,12 @@ alert("Upload feito: " + data.arquivo);
 
 /* ================= AUTO LOGIN SE TOKEN EXISTIR ================= */
 
+(async ()=>{
 if(tokenAdmin){
-iniciarDashboard();
+const valido = await validarSessao();
+if(valido) iniciarDashboard();
 }
-
+})();
 </script>
 
 </body>
