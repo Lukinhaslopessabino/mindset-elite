@@ -213,6 +213,10 @@ const scanner = document.getElementById("scanner");
 const statusMsg = document.getElementById("statusMsg");
 const successSound = document.getElementById("successSound");
 const errorSound = document.getElementById("errorSound");
+const painel = document.getElementById("painel");
+const matrixLoading = document.getElementById("matrixLoading");
+const botao = document.querySelector("button");
+const input = document.getElementById("senha");
 
 statusMsg.innerHTML="🧠 Decrypting credentials...";
 statusMsg.className="status";
@@ -241,13 +245,17 @@ statusMsg.className="status success";
 
 await new Promise(r=>setTimeout(r,1500));
 
-document.getElementById("matrixLoading").style.display="flex";
+matrixLoading.style.display="flex";
 
 await new Promise(r=>setTimeout(r,2500));
 
-document.getElementById("matrixLoading").style.display="none";
-document.querySelector(",login-box").style.display="none";
-document.getElementById("painel).style.display="block";
+matrixLoading.style.display="none";
+scanner.style.display="none";
+statusMsg.style.display="none";
+botao.style.display="none";
+input.style.display="none";
+
+painel.style.display="block";
 
 }catch{
 statusMsg.innerHTML="Erro de conexão.";
@@ -259,6 +267,7 @@ statusMsg.className="status error";
 
 </body>
 </html>
+
 
 
 
