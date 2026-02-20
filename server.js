@@ -1,7 +1,6 @@
 import express from "express";
 import fs from "fs";
 import cors from "cors";
-import fetch from "node-fetch";
 
 const app = express();
 
@@ -22,10 +21,17 @@ const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 function lerBanco() {
   if (!fs.existsSync("./database.json")) {
-    fs.writeFileSync("./database.json", JSON.stringify({
-      vagas: 1,
-      inscritos: []
-    }, null, 2));
+    fs.writeFileSync(
+      "./database.json",
+      JSON.stringify(
+        {
+          vagas: 1,
+          inscritos: []
+        },
+        null,
+        2
+      )
+    );
   }
 
   return JSON.parse(fs.readFileSync("./database.json"));
@@ -71,7 +77,6 @@ app.get("/ranking", (req, res) => {
 
 app.post("/inscrever", async (req, res) => {
   try {
-
     const { nome, idade, telegram, token } = req.body;
 
     if (!token) {
@@ -92,12 +97,12 @@ app.post("/inscrever", async (req, res) => {
     const recaptchaData = await verify.json();
 
     if (!recaptchaData.success) {
-      return res.status(400).json({ erro: "Falha na verificação de segurança." });
+      return res
+        .status(400)
+        .json({ erro: "Falha na verificação de segurança." });
     }
 
     const banco = lerBanco();
-
-    /* VALIDAÇÕES */
 
     if (!nome || nome.length < 2) {
       return res.status(400).json({ erro: "Nome inválido." });
@@ -115,12 +120,15 @@ app.post("/inscrever", async (req, res) => {
       return res.status(400).json({ erro: "Vagas esgotadas." });
     }
 
-    const jaExiste = banco.inscritos.find(i => i.telegram === telegram);
-    if (jaExiste) {
-      return res.status(400).json({ erro: "Telegram já cadastrado." });
-    }
+    const jaExiste = banco.inscritos.find(
+      (i) => i.telegram === telegram
+    );
 
-    /* SALVAR */
+    if (jaExiste) {
+      return res
+        .status(400)
+        .json({ erro: "Telegram já cadastrado." });
+    }
 
     banco.vagas -= 1;
 
@@ -133,10 +141,9 @@ app.post("/inscrever", async (req, res) => {
 
     salvarBanco(banco);
 
-    /* TELEGRAM */
+    /* ENVIAR PARA TELEGRAM */
 
     if (TELEGRAM_TOKEN && TELEGRAM_CHAT_ID) {
-
       const mensagem = `
 🚀 NOVA INSCRIÇÃO
 
@@ -145,15 +152,17 @@ app.post("/inscrever", async (req, res) => {
 📩 Telegram: ${telegram}
 `;
 
-      await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: TELEGRAM_CHAT_ID,
-          text: mensagem
-        })
-      });
-
+      await fetch(
+        `https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: mensagem
+          })
+        }
+      );
     }
 
     res.json({ sucesso: true });
