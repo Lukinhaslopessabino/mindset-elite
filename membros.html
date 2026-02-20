@@ -237,7 +237,7 @@ async function carregarRanking(){
         <div class="member-card">
           <div class="rank">#${user.rank} ${medal}</div>
           <div class="avatar-wrapper">
-            <img src="/${user.foto || 'Daniel.jpg'}"
+            <img src="/${user.foto ||"
                  onerror="this.src='/Daniel.jpg'">
           </div>
           <h3>${user.nome}</h3>
@@ -256,4 +256,5 @@ carregarRanking();
 
 </body>
 </html>
+
 
