@@ -18,7 +18,6 @@ color:#fff;
 overflow-x:hidden;
 }
 
-/* THREE CANVAS */
 #bg3d{
 position:fixed;
 top:0;
@@ -26,7 +25,6 @@ left:0;
 z-index:-3;
 }
 
-/* MENU */
 nav{
 position:fixed;
 top:0;
@@ -56,7 +54,6 @@ color:#000;
 box-shadow:0 0 20px #0099FF;
 }
 
-/* CONTAINER */
 .container{
 max-width:1300px;
 margin:auto;
@@ -73,14 +70,12 @@ border-left:5px solid #0099FF;
 padding-left:15px;
 }
 
-/* GRID */
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
 gap:60px;
 }
 
-/* CARD */
 .member-card{
 background:rgba(10,10,20,0.85);
 padding:35px;
@@ -174,7 +169,10 @@ Carregando ranking...
 <div class="wave"></div>
 
 <script>
+
+/* ============================= */
 /* FUNDO 3D */
+/* ============================= */
 
 const canvas = document.getElementById("bg3d");
 const scene = new THREE.Scene();
@@ -213,32 +211,40 @@ function animate(){
 }
 animate();
 
+window.addEventListener("resize", ()=>{
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+/* ============================= */
 /* RANKING */
+/* ============================= */
 
 async function carregarRanking(){
   const grid = document.getElementById("membersGrid");
 
   try{
     const res = await fetch("/ranking");
-
     if(!res.ok) throw new Error();
 
     const data = await res.json();
-
     grid.innerHTML="";
 
     data.ranking.forEach(user=>{
+
       let medal="";
       if(user.rank===1) medal="🥇";
       else if(user.rank===2) medal="🥈";
       else if(user.rank===3) medal="🥉";
 
-      grid.innerHTML+=`
+      const foto = user.foto ? user.foto : "Daniel.jpg";
+
+      grid.innerHTML += `
         <div class="member-card">
           <div class="rank">#${user.rank} ${medal}</div>
           <div class="avatar-wrapper">
-            <img src="/${user.foto ||"
-                 onerror="this.src='/Daniel.jpg'">
+            <img src="/${foto}" onerror="this.src='/Daniel.jpg'">
           </div>
           <h3>${user.nome}</h3>
           <p>${user.idade} anos</p>
@@ -252,9 +258,8 @@ async function carregarRanking(){
 }
 
 carregarRanking();
+
 </script>
 
 </body>
 </html>
-
-
