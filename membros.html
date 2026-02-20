@@ -128,6 +128,7 @@ width:100%;
 height:100%;
 border-radius:50%;
 object-fit:cover;
+display:block;
 }
 
 /* ===== FUNDO 3D ===== */
@@ -142,19 +143,11 @@ z-index:-2;
 /* ===== MOBILE ===== */
 
 @media (max-width:600px){
-
 h2{font-size:22px;}
-
-.avatar-wrapper{
-width:90px;
-height:90px;
+.avatar-wrapper{width:90px;height:90px;}
+.grid{gap:20px;}
 }
 
-.grid{
-gap:20px;
-}
-
-}
 </style>
 </head>
 
@@ -179,7 +172,7 @@ Carregando ranking...
 
 <script>
 
-/* ================= FUNDO 3D (DESKTOP) ================= */
+/* ================= FUNDO 3D (DESKTOP APENAS) ================= */
 
 if(window.innerWidth > 768){
 
@@ -202,7 +195,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 const geometry = new THREE.BufferGeometry();
 const vertices = [];
 
-for(let i=0;i<1200;i++){
+for(let i=0;i<1000;i++){
 vertices.push(
 THREE.MathUtils.randFloatSpread(2000),
 THREE.MathUtils.randFloatSpread(2000),
@@ -227,21 +220,15 @@ camera.position.z = 600;
 
 function animate(){
 requestAnimationFrame(animate);
-particles.rotation.x += 0.0003;
-particles.rotation.y += 0.0003;
+particles.rotation.x += 0.0002;
+particles.rotation.y += 0.0002;
 renderer.render(scene, camera);
 }
 animate();
 
-window.addEventListener("resize", ()=>{
-camera.aspect = window.innerWidth/window.innerHeight;
-camera.updateProjectionMatrix();
-renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
 }
 
-/* ================= RANKING ================= */
+/* ================= RANKING ROBUSTO ================= */
 
 async function carregarRanking(){
 
@@ -250,11 +237,20 @@ const grid = document.getElementById("membersGrid");
 try{
 
 const res = await fetch("/ranking");
-if(!res.ok) throw new Error();
+
+if(!res.ok){
+grid.innerHTML="⚠ Ranking indisponível.";
+return;
+}
 
 const data = await res.json();
 
 grid.innerHTML="";
+
+if(!data.ranking || data.ranking.length === 0){
+grid.innerHTML="Nenhum membro ainda.";
+return;
+}
 
 data.ranking.forEach(user=>{
 
@@ -263,7 +259,7 @@ if(user.rank===1) medal="🥇";
 else if(user.rank===2) medal="🥈";
 else if(user.rank===3) medal="🥉";
 
-const foto = user.foto 
+const fotoPath = user.foto
 ? `/images/${user.foto}`
 : "/images/default.jpg";
 
@@ -273,24 +269,27 @@ card.className="member-card";
 card.innerHTML=`
 <div class="rank">#${user.rank} ${medal}</div>
 <div class="avatar-wrapper">
-<img src="${foto}" alt="${user.nome}">
+<img src="${fotoPath}" alt="${user.nome}">
 </div>
 <h3>${user.nome}</h3>
-<p>${user.idade} anos</p>
+<p>${user.idade || 0} anos</p>
 `;
 
 const img = card.querySelector("img");
 
-img.addEventListener("error", ()=>{
-img.src="/images/default.jpg";
-});
+/* Fallback profissional */
+img.onerror = function(){
+this.onerror=null;
+this.src="/images/default.jpg";
+};
 
 grid.appendChild(card);
 
 });
 
-}catch{
-grid.innerHTML="⚠ Ranking indisponível.";
+}catch(err){
+grid.innerHTML="⚠ Erro ao carregar ranking.";
+console.error(err);
 }
 
 }
