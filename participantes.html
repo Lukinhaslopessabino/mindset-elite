@@ -208,7 +208,7 @@ move:{speed:0.8}
 
 async function carregarVagas(){
 try{
-const res = await fetch("/vagas");
+const res = await fetch("https://mindset-elite.onrender.com/vagas");
 const data = await res.json();
 document.getElementById("vagasInfo").innerText =
 "Vagas disponíveis: " + data.vagas;
@@ -223,4 +223,5 @@ carregarVagas();
 
 </body>
 </html>
+
 
