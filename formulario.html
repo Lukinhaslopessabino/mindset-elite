@@ -217,7 +217,7 @@ move:{speed:0.8}
 
 async function carregarVagas(){
 try{
-const res = await fetch("/vagas");
+const res = await fetch("https://mindset-elite.onrender.com/vagas");
 const data = await res.json();
 
 document.getElementById("vagasInfo").innerText =
@@ -283,7 +283,7 @@ button.disabled=true;
 enviando = true;
 
 try{
-const res = await fetch("/inscrever",{
+const res = await fetch("https://mindset-elite.onrender.com/inscrever",{
 method:"POST",
 headers:{ "Content-Type":"application/json" },
 body: JSON.stringify({ nome, idade, telegram, token })
@@ -316,5 +316,6 @@ enviando = false;
 
 </body>
 </html>
+
 
 
