@@ -232,7 +232,7 @@ async function validarSessao(){
 
 if(!tokenAdmin) return false;
 
-const res = await fetch("/admin/inscritos",{
+const res = await fetch("https://mindset-elite.onrender.com/admin/inscritos",{
 method:"POST",
 headers:{
 "Content-Type":"application/json",
@@ -254,7 +254,7 @@ async function login(){
 
 const senha = document.getElementById("senha").value;
 
-const res = await fetch("/admin/login",{
+const res = await fetch("https://mindset-elite.onrender.com/admin/login",{
 method:"POST",
 headers:{"Content-Type":"application/json"},
 body: JSON.stringify({ senha })
@@ -295,7 +295,7 @@ async function verInscritos(){
 
 if(!tokenAdmin) return;
 
-const res = await fetch("/admin/inscritos",{
+const res = await fetch("https://mindset-elite.onrender.com/admin/inscritos",{
 method:"POST",
 headers:{
 "Content-Type":"application/json",
@@ -335,7 +335,7 @@ async function excluir(rank){
 
 if(!confirm("Excluir este membro?")) return;
 
-await fetch("/admin/excluir",{
+await fetch("https://mindset-elite.onrender.com/admin/excluir",{
 method:"POST",
 headers:{
 "Content-Type":"application/json",
@@ -353,7 +353,7 @@ async function resetar(){
 
 if(!confirm("Resetar vagas para 1?")) return;
 
-await fetch("/admin/resetar",{
+await fetch("https://mindset-elite.onrender.com/admin/resetar",{
 method:"POST",
 headers:{
 "Content-Type":"application/json",
@@ -374,7 +374,7 @@ if(!fileInput.files.length) return alert("Selecione uma imagem");
 const formData = new FormData();
 formData.append("foto", fileInput.files[0]);
 
-const res = await fetch("/admin/upload",{
+const res = await fetch("https://mindset-elite.onrender.com/admin/upload",{
 method:"POST",
 headers:{
 "x-admin-token": tokenAdmin
@@ -403,3 +403,4 @@ if(valido) iniciarDashboard();
 
 </body>
 </html>
+
