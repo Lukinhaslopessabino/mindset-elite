@@ -237,7 +237,7 @@ const grid = document.getElementById("membersGrid");
 
 try{
 
-const res = await fetch("/ranking");
+const res = await fetch("https://mindset-elite.onrender.com/ranking");
 
 if(!res.ok){
 grid.innerHTML="⚠ Ranking indisponível.";
@@ -301,4 +301,5 @@ carregarRanking();
 
 </body>
 </html>
+
 
