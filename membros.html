@@ -20,10 +20,11 @@ body{
   background:linear-gradient(135deg,#000,#0a0f1c);
   color:#fff;
   overflow-x:hidden;
-  padding-bottom:80px;
+  min-height:100vh;
+  padding-bottom:100px;
 }
 
-/* ================= NAV ================= */
+/* ================= NAV PADRÃO ================= */
 
 nav{
   position:fixed;
@@ -31,7 +32,6 @@ nav{
   width:100%;
   display:flex;
   justify-content:center;
-  align-items:center;
   gap:20px;
   padding:16px;
   background:rgba(0,0,0,0.85);
@@ -60,69 +60,84 @@ nav a:hover{
 /* ================= CONTAINER ================= */
 
 .container{
-  max-width:1100px;
+  max-width:1000px;
   margin:auto;
-  padding:140px 20px 100px 20px;
+  padding:150px 20px 120px;
 }
 
 h2{
-  font-size:28px;
-  margin-bottom:40px;
+  font-size:26px;
+  margin-bottom:35px;
   border-left:5px solid #00F5FF;
   padding-left:15px;
+  letter-spacing:1px;
 }
 
-/* ================= LISTA PARTICIPANTES ================= */
+/* ================= CARD PRINCIPAL ================= */
 
 .card{
   background:rgba(15,20,35,0.95);
-  padding:30px;
-  border-radius:20px;
+  padding:35px;
+  border-radius:25px;
   border:1px solid rgba(0,153,255,0.3);
-  box-shadow:0 0 25px rgba(0,153,255,0.2);
+  box-shadow:0 0 35px rgba(0,153,255,0.25);
 }
+
+/* ================= LINHAS ================= */
 
 .row{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:12px 0;
+  padding:14px 0;
   border-bottom:1px solid rgba(255,255,255,0.05);
   font-size:15px;
+  transition:0.3s;
 }
 
 .row:last-child{
   border-bottom:none;
 }
 
+.row:hover{
+  transform:translateX(5px);
+  color:#00F5FF;
+}
+
+/* ================= STATUS ================= */
+
 .confirmado{
   color:#00FFAA;
+  text-shadow:0 0 8px #00FFAA;
 }
 
 .indefinido{
   color:#00BFFF;
+  text-shadow:0 0 8px #00BFFF;
 }
 
 .nao{
   color:#FF4C4C;
+  text-shadow:0 0 8px #FF4C4C;
 }
 
+/* ================= VAGAS ================= */
+
 .vagas{
-  margin-top:30px;
+  margin-top:35px;
   text-align:center;
   font-size:18px;
   font-weight:bold;
   color:#00F5FF;
+  text-shadow:0 0 12px #00F5FF;
 }
 
-/* ===================================================== */
 /* ================= MOBILE APP STYLE ================= */
-/* ===================================================== */
 
 @media (max-width:768px){
 
   body{
-    padding-bottom:100px;
+    padding-bottom:120px;
   }
 
   nav{
@@ -140,17 +155,22 @@ h2{
   }
 
   .container{
-    padding:80px 15px 120px 15px;
+    padding:100px 15px 140px;
   }
 
   h2{
-    font-size:22px;
+    font-size:20px;
+  }
+
+  .card{
+    padding:25px;
   }
 
   .row{
     flex-direction:column;
     align-items:flex-start;
     gap:6px;
+    font-size:14px;
   }
 
   .vagas{
@@ -158,6 +178,7 @@ h2{
   }
 
 }
+
 
 
 </style>
@@ -313,6 +334,7 @@ carregarRanking();
 <script src="layout.js?v=2"></script>
 </body>
 </html>
+
 
 
 
