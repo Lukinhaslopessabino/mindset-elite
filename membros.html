@@ -1,11 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Membros - Mindset Elite</title>
 
-<!-- PERFORMANCE -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
@@ -15,35 +14,54 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
+:root{
+  --bg1:#000;
+  --bg2:#0a0f1c;
+
+  --cyan:#00F5FF;
+  --blue:#0099FF;
+  --purple:#635BFF;
+  --danger:#FF4D4D;
+  --ok:#00FFAA;
+
+  --text:#fff;
+  --muted:rgba(255,255,255,.72);
+
+  --card:rgba(15,20,35,0.92);
+  --stroke:rgba(0,153,255,0.28);
+  --shadow:0 0 25px rgba(0,153,255,0.20);
+  --shadowStrong:0 0 45px rgba(0,153,255,0.70);
+}
+
 body{
   font-family:'Orbitron',sans-serif;
-  background:linear-gradient(135deg,#000,#0a0f1c);
-  color:#fff;
+  background:linear-gradient(135deg,var(--bg1),var(--bg2));
+  color:var(--text);
   overflow-x:hidden;
   min-height:100vh;
 }
 
-/* ================= NAV PADRÃO APP ================= */
-
+/* ================= NAV ================= */
 .navbar{
   position:fixed;
   top:0;
   width:100%;
   display:flex;
   justify-content:center;
-  gap:25px;
-  padding:18px;
-  background:rgba(0,0,0,0.75);
+  gap:22px;
+  padding:16px;
+  background:rgba(0,0,0,0.72);
   backdrop-filter:blur(15px);
   z-index:1000;
+  border-bottom:1px solid rgba(0,153,255,.18);
 }
 
 .navbar a{
   color:#fff;
   text-decoration:none;
-  padding:8px 16px;
-  border-radius:25px;
-  transition:.3s;
+  padding:8px 14px;
+  border-radius:22px;
+  transition:.25s;
   display:flex;
   align-items:center;
   gap:6px;
@@ -51,13 +69,80 @@ body{
 }
 
 .navbar a:hover{
-  background:#00F5FF;
+  background:var(--cyan);
   color:#000;
-  box-shadow:0 0 20px #00F5FF;
+  box-shadow:0 0 18px var(--cyan);
 }
 
-/* ================= CONTAINER ================= */
+/* ================= TOP STATUS ================= */
+.statusbar{
+  position:fixed;
+  top:70px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:999;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  padding:10px 12px;
+  border-radius:999px;
+  background:rgba(0,0,0,.55);
+  border:1px solid rgba(0,153,255,.22);
+  backdrop-filter: blur(12px);
+  font-size:12px;
+  color:rgba(255,255,255,.86);
+}
 
+.dot{
+  width:8px;height:8px;border-radius:99px;
+  background:rgba(255,255,255,.25);
+  box-shadow:0 0 0 3px rgba(255,255,255,.08);
+}
+.dot.ok{ background:var(--ok); box-shadow:0 0 0 3px rgba(0,255,170,.12); }
+.dot.bad{ background:var(--danger); box-shadow:0 0 0 3px rgba(255,77,77,.12); }
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:22px;
+  height:22px;
+  padding:0 8px;
+  border-radius:999px;
+  background:rgba(0,245,255,.14);
+  border:1px solid rgba(0,245,255,.30);
+  color:rgba(255,255,255,.92);
+  font-weight:900;
+}
+
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 14px;
+  border-radius:999px;
+  background:rgba(15,20,35,.65);
+  border:1px solid rgba(0,153,255,.20);
+  box-shadow:0 0 22px rgba(0,153,255,.12);
+  font-size:12px;
+  color:rgba(255,255,255,.84);
+}
+
+.btn{
+  border:none;
+  cursor:pointer;
+  padding:10px 14px;
+  border-radius:999px;
+  font-weight:900;
+  color:#000;
+  background:linear-gradient(90deg,var(--cyan),#00cfff);
+  box-shadow:0 0 22px rgba(0,245,255,.16);
+  transition:.18s;
+}
+.btn:hover{ transform: translateY(-1px); box-shadow:0 0 30px rgba(0,245,255,.24); }
+.btn:active{ transform: translateY(0px) scale(.99); }
+
+/* ================= CONTAINER ================= */
 .container{
   max-width:1200px;
   margin:auto;
@@ -66,15 +151,23 @@ body{
 
 h2{
   font-size:28px;
-  margin-bottom:50px;
+  margin-bottom:28px;
   text-align:center;
-  background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
+  background:linear-gradient(90deg,var(--cyan),#fff,var(--cyan));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
 
-/* ================= GRID ================= */
+/* ================= CONTROLS ================= */
+.controls{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin-bottom:22px;
+}
 
+/* ================= GRID ================= */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
@@ -82,54 +175,66 @@ h2{
 }
 
 /* ================= CARD ================= */
-
 .member-card{
-  background:rgba(15,20,35,0.95);
-  padding:30px;
+  background:var(--card);
+  padding:28px;
   border-radius:25px;
   text-align:center;
-  border:1px solid rgba(0,153,255,0.3);
-  box-shadow:0 0 25px rgba(0,153,255,0.25);
-  transition:.4s;
+  border:1px solid var(--stroke);
+  box-shadow:var(--shadow);
+  transition:.28s;
   position:relative;
   opacity:0;
-  transform:translateY(30px);
+  transform:translateY(24px);
   will-change: transform, opacity;
+  overflow:hidden;
 }
 
 .member-card.show{
   opacity:1;
   transform:translateY(0);
-  transition:all .8s ease;
+  transition:all .65s ease;
 }
 
 .member-card:hover{
   transform:translateY(-8px);
-  box-shadow:0 0 45px rgba(0,153,255,0.8);
+  box-shadow:var(--shadowStrong);
 }
 
-/* RANK BADGE */
-
+/* RANK */
 .rank{
   position:absolute;
-  top:15px;
-  right:18px;
-  font-size:15px;
-  font-weight:700;
-  color:#00F5FF;
+  top:14px;
+  right:16px;
+  font-size:14px;
+  font-weight:900;
+  color:var(--cyan);
+}
+
+/* XP chip */
+.xp{
+  position:absolute;
+  top:14px;
+  left:16px;
+  font-size:12px;
+  font-weight:900;
+  color:rgba(255,255,255,.88);
+  padding:7px 10px;
+  border-radius:999px;
+  background:rgba(0,0,0,.28);
+  border:1px solid rgba(255,255,255,.12);
 }
 
 /* AVATAR */
-
 .avatar-wrapper{
   width:120px;
   height:120px;
   margin:auto;
   border-radius:50%;
   overflow:hidden;
-  border:3px solid #00F5FF;
-  margin-bottom:20px;
-  box-shadow:0 0 25px rgba(0,245,255,.6);
+  border:3px solid var(--cyan);
+  margin-bottom:18px;
+  box-shadow:0 0 25px rgba(0,245,255,.55);
 }
 
 .avatar-wrapper img{
@@ -140,19 +245,47 @@ h2{
 }
 
 .member-card h3{
-  margin-bottom:5px;
+  margin-bottom:6px;
   font-size:18px;
 }
 
 .member-card p{
-  opacity:.8;
-  font-size:14px;
+  opacity:.85;
+  font-size:13px;
+  margin-bottom:10px;
 }
 
-/* ================= MOBILE APP STYLE ================= */
+/* Top 3 glow */
+.member-card.top1{ border-color:rgba(255,215,0,.35); box-shadow:0 0 40px rgba(255,215,0,.20); }
+.member-card.top2{ border-color:rgba(192,192,192,.30); box-shadow:0 0 38px rgba(192,192,192,.16); }
+.member-card.top3{ border-color:rgba(205,127,50,.30); box-shadow:0 0 38px rgba(205,127,50,.16); }
 
+.member-card.top1 .rank{ color:#FFD700; }
+.member-card.top2 .rank{ color:#C0C0C0; }
+.member-card.top3 .rank{ color:#CD7F32; }
+
+/* Animação “subiu no ranking” */
+@keyframes moveUpGlow{
+  0%{ transform: translateY(0); box-shadow: var(--shadow); }
+  50%{ transform: translateY(-6px); box-shadow:0 0 55px rgba(0,245,255,.30); }
+  100%{ transform: translateY(0); box-shadow: var(--shadowStrong); }
+}
+.member-card.moved-up{
+  animation: moveUpGlow .65s ease-out both;
+}
+
+/* New member highlight */
+@keyframes newPulse{
+  0%{ box-shadow:0 0 0 rgba(0,245,255,.0); }
+  35%{ box-shadow:0 0 65px rgba(0,245,255,.22); }
+  100%{ box-shadow:var(--shadow); }
+}
+.member-card.is-new{
+  animation: newPulse .9s ease-out both;
+}
+
+/* ================= MOBILE ================= */
 @media (max-width:768px){
-
   body{padding-bottom:100px;}
 
   .navbar{
@@ -161,21 +294,25 @@ h2{
     justify-content:space-around;
     padding:12px 0;
     border-top:1px solid rgba(0,153,255,.4);
+    border-bottom:none;
   }
 
   .navbar a{
     flex-direction:column;
     font-size:18px;
+    padding:8px 10px;
   }
 
   .container{
-    padding:100px 15px 150px;
+    padding:110px 15px 150px;
   }
 
-  .grid{
-    gap:25px;
-  }
+  .grid{ gap:25px; }
 
+  .statusbar{
+    top:12px;
+    font-size:11px;
+  }
 }
 
 canvas{
@@ -199,13 +336,145 @@ canvas{
   <a href="formulario.html">📝 Formulário</a>
 </nav>
 
+<div class="statusbar" id="statusbar">
+  <span class="dot bad" id="wsDot"></span>
+  <span id="wsText">Live: desconectado</span>
+  <span class="pill" style="padding:6px 10px;">
+    Updates: <span class="badge" id="liveBadge">0</span>
+  </span>
+  <button class="btn" id="btnSom" style="padding:8px 12px;" onclick="toggleSound()">🔊 Som: ON</button>
+</div>
+
 <div class="container">
   <h2>🏆 Ranking Mindset Elite</h2>
+
+  <div class="controls">
+    <div class="pill">⚡ Ranking por XP dinâmico (tempo + bônus)</div>
+    <button class="btn" onclick="carregarRanking(true)">↻ Atualizar</button>
+  </div>
+
   <div class="grid" id="membersGrid">Carregando ranking...</div>
 </div>
 
 <script defer>
-/* ================= FUNDO 3D ================= */
+/* =========================================================
+   CONFIG (Cloudflare Pages -> Render)
+========================================================= */
+const BACKEND_BASE = "https://mindset-elite.onrender.com";
+const RANKING_URL = BACKEND_BASE + "/ranking";
+
+/* =========================================================
+   STATE
+========================================================= */
+let ws;
+let liveCount = 0;
+let soundOn = true;
+let prevRankById = new Map();
+let knownIds = new Set();
+
+/* AUDIO unlock (browser precisa 1 toque) */
+let audioUnlocked = false;
+let audioCtx;
+
+function unlockAudio(){
+  if(audioUnlocked) return;
+  try{
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    audioCtx = new AudioCtx();
+    audioCtx.resume();
+    audioUnlocked = true;
+  }catch{}
+}
+document.addEventListener("click", unlockAudio);
+
+function $(id){ return document.getElementById(id); }
+
+function bumpLive(n=1){
+  liveCount += n;
+  $("liveBadge").textContent = String(liveCount);
+}
+
+function toggleSound(){
+  soundOn = !soundOn;
+  $("btnSom").textContent = soundOn ? "🔊 Som: ON" : "🔇 Som: OFF";
+}
+
+/* som elegante */
+function playNotify(){
+  if(!soundOn || !audioUnlocked || !audioCtx) return;
+
+  const o1 = audioCtx.createOscillator();
+  const g = audioCtx.createGain();
+
+  o1.type = "sine";
+  o1.frequency.setValueAtTime(880, audioCtx.currentTime);
+  o1.frequency.exponentialRampToValueAtTime(1320, audioCtx.currentTime + 0.08);
+
+  g.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.10, audioCtx.currentTime + 0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.25);
+
+  o1.connect(g);
+  g.connect(audioCtx.destination);
+
+  o1.start();
+  o1.stop(audioCtx.currentTime + 0.25);
+}
+
+/* =========================================================
+   XP DINÂMICO ESTÁVEL (não muda sozinho)
+========================================================= */
+function calcXP(user){
+  const idade = Number(user?.idade ?? 0);
+  const dt = user?.data ? new Date(user.data) : new Date();
+  const days = Math.max(0, Math.floor((Date.now() - dt.getTime()) / (1000*60*60*24)));
+  return Math.round(500 + (days * 20) + (idade * 2));
+}
+
+/* =========================================================
+   WEBSOCKET -> Render
+========================================================= */
+function setWSStatus(ok){
+  $("wsDot").classList.toggle("ok", !!ok);
+  $("wsDot").classList.toggle("bad", !ok);
+  $("wsText").textContent = ok ? "Live: conectado" : "Live: desconectado";
+}
+
+function wsUrl(){
+  return BACKEND_BASE.replace("https://","wss://").replace("http://","ws://");
+}
+
+function initWS(){
+  try{
+    ws = new WebSocket(wsUrl());
+
+    ws.onopen = () => setWSStatus(true);
+
+    ws.onclose = () => {
+      setWSStatus(false);
+      setTimeout(initWS, 3000); // reconecta com calma
+    };
+
+    ws.onerror = () => setWSStatus(false);
+
+    ws.onmessage = (event) => {
+      let msg;
+      try{ msg = JSON.parse(event.data); }catch{ return; }
+
+      if(msg.type === "data_update"){
+        bumpLive(1);
+        carregarRanking(false, true);
+      }
+    };
+  }catch{
+    setWSStatus(false);
+  }
+}
+initWS();
+
+/* =========================================================
+   FUNDO 3D
+========================================================= */
 function initThree(){
   if(!(window.innerWidth > 768 && window.THREE)) return;
 
@@ -249,65 +518,111 @@ function initThree(){
 }
 initThree();
 
-/* ================= RANKING ================= */
-async function carregarRanking(){
-  const grid=document.getElementById("membersGrid");
+/* =========================================================
+   RANKING (XP + animações)
+========================================================= */
+function escapeHtml(str){
+  return String(str ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+async function carregarRanking(forceLog=false, fromWS=false){
+  const grid = $("membersGrid");
 
   try{
-    const res=await fetch("https://mindset-elite.onrender.com/ranking", {
-      cache: "no-store"
-    });
-
+    const res = await fetch(RANKING_URL, { cache: "no-store" });
     if(!res.ok){
-      grid.innerHTML="⚠ Ranking indisponível.";
+      grid.innerHTML = "⚠ Ranking indisponível.";
       return;
     }
 
-    const data=await res.json();
-    grid.innerHTML="";
+    const data = await res.json();
+    const list = Array.isArray(data?.ranking) ? data.ranking : [];
 
-    if(!data.ranking || data.ranking.length===0){
-      grid.innerHTML="Nenhum membro ainda.";
+    if(list.length === 0){
+      grid.innerHTML = "Nenhum membro ainda.";
       return;
     }
 
-    data.ranking.forEach((user,index)=>{
-      let medal="";
-      if(user.rank===1) medal="🥇";
-      else if(user.rank===2) medal="🥈";
-      else if(user.rank===3) medal="🥉";
+    // aplica XP
+    const withXP = list.map(u => ({ ...u, xp: calcXP(u) }));
 
-      const fotoPath=user.foto ? `/images/${user.foto}` : "/images/default.jpg";
+    // ordena por XP (maior primeiro)
+    withXP.sort((a,b)=> b.xp - a.xp);
 
-      const card=document.createElement("div");
-      card.className="member-card";
+    // rank atual por id
+    const currentRankById = new Map();
+    withXP.forEach((u,i)=> u?.id && currentRankById.set(u.id, i+1));
 
-      card.innerHTML=`
-        <div class="rank">#${user.rank} ${medal}</div>
+    // novos
+    const newIds = new Set(withXP.map(u=>u.id).filter(Boolean));
+    const newcomers = [];
+    for(const u of withXP){
+      if(u?.id && !knownIds.has(u.id)) newcomers.push(u);
+    }
+
+    grid.innerHTML = "";
+
+    withXP.forEach((user,index)=>{
+      const rank = index + 1;
+
+      const fotoPath = user.foto
+        ? (BACKEND_BASE + "/images/" + user.foto)
+        : (BACKEND_BASE + "/images/default.jpg");
+
+      const card = document.createElement("div");
+      card.className = "member-card";
+
+      if(rank === 1) card.classList.add("top1");
+      if(rank === 2) card.classList.add("top2");
+      if(rank === 3) card.classList.add("top3");
+
+      const prev = user?.id ? prevRankById.get(user.id) : undefined;
+      if(prev != null && prev > rank) card.classList.add("moved-up");
+
+      if(newcomers.find(n=>n.id === user.id)) card.classList.add("is-new");
+
+      card.innerHTML = `
+        <div class="xp">⚡ XP ${user.xp}</div>
+        <div class="rank">#${rank}</div>
         <div class="avatar-wrapper">
-          <img src="${fotoPath}" alt="${user.nome}">
+          <img src="${fotoPath}" alt="${escapeHtml(user.nome)}">
         </div>
-        <h3>${user.nome}</h3>
-        <p>${user.idade || 0} anos</p>
+        <h3>${escapeHtml(user.nome)}</h3>
+        <p>${escapeHtml(user.idade || 0)} anos</p>
+        <p style="opacity:.75;font-size:12px;">@${escapeHtml(String(user.telegram||"").replace("@",""))}</p>
       `;
 
       const img = card.querySelector("img");
-      img.onerror = () => { img.src = "/images/default.jpg"; };
+      img.onerror = () => { img.src = BACKEND_BASE + "/images/default.jpg"; };
 
       grid.appendChild(card);
-
-      setTimeout(()=> card.classList.add("show"), index*120);
+      setTimeout(()=> card.classList.add("show"), index * 85);
     });
+
+    knownIds = newIds;
+    prevRankById = currentRankById;
+
+    if(newcomers.length > 0){
+      playNotify();
+      bumpLive(newcomers.length);
+    }
+
+    if(forceLog) console.log("Ranking atualizado:", withXP.length);
 
   }catch(err){
     grid.innerHTML="⚠ Erro ao carregar ranking.";
     console.error(err);
   }
 }
-carregarRanking();
+
+carregarRanking(true,false);
 </script>
 
-<!-- ✅ CORRIGIDO -->
 <script src="layout.v3.js" defer></script>
 
 </body>
