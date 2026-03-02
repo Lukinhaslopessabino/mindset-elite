@@ -1,1047 +1,176 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Mindset Elite • Admin</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Premium</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-  :root{
-    --bg:#070B14;
-    --panel:#0B1220;
-    --panel2:#0E172A;
-    --stroke:rgba(255,255,255,.08);
-    --stroke2:rgba(0,245,255,.22);
-    --text:#EAF2FF;
-    --muted:rgba(234,242,255,.68);
-    --cyan:#00F5FF;
-    --cyan2:#00CFFF;
-    --danger:#FF4D4D;
-    --ok:#00FFAA;
-    --shadow: 0 24px 80px rgba(0,245,255,.10);
-    --shadow2: 0 18px 60px rgba(0,0,0,.50);
-    --radius:18px;
-  }
-
-  *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
-
-  body{
-    min-height:100vh;
-    color:var(--text);
-    background:
-      radial-gradient(1200px 500px at 20% -10%, rgba(0,245,255,.12), transparent 60%),
-      radial-gradient(900px 450px at 90% 10%, rgba(0,153,255,.10), transparent 55%),
-      radial-gradient(700px 500px at 50% 120%, rgba(255,0,80,.06), transparent 60%),
-      var(--bg);
-    overflow-x:hidden;
-  }
-
-  /* Layout shell */
-  .shell{
-    display:flex;
-    min-height:100vh;
-  }
-
-  /* Sidebar */
-  .sidebar{
-    width:260px;
-    background:linear-gradient(180deg, rgba(11,18,32,.98), rgba(7,11,20,.95));
-    border-right:1px solid var(--stroke);
-    padding:26px 18px;
-    position:sticky;
-    top:0;
-    height:100vh;
-    display:none; /* aparece após login */
-  }
-
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:10px 12px;
-    border-radius:16px;
-    background:rgba(255,255,255,.03);
-    border:1px solid var(--stroke);
-    box-shadow: var(--shadow2);
-    margin-bottom:18px;
-  }
-
-  .brand-badge{
-    width:42px;height:42px;border-radius:14px;
-    background:linear-gradient(135deg, rgba(0,245,255,.35), rgba(0,153,255,.18));
-    border:1px solid rgba(0,245,255,.25);
-    box-shadow:0 0 35px rgba(0,245,255,.10);
-    display:flex;align-items:center;justify-content:center;
-    font-weight:800;
-    color:var(--cyan);
-  }
-
-  .brand h2{
-    font-size:14px;
-    letter-spacing:.4px;
-    line-height:1.1;
-  }
-  .brand small{
-    display:block;
-    margin-top:3px;
-    color:var(--muted);
-    font-weight:600;
-    font-size:11px;
-  }
-
-  .nav-group{
-    margin-top:18px;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-  }
-
-  .side-btn{
-    width:100%;
-    border:none;
-    cursor:pointer;
-    border-radius:14px;
-    padding:12px 12px;
-    background:rgba(255,255,255,.03);
-    border:1px solid var(--stroke);
-    color:var(--text);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    transition:.25s;
-  }
-
-  .side-btn:hover{
-    transform:translateY(-1px);
-    border-color:var(--stroke2);
-    box-shadow:0 0 0 3px rgba(0,245,255,.08);
-  }
-
-  .side-btn .left{
-    display:flex;align-items:center;gap:10px;
-    font-weight:700;
-    font-size:13px;
-  }
-  .pill{
-    font-size:11px;
-    color:rgba(0,0,0,.85);
-    background:linear-gradient(90deg, var(--cyan), #0099FF);
-    padding:5px 10px;
-    border-radius:999px;
-    font-weight:800;
-  }
-
-  .danger{
-    border-color:rgba(255,77,77,.25);
-  }
-  .danger:hover{
-    border-color:rgba(255,77,77,.55);
-    box-shadow:0 0 0 3px rgba(255,77,77,.10);
-  }
-
-  /* Main */
-  .main{
-    flex:1;
-    padding:30px 26px;
-  }
-
-  .topbar{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:16px;
-    margin-bottom:18px;
-  }
-
-  .title{
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-  }
-
-  .title h1{
-    font-size:18px;
-    letter-spacing:.2px;
-  }
-
-  .title p{
-    color:var(--muted);
-    font-size:13px;
-  }
-
-  .chip{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    padding:10px 12px;
-    border-radius:999px;
-    border:1px solid var(--stroke);
-    background:rgba(255,255,255,.03);
-    color:var(--muted);
-    font-size:12px;
-  }
-
-  .dot{
-    width:8px;height:8px;border-radius:99px;
-    background:rgba(255,255,255,.25);
-    box-shadow:0 0 0 3px rgba(255,255,255,.06);
-  }
-  .dot.ok{ background:var(--ok); box-shadow:0 0 0 3px rgba(0,255,170,.12); }
-  .dot.bad{ background:var(--danger); box-shadow:0 0 0 3px rgba(255,77,77,.12); }
-
-  /* Panels */
-  .panel{
-    background:linear-gradient(180deg, rgba(14,23,42,.92), rgba(11,18,32,.92));
-    border:1px solid var(--stroke);
-    border-radius:var(--radius);
-    box-shadow: var(--shadow2);
-    overflow:hidden;
-  }
-
-  /* Login */
-  .login-wrap{
-    max-width:420px;
-    margin:70px auto 0;
-  }
-
-  .login{
-    padding:26px;
-  }
-
-  .login-head{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:12px;
-    margin-bottom:16px;
-  }
-
-  .login-head h2{
-    font-size:18px;
-    letter-spacing:.2px;
-  }
-
-  .login-head span{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    color:var(--muted);
-    font-size:12px;
-  }
-
-  .field{
-    margin-top:14px;
-  }
-
-  .label{
-    font-size:12px;
-    color:var(--muted);
-    margin-bottom:8px;
-    display:block;
-    font-weight:700;
-  }
-
-  .input{
-    width:100%;
-    padding:14px 14px;
-    border-radius:14px;
-    border:1px solid var(--stroke);
-    background:rgba(7,11,20,.60);
-    color:var(--text);
-    outline:none;
-    transition:.2s;
-  }
-
-  .input:focus{
-    border-color:rgba(0,245,255,.35);
-    box-shadow:0 0 0 4px rgba(0,245,255,.10);
-  }
-
-  .btn{
-    width:100%;
-    margin-top:16px;
-    padding:14px 14px;
-    border:none;
-    border-radius:14px;
-    font-weight:800;
-    cursor:pointer;
-    background:linear-gradient(90deg, var(--cyan), #0099FF);
-    color:#001018;
-    transition:.25s;
-    position:relative;
-    overflow:hidden;
-  }
-
-  .btn:hover{
-    transform:translateY(-1px);
-    box-shadow:0 0 35px rgba(0,245,255,.18);
-  }
-
-  .btn:disabled{
-    opacity:.55;
-    cursor:not-allowed;
-    transform:none;
-    box-shadow:none;
-  }
-
-  .msg{
-    margin-top:12px;
-    font-size:13px;
-    color:var(--danger);
-    min-height:18px;
-  }
-
-  /* Dashboard */
-  .dashboard{
-    display:none;
-  }
-
-  .stats{
-    display:grid;
-    grid-template-columns:repeat(12, 1fr);
-    gap:14px;
-    margin-top:16px;
-    margin-bottom:16px;
-  }
-
-  .stat{
-    grid-column:span 6;
-    padding:18px;
-  }
-
-  .stat h3{
-    font-size:13px;
-    color:var(--muted);
-    font-weight:800;
-    letter-spacing:.2px;
-  }
-
-  .stat .value{
-    margin-top:10px;
-    font-size:30px;
-    font-weight:900;
-    color:var(--cyan);
-    text-shadow:0 0 18px rgba(0,245,255,.12);
-  }
-
-  .stat small{
-    display:block;
-    margin-top:6px;
-    color:rgba(234,242,255,.55);
-    font-size:12px;
-  }
-
-  /* Actions row */
-  .actions{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-bottom:14px;
-  }
-
-  .btn-ghost{
-    padding:12px 14px;
-    border-radius:14px;
-    border:1px solid var(--stroke);
-    background:rgba(255,255,255,.03);
-    color:var(--text);
-    font-weight:800;
-    cursor:pointer;
-    transition:.2s;
-  }
-  .btn-ghost:hover{
-    border-color:var(--stroke2);
-    box-shadow:0 0 0 4px rgba(0,245,255,.08);
-    transform:translateY(-1px);
-  }
-
-  .btn-danger{
-    border-color:rgba(255,77,77,.25);
-  }
-  .btn-danger:hover{
-    border-color:rgba(255,77,77,.55);
-    box-shadow:0 0 0 4px rgba(255,77,77,.10);
-  }
-
-  /* Table */
-  .table-wrap{
-    padding:14px;
-  }
-
-  .table-head{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:12px;
-    padding:6px 4px 12px;
-  }
-
-  .table-head h3{
-    font-size:13px;
-    color:var(--muted);
-    font-weight:900;
-    letter-spacing:.2px;
-  }
-
-  .table-container{
-    overflow:auto;
-    border-radius:16px;
-    border:1px solid var(--stroke);
-    background:rgba(7,11,20,.35);
-  }
-
-  table{
-    width:100%;
-    border-collapse:collapse;
-    min-width:720px;
-  }
-
-  th, td{
-    padding:12px 14px;
-    font-size:13px;
-    white-space:nowrap;
-  }
-
-  th{
-    text-align:left;
-    color:rgba(234,242,255,.65);
-    font-weight:900;
-    border-bottom:1px solid rgba(255,255,255,.08);
-    background:rgba(255,255,255,.03);
-  }
-
-  tr{
-    border-bottom:1px solid rgba(255,255,255,.05);
-  }
-
-  tbody tr:hover{
-    background:rgba(0,245,255,.04);
-  }
-
-  .tag{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    padding:6px 10px;
-    border-radius:999px;
-    border:1px solid rgba(0,245,255,.18);
-    background:rgba(0,245,255,.06);
-    color:rgba(234,242,255,.85);
-    font-weight:800;
-    font-size:12px;
-  }
-
-  .del{
-    border:none;
-    cursor:pointer;
-    background:rgba(255,77,77,.14);
-    border:1px solid rgba(255,77,77,.30);
-    color:#FFD7D7;
-    font-weight:900;
-    padding:8px 10px;
-    border-radius:12px;
-    transition:.2s;
-  }
-  .del:hover{
-    background:rgba(255,77,77,.25);
-    border-color:rgba(255,77,77,.55);
-    transform:translateY(-1px);
-  }
-
-  /* Upload */
-  .upload{
-    padding:16px;
-    margin-top:14px;
-  }
-  .upload h3{
-    font-size:13px;
-    color:var(--muted);
-    font-weight:900;
-    margin-bottom:10px;
-  }
-  .upload-row{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    align-items:center;
-  }
-
-  .file{
-    flex:1;
-    min-width:220px;
-    padding:12px 12px;
-    border-radius:14px;
-    border:1px dashed rgba(0,245,255,.25);
-    background:rgba(7,11,20,.45);
-    color:rgba(234,242,255,.70);
-  }
-
-  .mini{
-    width:auto;
-    padding:12px 14px;
-  }
-
-  /* Skeleton */
-  .skeleton{
-    height:14px;
-    border-radius:999px;
-    background:linear-gradient(90deg, rgba(255,255,255,.06), rgba(255,255,255,.12), rgba(255,255,255,.06));
-    background-size:200% 100%;
-    animation: shimmer 1.2s infinite linear;
-  }
-  @keyframes shimmer{
-    0%{background-position:0% 0%}
-    100%{background-position:200% 0%}
-  }
-
-  /* Toast */
-  .toast{
-    position:fixed;
-    right:16px;
-    bottom:16px;
-    background:rgba(11,18,32,.92);
-    border:1px solid var(--stroke);
-    color:var(--text);
-    padding:12px 14px;
-    border-radius:16px;
-    box-shadow: var(--shadow2);
-    display:none;
-    max-width:360px;
-  }
-  .toast.show{ display:block; }
-  .toast strong{ display:block; font-size:13px; margin-bottom:2px; }
-  .toast span{ font-size:12px; color:var(--muted); }
-  .toast.ok{ border-color:rgba(0,255,170,.25); }
-  .toast.bad{ border-color:rgba(255,77,77,.25); }
-
-  /* Mobile bottom nav (aparece depois do login) */
-  .mobile-nav{
-    position:fixed;
-    left:0; right:0; bottom:0;
-    padding:10px 10px 12px;
-    background:rgba(7,11,20,.92);
-    border-top:1px solid rgba(0,245,255,.18);
-    display:none;
-    z-index:2000;
-  }
-  .mobile-nav .row{
-    display:flex;
-    gap:10px;
-    justify-content:space-between;
-  }
-  .mbtn{
-    flex:1;
-    border:none;
-    border-radius:14px;
-    padding:12px 10px;
-    background:rgba(255,255,255,.04);
-    border:1px solid var(--stroke);
-    color:var(--text);
-    font-weight:900;
-    font-size:12px;
-    cursor:pointer;
-    transition:.2s;
-  }
-  .mbtn:hover{
-    border-color:rgba(0,245,255,.25);
-    box-shadow:0 0 0 3px rgba(0,245,255,.08);
-  }
-  .mbtn.danger{
-    border-color:rgba(255,77,77,.25);
-  }
-
-  /* Responsive */
-  @media (max-width: 980px){
-    .sidebar{ display:none !important; }
-    .main{ padding:22px 16px; }
-    table{ min-width:640px; }
-  }
-
-  @media (max-width: 768px){
-    .stats{ gap:10px; }
-    .stat{ grid-column:span 12; }
-    .login-wrap{ margin-top:50px; padding:0 14px; }
-    .main{ padding-bottom:110px; } /* espaço p/ mobile nav */
-  }
+body{background:#0B1220;color:#fff;font-family:Arial;padding:30px}
+.card{background:#111827;padding:20px;border-radius:10px;margin-bottom:20px}
+button{padding:6px 10px;border:none;border-radius:6px;cursor:pointer}
+.delete{background:red;color:#fff}
 </style>
 </head>
-
 <body>
 
-<div class="shell">
+<h1>Admin Dashboard</h1>
+<p id="roleInfo"></p>
 
-  <!-- Sidebar -->
-  <aside class="sidebar" id="sidebar">
-    <div class="brand">
-      <div class="brand-badge">ME</div>
-      <div>
-        <h2>Mindset Admin</h2>
-        <small>painel seguro • SaaS</small>
-      </div>
-    </div>
-
-    <div class="nav-group">
-      <button class="side-btn" onclick="verInscritos()">
-        <span class="left">🔄 Atualizar</span>
-        <span class="pill">LIVE</span>
-      </button>
-
-      <button class="side-btn danger" onclick="resetar()">
-        <span class="left">♻️ Resetar vagas</span>
-        <span class="pill" style="background:linear-gradient(90deg,#FF4D4D,#FF2A7A);color:#140001;">RISK</span>
-      </button>
-
-      <button class="side-btn danger" onclick="logout()">
-        <span class="left">🚪 Logout</span>
-        <span style="opacity:.7;font-weight:900;">⟶</span>
-      </button>
-    </div>
-  </aside>
-
-  <!-- Main -->
-  <main class="main">
-
-    <!-- TOPBAR -->
-    <div class="topbar">
-      <div class="title">
-        <h1>Dashboard</h1>
-        <p>Gerencie inscrições, vagas e uploads com segurança.</p>
-      </div>
-      <div class="chip" id="statusChip">
-        <span class="dot bad" id="statusDot"></span>
-        <span id="statusText">Desconectado</span>
-      </div>
-    </div>
-
-    <!-- LOGIN -->
-    <div class="login-wrap" id="loginBoxWrap">
-      <div class="panel login">
-        <div class="login-head">
-          <div>
-            <h2>Acesso Seguro</h2>
-            <span><span class="dot"></span> Token + sessão</span>
-          </div>
-          <div class="pill">ADMIN</div>
-        </div>
-
-        <div class="field">
-          <label class="label" for="senha">Senha</label>
-          <input class="input" type="password" id="senha" placeholder="Digite sua senha" autocomplete="current-password" />
-        </div>
-
-        <button class="btn" id="btnLogin" onclick="login()">Entrar</button>
-        <div class="msg" id="loginMsg"></div>
-      </div>
-    </div>
-
-    <!-- DASHBOARD -->
-    <section class="dashboard" id="dashboard">
-
-      <div class="stats">
-        <div class="panel stat">
-          <h3>Total inscritos</h3>
-          <div class="value" id="inscritoCount"><div class="skeleton" style="width:90px;height:28px;"></div></div>
-          <small>Quantidade total cadastrada</small>
-        </div>
-
-        <div class="panel stat">
-          <h3>Vagas restantes</h3>
-          <div class="value" id="vagaCount"><div class="skeleton" style="width:70px;height:28px;"></div></div>
-          <small>Atualiza em tempo real</small>
-        </div>
-      </div>
-
-      <div class="actions">
-        <button class="btn-ghost" onclick="verInscritos()">🔄 Atualizar lista</button>
-        <button class="btn-ghost btn-danger" onclick="resetar()">♻️ Resetar vagas</button>
-        <button class="btn-ghost btn-danger" onclick="logout()">🚪 Sair</button>
-      </div>
-
-      <div class="panel table-wrap">
-        <div class="table-head">
-          <h3>Inscritos</h3>
-          <span class="tag" id="tableTag">Carregando…</span>
-        </div>
-
-        <div class="table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Nome</th>
-                <th>Idade</th>
-                <th>Telegram</th>
-                <th>Ação</th>
-              </tr>
-            </thead>
-            <tbody id="tableBody">
-              <tr>
-                <td colspan="5" style="padding:16px;color:rgba(234,242,255,.55);">
-                  <div class="skeleton" style="width:60%;height:14px;"></div>
-                  <div style="height:10px"></div>
-                  <div class="skeleton" style="width:85%;height:14px;"></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="panel upload">
-        <h3>Upload de foto</h3>
-        <div class="upload-row">
-          <input class="file" type="file" id="fotoInput" accept="image/*" />
-          <button class="btn mini" style="width:auto;" onclick="uploadFoto()" id="btnUpload">Enviar foto</button>
-        </div>
-        <div class="msg" id="uploadMsg" style="color:rgba(234,242,255,.55);margin-top:10px;"></div>
-      </div>
-
-    </section>
-
-  </main>
-
+<div class="card">
+<input type="text" id="search" placeholder="Buscar...">
 </div>
 
-<!-- Mobile nav -->
-<div class="mobile-nav" id="mobileNav">
-  <div class="row">
-    <button class="mbtn" onclick="verInscritos()">🔄 Atualizar</button>
-    <button class="mbtn danger" onclick="resetar()">♻️ Resetar</button>
-    <button class="mbtn danger" onclick="logout()">🚪 Logout</button>
-  </div>
+<div class="card">
+<table width="100%" id="tabela">
+<thead>
+<tr>
+<th>#</th>
+<th>Nome</th>
+<th>Idade</th>
+<th>Telegram</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
 </div>
 
-<!-- Toast -->
-<div class="toast" id="toast">
-  <strong id="toastTitle">Info</strong>
-  <span id="toastText">…</span>
-</div>
+<canvas id="chart"></canvas>
 
 <script>
-  let tokenAdmin = sessionStorage.getItem("adminToken") || null;
+let token=sessionStorage.getItem("adminToken");
+let role=sessionStorage.getItem("adminRole");
+let lista=[];
+let chart;
 
-  const $ = (id) => document.getElementById(id);
+/* LOGIN SIMPLES */
+if(!token){
+let senha=prompt("Senha admin:");
+fetch("https://mindset-elite.onrender.com/admin/login",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({senha})
+})
+.then(r=>r.json())
+.then(data=>{
+if(data.token){
+sessionStorage.setItem("adminToken",data.token);
+sessionStorage.setItem("adminRole",data.role);
+location.reload();
+}else{
+alert("Login inválido");
+location.reload();
+}
+});
+}else{
+document.getElementById("roleInfo").innerText="Nível: "+role;
+}
 
-  function setStatus(connected){
-    const dot = $("statusDot");
-    const text = $("statusText");
-    if(connected){
-      dot.classList.remove("bad");
-      dot.classList.add("ok");
-      text.textContent = "Conectado";
-    }else{
-      dot.classList.remove("ok");
-      dot.classList.add("bad");
-      text.textContent = "Desconectado";
-    }
-  }
+/* CARREGAR */
+async function carregar(){
 
-  function toast(type, title, msg){
-    const t = $("toast");
-    t.classList.remove("ok","bad");
-    t.classList.add(type === "ok" ? "ok" : "bad");
-    $("toastTitle").textContent = title;
-    $("toastText").textContent = msg;
-    t.classList.add("show");
-    clearTimeout(window.__toastTimer);
-    window.__toastTimer = setTimeout(()=> t.classList.remove("show"), 2600);
-  }
+const res=await fetch("https://mindset-elite.onrender.com/admin/inscritos",{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"x-admin-token":token
+}
+});
 
-  function showLogin(){
-    $("loginBoxWrap").style.display = "block";
-    $("dashboard").style.display = "none";
-    $("sidebar").style.display = "none";
-    $("mobileNav").style.display = "none";
-    setStatus(false);
-  }
+if(res.status===401){logout();return;}
 
-  function showDashboard(){
-    $("loginBoxWrap").style.display = "none";
-    $("dashboard").style.display = "block";
-    // Sidebar só em telas maiores
-    if(window.innerWidth > 980) $("sidebar").style.display = "block";
-    $("mobileNav").style.display = "block";
-    setStatus(true);
-  }
+const data=await res.json();
+lista=data.inscritos;
+render();
+grafico();
+}
 
-  /* ================= VALIDA TOKEN ================= */
-  async function validarSessao(){
-    if(!tokenAdmin) return false;
+carregar();
 
-    const res = await fetch("https://mindset-elite.onrender.com/admin/inscritos",{
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json",
-        "x-admin-token": tokenAdmin
-      }
-    });
+/* AUTO UPDATE A CADA 10s */
+setInterval(carregar,10000);
 
-    if(res.status === 401){
-      logout();
-      return false;
-    }
-    return true;
-  }
+/* BUSCA */
+document.getElementById("search").addEventListener("input",render);
 
-  /* ================= LOGIN ================= */
-  async function login(){
-    const senha = $("senha").value;
-    $("loginMsg").textContent = "";
+function render(){
 
-    const btn = $("btnLogin");
-    btn.disabled = true;
-    btn.textContent = "Entrando...";
+let filtro=document.getElementById("search").value.toLowerCase();
+let tbody=document.querySelector("#tabela tbody");
+tbody.innerHTML="";
 
-    try{
-      const res = await fetch("https://mindset-elite.onrender.com/admin/login",{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ senha })
-      });
+lista
+.filter(u=>u.nome.toLowerCase().includes(filtro) || u.telegram.toLowerCase().includes(filtro))
+.forEach((u,i)=>{
 
-      const data = await res.json().catch(()=> ({}));
+let botao = role==="superadmin"
+? `<button class="delete" onclick="excluir('${u.id}')">Excluir</button>`
+: `Sem permissão`;
 
-      if(!res.ok){
-        $("loginMsg").textContent = data.erro || "Falha no login.";
-        toast("bad", "Login negado", $("loginMsg").textContent);
-        return;
-      }
+tbody.innerHTML+=`
+<tr>
+<td>${i+1}</td>
+<td>${u.nome}</td>
+<td>${u.idade}</td>
+<td>${u.telegram}</td>
+<td>${botao}</td>
+</tr>`;
+});
+}
 
-      tokenAdmin = data.token;
-      sessionStorage.setItem("adminToken", tokenAdmin);
+/* EXCLUIR */
+async function excluir(id){
 
-      toast("ok", "Acesso liberado", "Sessão iniciada com sucesso.");
-      iniciarDashboard();
+if(role!=="superadmin"){
+alert("Permissão negada");
+return;
+}
 
-    }catch(e){
-      $("loginMsg").textContent = "Erro de conexão.";
-      toast("bad", "Erro", "Não foi possível conectar no servidor.");
-    }finally{
-      btn.disabled = false;
-      btn.textContent = "Entrar";
-    }
-  }
+await fetch("https://mindset-elite.onrender.com/admin/excluir",{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"x-admin-token":token
+},
+body:JSON.stringify({id})
+});
 
-  /* ================= INICIAR ================= */
-  function iniciarDashboard(){
-    showDashboard();
-    verInscritos();
-  }
+carregar();
+}
 
-  /* ================= LOGOUT ================= */
-  function logout(){
-    sessionStorage.removeItem("adminToken");
-    tokenAdmin = null;
-    location.reload();
-  }
+/* GRÁFICO */
+function grafico(){
 
-  /* ================= VER INSCRITOS ================= */
-  async function verInscritos(){
-    if(!tokenAdmin) return;
+let dias={};
 
-    $("tableTag").textContent = "Carregando…";
-    $("tableBody").innerHTML = `
-      <tr>
-        <td colspan="5" style="padding:16px;color:rgba(234,242,255,.55);">
-          <div class="skeleton" style="width:60%;height:14px;"></div>
-          <div style="height:10px"></div>
-          <div class="skeleton" style="width:85%;height:14px;"></div>
-        </td>
-      </tr>
-    `;
+lista.forEach(u=>{
+let dia=new Date(u.data).toLocaleDateString();
+dias[dia]=(dias[dia]||0)+1;
+});
 
-    try{
-      const res = await fetch("https://mindset-elite.onrender.com/admin/inscritos",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "x-admin-token": tokenAdmin
-        }
-      });
+if(chart)chart.destroy();
 
-      if(res.status === 401){
-        logout();
-        return;
-      }
+chart=new Chart(document.getElementById("chart"),{
+type:"line",
+data:{
+labels:Object.keys(dias),
+datasets:[{
+label:"Inscrições por dia",
+data:Object.values(dias),
+borderColor:"#00F5FF",
+backgroundColor:"rgba(0,245,255,.1)",
+fill:true
+}]
+}
+});
+}
 
-      const data = await res.json();
-
-      $("inscritoCount").textContent = data.inscritos.length;
-      $("vagaCount").textContent = data.vagas;
-      $("tableTag").textContent = `Total: ${data.inscritos.length}`;
-
-      const tbody = $("tableBody");
-      tbody.innerHTML = "";
-
-      if(!data.inscritos.length){
-        tbody.innerHTML = `
-          <tr>
-            <td colspan="5" style="padding:16px;color:rgba(234,242,255,.55);">
-              Nenhum inscrito ainda.
-            </td>
-          </tr>
-        `;
-        return;
-      }
-
-      data.inscritos.forEach((user,index)=>{
-        // Se seu backend tiver rank/id, use isso. Se não tiver, mantém index+1 (como você já fazia).
-        const rank = (user.rank != null ? user.rank : (index+1));
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${index+1}</td>
-          <td><strong>${escapeHtml(user.nome || "")}</strong></td>
-          <td>${escapeHtml(String(user.idade ?? ""))}</td>
-          <td><span class="tag">${escapeHtml(user.telegram || "")}</span></td>
-          <td><button class="del" onclick="excluir(${rank})">Excluir</button></td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      toast("ok", "Atualizado", "Lista carregada.");
-
-    }catch(e){
-      $("tableTag").textContent = "Erro";
-      $("tableBody").innerHTML = `
-        <tr>
-          <td colspan="5" style="padding:16px;color:rgba(255,77,77,.85);">
-            Erro ao carregar inscritos.
-          </td>
-        </tr>
-      `;
-      toast("bad", "Erro", "Falha ao buscar inscritos.");
-    }
-  }
-
-  function escapeHtml(str){
-    return String(str)
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
-
-  /* ================= EXCLUIR ================= */
-  async function excluir(rank){
-    if(!confirm("Excluir este membro?")) return;
-
-    try{
-      await fetch("https://mindset-elite.onrender.com/admin/excluir",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "x-admin-token": tokenAdmin
-        },
-        body: JSON.stringify({ rank })
-      });
-
-      toast("ok", "Excluído", "Membro removido.");
-      verInscritos();
-
-    }catch(e){
-      toast("bad", "Erro", "Não foi possível excluir.");
-    }
-  }
-
-  /* ================= RESETAR ================= */
-  async function resetar(){
-    if(!confirm("Resetar vagas para 1?")) return;
-
-    try{
-      await fetch("https://mindset-elite.onrender.com/admin/resetar",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "x-admin-token": tokenAdmin
-        }
-      });
-
-      toast("ok", "Reset feito", "Vagas resetadas.");
-      verInscritos();
-
-    }catch(e){
-      toast("bad", "Erro", "Não foi possível resetar vagas.");
-    }
-  }
-
-  /* ================= UPLOAD FOTO ================= */
-  async function uploadFoto(){
-    const fileInput = $("fotoInput");
-    const msg = $("uploadMsg");
-    msg.textContent = "";
-
-    if(!fileInput.files.length){
-      toast("bad", "Upload", "Selecione uma imagem primeiro.");
-      msg.textContent = "Selecione uma imagem antes de enviar.";
-      msg.style.color = "rgba(255,77,77,.9)";
-      return;
-    }
-
-    const btn = $("btnUpload");
-    btn.disabled = true;
-    btn.textContent = "Enviando...";
-
-    try{
-      const formData = new FormData();
-      formData.append("foto", fileInput.files[0]);
-
-      const res = await fetch("https://mindset-elite.onrender.com/admin/upload",{
-        method:"POST",
-        headers:{ "x-admin-token": tokenAdmin },
-        body: formData
-      });
-
-      if(!res.ok){
-        toast("bad", "Upload falhou", "Erro no upload.");
-        msg.textContent = "Erro no upload.";
-        msg.style.color = "rgba(255,77,77,.9)";
-        return;
-      }
-
-      const data = await res.json();
-      toast("ok", "Upload OK", "Arquivo enviado com sucesso.");
-      msg.textContent = "Upload feito: " + (data.arquivo || "");
-      msg.style.color = "rgba(0,255,170,.9)";
-      fileInput.value = "";
-
-    }catch(e){
-      toast("bad", "Erro", "Falha de conexão no upload.");
-      msg.textContent = "Falha de conexão.";
-      msg.style.color = "rgba(255,77,77,.9)";
-    }finally{
-      btn.disabled = false;
-      btn.textContent = "Enviar foto";
-    }
-  }
-
-  /* ================= AUTO LOGIN SE TOKEN EXISTIR ================= */
-  (async ()=>{
-    if(tokenAdmin){
-      const valido = await validarSessao();
-      if(valido) iniciarDashboard();
-      else showLogin();
-    }else{
-      showLogin();
-    }
-  })();
-
-  window.addEventListener("resize", ()=>{
-    // Ajusta sidebar conforme largura (só depois do login)
-    if($("dashboard").style.display === "block"){
-      if(window.innerWidth > 980) $("sidebar").style.display = "block";
-      else $("sidebar").style.display = "none";
-    }
-  });
+function logout(){
+sessionStorage.clear();
+location.reload();
+}
 </script>
-
-<!-- Transição global entre páginas (se você estiver usando isso no resto do site) -->
-<script src="layout.v3.js" defer></script>
 
 </body>
 </html>
