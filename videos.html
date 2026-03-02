@@ -5,10 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vídeos - Mindset Elite</title>
 
-<!-- PERFORMANCE -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
 <style>
@@ -22,8 +20,7 @@ body{
   min-height:100vh;
 }
 
-/* ================= NAV ================= */
-
+/* NAV */
 .navbar{
   position:fixed;
   top:0;
@@ -32,7 +29,7 @@ body{
   justify-content:center;
   gap:25px;
   padding:18px;
-  background:rgba(0,0,0,0.8);
+  background:rgba(0,0,0,0.85);
   backdrop-filter:blur(15px);
   z-index:1000;
 }
@@ -52,8 +49,7 @@ body{
   box-shadow:0 0 20px #00F5FF;
 }
 
-/* ================= CONTAINER ================= */
-
+/* CONTAINER */
 .container{
   padding:150px 5% 120px;
   max-width:1400px;
@@ -62,7 +58,7 @@ body{
 
 h1{
   text-align:center;
-  margin-bottom:70px;
+  margin-bottom:60px;
   font-size:clamp(1.8rem,4vw,3rem);
   background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
   background-size:200%;
@@ -76,76 +72,14 @@ h1{
   100%{background-position:200%}
 }
 
-/* ================= CANAL ================= */
-
-.channel-box{
-  background:rgba(15,20,35,0.95);
-  border-radius:30px;
-  padding:50px;
-  margin-bottom:70px;
-  text-align:center;
-  box-shadow:0 0 40px rgba(255,0,0,.2);
-  border:1px solid rgba(255,0,0,.4);
-  transition:.4s;
-}
-
-.channel-box:hover{
-  transform:translateY(-6px);
-  box-shadow:0 0 70px rgba(255,0,0,.6);
-}
-
-.channel-thumb{
-  width:150px;
-  height:150px;
-  border-radius:50%;
-  margin:auto;
-  margin-bottom:25px;
-  overflow:hidden;
-  border:4px solid #ff0000;
-  box-shadow:0 0 30px rgba(255,0,0,.6);
-}
-
-.channel-thumb img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-
-/* BOTÃO */
-.subscribe-btn{
-  display:inline-block;
-  margin-top:25px;
-  padding:16px 40px;
-  border-radius:40px;
-  background:linear-gradient(90deg,#ff0000,#ff4444,#ff0000);
-  background-size:200%;
-  color:#fff;
-  text-decoration:none;
-  font-weight:700;
-  transition:.4s;
-  animation:btnMove 4s linear infinite;
-}
-
-.subscribe-btn:hover{
-  transform:scale(1.08);
-  box-shadow:0 0 35px #ff0000;
-}
-
-@keyframes btnMove{
-  0%{background-position:0%}
-  100%{background-position:200%}
-}
-
-/* ================= GRID ================= */
-
+/* GRID */
 .video-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
   gap:35px;
 }
 
-/* ================= CARD ================= */
-
+/* CARD */
 .video-card{
   background:rgba(15,20,35,0.95);
   border-radius:25px;
@@ -154,6 +88,7 @@ h1{
   transition:.4s;
   opacity:0;
   transform:translateY(30px);
+  position:relative;
 }
 
 .video-card.show{
@@ -167,30 +102,56 @@ h1{
   box-shadow:0 0 50px rgba(0,153,255,.7);
 }
 
-/* ================= IFRAME 16:9 ================= */
-
 .video-wrapper{
   position:relative;
   width:100%;
   padding-bottom:56.25%;
-  height:0;
 }
 
 .video-wrapper iframe{
   position:absolute;
-  top:0;
-  left:0;
   width:100%;
   height:100%;
   border:none;
 }
 
-/* ================= MOBILE ================= */
+.badge-destaque{
+  position:absolute;
+  top:15px;
+  left:15px;
+  background:gold;
+  color:#000;
+  padding:6px 12px;
+  border-radius:20px;
+  font-weight:bold;
+  font-size:12px;
+  box-shadow:0 0 15px gold;
+}
 
+.overlay-launch{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  font-weight:bold;
+  font-size:14px;
+  text-align:center;
+}
+
+.video-footer{
+  padding:15px;
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  opacity:.8;
+}
+
+/* MOBILE */
 @media(max-width:768px){
-
   body{padding-bottom:100px;}
-
   .navbar{
     top:auto;
     bottom:0;
@@ -198,15 +159,9 @@ h1{
     padding:12px 0;
     border-top:1px solid rgba(0,153,255,.4);
   }
-
   .container{
     padding:100px 15px 150px;
   }
-
-  .video-grid{
-    gap:25px;
-  }
-
 }
 </style>
 </head>
@@ -224,43 +179,96 @@ h1{
 
 <div class="container">
 
-<h1>Alguns vídeos dos Estados Unidos 🇺🇸🗽</h1>
+<h1>Plataforma Oficial de Vídeos 🚀</h1>
 
-<div class="channel-box">
-  <div class="channel-thumb">
-    <img src="https://yt3.googleusercontent.com/mdqCINPROhI30XabGHVdb_CQxaDPf1hIkhJ7tCFmOAzuRMYXDhy7-sfoZTkAdL_UxDaRGHhf7p8=s160-c-k-c0x00ffffff-no-rj">
-  </div>
-  <h2>Canal Oficial</h2>
-  <p>Inscreva-se para acompanhar os próximos conteúdos 🚀</p>
-  <a class="subscribe-btn"
-     href="https://youtube.com/@new_york2901?sub_confirmation=1"
-     target="_blank">
-     🔔 Inscrever-se no Canal
-  </a>
-</div>
-
-<div class="video-grid">
-
-<div class="video-card">
-<div class="video-wrapper">
-<iframe loading="lazy"
-referrerpolicy="strict-origin-when-cross-origin"
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-allowfullscreen
-src="https://www.youtube.com/embed/lS8Sdam5pEA">
-</iframe>
-</div>
-</div>
-
-</div>
+<div class="video-grid" id="videoGrid"></div>
 
 </div>
 
 <script>
-const cards=document.querySelectorAll(".video-card");
-cards.forEach((card,index)=>{
-  setTimeout(()=>card.classList.add("show"), index*150);
+
+/* ========================================
+   CONFIGURE AQUI SEUS VÍDEOS
+======================================== */
+
+const videos = [
+{
+  url:"https://www.youtube.com/embed/lS8Sdam5pEA",
+  destaque:true,
+  lancamento:"2026-03-01"
+},
+{
+  url:"https://www.youtube.com/embed/VIDEO2",
+  destaque:false,
+  lancamento:"2026-03-08"
+},
+{
+  url:"https://www.youtube.com/embed/VIDEO3",
+  destaque:false,
+  lancamento:"2026-03-15"
+}
+];
+
+/* ========================================
+   SISTEMA AUTOMÁTICO
+======================================== */
+
+const grid = document.getElementById("videoGrid");
+const hoje = new Date();
+
+videos.forEach((video,index)=>{
+
+  const lancamentoData = new Date(video.lancamento);
+  const liberado = hoje >= lancamentoData;
+
+  const viewsKey = "views_" + video.url;
+  let views = parseInt(localStorage.getItem(viewsKey)) || 0;
+
+  const card = document.createElement("div");
+  card.className="video-card";
+
+  let destaqueHTML = video.destaque ? `<div class="badge-destaque">⭐ Destaque</div>` : "";
+  let overlayHTML = "";
+
+  if(!liberado){
+    overlayHTML = `
+      <div class="overlay-launch">
+        🚀 Lançamento em <br>
+        ${video.lancamento}
+      </div>
+    `;
+  }
+
+  card.innerHTML = `
+    ${destaqueHTML}
+    <div class="video-wrapper">
+      ${liberado ? `
+      <iframe loading="lazy"
+      allowfullscreen
+      src="${video.url}">
+      </iframe>` : ``}
+    </div>
+    ${overlayHTML}
+    <div class="video-footer">
+      <span class="views">👁️ ${views} views</span>
+      ${liberado ? `<span style="color:#00FFAA">Disponível</span>` : `<span style="color:#FF4D4D">Em breve</span>`}
+    </div>
+  `;
+
+  grid.appendChild(card);
+
+  setTimeout(()=>card.classList.add("show"), index*120);
+
+  if(liberado){
+    card.addEventListener("click",()=>{
+      views++;
+      localStorage.setItem(viewsKey, views);
+      card.querySelector(".views").innerText = "👁️ " + views + " views";
+    });
+  }
+
 });
+
 </script>
 
 <script src="layout.v3.js" defer></script>
