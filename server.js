@@ -18,7 +18,10 @@ app.use(express.static("./"));
 
 const PORT = process.env.PORT || 3000;
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const ADMINS = [
+  { senha: process.env.SUPERADMIN_PASSWORD, role: "superadmin" },
+  { senha: process.env.MODERADOR_PASSWORD, role: "moderador" }
+];
 const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET;
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
@@ -283,3 +286,4 @@ app.post("/admin/upload", middlewareAdmin, upload.single("foto"), (req, res) => 
 app.listen(PORT, () => {
   console.log("Servidor rodando...");
 });
+
