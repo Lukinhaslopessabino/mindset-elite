@@ -9,144 +9,156 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-
-body{
-font-family:'Orbitron',sans-serif;
-background:linear-gradient(135deg,#000,#0a0f1c);
-color:#fff;
-overflow-x:hidden;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-/* ===== NAV ===== */
+body{
+  font-family:'Orbitron',sans-serif;
+  background:linear-gradient(135deg,#000,#0a0f1c);
+  color:#fff;
+  overflow-x:hidden;
+  padding-bottom:80px;
+}
+
+/* ================= NAV ================= */
 
 nav{
-position:fixed;
-top:0;
-width:100%;
-display:flex;
-justify-content:center;
-gap:20px;
-padding:15px;
-background:rgba(0,0,0,0.85);
-backdrop-filter:blur(15px);
-border-bottom:1px solid rgba(0,153,255,0.5);
-z-index:1000;
-flex-wrap:wrap;
+  position:fixed;
+  top:0;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:20px;
+  padding:16px;
+  background:rgba(0,0,0,0.85);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid rgba(0,153,255,0.4);
+  z-index:1000;
+  flex-wrap:wrap;
 }
 
 nav a{
-color:#fff;
-text-decoration:none;
-font-weight:600;
-padding:8px 14px;
-border-radius:25px;
-transition:0.3s;
-font-size:14px;
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+  padding:8px 14px;
+  border-radius:25px;
+  transition:0.3s;
+  font-size:14px;
 }
 
 nav a:hover{
-background:#0099FF;
-color:#000;
-box-shadow:0 0 20px #0099FF;
+  background:#00F5FF;
+  color:#000;
+  box-shadow:0 0 20px #00F5FF;
 }
 
-/* ===== CONTAINER ===== */
+/* ================= CONTAINER ================= */
 
 .container{
-max-width:1300px;
-margin:auto;
-padding:130px 20px 80px 20px;
+  max-width:1100px;
+  margin:auto;
+  padding:140px 20px 100px 20px;
 }
 
 h2{
-font-size:28px;
-margin-bottom:40px;
-border-left:5px solid #0099FF;
-padding-left:15px;
+  font-size:28px;
+  margin-bottom:40px;
+  border-left:5px solid #00F5FF;
+  padding-left:15px;
 }
 
-/* ===== GRID ===== */
+/* ================= LISTA PARTICIPANTES ================= */
 
-.grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:30px;
+.card{
+  background:rgba(15,20,35,0.95);
+  padding:30px;
+  border-radius:20px;
+  border:1px solid rgba(0,153,255,0.3);
+  box-shadow:0 0 25px rgba(0,153,255,0.2);
 }
 
-/* ===== CARD ===== */
-
-.member-card{
-background:rgba(15,20,35,0.95);
-padding:25px;
-border-radius:20px;
-text-align:center;
-border:1px solid rgba(0,153,255,0.3);
-box-shadow:0 0 20px rgba(0,153,255,0.2);
-transition:0.4s;
-position:relative;
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 0;
+  border-bottom:1px solid rgba(255,255,255,0.05);
+  font-size:15px;
 }
 
-.member-card:hover{
-transform:translateY(-6px);
-box-shadow:0 0 40px rgba(0,153,255,0.7);
+.row:last-child{
+  border-bottom:none;
 }
 
-.rank{
-position:absolute;
-top:10px;
-right:15px;
-font-size:14px;
-animation:pulse 2s infinite;
+.confirmado{
+  color:#00FFAA;
 }
 
-@keyframes pulse{
-0%{transform:scale(1);}
-50%{transform:scale(1.1);}
-100%{transform:scale(1);}
+.indefinido{
+  color:#00BFFF;
 }
 
-/* ===== AVATAR ===== */
-
-.avatar-wrapper{
-width:110px;
-height:110px;
-margin:auto;
-border-radius:50%;
-padding:4px;
-background:linear-gradient(45deg,#0099FF,#00FFFF,#0099FF);
-animation:rotateAura 6s linear infinite;
+.nao{
+  color:#FF4C4C;
 }
 
-@keyframes rotateAura{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
+.vagas{
+  margin-top:30px;
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+  color:#00F5FF;
 }
 
-.avatar-wrapper img{
-width:100%;
-height:100%;
-border-radius:50%;
-object-fit:cover;
-display:block;
+/* ===================================================== */
+/* ================= MOBILE APP STYLE ================= */
+/* ===================================================== */
+
+@media (max-width:768px){
+
+  body{
+    padding-bottom:100px;
+  }
+
+  nav{
+    top:auto;
+    bottom:0;
+    justify-content:space-around;
+    padding:12px 0;
+    border-top:1px solid rgba(0,153,255,0.4);
+    border-bottom:none;
+  }
+
+  nav a{
+    font-size:12px;
+    padding:4px 6px;
+  }
+
+  .container{
+    padding:80px 15px 120px 15px;
+  }
+
+  h2{
+    font-size:22px;
+  }
+
+  .row{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:6px;
+  }
+
+  .vagas{
+    font-size:16px;
+  }
+
 }
 
-/* ===== FUNDO 3D ===== */
-
-#bg3d{
-position:fixed;
-top:0;
-left:0;
-z-index:-2;
-}
-
-/* ===== MOBILE ===== */
-
-@media (max-width:600px){
-h2{font-size:22px;}
-.avatar-wrapper{width:90px;height:90px;}
-.grid{gap:20px;}
-}
 
 </style>
 </head>
@@ -155,13 +167,13 @@ h2{font-size:22px;}
 
 <canvas id="bg3d"></canvas>
 
-<nav>
-<a href="index.html">Início</a>
-<a href="membros.html">Membros</a>
-<a href="participantes.html">Participantes</a>
-<a href="videos.html">Vídeos</a>
-<a href="links.html">Links Oficiais</a>
-<a href="formulario.html">Formulário</a>
+<nav class="navbar">
+  <a href="index.html">🏠<span>Início</span></a>
+  <a href="membros.html">👑<span>Membros</span></a>
+  <a href="participantes.html">🎯<span>Participantes</span></a>
+  <a href="videos.html">🎬<span>Vídeos</span></a>
+  <a href="links.html">🔗<span>Links</span></a>
+  <a href="formulario.html">📝<span>Formulário</span></a>
 </nav>
 
 <div class="container">
@@ -301,6 +313,7 @@ carregarRanking();
 <script src="layout.js?v=2"></script>
 </body>
 </html>
+
 
 
 
