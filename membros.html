@@ -5,180 +5,184 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Membros - Mindset Elite</title>
 
+<!-- PERFORMANCE -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
-font-family:'Orbitron',sans-serif;
-background:linear-gradient(135deg,#000,#0a0f1c);
-color:#fff;
-overflow-x:hidden;
-min-height:100vh;
+  font-family:'Orbitron',sans-serif;
+  background:linear-gradient(135deg,#000,#0a0f1c);
+  color:#fff;
+  overflow-x:hidden;
+  min-height:100vh;
 }
 
 /* ================= NAV PADRÃO APP ================= */
 
 .navbar{
-position:fixed;
-top:0;
-width:100%;
-display:flex;
-justify-content:center;
-gap:25px;
-padding:18px;
-background:rgba(0,0,0,0.75);
-backdrop-filter:blur(15px);
-z-index:1000;
+  position:fixed;
+  top:0;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  gap:25px;
+  padding:18px;
+  background:rgba(0,0,0,0.75);
+  backdrop-filter:blur(15px);
+  z-index:1000;
 }
 
 .navbar a{
-color:#fff;
-text-decoration:none;
-padding:8px 16px;
-border-radius:25px;
-transition:.3s;
-display:flex;
-align-items:center;
-gap:6px;
-font-size:14px;
+  color:#fff;
+  text-decoration:none;
+  padding:8px 16px;
+  border-radius:25px;
+  transition:.3s;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:14px;
 }
 
 .navbar a:hover{
-background:#00F5FF;
-color:#000;
-box-shadow:0 0 20px #00F5FF;
+  background:#00F5FF;
+  color:#000;
+  box-shadow:0 0 20px #00F5FF;
 }
 
 /* ================= CONTAINER ================= */
 
 .container{
-max-width:1200px;
-margin:auto;
-padding:150px 20px 120px;
+  max-width:1200px;
+  margin:auto;
+  padding:150px 20px 120px;
 }
 
 h2{
-font-size:28px;
-margin-bottom:50px;
-text-align:center;
-background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
+  font-size:28px;
+  margin-bottom:50px;
+  text-align:center;
+  background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 
 /* ================= GRID ================= */
 
 .grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:35px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:35px;
 }
 
 /* ================= CARD ================= */
 
 .member-card{
-background:rgba(15,20,35,0.95);
-padding:30px;
-border-radius:25px;
-text-align:center;
-border:1px solid rgba(0,153,255,0.3);
-box-shadow:0 0 25px rgba(0,153,255,0.25);
-transition:.4s;
-position:relative;
-opacity:0;
-transform:translateY(30px);
+  background:rgba(15,20,35,0.95);
+  padding:30px;
+  border-radius:25px;
+  text-align:center;
+  border:1px solid rgba(0,153,255,0.3);
+  box-shadow:0 0 25px rgba(0,153,255,0.25);
+  transition:.4s;
+  position:relative;
+  opacity:0;
+  transform:translateY(30px);
+  will-change: transform, opacity;
 }
 
 .member-card.show{
-opacity:1;
-transform:translateY(0);
-transition:all .8s ease;
+  opacity:1;
+  transform:translateY(0);
+  transition:all .8s ease;
 }
 
 .member-card:hover{
-transform:translateY(-8px);
-box-shadow:0 0 45px rgba(0,153,255,0.8);
+  transform:translateY(-8px);
+  box-shadow:0 0 45px rgba(0,153,255,0.8);
 }
 
 /* RANK BADGE */
 
 .rank{
-position:absolute;
-top:15px;
-right:18px;
-font-size:15px;
-font-weight:700;
-color:#00F5FF;
+  position:absolute;
+  top:15px;
+  right:18px;
+  font-size:15px;
+  font-weight:700;
+  color:#00F5FF;
 }
 
 /* AVATAR */
 
 .avatar-wrapper{
-width:120px;
-height:120px;
-margin:auto;
-border-radius:50%;
-overflow:hidden;
-border:3px solid #00F5FF;
-margin-bottom:20px;
-box-shadow:0 0 25px rgba(0,245,255,.6);
+  width:120px;
+  height:120px;
+  margin:auto;
+  border-radius:50%;
+  overflow:hidden;
+  border:3px solid #00F5FF;
+  margin-bottom:20px;
+  box-shadow:0 0 25px rgba(0,245,255,.6);
 }
 
 .avatar-wrapper img{
-width:100%;
-height:100%;
-object-fit:cover;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
 }
 
 .member-card h3{
-margin-bottom:5px;
-font-size:18px;
+  margin-bottom:5px;
+  font-size:18px;
 }
 
 .member-card p{
-opacity:.8;
-font-size:14px;
+  opacity:.8;
+  font-size:14px;
 }
 
 /* ================= MOBILE APP STYLE ================= */
 
 @media (max-width:768px){
 
-body{padding-bottom:100px;}
+  body{padding-bottom:100px;}
 
-.navbar{
-top:auto;
-bottom:0;
-justify-content:space-around;
-padding:12px 0;
-border-top:1px solid rgba(0,153,255,.4);
-}
+  .navbar{
+    top:auto;
+    bottom:0;
+    justify-content:space-around;
+    padding:12px 0;
+    border-top:1px solid rgba(0,153,255,.4);
+  }
 
-.navbar a{
-flex-direction:column;
-font-size:18px;
-}
+  .navbar a{
+    flex-direction:column;
+    font-size:18px;
+  }
 
-.container{
-padding:100px 15px 150px;
-}
+  .container{
+    padding:100px 15px 150px;
+  }
 
-.grid{
-gap:25px;
-}
+  .grid{
+    gap:25px;
+  }
 
 }
 
 canvas{
-position:fixed;
-top:0;
-left:0;
-z-index:-1;
+  position:fixed;
+  inset:0;
+  z-index:-1;
 }
-
 </style>
 </head>
 
@@ -187,124 +191,124 @@ z-index:-1;
 <canvas id="bg3d"></canvas>
 
 <nav class="navbar">
-<a href="index.html">🏠 Início</a>
-<a href="membros.html">👑 Membros</a>
-<a href="participantes.html">🎯 Participantes</a>
-<a href="videos.html">🎬 Vídeos</a>
-<a href="links.html">🔗 Links</a>
-<a href="formulario.html">📝 Formulário</a>
+  <a href="index.html">🏠 Início</a>
+  <a href="membros.html">👑 Membros</a>
+  <a href="participantes.html">🎯 Participantes</a>
+  <a href="videos.html">🎬 Vídeos</a>
+  <a href="links.html">🔗 Links</a>
+  <a href="formulario.html">📝 Formulário</a>
 </nav>
 
 <div class="container">
-<h2>🏆 Ranking Mindset Elite</h2>
-<div class="grid" id="membersGrid">
-Carregando ranking...
-</div>
+  <h2>🏆 Ranking Mindset Elite</h2>
+  <div class="grid" id="membersGrid">Carregando ranking...</div>
 </div>
 
-<script>
-
+<script defer>
 /* ================= FUNDO 3D ================= */
+function initThree(){
+  if(!(window.innerWidth > 768 && window.THREE)) return;
 
-if(window.innerWidth > 768){
+  const canvas=document.getElementById("bg3d");
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,2000);
+  const renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:false});
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-const canvas=document.getElementById("bg3d");
-const scene=new THREE.Scene();
-const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,2000);
-const renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true});
-renderer.setSize(window.innerWidth,window.innerHeight);
+  const geometry=new THREE.BufferGeometry();
+  const vertices=[];
+  for(let i=0;i<1200;i++){
+    vertices.push(
+      THREE.MathUtils.randFloatSpread(2000),
+      THREE.MathUtils.randFloatSpread(2000),
+      THREE.MathUtils.randFloatSpread(2000)
+    );
+  }
+  geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));
 
-const geometry=new THREE.BufferGeometry();
-const vertices=[];
+  const material=new THREE.PointsMaterial({color:0x00f5ff,size:2});
+  const particles=new THREE.Points(geometry,material);
+  scene.add(particles);
 
-for(let i=0;i<1200;i++){
-vertices.push(
-THREE.MathUtils.randFloatSpread(2000),
-THREE.MathUtils.randFloatSpread(2000),
-THREE.MathUtils.randFloatSpread(2000)
-);
+  camera.position.z=700;
+
+  function animate(){
+    requestAnimationFrame(animate);
+    particles.rotation.x+=0.0003;
+    particles.rotation.y+=0.0003;
+    renderer.render(scene,camera);
+  }
+  animate();
+
+  window.addEventListener("resize",()=>{
+    camera.aspect=window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth,window.innerHeight);
+  });
 }
-
-geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));
-const material=new THREE.PointsMaterial({color:0x00f5ff,size:2});
-const particles=new THREE.Points(geometry,material);
-scene.add(particles);
-
-camera.position.z=700;
-
-function animate(){
-requestAnimationFrame(animate);
-particles.rotation.x+=0.0003;
-particles.rotation.y+=0.0003;
-renderer.render(scene,camera);
-}
-animate();
-
-}
+initThree();
 
 /* ================= RANKING ================= */
-
 async function carregarRanking(){
+  const grid=document.getElementById("membersGrid");
 
-const grid=document.getElementById("membersGrid");
+  try{
+    const res=await fetch("https://mindset-elite.onrender.com/ranking", {
+      cache: "no-store"
+    });
 
-try{
+    if(!res.ok){
+      grid.innerHTML="⚠ Ranking indisponível.";
+      return;
+    }
 
-const res=await fetch("https://mindset-elite.onrender.com/ranking");
+    const data=await res.json();
+    grid.innerHTML="";
 
-if(!res.ok){
-grid.innerHTML="⚠ Ranking indisponível.";
-return;
+    if(!data.ranking || data.ranking.length===0){
+      grid.innerHTML="Nenhum membro ainda.";
+      return;
+    }
+
+    data.ranking.forEach((user,index)=>{
+      let medal="";
+      if(user.rank===1) medal="🥇";
+      else if(user.rank===2) medal="🥈";
+      else if(user.rank===3) medal="🥉";
+
+      const fotoPath=user.foto ? `/images/${user.foto}` : "/images/default.jpg";
+
+      const card=document.createElement("div");
+      card.className="member-card";
+
+      card.innerHTML=`
+        <div class="rank">#${user.rank} ${medal}</div>
+        <div class="avatar-wrapper">
+          <img src="${fotoPath}" alt="${user.nome}">
+        </div>
+        <h3>${user.nome}</h3>
+        <p>${user.idade || 0} anos</p>
+      `;
+
+      const img = card.querySelector("img");
+      img.onerror = () => { img.src = "/images/default.jpg"; };
+
+      grid.appendChild(card);
+
+      setTimeout(()=> card.classList.add("show"), index*120);
+    });
+
+  }catch(err){
+    grid.innerHTML="⚠ Erro ao carregar ranking.";
+    console.error(err);
+  }
 }
-
-const data=await res.json();
-grid.innerHTML="";
-
-if(!data.ranking || data.ranking.length===0){
-grid.innerHTML="Nenhum membro ainda.";
-return;
-}
-
-data.ranking.forEach((user,index)=>{
-
-let medal="";
-if(user.rank===1) medal="🥇";
-else if(user.rank===2) medal="🥈";
-else if(user.rank===3) medal="🥉";
-
-const fotoPath=user.foto?`/images/${user.foto}`:"/images/default.jpg";
-
-const card=document.createElement("div");
-card.className="member-card";
-
-card.innerHTML=`
-<div class="rank">#${user.rank} ${medal}</div>
-<div class="avatar-wrapper">
-<img src="${fotoPath}" alt="${user.nome}">
-</div>
-<h3>${user.nome}</h3>
-<p>${user.idade || 0} anos</p>
-`;
-
-grid.appendChild(card);
-
-setTimeout(()=>{
-card.classList.add("show");
-}, index*120);
-
-});
-
-}catch(err){
-grid.innerHTML="⚠ Erro ao carregar ranking.";
-console.error(err);
-}
-
-}
-
 carregarRanking();
-
 </script>
-<script src="layout.v3.js" defer-></script>
+
+<!-- ✅ CORRIGIDO -->
+<script src="layout.v3.js" defer></script>
+
 </body>
 </html>
-
