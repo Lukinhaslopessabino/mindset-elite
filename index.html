@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mindset Elite</title>
 
+<!-- PERFORMANCE -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -19,12 +25,10 @@ body{
   overflow-x:hidden;
 }
 
-/* ================= LOADER ================= */
-
+/* LOADER */
 #loader{
   position:fixed;
-  width:100%;
-  height:100%;
+  inset:0;
   background:#000;
   display:flex;
   justify-content:center;
@@ -44,8 +48,7 @@ body{
   100%{opacity:.4}
 }
 
-/* ================= NAV ================= */
-
+/* NAV */
 .navbar{
   position:fixed;
   top:0;
@@ -76,8 +79,7 @@ body{
   box-shadow:0 0 20px #00F5FF;
 }
 
-/* ================= HERO ================= */
-
+/* HERO */
 .hero{
   min-height:100vh;
   display:flex;
@@ -110,7 +112,6 @@ body{
 }
 
 /* CTA */
-
 .cta-btn{
   margin-top:35px;
   padding:14px 35px;
@@ -128,8 +129,7 @@ body{
   box-shadow:0 0 40px rgba(0,245,255,.9);
 }
 
-/* ================= SECTION ================= */
-
+/* SECTION */
 section{
   padding:120px 10%;
   text-align:center;
@@ -147,21 +147,19 @@ section p{
   opacity:.85;
 }
 
-/* ================= REVEAL ================= */
-
+/* REVEAL */
 .reveal{
   opacity:0;
   transform:translateY(40px);
-}
-
-.active{
-  opacity:1;
-  transform:translateY(0);
   transition:all 1s ease;
 }
 
-/* ================= CANVAS ================= */
+.reveal.active{
+  opacity:1;
+  transform:translateY(0);
+}
 
+/* CANVAS */
 canvas{
   position:fixed;
   top:0;
@@ -169,8 +167,7 @@ canvas{
   z-index:-1;
 }
 
-/* ================= MOBILE ================= */
-
+/* MOBILE */
 @media (max-width:768px){
 
   body{padding-bottom:90px;}
@@ -181,15 +178,6 @@ canvas{
     justify-content:space-around;
     padding:10px 0;
     border-top:1px solid rgba(0,153,255,.4);
-  }
-
-  .navbar a{
-    flex-direction:column;
-    font-size:18px;
-  }
-
-  .navbar a span{
-    font-size:11px;
   }
 
   .hero h1{font-size:30px;}
@@ -231,17 +219,21 @@ Networking forte, crescimento real e mentalidade de alto nível.
 </p>
 </section>
 
-<script>
+<script defer>
 
 /* LOADER */
 window.addEventListener("load",()=>{
-  gsap.to("#loader",{opacity:0,duration:.8,onComplete:()=>{
+  if(window.gsap){
+    gsap.to("#loader",{opacity:0,duration:.8,onComplete:()=>{
+      document.getElementById("loader").style.display="none";
+    }});
+  } else {
     document.getElementById("loader").style.display="none";
-  }});
+  }
 });
 
-/* FUNDO 3D */
-if(window.innerWidth > 768){
+/* THREE.JS */
+if(window.innerWidth > 768 && window.THREE){
 
 const canvas=document.getElementById("bg3d");
 const scene=new THREE.Scene();
@@ -276,23 +268,30 @@ renderer.render(scene,camera);
 }
 animate();
 
+window.addEventListener("resize",()=>{
+camera.aspect=window.innerWidth/window.innerHeight;
+camera.updateProjectionMatrix();
+renderer.setSize(window.innerWidth,window.innerHeight);
+});
+
 }
 
-/* SCROLL REVEAL */
-const reveals=document.querySelectorAll(".reveal");
-
-window.addEventListener("scroll",()=>{
-reveals.forEach(el=>{
-if(el.getBoundingClientRect().top < window.innerHeight-100){
-el.classList.add("active");
+/* REVEAL PROFISSIONAL */
+const observer=new IntersectionObserver(entries=>{
+entries.forEach(entry=>{
+if(entry.isIntersecting){
+entry.target.classList.add("active");
 }
 });
+},{threshold:0.2});
+
+document.querySelectorAll(".reveal").forEach(el=>{
+observer.observe(el);
 });
 
 </script>
 
-<script src="layout.v3.js" defer-></script>
+<script src="layout.v3.js" defer></script>
 
 </body>
 </html>
-
