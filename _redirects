@@ -1,4 +1,10 @@
+# Força https + tira www (se você quiser sem www)
 http://mindset-elite-fcmg.com.br/* 
+https://mindset-elite-fcmg.com.br/:splat 301!
+https://www.mindset-elite-fcmg.com.br/* 
 https://mindset-elite-fcmg.com.br/:splat 301!
 http://www.mindset-elite-fcmg.com.br/* 
 https://mindset-elite-fcmg.com.br/:splat 301!
+
+# SPA fallback (se algum link quebrar)
+ /* /index.html 200
