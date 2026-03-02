@@ -78,10 +78,13 @@ color:#FF4D4D;
 </div>
 
 <script>
+
+const API = "https://mindset-elite.onrender.com";
+
 async function login(){
 
-const senha = document.getElementById("senha").value;
-const codigo = document.getElementById("codigo").value;
+const senha = document.getElementById("senha").value.trim();
+const codigo = document.getElementById("codigo").value.trim();
 const msg = document.getElementById("msg");
 
 msg.innerText = "";
@@ -93,8 +96,8 @@ return;
 
 try{
 
-// 1️⃣ validar 2FA (já faz login completo no seu backend)
-const res = await fetch("https://mindset-elite.onrender.com/admin/2fa",{
+// 🔐 Login direto com 2FA
+const res = await fetch(API + "/admin/2fa",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
@@ -109,18 +112,19 @@ msg.innerText = data.erro || "Erro no login";
 return;
 }
 
-// 2️⃣ salva token
+// ✅ salva token corretamente
 sessionStorage.setItem("adminToken", data.token);
 sessionStorage.setItem("adminRole", data.role);
 
-// 3️⃣ vai pro admin
-window.location.href = "/admin";
+// ✅ redireciona corretamente para admin.html
+window.location.href = "admin.html";
 
 }catch(e){
-msg.innerText = "Erro de conexão";
+msg.innerText = "Erro de conexão com o servidor";
 }
 
 }
+
 </script>
 
 </body>
