@@ -94,7 +94,7 @@ return;
 try{
 
 // 1️⃣ validar 2FA (já faz login completo no seu backend)
-const res = await fetch("/admin/2fa",{
+const res = await fetch("https://mindset-elite.onrender.com/admin/2fa",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
