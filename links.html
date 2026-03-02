@@ -5,147 +5,146 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Links Oficiais - Mindset Elite</title>
 
+<!-- PERFORMANCE -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
-font-family:'Orbitron',sans-serif;
-background:linear-gradient(135deg,#000,#0a0f1c);
-color:#fff;
-min-height:100vh;
-overflow-x:hidden;
+  font-family:'Orbitron',sans-serif;
+  background:#05070d;
+  color:#fff;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ================= NAV ================= */
+
+.navbar{
+  position:fixed;
+  top:0;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  gap:25px;
+  padding:18px;
+  background:rgba(0,0,0,0.85);
+  backdrop-filter:blur(15px);
+  z-index:1000;
+}
+
+.navbar a{
+  color:#fff;
+  text-decoration:none;
+  padding:8px 16px;
+  border-radius:25px;
+  transition:.3s;
+  font-size:14px;
+}
+
+.navbar a:hover{
+  background:#00F5FF;
+  color:#000;
+  box-shadow:0 0 20px #00F5FF;
 }
 
 /* ================= FUNDO ================= */
 
 #particles-js{
-position:fixed;
-width:100%;
-height:100%;
-z-index:-1;
-}
-
-/* ================= NAV PADRÃO ================= */
-
-.navbar{
-position:fixed;
-top:0;
-width:100%;
-display:flex;
-justify-content:center;
-gap:25px;
-padding:18px;
-background:rgba(0,0,0,0.75);
-backdrop-filter:blur(15px);
-z-index:1000;
-}
-
-.navbar a{
-color:#fff;
-text-decoration:none;
-padding:8px 16px;
-border-radius:25px;
-transition:.3s;
-display:flex;
-align-items:center;
-gap:6px;
-font-size:14px;
-}
-
-.navbar a:hover{
-background:#00F5FF;
-color:#000;
-box-shadow:0 0 20px #00F5FF;
+  position:fixed;
+  inset:0;
+  z-index:-1;
 }
 
 /* ================= CONTAINER ================= */
 
 .container{
-max-width:700px;
-margin:auto;
-padding:150px 20px 120px;
+  max-width:700px;
+  margin:auto;
+  padding:150px 20px 120px;
 }
 
 h1{
-margin-bottom:60px;
-font-size:clamp(1.8rem,4vw,2.5rem);
-border-left:5px solid #00F5FF;
-padding-left:15px;
+  margin-bottom:70px;
+  font-size:clamp(1.8rem,4vw,2.5rem);
+  border-left:5px solid #00F5FF;
+  padding-left:15px;
+  letter-spacing:1px;
 }
 
 /* ================= LINK CARD ================= */
 
 .link-card{
-display:flex;
-align-items:center;
-gap:20px;
-padding:22px;
-margin-bottom:30px;
-border-radius:25px;
-border:1px solid rgba(0,153,255,.3);
-background:rgba(15,20,35,.95);
-text-decoration:none;
-color:#fff;
-box-shadow:0 0 30px rgba(0,153,255,.15);
-transition:.4s;
-opacity:0;
-transform:translateY(30px);
+  display:flex;
+  align-items:center;
+  gap:20px;
+  padding:24px;
+  margin-bottom:35px;
+  border-radius:30px;
+  border:1px solid rgba(0,153,255,.25);
+  background:rgba(15,20,35,.95);
+  text-decoration:none;
+  color:#fff;
+  box-shadow:0 0 35px rgba(0,153,255,.15);
+  transition:.4s ease;
+  opacity:0;
+  transform:translateY(30px);
 }
 
 .link-card.show{
-opacity:1;
-transform:translateY(0);
-transition:all .8s ease;
+  opacity:1;
+  transform:translateY(0);
+  transition:all .8s ease;
 }
 
 .link-card img{
-width:35px;
-height:35px;
-object-fit:contain;
+  width:38px;
+  height:38px;
+  object-fit:contain;
 }
 
 .link-card span{
-font-weight:700;
-letter-spacing:1px;
-font-size:16px;
+  font-weight:700;
+  letter-spacing:1px;
+  font-size:16px;
 }
 
 .link-card:hover{
-transform:translateY(-8px);
-box-shadow:0 0 50px rgba(0,245,255,.7);
-background:linear-gradient(90deg,#00F5FF,#0099FF);
-color:#000;
+  transform:translateY(-10px);
+  box-shadow:0 0 60px rgba(0,245,255,.6);
+  background:linear-gradient(90deg,#00F5FF,#0099FF);
+  color:#000;
 }
 
-/* ================= MOBILE APP STYLE ================= */
+/* ================= MOBILE ================= */
 
 @media (max-width:768px){
 
-body{padding-bottom:100px;}
+  body{padding-bottom:100px;}
 
-.navbar{
-top:auto;
-bottom:0;
-justify-content:space-around;
-padding:12px 0;
-border-top:1px solid rgba(0,153,255,.4);
+  .navbar{
+    top:auto;
+    bottom:0;
+    justify-content:space-around;
+    padding:12px 0;
+    border-top:1px solid rgba(0,153,255,.4);
+  }
+
+  .navbar a{
+    flex-direction:column;
+    font-size:18px;
+  }
+
+  .container{
+    padding:100px 15px 150px;
+  }
+
 }
-
-.navbar a{
-flex-direction:column;
-font-size:18px;
-}
-
-.container{
-padding:100px 15px 150px;
-}
-
-}
-
 </style>
 </head>
 
@@ -154,12 +153,12 @@ padding:100px 15px 150px;
 <div id="particles-js"></div>
 
 <nav class="navbar">
-<a href="index.html">🏠 Início</a>
-<a href="membros.html">👑 Membros</a>
-<a href="participantes.html">🎯 Participantes</a>
-<a href="videos.html">🎬 Vídeos</a>
-<a href="links.html">🔗 Links</a>
-<a href="formulario.html">📝 Formulário</a>
+  <a href="index.html">🏠 Início</a>
+  <a href="membros.html">👑 Membros</a>
+  <a href="participantes.html">🎯 Participantes</a>
+  <a href="videos.html">🎬 Vídeos</a>
+  <a href="links.html">🔗 Links</a>
+  <a href="formulario.html">📝 Formulário</a>
 </nav>
 
 <div class="container">
@@ -183,33 +182,29 @@ padding:100px 15px 150px;
 
 </div>
 
-<script>
+<script defer>
 
-/* ================= PARTÍCULAS ================= */
-
-if(window.innerWidth > 600){
-particlesJS("particles-js",{
-particles:{
-number:{value:40},
-color:{value:"#00F5FF"},
-line_linked:{enable:true,color:"#00F5FF"},
-move:{speed:0.8}
+/* PARTÍCULAS */
+if(window.innerWidth > 600 && window.particlesJS){
+  particlesJS("particles-js",{
+    particles:{
+      number:{value:35},
+      color:{value:"#00F5FF"},
+      line_linked:{enable:true,color:"#00F5FF"},
+      move:{speed:0.6}
+    }
+  });
 }
-});
-}
 
-/* ================= FADE ELEGANTE ================= */
-
+/* ANIMAÇÃO ENTRADA */
 const cards=document.querySelectorAll(".link-card");
-
 cards.forEach((card,index)=>{
-setTimeout(()=>{
-card.classList.add("show");
-}, index*150);
+  setTimeout(()=>card.classList.add("show"), index*120);
 });
 
 </script>
 
-<script src="layout.v3.js" defer-></script></body>
-</html>
+<script src="layout.v3.js" defer></script>
 
+</body>
+</html>
