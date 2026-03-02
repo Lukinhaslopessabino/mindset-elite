@@ -8,12 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box}
 
 body{
   font-family:'Orbitron',sans-serif;
@@ -33,22 +30,21 @@ body{
   justify-content:center;
   align-items:center;
   z-index:9999;
-  transition:opacity 0.6s ease;
+  transition:opacity .6s ease;
 }
 
 #loader h1{
-  font-size:24px;
   letter-spacing:3px;
   animation:pulse 1.5s infinite;
 }
 
 @keyframes pulse{
-  0%{opacity:0.4}
+  0%{opacity:.4}
   50%{opacity:1}
-  100%{opacity:0.4}
+  100%{opacity:.4}
 }
 
-/* ================= NAV DESKTOP ================= */
+/* ================= NAV ================= */
 
 .navbar{
   position:fixed;
@@ -68,15 +64,10 @@ body{
   text-decoration:none;
   padding:8px 16px;
   border-radius:25px;
-  transition:0.3s;
+  transition:.3s;
   display:flex;
   align-items:center;
   gap:6px;
-  font-size:15px;
-}
-
-.navbar a span{
-  font-size:14px;
 }
 
 .navbar a:hover{
@@ -98,13 +89,12 @@ body{
 }
 
 .hero h1{
-  font-size:clamp(2.5rem,6vw,4rem);
+  font-size:clamp(2.8rem,6vw,4.5rem);
   background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
   background-size:200%;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
   animation:glowMove 6s linear infinite;
-  line-height:1.2;
 }
 
 @keyframes glowMove{
@@ -115,15 +105,46 @@ body{
 .hero p{
   margin-top:20px;
   font-size:1.2rem;
-  opacity:0.85;
+  opacity:.9;
   max-width:600px;
 }
 
-/* ================= SECTIONS ================= */
+/* CTA */
+
+.cta-btn{
+  margin-top:35px;
+  padding:14px 35px;
+  border-radius:40px;
+  text-decoration:none;
+  font-weight:700;
+  background:linear-gradient(90deg,#00F5FF,#0099FF);
+  color:#000;
+  transition:.4s;
+  box-shadow:0 0 25px rgba(0,245,255,.5);
+}
+
+.cta-btn:hover{
+  transform:scale(1.08);
+  box-shadow:0 0 40px rgba(0,245,255,.9);
+}
+
+/* ================= SECTION ================= */
 
 section{
-  padding:100px 10%;
-  min-height:60vh;
+  padding:120px 10%;
+  text-align:center;
+}
+
+section h2{
+  font-size:2rem;
+  margin-bottom:25px;
+  color:#00F5FF;
+}
+
+section p{
+  max-width:700px;
+  margin:auto;
+  opacity:.85;
 }
 
 /* ================= REVEAL ================= */
@@ -131,15 +152,15 @@ section{
 .reveal{
   opacity:0;
   transform:translateY(40px);
+}
+
+.active{
+  opacity:1;
+  transform:translateY(0);
   transition:all 1s ease;
 }
 
-.reveal.active{
-  opacity:1;
-  transform:translateY(0);
-}
-
-/* ================= BACKGROUND CANVAS ================= */
+/* ================= CANVAS ================= */
 
 canvas{
   position:fixed;
@@ -148,56 +169,35 @@ canvas{
   z-index:-1;
 }
 
-/* ===================================================== */
-/* ================= MOBILE APP STYLE ================= */
-/* ===================================================== */
+/* ================= MOBILE ================= */
 
 @media (max-width:768px){
 
-  body{
-    padding-bottom:80px;
-  }
+  body{padding-bottom:90px;}
 
   .navbar{
     top:auto;
     bottom:0;
-    background:rgba(0,0,0,0.95);
-    border-top:1px solid rgba(0,153,255,0.4);
     justify-content:space-around;
     padding:10px 0;
+    border-top:1px solid rgba(0,153,255,.4);
   }
 
   .navbar a{
     flex-direction:column;
-    font-size:20px;
-    padding:0;
+    font-size:18px;
   }
 
   .navbar a span{
     font-size:11px;
-    margin-top:3px;
   }
 
-  .hero{
-    padding:140px 20px 80px;
-  }
-
-  .hero h1{
-    font-size:30px;
-  }
-
-  .hero p{
-    font-size:15px;
-  }
-
-  section{
-    padding:60px 20px;
-  }
+  .hero h1{font-size:30px;}
+  .hero p{font-size:15px;}
+  section{padding:80px 20px;}
 
 }
 </style>
-
-
 </head>
 
 <body>
@@ -209,23 +209,25 @@ canvas{
 <canvas id="bg3d"></canvas>
 
 <nav class="navbar">
-  <a href="index.html">🏠<span>Início</span></a>
-  <a href="membros.html">👑<span>Membros</span></a>
-  <a href="participantes.html">🎯<span>Participantes</span></a>
-  <a href="videos.html">🎬<span>Vídeos</span></a>
-  <a href="links.html">🔗<span>Links</span></a>
-  <a href="formulario.html">📝<span>Formulário</span></a>
+  <a href="index.html">🏠 Início</a>
+  <a href="membros.html">👑 Membros</a>
+  <a href="participantes.html">🎯 Participantes</a>
+  <a href="videos.html">🎬 Vídeos</a>
+  <a href="links.html">🔗 Links</a>
+  <a href="formulario.html">📝 Formulário</a>
 </nav>
+
 <div class="hero">
-<h1>Mindset Elite</h1>
+<h1 class="reveal">Mindset Elite</h1>
 <p class="reveal">Elite não nasce. Elite se constrói.</p>
+<a href="formulario.html" class="cta-btn reveal">Entrar para a Elite</a>
 </div>
 
 <section>
 <h2 class="reveal">Mentalidade Global</h2>
 <p class="reveal">
 Construindo uma elite com visão internacional.
-Conteúdo exclusivo, networking forte e crescimento real.
+Networking forte, crescimento real e mentalidade de alto nível.
 </p>
 </section>
 
@@ -233,26 +235,24 @@ Conteúdo exclusivo, networking forte e crescimento real.
 
 /* LOADER */
 window.addEventListener("load",()=>{
-gsap.to("#loader",{opacity:0,duration:0.8,onComplete:()=>{
-document.getElementById("loader").style.display="none";
-}});
+  gsap.to("#loader",{opacity:0,duration:.8,onComplete:()=>{
+    document.getElementById("loader").style.display="none";
+  }});
 });
 
-/* FUNDO 3D (DESKTOP) */
-
+/* FUNDO 3D */
 if(window.innerWidth > 768){
 
-const canvas = document.getElementById("bg3d");
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 2000);
-const renderer = new THREE.WebGLRenderer({ canvas:canvas, alpha:true });
+const canvas=document.getElementById("bg3d");
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,2000);
+const renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true});
+renderer.setSize(window.innerWidth,window.innerHeight);
 
-renderer.setSize(window.innerWidth, window.innerHeight);
+const geometry=new THREE.BufferGeometry();
+const vertices=[];
 
-const geometry = new THREE.BufferGeometry();
-const vertices = [];
-
-for(let i=0;i<1500;i++){
+for(let i=0;i<1200;i++){
 vertices.push(
 THREE.MathUtils.randFloatSpread(2000),
 THREE.MathUtils.randFloatSpread(2000),
@@ -260,17 +260,13 @@ THREE.MathUtils.randFloatSpread(2000)
 );
 }
 
-geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices,3));
+geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));
 
-const material = new THREE.PointsMaterial({
-color:0x00f5ff,
-size:2
-});
-
-const particles = new THREE.Points(geometry, material);
+const material=new THREE.PointsMaterial({color:0x00f5ff,size:2});
+const particles=new THREE.Points(geometry,material);
 scene.add(particles);
 
-camera.position.z = 700;
+camera.position.z=700;
 
 function animate(){
 requestAnimationFrame(animate);
@@ -280,21 +276,14 @@ renderer.render(scene,camera);
 }
 animate();
 
-window.addEventListener("resize",()=>{
-camera.aspect=window.innerWidth/window.innerHeight;
-camera.updateProjectionMatrix();
-renderer.setSize(window.innerWidth, window.innerHeight);
-});
-
 }
 
 /* SCROLL REVEAL */
-
 const reveals=document.querySelectorAll(".reveal");
 
 window.addEventListener("scroll",()=>{
 reveals.forEach(el=>{
-if(el.getBoundingClientRect().top < window.innerHeight - 100){
+if(el.getBoundingClientRect().top < window.innerHeight-100){
 el.classList.add("active");
 }
 });
@@ -306,7 +295,3 @@ el.classList.add("active");
 
 </body>
 </html>
-
-
-
-
