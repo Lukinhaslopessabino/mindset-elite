@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
 <style>
 *{
   margin:0;
@@ -49,33 +48,38 @@ body{
   100%{opacity:0.4}
 }
 
-/* ================= NAV ================= */
+/* ================= NAV DESKTOP ================= */
 
-nav{
+.navbar{
   position:fixed;
   top:0;
   width:100%;
   display:flex;
   justify-content:center;
-  align-items:center;
   gap:25px;
   padding:18px;
-  background:rgba(0,0,0,0.7);
+  background:rgba(0,0,0,0.75);
   backdrop-filter:blur(15px);
   z-index:1000;
-  flex-wrap:wrap;
 }
 
-nav a{
+.navbar a{
   color:#fff;
   text-decoration:none;
   padding:8px 16px;
   border-radius:25px;
   transition:0.3s;
+  display:flex;
+  align-items:center;
+  gap:6px;
   font-size:15px;
 }
 
-nav a:hover{
+.navbar a span{
+  font-size:14px;
+}
+
+.navbar a:hover{
   background:#00F5FF;
   color:#000;
   box-shadow:0 0 20px #00F5FF;
@@ -145,30 +149,41 @@ canvas{
 }
 
 /* ===================================================== */
-/* ================= MOBILE PROFISSIONAL ================= */
+/* ================= MOBILE APP STYLE ================= */
 /* ===================================================== */
 
-@media (max-width: 768px){
+@media (max-width:768px){
 
-  nav{
-    flex-direction:column;
-    gap:15px;
-    padding:20px 10px;
+  body{
+    padding-bottom:80px;
   }
 
-  nav a{
-    width:100%;
-    text-align:center;
-    font-size:18px;
+  .navbar{
+    top:auto;
+    bottom:0;
+    background:rgba(0,0,0,0.95);
+    border-top:1px solid rgba(0,153,255,0.4);
+    justify-content:space-around;
     padding:10px 0;
   }
 
+  .navbar a{
+    flex-direction:column;
+    font-size:20px;
+    padding:0;
+  }
+
+  .navbar a span{
+    font-size:11px;
+    margin-top:3px;
+  }
+
   .hero{
-    padding:140px 20px 60px;
+    padding:140px 20px 80px;
   }
 
   .hero h1{
-    font-size:32px;
+    font-size:30px;
   }
 
   .hero p{
@@ -180,8 +195,8 @@ canvas{
   }
 
 }
-
 </style>
+
 
 </head>
 
@@ -193,15 +208,14 @@ canvas{
 
 <canvas id="bg3d"></canvas>
 
-<nav>
-<a href="index.html">Início</a>
-<a href="membros.html">Membros</a>
-<a href="participantes.html">Participantes</a>
-<a href="videos.html">Vídeos</a>
-<a href="links.html">Links Oficiais</a>
-<a href="formulario.html">Formulário</a>
+<nav class="navbar">
+  <a href="index.html">🏠<span>Início</span></a>
+  <a href="membros.html">👑<span>Membros</span></a>
+  <a href="participantes.html">🎯<span>Participantes</span></a>
+  <a href="videos.html">🎬<span>Vídeos</span></a>
+  <a href="links.html">🔗<span>Links</span></a>
+  <a href="formulario.html">📝<span>Formulário</span></a>
 </nav>
-
 <div class="hero">
 <h1>Mindset Elite</h1>
 <p class="reveal">Elite não nasce. Elite se constrói.</p>
@@ -292,6 +306,7 @@ el.classList.add("active");
 
 </body>
 </html>
+
 
 
 
