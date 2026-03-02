@@ -9,30 +9,26 @@ import speakeasy from "speakeasy";
 import QRCode from "qrcode";
 
 const app = express();
-app.set("trust proxy", 1); // ✅ IP real no Render/Proxy
+app.set("trust proxy", 1); // IP real no Render/Proxy
 
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
 /* ===================================================== */
-/* 🌐 CORS */
+/* ✅ CORS */
 /* ===================================================== */
-const ALLOWED_ORIGINS = [
-  "https://mindset-elite-fcmg.com.br",
-  "https://www.mindset-elite-fcmg.com.br",
-];
-
 app.use(
   cors({
-    origin: ALLOWED_ORIGINS,
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "x-admin-token", "x-setup-key"],
+    origin: [
+      "https://mindset-elite-fcmg.com.br",
+      "https://www.mindset-elite-fcmg.com.br",
+    ],
   })
 );
 
-app.use(express.json({ limit: "1mb" }));
-app.use(express.static("./")); // serve html/css/js
-app.use("/images", express.static("./images")); // serve imagens
+/* JSON com limite pra não deixar bot mandar payload gigante */
+app.use(express.json({ limit: "60kb" }));
+app.use(express.static("./"));
 
 const PORT = process.env.PORT || 3000;
 
@@ -41,12 +37,12 @@ const PORT = process.env.PORT || 3000;
 /* ===================================================== */
 const ADMINS = [
   {
-    senha: process.env.SUPERADMIN_PASSWORD || "",
+    senha: process.env.SUPERADMIN_PASSWORD,
     role: "superadmin",
     twoFASecret: process.env.SUPERADMIN_2FA_SECRET || "", // base32
   },
   {
-    senha: process.env.MODERADOR_PASSWORD || "",
+    senha: process.env.MODERADOR_PASSWORD,
     role: "moderador",
     twoFASecret: process.env.MODERADOR_2FA_SECRET || "", // base32
   },
@@ -93,27 +89,9 @@ function broadcast(data) {
     if (client.readyState === 1) client.send(msg);
   });
 }
-
 wss.on("connection", (ws) => {
   ws.send(JSON.stringify({ type: "connected" }));
 });
-
-/* ===================================================== */
-/* 🧹 LIMPEZA AUTOMÁTICA (sessions + ip block) */
-/* ===================================================== */
-setInterval(() => {
-  const now = Date.now();
-
-  // limpa sessions expiradas
-  for (const [token, sess] of Object.entries(SESSIONS)) {
-    if (!sess || now > sess.expira) delete SESSIONS[token];
-  }
-
-  // limpa IP bloqueado já vencido
-  for (const [ip, until] of Object.entries(IP_BLOQUEADO)) {
-    if (!until || now >= until) delete IP_BLOQUEADO[ip];
-  }
-}, 30 * 1000);
 
 /* ===================================================== */
 /* 📜 LOGS */
@@ -126,7 +104,6 @@ function lerLogs() {
     return [];
   }
 }
-
 function salvarLog(tipo, detalhes, role, ip) {
   const log = {
     data: new Date().toISOString(),
@@ -135,7 +112,6 @@ function salvarLog(tipo, detalhes, role, ip) {
     ip: ip || null,
     detalhes: detalhes || null,
   };
-
   const logs = lerLogs();
   logs.push(log);
   fs.writeFileSync(LOG_FILE, JSON.stringify(logs, null, 2));
@@ -145,19 +121,15 @@ function salvarLog(tipo, detalhes, role, ip) {
 /* ===================================================== */
 /* 💾 DATABASE */
 /* ===================================================== */
-function ensureDB() {
+function lerBanco() {
   if (!fs.existsSync(DB_FILE)) {
     fs.writeFileSync(DB_FILE, JSON.stringify({ vagas: 1, inscritos: [] }, null, 2));
   }
-}
-function lerBanco() {
-  ensureDB();
   return JSON.parse(fs.readFileSync(DB_FILE));
 }
 function salvarBanco(dados) {
   fs.writeFileSync(DB_FILE, JSON.stringify(dados, null, 2));
   broadcast({ type: "data_update" });
-  broadcast({ type: "ranking_update" });
 }
 
 /* ===================================================== */
@@ -175,134 +147,274 @@ function middlewareAdmin(req, res, next) {
   if (!token || !SESSIONS[token]) return res.status(401).json({ erro: "Sessão inválida" });
 
   const sess = SESSIONS[token];
-
   if (Date.now() > sess.expira) {
     delete SESSIONS[token];
     return res.status(401).json({ erro: "Sessão expirada" });
   }
 
-  // ✅ trava por IP (evita token roubado)
-  if (sess.ip && sess.ip !== req.ip) {
-    salvarLog("TOKEN_IP_MISMATCH", "Token usado em outro IP", sess.role, req.ip);
-    return res.status(401).json({ erro: "Sessão inválida (IP diferente)" });
-  }
-
-  // ✅ renova expiração (sliding session)
   sess.expira = Date.now() + SESSION_EXPIRATION;
-
   req.adminRole = sess.role;
   req.adminIp = req.ip;
+
   next();
 }
 
 /* ===================================================== */
-/* ⚡ XP DINÂMICO (SERVER-SIDE) */
+/* 🛡️ RATE LIMIT + ANTI-BOT (PUBLIC) */
 /* ===================================================== */
-function calcXP(user, idxOldest) {
-  const idade = Number(user?.idade ?? 0);
-  const ageBonus = Math.max(0, Math.min(idade, 60)) * 2; // até 120
+/**
+ * Regras:
+ * - rate limit por IP: 20 requests / 5 min (no /inscrever)
+ * - cooldown de inscrição por IP: 1 inscrição a cada 60s
+ */
+const RL_WINDOW_MS = 5 * 60 * 1000;
+const RL_MAX_REQ = 20;
+const SIGNUP_COOLDOWN_MS = 60 * 1000;
+
+const rlMap = new Map(); // ip -> { count, resetAt }
+const signupCooldown = new Map(); // ip -> nextAllowedAt
+
+function publicAntiBot(req, res, next) {
+  const ip = req.ip || "unknown";
+
+  // user-agent mínimo (bloqueia muita request de bot “vazia”)
+  const ua = String(req.headers["user-agent"] || "");
+  if (ua.length < 8) {
+    salvarLog("ANTIBOT", "User-Agent suspeito (curto)", null, ip);
+    return res.status(403).json({ erro: "Requisição bloqueada (UA suspeito)." });
+  }
+
+  // rate limit simples
+  const now = Date.now();
+  const cur = rlMap.get(ip);
+  if (!cur || now > cur.resetAt) {
+    rlMap.set(ip, { count: 1, resetAt: now + RL_WINDOW_MS });
+  } else {
+    cur.count += 1;
+    if (cur.count > RL_MAX_REQ) {
+      salvarLog("RATE_LIMIT", `IP excedeu ${RL_MAX_REQ}/${RL_WINDOW_MS}ms`, null, ip);
+      return res.status(429).json({ erro: "Muitas requisições. Tente novamente mais tarde." });
+    }
+  }
+
+  next();
+}
+
+/* ===================================================== */
+/* ✅ reCAPTCHA V2 verify (BACKEND REAL) */
+/* ===================================================== */
+async function verifyRecaptchaV2(recaptchaToken, ip) {
+  const secret = process.env.RECAPTCHA_SECRET;
+  if (!secret) {
+    // Sem secret = sem validação real (não recomendado)
+    return { ok: false, erro: "RECAPTCHA_SECRET não configurado no servidor." };
+  }
+
+  if (!recaptchaToken || String(recaptchaToken).trim().length < 20) {
+    return { ok: false, erro: "Token reCAPTCHA inválido." };
+  }
+
+  const body = new URLSearchParams();
+  body.set("secret", secret);
+  body.set("response", recaptchaToken);
+  if (ip) body.set("remoteip", ip);
+
+  const controller = new AbortController();
+  const t = setTimeout(() => controller.abort(), 5000);
+
+  try {
+    const resp = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body,
+      signal: controller.signal,
+    });
+
+    const data = await resp.json().catch(() => null);
+    if (!data || data.success !== true) {
+      return { ok: false, erro: "Falha na validação do reCAPTCHA." };
+    }
+
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, erro: "Erro ao validar reCAPTCHA (timeout/conexão)." };
+  } finally {
+    clearTimeout(t);
+  }
+}
+
+/* ===================================================== */
+/* ⚡ XP + NÍVEIS AUTOMÁTICOS */
+/* ===================================================== */
+function calcXP(user, indexByOldest) {
+  const idade = Math.max(0, Math.min(Number(user?.idade || 0), 60));
+  const ageBonus = idade * 2; // até 120
 
   const dt = user?.data ? new Date(user.data) : new Date();
   const days = Math.max(0, Math.floor((Date.now() - dt.getTime()) / (1000 * 60 * 60 * 24)));
 
   const timeXP = days * 15;
-  const joinBonus = Math.max(0, 500 - idxOldest * 12);
+  const joinBonus = Math.max(0, 500 - indexByOldest * 12);
 
   return Math.round(200 + timeXP + joinBonus + ageBonus);
+}
+
+function levelFromXP(xp) {
+  if (xp >= 1600) return "Diamond";
+  if (xp >= 1100) return "Gold";
+  if (xp >= 700) return "Silver";
+  return "Bronze";
+}
+
+function recomputeXPAndLevels(banco) {
+  const inscritos = banco.inscritos || [];
+
+  // mais antigo primeiro
+  const byOldest = [...inscritos].sort((a, b) => new Date(a.data || 0) - new Date(b.data || 0));
+  const oldestIndex = new Map(byOldest.map((u, i) => [u.id, i]));
+
+  for (const u of inscritos) {
+    const idx = oldestIndex.has(u.id) ? oldestIndex.get(u.id) : 9999;
+    const xp = calcXP(u, idx);
+    u.xp = xp;
+    u.nivel = levelFromXP(xp);
+  }
 }
 
 /* ===================================================== */
 /* ✅ ROTAS PÚBLICAS */
 /* ===================================================== */
-app.get("/health", (req, res) => res.json({ ok: true }));
-
 app.get("/vagas", (req, res) => {
   const banco = lerBanco();
   res.json({ vagas: banco.vagas });
 });
 
-/**
- * ✅ INSCRIÇÃO
- * - cria ID único
- * - salva data ISO
- * - impede telegram duplicado
- * - decrementa vagas
- */
-app.post("/inscrever", (req, res) => {
-  try {
-    const { nome, idade, telegram } = req.body;
+app.get("/ranking", (req, res) => {
+  const banco = lerBanco();
 
-    if (!nome || !telegram) return res.status(400).json({ erro: "Nome e Telegram são obrigatórios" });
+  // garante que xp/nivel existem (caso banco antigo)
+  recomputeXPAndLevels(banco);
+
+  // ordena por xp desc
+  const ranking = [...banco.inscritos]
+    .sort((a, b) => (b.xp || 0) - (a.xp || 0))
+    .map((u, i) => ({
+      id: u.id,
+      nome: u.nome,
+      idade: u.idade,
+      rank: i + 1,
+      foto: u.foto || null,
+      data: u.data,
+      xp: u.xp || 0,
+      nivel: u.nivel || "Bronze",
+      telegram: u.telegram || "",
+    }));
+
+  res.json({ ranking });
+});
+
+/* ===================================================== */
+/* 📝 INSCRIÇÃO (PUBLIC) */
+/* ===================================================== */
+/**
+ * body esperado:
+ * { nome, idade, telegram, token, hp, ts }
+ * - token: reCAPTCHA response
+ * - hp: honeypot (deve vir vazio)
+ * - ts: timestamp do cliente (Date.now()) pra validar tempo mínimo
+ */
+app.post("/inscrever", publicAntiBot, async (req, res) => {
+  const ip = req.ip || "unknown";
+  const ua = String(req.headers["user-agent"] || "");
+
+  try {
+    const { nome, idade, telegram, token, hp, ts } = req.body || {};
+
+    // honeypot: se vier preenchido, é bot
+    if (hp && String(hp).trim().length > 0) {
+      salvarLog("ANTIBOT", "Honeypot preenchido", null, ip);
+      return res.status(403).json({ erro: "Requisição bloqueada." });
+    }
+
+    // tempo mínimo (evita bot que dispara instant)
+    // (permite se não enviar ts, mas recomendo mandar)
+    if (ts && Number.isFinite(Number(ts))) {
+      const diff = Date.now() - Number(ts);
+      if (diff < 2500) {
+        salvarLog("ANTIBOT", `Tempo muito rápido (${diff}ms)`, null, ip);
+        return res.status(403).json({ erro: "Envio muito rápido. Tente novamente." });
+      }
+    }
+
+    // cooldown por IP (1 inscrição / 60s)
+    const nextAllowed = signupCooldown.get(ip) || 0;
+    if (Date.now() < nextAllowed) {
+      return res.status(429).json({ erro: "Aguarde um pouco antes de tentar novamente." });
+    }
+
+    // validações fortes
+    const nomeOk = String(nome || "").trim();
+    const tgOk = String(telegram || "").trim();
+    const idadeNum = Number(idade);
+
+    if (nomeOk.length < 2 || nomeOk.length > 40) return res.status(400).json({ erro: "Nome inválido." });
+    if (!tgOk.startsWith("@") || tgOk.length < 4 || tgOk.length > 32) return res.status(400).json({ erro: "Telegram inválido." });
+    if (!Number.isFinite(idadeNum) || idadeNum < 16 || idadeNum > 80) return res.status(400).json({ erro: "Idade inválida." });
+
+    // bloqueia caracteres muito “bot”
+    if (/http|www\.|\.com|<|>|script|select\s|insert\s/i.test(nomeOk + " " + tgOk)) {
+      salvarLog("ANTIBOT", "Padrão suspeito no payload", null, ip);
+      return res.status(403).json({ erro: "Requisição bloqueada." });
+    }
+
+    // ✅ reCAPTCHA REAL
+    const cap = await verifyRecaptchaV2(token, ip);
+    if (!cap.ok) {
+      salvarLog("RECAPTCHA_FAIL", cap.erro, null, ip);
+      return res.status(403).json({ erro: cap.erro || "Falha no reCAPTCHA." });
+    }
 
     const banco = lerBanco();
 
-    const tg = String(telegram).trim().toLowerCase();
-    if (banco.inscritos.some((i) => String(i.telegram || "").trim().toLowerCase() === tg)) {
-      return res.status(400).json({ erro: "Telegram já cadastrado" });
+    if (banco.vagas <= 0) {
+      return res.status(400).json({ erro: "Vagas esgotadas." });
     }
 
-    if (banco.vagas <= 0) return res.status(400).json({ erro: "Sem vagas" });
+    // anti-fraude: não permitir telegram duplicado
+    const tgLower = tgOk.toLowerCase();
+    const exists = banco.inscritos.some((u) => String(u.telegram || "").toLowerCase() === tgLower);
+    if (exists) return res.status(409).json({ erro: "Este Telegram já está inscrito." });
 
-    const novo = {
-      id: crypto.randomUUID(),
-      nome: String(nome).trim(),
-      idade: String(idade ?? "").trim(),
-      telegram: String(telegram).trim(),
-      foto: null,
+    // cria user
+    const user = {
+      id: crypto.randomBytes(10).toString("hex"),
+      nome: nomeOk,
+      idade: idadeNum,
+      telegram: tgOk,
       data: new Date().toISOString(),
+      foto: null,
+      ip,
+      ua: ua.slice(0, 180),
     };
 
-    banco.inscritos.push(novo);
-    banco.vagas -= 1;
+    banco.inscritos.push(user);
+    banco.vagas = Math.max(0, Number(banco.vagas || 0) - 1);
+
+    // calcula XP/Nível e salva
+    recomputeXPAndLevels(banco);
 
     salvarBanco(banco);
-    salvarLog("NOVA_INSCRICAO", `id=${novo.id} telegram=${novo.telegram}`, "public", req.ip);
 
-    res.json({ ok: true, id: novo.id });
+    // trava cooldown após sucesso
+    signupCooldown.set(ip, Date.now() + SIGNUP_COOLDOWN_MS);
+
+    salvarLog("INSCRICAO", `Novo inscrito: ${user.nome} (${user.telegram})`, null, ip);
+
+    res.json({ ok: true });
   } catch (e) {
-    console.error(e);
-    res.status(500).json({ erro: "Erro interno" });
+    salvarLog("ERRO_INSCRICAO", String(e?.message || e), null, ip);
+    res.status(500).json({ erro: "Erro interno." });
   }
-});
-
-/**
- * ✅ RANKING
- * Agora vem:
- * - ordenado por XP (dinâmico)
- * - retorna rank e xp
- * - com fallback de ordenação por data
- */
-app.get("/ranking", (req, res) => {
-  const banco = lerBanco();
-  const inscritos = Array.isArray(banco.inscritos) ? banco.inscritos : [];
-
-  // oldest index (mais antigo = menor índice)
-  const byOldest = [...inscritos].sort((a, b) => new Date(a.data || 0) - new Date(b.data || 0));
-  const oldestIndex = new Map(byOldest.map((u, i) => [u.id, i]));
-
-  const withXP = inscritos.map((u) => {
-    const idxOld = oldestIndex.has(u.id) ? oldestIndex.get(u.id) : 9999;
-    const xp = calcXP(u, idxOld);
-    return { ...u, xp };
-  });
-
-  withXP.sort((a, b) => {
-    if (b.xp !== a.xp) return b.xp - a.xp;
-    return new Date(a.data || 0) - new Date(b.data || 0);
-  });
-
-  const ranking = withXP.map((u, i) => ({
-    id: u.id,
-    nome: u.nome,
-    idade: u.idade,
-    telegram: u.telegram,
-    foto: u.foto || null,
-    data: u.data,
-    xp: u.xp,
-    rank: i + 1,
-  }));
-
-  res.json({ ranking });
 });
 
 /* ===================================================== */
@@ -341,7 +453,9 @@ app.post("/admin/login", (req, res) => {
     precisa2FA: true,
     role: admin.role,
     precisaConfigurar2FA: !hasSecret,
-    dica: !hasSecret ? "Falta configurar 2FA secret no Render. Use /admin/2fa/setup." : undefined,
+    dica: !hasSecret
+      ? "Falta configurar o 2FA secret no Render. Use /admin/2fa/setup para gerar QR/secret."
+      : undefined,
   });
 });
 
@@ -396,7 +510,7 @@ app.post("/admin/2fa", (req, res) => {
   if (!secret) {
     return res.status(400).json({
       erro: "2FA não configurado no servidor",
-      dica: "Gere em /admin/2fa/setup e cole o secret no Render ENV.",
+      dica: "Gere no /admin/2fa/setup e cole o secret no Render ENV.",
     });
   }
 
@@ -413,7 +527,11 @@ app.post("/admin/2fa", (req, res) => {
   }
 
   const token = gerarToken();
-  SESSIONS[token] = { role: admin.role, expira: Date.now() + SESSION_EXPIRATION, ip };
+  SESSIONS[token] = {
+    role: admin.role,
+    expira: Date.now() + SESSION_EXPIRATION,
+    ip,
+  };
 
   salvarLog("LOGIN_SUCESSO", "2FA validado e token emitido", admin.role, ip);
   res.json({ token, role: admin.role });
@@ -438,22 +556,6 @@ app.post("/admin/resetar-vagas", middlewareAdmin, (req, res) => {
 
   salvarBanco(banco);
   salvarLog("RESET_VAGAS", "Vagas resetadas para 1", req.adminRole, req.adminIp);
-
-  res.json({ ok: true });
-});
-
-/* ===================================================== */
-/* 🔄 RESETAR SISTEMA (opcional) */
-/* ===================================================== */
-app.post("/admin/resetar", middlewareAdmin, (req, res) => {
-  if (req.adminRole !== "superadmin") return res.status(403).json({ erro: "Permissão negada" });
-
-  const banco = lerBanco();
-  banco.vagas = 1;
-  banco.inscritos = [];
-
-  salvarBanco(banco);
-  salvarLog("RESET_SISTEMA", "Sistema resetado (vagas=1 e inscritos=[]) ", req.adminRole, req.adminIp);
 
   res.json({ ok: true });
 });
@@ -488,7 +590,7 @@ app.post("/admin/logs", middlewareAdmin, (req, res) => {
 });
 
 /* ===================================================== */
-/* 📈 MÉTRICAS AVANÇADAS */
+/* 📈 MÉTRICAS */
 /* ===================================================== */
 app.post("/admin/metricas", middlewareAdmin, (req, res) => {
   const banco = lerBanco();
@@ -496,7 +598,6 @@ app.post("/admin/metricas", middlewareAdmin, (req, res) => {
 
   const total = inscritos.length;
   const porDia = {};
-
   inscritos.forEach((i) => {
     const dia = (i.data ? new Date(i.data) : new Date()).toISOString().split("T")[0];
     porDia[dia] = (porDia[dia] || 0) + 1;
@@ -529,12 +630,18 @@ app.post("/admin/metricas", middlewareAdmin, (req, res) => {
 app.post("/admin/upload", middlewareAdmin, upload.single("foto"), (req, res) => {
   if (!req.file) return res.status(400).json({ erro: "Arquivo inválido" });
 
-  // você precisa depois salvar esse filename no usuário (ex: /admin/set-foto)
+  const banco = lerBanco();
+  // aqui você pode amarrar foto a um user específico se quiser (por id)
   salvarLog("UPLOAD", `arquivo=${req.file.filename}`, req.adminRole, req.adminIp);
   res.json({ arquivo: req.file.filename });
 });
 
 /* ===================================================== */
+/* HEALTH */
+/* ===================================================== */
+app.get("/health", (req, res) => res.json({ ok: true }));
+
+/* ===================================================== */
 server.listen(PORT, () => {
-  console.log("🚀 Server rodando com WebSocket + 2FA + Logs + Ranking XP");
+  console.log("🚀 SaaS Server rodando com WebSocket + 2FA + reCAPTCHA + AntiBot + Levels");
 });
