@@ -10,123 +10,179 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-
-body{
-font-family:'Orbitron',sans-serif;
-background:#000;
-color:#fff;
-overflow-x:hidden;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-/* LOADER */
+body{
+  font-family:'Orbitron',sans-serif;
+  background:#000;
+  color:#fff;
+  overflow-x:hidden;
+}
+
+/* ================= LOADER ================= */
+
 #loader{
-position:fixed;
-width:100%;
-height:100%;
-background:#000;
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:9999;
-transition:opacity 0.6s ease;
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:#000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+  transition:opacity 0.6s ease;
 }
 
 #loader h1{
-font-size:24px;
-letter-spacing:3px;
-animation:pulse 1.5s infinite;
+  font-size:24px;
+  letter-spacing:3px;
+  animation:pulse 1.5s infinite;
 }
 
 @keyframes pulse{
-0%{opacity:0.4}
-50%{opacity:1}
-100%{opacity:0.4}
+  0%{opacity:0.4}
+  50%{opacity:1}
+  100%{opacity:0.4}
 }
 
-/* NAV */
+/* ================= NAV ================= */
+
 nav{
-position:fixed;
-top:0;
-width:100%;
-display:flex;
-justify-content:center;
-gap:25px;
-padding:18px;
-background:rgba(0,0,0,0.7);
-backdrop-filter:blur(15px);
-z-index:1000;
-flex-wrap:wrap;
+  position:fixed;
+  top:0;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:25px;
+  padding:18px;
+  background:rgba(0,0,0,0.7);
+  backdrop-filter:blur(15px);
+  z-index:1000;
+  flex-wrap:wrap;
 }
 
 nav a{
-color:#fff;
-text-decoration:none;
-padding:8px 16px;
-border-radius:25px;
-transition:0.3s;
+  color:#fff;
+  text-decoration:none;
+  padding:8px 16px;
+  border-radius:25px;
+  transition:0.3s;
+  font-size:15px;
 }
 
 nav a:hover{
-background:#00F5FF;
-color:#000;
-box-shadow:0 0 20px #00F5FF;
+  background:#00F5FF;
+  color:#000;
+  box-shadow:0 0 20px #00F5FF;
 }
 
-/* HERO */
+/* ================= HERO ================= */
+
 .hero{
-min-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
-padding:120px 20px 40px;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:120px 20px 60px;
 }
 
 .hero h1{
-font-size:clamp(2.5rem,6vw,4rem);
-background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
-background-size:200%;
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-animation:glowMove 6s linear infinite;
+  font-size:clamp(2.5rem,6vw,4rem);
+  background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
+  background-size:200%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:glowMove 6s linear infinite;
+  line-height:1.2;
 }
 
 @keyframes glowMove{
-0%{background-position:0%}
-100%{background-position:200%}
+  0%{background-position:0%}
+  100%{background-position:200%}
 }
 
 .hero p{
-margin-top:20px;
-font-size:1.2rem;
-opacity:0.8;
+  margin-top:20px;
+  font-size:1.2rem;
+  opacity:0.85;
+  max-width:600px;
 }
 
+/* ================= SECTIONS ================= */
+
+section{
+  padding:100px 10%;
+  min-height:60vh;
+}
+
+/* ================= REVEAL ================= */
+
 .reveal{
-opacity:0;
-transform:translateY(40px);
-transition:all 1s ease;
+  opacity:0;
+  transform:translateY(40px);
+  transition:all 1s ease;
 }
 
 .reveal.active{
-opacity:1;
-transform:translateY(0);
+  opacity:1;
+  transform:translateY(0);
 }
 
-section{
-padding:120px 10%;
-min-height:60vh;
-}
+/* ================= BACKGROUND CANVAS ================= */
 
 canvas{
-position:fixed;
-top:0;
-left:0;
-z-index:-1;
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-1;
 }
+
+/* ===================================================== */
+/* ================= MOBILE PROFISSIONAL ================= */
+/* ===================================================== */
+
+@media (max-width: 768px){
+
+  nav{
+    flex-direction:column;
+    gap:15px;
+    padding:20px 10px;
+  }
+
+  nav a{
+    width:100%;
+    text-align:center;
+    font-size:18px;
+    padding:10px 0;
+  }
+
+  .hero{
+    padding:140px 20px 60px;
+  }
+
+  .hero h1{
+    font-size:32px;
+  }
+
+  .hero p{
+    font-size:15px;
+  }
+
+  section{
+    padding:60px 20px;
+  }
+
+}
+
 </style>
+
 </head>
 
 <body>
@@ -236,5 +292,6 @@ el.classList.add("active");
 
 </body>
 </html>
+
 
 
