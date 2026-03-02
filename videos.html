@@ -8,207 +8,207 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box}
 
 body{
-  font-family:'Orbitron',sans-serif;
-  background:linear-gradient(135deg,#000,#0a0f1c);
-  color:#fff;
-  overflow-x:hidden;
-  min-height:100vh;
-  padding-bottom:90px;
+font-family:'Orbitron',sans-serif;
+background:linear-gradient(135deg,#000,#0a0f1c);
+color:#fff;
+overflow-x:hidden;
+min-height:100vh;
 }
 
 /* ================= NAV PADRÃO ================= */
 
-nav{
-  position:fixed;
-  top:0;
-  width:100%;
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  padding:16px;
-  background:rgba(0,0,0,0.85);
-  backdrop-filter:blur(15px);
-  border-bottom:1px solid rgba(0,153,255,0.4);
-  z-index:1000;
-  flex-wrap:wrap;
+.navbar{
+position:fixed;
+top:0;
+width:100%;
+display:flex;
+justify-content:center;
+gap:25px;
+padding:18px;
+background:rgba(0,0,0,0.75);
+backdrop-filter:blur(15px);
+z-index:1000;
 }
 
-nav a{
-  color:#fff;
-  text-decoration:none;
-  padding:8px 14px;
-  border-radius:25px;
-  transition:0.3s;
-  font-size:14px;
+.navbar a{
+color:#fff;
+text-decoration:none;
+padding:8px 16px;
+border-radius:25px;
+transition:.3s;
+display:flex;
+align-items:center;
+gap:6px;
+font-size:14px;
 }
 
-nav a:hover{
-  background:#00F5FF;
-  color:#000;
-  box-shadow:0 0 15px #00F5FF;
+.navbar a:hover{
+background:#00F5FF;
+color:#000;
+box-shadow:0 0 20px #00F5FF;
 }
 
 /* ================= CONTAINER ================= */
 
 .container{
-  padding:140px 5% 100px;
-  max-width:1400px;
-  margin:auto;
+padding:150px 5% 120px;
+max-width:1400px;
+margin:auto;
 }
 
 h1{
-  text-align:center;
-  margin-bottom:60px;
-  font-size:clamp(1.8rem,4vw,2.8rem);
-  background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
-  background-size:200%;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:shine 6s linear infinite;
+text-align:center;
+margin-bottom:70px;
+font-size:clamp(1.8rem,4vw,3rem);
+background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
+background-size:200%;
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+animation:shine 6s linear infinite;
 }
 
 @keyframes shine{
-  0%{background-position:0%}
-  100%{background-position:200%}
+0%{background-position:0%}
+100%{background-position:200%}
 }
 
 /* ================= CANAL ================= */
 
 .channel-box{
-  background:rgba(15,20,35,0.95);
-  border-radius:25px;
-  padding:40px;
-  margin-bottom:60px;
-  text-align:center;
-  box-shadow:0 0 35px rgba(255,0,0,0.25);
-  border:1px solid rgba(255,0,0,0.4);
-  transition:0.4s;
+background:rgba(15,20,35,0.95);
+border-radius:30px;
+padding:50px;
+margin-bottom:70px;
+text-align:center;
+box-shadow:0 0 40px rgba(255,0,0,.25);
+border:1px solid rgba(255,0,0,.4);
+transition:.4s;
 }
 
 .channel-box:hover{
-  box-shadow:0 0 60px rgba(255,0,0,0.6);
+box-shadow:0 0 70px rgba(255,0,0,.6);
+transform:translateY(-5px);
 }
 
 .channel-thumb{
-  width:140px;
-  height:140px;
-  border-radius:50%;
-  margin:auto;
-  margin-bottom:20px;
-  overflow:hidden;
-  border:3px solid #ff0000;
-  box-shadow:0 0 25px rgba(255,0,0,0.6);
+width:150px;
+height:150px;
+border-radius:50%;
+margin:auto;
+margin-bottom:25px;
+overflow:hidden;
+border:4px solid #ff0000;
+box-shadow:0 0 30px rgba(255,0,0,.6);
 }
 
 .channel-thumb img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+width:100%;
+height:100%;
+object-fit:cover;
 }
 
 .subscribe-btn{
-  display:inline-block;
-  margin-top:20px;
-  padding:14px 35px;
-  border-radius:30px;
-  background:linear-gradient(90deg,#ff0000,#ff4444,#ff0000);
-  background-size:200%;
-  color:#fff;
-  text-decoration:none;
-  font-weight:700;
-  transition:0.4s;
-  animation:btnMove 4s linear infinite;
+display:inline-block;
+margin-top:25px;
+padding:16px 40px;
+border-radius:40px;
+background:linear-gradient(90deg,#ff0000,#ff4444,#ff0000);
+background-size:200%;
+color:#fff;
+text-decoration:none;
+font-weight:700;
+transition:.4s;
+animation:btnMove 4s linear infinite;
 }
 
 .subscribe-btn:hover{
-  transform:scale(1.08);
-  box-shadow:0 0 25px #ff0000;
+transform:scale(1.1);
+box-shadow:0 0 35px #ff0000;
 }
 
 @keyframes btnMove{
-  0%{background-position:0%}
-  100%{background-position:200%}
+0%{background-position:0%}
+100%{background-position:200%}
 }
 
 /* ================= GRID ================= */
 
 .video-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:30px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:35px;
 }
 
+/* ================= CARD ================= */
+
 .video-card{
-  background:rgba(15,20,35,0.95);
-  border-radius:20px;
-  overflow:hidden;
-  box-shadow:0 0 25px rgba(0,153,255,0.25);
-  transition:0.4s;
+background:rgba(15,20,35,0.95);
+border-radius:25px;
+overflow:hidden;
+box-shadow:0 0 30px rgba(0,153,255,.25);
+transition:.4s;
+opacity:0;
+transform:translateY(30px);
+}
+
+.video-card.show{
+opacity:1;
+transform:translateY(0);
+transition:all .8s ease;
 }
 
 .video-card:hover{
-  transform:translateY(-8px);
-  box-shadow:0 0 45px rgba(0,153,255,0.6);
+transform:translateY(-10px);
+box-shadow:0 0 50px rgba(0,153,255,.7);
 }
 
-/* ================= IFRAME RESPONSIVO ================= */
+/* ================= IFRAME 16:9 ================= */
 
 .video-wrapper{
-  position:relative;
-  width:100%;
-  padding-bottom:177%;
-  height:0;
+position:relative;
+width:100%;
+padding-bottom:56.25%; /* 16:9 */
+height:0;
 }
 
 .video-wrapper iframe{
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  border:none;
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100%;
+border:none;
 }
 
 /* ================= MOBILE APP STYLE ================= */
 
 @media(max-width:768px){
 
-  body{
-    padding-bottom:120px;
-  }
+body{padding-bottom:100px;}
 
-  nav{
-    top:auto;
-    bottom:0;
-    justify-content:space-around;
-    padding:12px 0;
-    border-top:1px solid rgba(0,153,255,0.4);
-    border-bottom:none;
-  }
+.navbar{
+top:auto;
+bottom:0;
+justify-content:space-around;
+padding:12px 0;
+border-top:1px solid rgba(0,153,255,.4);
+}
 
-  nav a{
-    font-size:12px;
-    padding:4px 6px;
-  }
+.navbar a{
+flex-direction:column;
+font-size:18px;
+}
 
-  .container{
-    padding:80px 15px 130px;
-  }
+.container{
+padding:100px 15px 150px;
+}
 
-  h1{
-    margin-bottom:40px;
-  }
-
-  .video-grid{
-    gap:20px;
-  }
+.video-grid{
+gap:25px;
+}
 
 }
 
@@ -218,12 +218,12 @@ h1{
 <body>
 
 <nav class="navbar">
-  <a href="index.html">🏠<span>Início</span></a>
-  <a href="membros.html">👑<span>Membros</span></a>
-  <a href="participantes.html">🎯<span>Participantes</span></a>
-  <a href="videos.html">🎬<span>Vídeos</span></a>
-  <a href="links.html">🔗<span>Links</span></a>
-  <a href="formulario.html">📝<span>Formulário</span></a>
+<a href="index.html">🏠 Início</a>
+<a href="membros.html">👑 Membros</a>
+<a href="participantes.html">🎯 Participantes</a>
+<a href="videos.html">🎬 Vídeos</a>
+<a href="links.html">🔗 Links</a>
+<a href="formulario.html">📝 Formulário</a>
 </nav>
 
 <div class="container">
@@ -233,150 +233,50 @@ h1{
 <!-- ================= CANAL ================= -->
 
 <div class="channel-box">
-
 <div class="channel-thumb">
 <img src="https://yt3.googleusercontent.com/mdqCINPROhI30XabGHVdb_CQxaDPf1hIkhJ7tCFmOAzuRMYXDhy7-sfoZTkAdL_UxDaRGHhf7p8=s160-c-k-c0x00ffffff-no-rj" alt="Canal YouTube">
 </div>
-
 <h2>Canal Oficial</h2>
 <p>Inscreva-se para acompanhar os próximos conteúdos 🚀</p>
-
 <a class="subscribe-btn"
-   href="https://youtube.com/@new_york2901?sub_confirmation=1"
-   target="_blank">
+href="https://youtube.com/@new_york2901?sub_confirmation=1"
+target="_blank">
 🔔 Inscrever-se no Canal
 </a>
-
 </div>
 
 <!-- ================= VÍDEOS ================= -->
 
 <div class="video-grid">
 
+<!-- REPITA ESSE BLOCO PARA CADA VÍDEO -->
 <div class="video-card">
-  <div class="video-wrapper">
-    <iframe
-      loading="lazy"
-      referrerpolicy="strict-origin-when-cross-origin"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen
-      src="https://www.youtube.com/embed/lS8Sdam5pEA">
-    </iframe>
-  </div>
+<div class="video-wrapper">
+<iframe loading="lazy"
+referrerpolicy="strict-origin-when-cross-origin"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+allowfullscreen
+src="https://www.youtube.com/embed/lS8Sdam5pEA">
+</iframe>
+</div>
 </div>
 
-<div class="video-card">
-  <div class="video-wrapper">
-    <iframe loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen
-      src="https://www.youtube.com/embed/v_s2bz8T3a8">
-    </iframe>
-  </div>
 </div>
 
-<div class="video-card">
-  <div class="video-wrapper">
-    <iframe loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen
-      src="https://www.youtube.com/embed/g-BJOYE_Zj8">
-    </iframe>
-  </div>
 </div>
 
-<div class="video-card">
-  <div class="video-wrapper">
-    <iframe loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen
-      src="https://www.youtube.com/embed/OJMOJnKw77g">
-    </iframe>
-  </div>
-</div>
+<script>
 
-<div class="video-card">
-  <div class="video-wrapper">
-    <iframe loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen
-      src="https://www.youtube.com/embed/NSSgs-AH9vc">
-    </iframe>
-  </div>
-</div>
+/* Animação suave nos vídeos */
+const cards=document.querySelectorAll(".video-card");
+cards.forEach((card,index)=>{
+setTimeout(()=>{
+card.classList.add("show");
+}, index*120);
+});
 
-<div class="video-card">
-  <div class="video-wrapper">
-    <iframe loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen
-      src="https://www.youtube.com/embed/pX0lkVI1dkg">
-    </iframe>
-  </div>
-</div>
+</script>
 
-<div class="video-card">
-  <div class="video-wrapper">
-    <iframe loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen
-      src="https://www.youtube.com/embed/CWGaPBbQI6M">
-    </iframe>
-  </div>
-</div>
-
-<div class="video-card">
-  <div class="video-wrapper">
-    <iframe loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen
-      src="https://www.youtube.com/embed/QTNoH8Gpho8">
-    </iframe>
-  </div>
-</div>
-
-<div class="video-card">
-  <div class="video-wrapper">
-    <iframe loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen
-      src="https://www.youtube.com/embed/lxOMW7GOn44">
-    </iframe>
-  </div>
-</div>
-
-<div class="video-card">
-  <div class="video-wrapper">
-    <iframe loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen
-      src="https://www.youtube.com/embed/wYi4Zvc6uuk">
-    </iframe>
-  </div>
-</div>
-
-<div class="video-card">
-  <div class="video-wrapper">
-    <iframe loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen
-      src="https://www.youtube.com/embed/tfh5HmCJS0w">
-    </iframe>
-  </div>
-</div>
-
-<div class="video-card">
-  <div class="video-wrapper">
-    <iframe loading="lazy" referrerpolicy="strict-origin-when-cross-origin"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-      allowfullscreen
-      src="https://www.youtube.com/embed/37D3nHE0Eac">
-    </iframe>
-  </div>
-</div>
-
-
-</div>
 <script src="layout.js?v=2"></script>
 </body>
 </html>
