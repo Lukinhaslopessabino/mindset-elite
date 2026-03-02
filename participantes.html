@@ -10,183 +10,180 @@
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box}
 
 body{
-  font-family:'Orbitron',sans-serif;
-  background:linear-gradient(135deg,#000,#0a0f1c);
-  color:#fff;
-  overflow-x:hidden;
-  min-height:100vh;
-  padding-bottom:90px;
+font-family:'Orbitron',sans-serif;
+background:linear-gradient(135deg,#000,#0a0f1c);
+color:#fff;
+overflow-x:hidden;
+min-height:100vh;
+}
+
+/* ================= NAV PADRÃO ================= */
+
+.navbar{
+position:fixed;
+top:0;
+width:100%;
+display:flex;
+justify-content:center;
+gap:25px;
+padding:18px;
+background:rgba(0,0,0,0.75);
+backdrop-filter:blur(15px);
+z-index:1000;
+}
+
+.navbar a{
+color:#fff;
+text-decoration:none;
+padding:8px 16px;
+border-radius:25px;
+transition:.3s;
+display:flex;
+align-items:center;
+gap:6px;
+font-size:14px;
+}
+
+.navbar a:hover{
+background:#00F5FF;
+color:#000;
+box-shadow:0 0 20px #00F5FF;
 }
 
 /* ================= FUNDO ================= */
 
 #particles-js{
-  position:fixed;
-  width:100%;
-  height:100%;
-  z-index:-1;
-}
-
-/* ================= NAV PADRÃO ================= */
-
-nav{
-  position:fixed;
-  top:0;
-  width:100%;
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  padding:16px;
-  background:rgba(0,0,0,0.85);
-  backdrop-filter:blur(15px);
-  border-bottom:1px solid rgba(0,153,255,0.4);
-  z-index:1000;
-  flex-wrap:wrap;
-}
-
-nav a{
-  color:#fff;
-  text-decoration:none;
-  font-weight:600;
-  padding:8px 14px;
-  border-radius:25px;
-  transition:0.3s;
-  font-size:14px;
-}
-
-nav a:hover{
-  background:#00F5FF;
-  color:#000;
-  box-shadow:0 0 15px #00F5FF;
+position:fixed;
+width:100%;
+height:100%;
+z-index:-1;
 }
 
 /* ================= CONTAINER ================= */
 
 .container{
-  max-width:900px;
-  margin:auto;
-  padding:140px 20px 100px 20px;
+max-width:1000px;
+margin:auto;
+padding:150px 20px 120px;
 }
 
 h2{
-  margin-bottom:40px;
-  border-left:5px solid #00F5FF;
-  padding-left:15px;
-  font-size:26px;
+font-size:28px;
+text-align:center;
+margin-bottom:50px;
+background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
 /* ================= CARD ================= */
 
 .card{
-  background:rgba(15,20,35,0.95);
-  padding:40px;
-  border-radius:25px;
-  border:1px solid rgba(0,153,255,0.4);
-  box-shadow:0 0 40px rgba(0,153,255,0.25);
-  line-height:1.8;
-  font-size:16px;
-  animation:fadeUp 0.8s ease;
+background:rgba(15,20,35,0.95);
+padding:40px;
+border-radius:25px;
+border:1px solid rgba(0,153,255,0.3);
+box-shadow:0 0 40px rgba(0,153,255,0.25);
 }
 
-@keyframes fadeUp{
-  from{opacity:0;transform:translateY(30px)}
-  to{opacity:1;transform:translateY(0)}
-}
+/* ================= LINHAS ================= */
 
 .row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:14px;
-  padding-bottom:10px;
-  border-bottom:1px solid rgba(255,255,255,0.06);
-  font-size:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:14px 0;
+border-bottom:1px solid rgba(255,255,255,0.05);
+transition:.3s;
+opacity:0;
+transform:translateY(20px);
 }
 
-/* ================= STATUS ================= */
+.row.show{
+opacity:1;
+transform:translateY(0);
+transition:all .6s ease;
+}
+
+.row:last-child{
+border-bottom:none;
+}
+
+.row:hover{
+color:#00F5FF;
+transform:translateX(5px);
+}
+
+/* ================= BADGES STATUS ================= */
+
+.status{
+padding:5px 12px;
+border-radius:20px;
+font-size:12px;
+font-weight:700;
+}
 
 .confirmado{
-  color:#00FFAA;
-  text-shadow:0 0 8px #00FFAA;
+background:rgba(0,255,170,.15);
+color:#00FFAA;
+border:1px solid #00FFAA;
 }
 
 .indefinido{
-  color:#00F5FF;
-  text-shadow:0 0 8px #00F5FF;
+background:rgba(0,245,255,.15);
+color:#00F5FF;
+border:1px solid #00F5FF;
 }
 
 .nao{
-  color:#FF4C4C;
-  text-shadow:0 0 8px #FF4C4C;
+background:rgba(255,76,76,.15);
+color:#FF4C4C;
+border:1px solid #FF4C4C;
 }
 
 /* ================= VAGAS ================= */
 
 .vagas{
-  margin-top:35px;
-  text-align:center;
-  font-size:18px;
-  font-weight:bold;
-  color:#00F5FF;
-  text-shadow:0 0 10px #00F5FF;
+margin-top:35px;
+text-align:center;
+font-size:18px;
+font-weight:bold;
+color:#00F5FF;
 }
 
-/* ===================================================== */
 /* ================= MOBILE APP STYLE ================= */
-/* ===================================================== */
 
 @media (max-width:768px){
 
-  body{
-    padding-bottom:120px;
-  }
+body{padding-bottom:100px;}
 
-  nav{
-    top:auto;
-    bottom:0;
-    justify-content:space-around;
-    padding:12px 0;
-    border-top:1px solid rgba(0,153,255,0.4);
-    border-bottom:none;
-  }
-
-  nav a{
-    font-size:12px;
-    padding:4px 6px;
-  }
-
-  .container{
-    padding:80px 15px 130px 15px;
-  }
-
-  h2{
-    font-size:20px;
-  }
-
-  .card{
-    padding:25px;
-    font-size:14px;
-  }
-
-  .row{
-    flex-direction:column;
-    align-items:flex-start;
-    gap:5px;
-  }
-
-  .vagas{
-    font-size:16px;
-  }
-
+.navbar{
+top:auto;
+bottom:0;
+justify-content:space-around;
+padding:12px 0;
+border-top:1px solid rgba(0,153,255,.4);
 }
 
+.navbar a{
+flex-direction:column;
+font-size:18px;
+}
+
+.container{
+padding:100px 15px 150px;
+}
+
+.row{
+flex-direction:column;
+align-items:flex-start;
+gap:6px;
+}
+
+}
 
 </style>
 </head>
@@ -196,28 +193,28 @@ h2{
 <div id="particles-js"></div>
 
 <nav class="navbar">
-  <a href="index.html">🏠<span>Início</span></a>
-  <a href="membros.html">👑<span>Membros</span></a>
-  <a href="participantes.html">🎯<span>Participantes</span></a>
-  <a href="videos.html">🎬<span>Vídeos</span></a>
-  <a href="links.html">🔗<span>Links</span></a>
-  <a href="formulario.html">📝<span>Formulário</span></a>
+<a href="index.html">🏠 Início</a>
+<a href="membros.html">👑 Membros</a>
+<a href="participantes.html">🎯 Participantes</a>
+<a href="videos.html">🎬 Vídeos</a>
+<a href="links.html">🔗 Links</a>
+<a href="formulario.html">📝 Formulário</a>
 </nav>
 
 <div class="container">
 <h2>Participantes Mindset 2029</h2>
 
-<div class="card">
+<div class="card" id="listaParticipantes">
 
-<div class="row"><span>Tuzin</span> <span class="confirmado">✅ Confirmado</span></div>
-<div class="row"><span>Luqueta</span> <span class="confirmado">✅ Confirmado</span></div>
-<div class="row"><span>Vini</span> <span class="confirmado">✅ Confirmado</span></div>
-<div class="row"><span>THZIN</span> <span class="indefinido">❓ Indefinido</span></div>
-<div class="row"><span>Leandro</span> <span class="confirmado">✅ Confirmado</span></div>
-<div class="row"><span>Elizeu</span> <span class="nao">❌ Não Participa</span></div>
-<div class="row"><span>Mistério</span> <span class="confirmado">✅ Confirmado</span></div>
-<div class="row"><span>Pandinha</span> <span class="confirmado">✅ Confirmado</span></div>
-<div class="row"><span>Daniel Nascimento</span> <span class="confirmado">✅ Confirmado</span></div>
+<div class="row"><span>Tuzin</span> <span class="status confirmado">Confirmado</span></div>
+<div class="row"><span>Luqueta</span> <span class="status confirmado">Confirmado</span></div>
+<div class="row"><span>Vini</span> <span class="status confirmado">Confirmado</span></div>
+<div class="row"><span>THZIN</span> <span class="status indefinido">Indefinido</span></div>
+<div class="row"><span>Leandro</span> <span class="status confirmado">Confirmado</span></div>
+<div class="row"><span>Elizeu</span> <span class="status nao">Não participa</span></div>
+<div class="row"><span>Mistério</span> <span class="status confirmado">Confirmado</span></div>
+<div class="row"><span>Pandinha</span> <span class="status confirmado">Confirmado</span></div>
+<div class="row"><span>Daniel Nascimento</span> <span class="status confirmado">Confirmado</span></div>
 
 <div class="vagas" id="vagasInfo">Carregando vagas...</div>
 
@@ -226,7 +223,7 @@ h2{
 
 <script>
 
-/* ================= PARTÍCULAS OTIMIZADAS ================= */
+/* ================= PARTÍCULAS ================= */
 
 if(window.innerWidth > 600){
 particlesJS("particles-js",{
@@ -238,6 +235,15 @@ move:{speed:0.8}
 }
 });
 }
+
+/* ================= ANIMAÇÃO ENTRADA ================= */
+
+const rows=document.querySelectorAll(".row");
+rows.forEach((row,index)=>{
+setTimeout(()=>{
+row.classList.add("show");
+}, index*120);
+});
 
 /* ================= VAGAS DINÂMICAS ================= */
 
@@ -252,13 +258,11 @@ document.getElementById("vagasInfo").innerText =
 "Não foi possível carregar vagas.";
 }
 }
+
 carregarVagas();
 
 </script>
+
 <script src="layout.js?v=2"></script>
 </body>
 </html>
-
-
-
-
