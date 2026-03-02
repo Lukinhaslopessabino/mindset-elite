@@ -11,9 +11,7 @@ app.use(cors({
     "https://mindset-elite-fcmg.com.br",
     "https://www.mindset-elite-fcmg.com.br"
     ]
-    methods:["GET","POST"],
-    credentials: true
-}));
+  }));
 app.use(express.json());
 app.use(express.static("./"));
 
@@ -279,4 +277,5 @@ app.post("/admin/upload", middlewareAdmin, upload.single("foto"), (req, res) => 
 app.listen(PORT, () => {
   console.log("Servidor rodando...");
 });
+
 
