@@ -1,37 +1,56 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-const transition = document.createElement("div");
-transition.id = "globalTransition";
-document.body.appendChild(transition);
+  // Se GSAP não existir, não interfere nos links
+  if (typeof gsap === "undefined") return;
 
-const style = document.createElement("style");
-style.innerHTML = `
-#globalTransition{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:linear-gradient(135deg,#00F5FF,#0099FF);
-transform:translateY(100%);
-z-index:9999;
-}
-`;
-document.head.appendChild(style);
+  const transition = document.createElement("div");
+  transition.id = "globalTransition";
+  document.body.appendChild(transition);
 
-document.querySelectorAll("a").forEach(link=>{
-if(link.hostname === window.location.hostname){
-link.addEventListener("click",function(e){
-e.preventDefault();
-const href = this.href;
-gsap.to("#globalTransition",{
-y:0,
-duration:0.7,
-ease:"power2.inOut",
-onComplete:()=>window.location.href = href
-});
-});
-}
-});
+  const style = document.createElement("style");
+  style.innerHTML = `
+  #globalTransition{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:linear-gradient(135deg,#00F5FF,#0099FF);
+    transform:translateY(100%);
+    z-index:9999;
+  }
+  `;
+  document.head.appendChild(style);
+
+  document.querySelectorAll("a").forEach(link => {
+
+    // Só links internos reais
+    if (
+      link.hostname === window.location.hostname &&
+      link.getAttribute("href") &&
+      !link.getAttribute("href").startsWith("#") &&
+      link.target !== "_blank"
+    ) {
+      link.addEventListener("click", function (e) {
+
+        // Se for a mesma página, não bloqueia
+        if (this.href === window.location.href) return;
+
+        e.preventDefault();
+        const href = this.href;
+
+        gsap.to("#globalTransition", {
+          y: 0,
+          duration: 0.6,
+          ease: "power2.inOut",
+          onComplete: () => {
+            window.location.href = href;
+          }
+        });
+
+      });
+    }
+
+  });
 
 });
