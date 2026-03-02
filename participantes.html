@@ -10,148 +10,183 @@
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
 body{
-font-family:'Orbitron',sans-serif;
-background:linear-gradient(135deg,#000,#0a0f1c);
-color:#fff;
-overflow-x:hidden;
-min-height:100vh;
+  font-family:'Orbitron',sans-serif;
+  background:linear-gradient(135deg,#000,#0a0f1c);
+  color:#fff;
+  overflow-x:hidden;
+  min-height:100vh;
+  padding-bottom:90px;
 }
 
 /* ================= FUNDO ================= */
 
 #particles-js{
-position:fixed;
-width:100%;
-height:100%;
-z-index:-1;
+  position:fixed;
+  width:100%;
+  height:100%;
+  z-index:-1;
 }
 
-/* ================= MENU ================= */
+/* ================= NAV PADRÃO ================= */
 
 nav{
-position:fixed;
-top:0;
-width:100%;
-display:flex;
-justify-content:center;
-gap:20px;
-padding:15px;
-background:rgba(0,0,0,0.85);
-backdrop-filter:blur(15px);
-border-bottom:1px solid rgba(0,153,255,0.4);
-z-index:1000;
-flex-wrap:wrap;
+  position:fixed;
+  top:0;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  padding:16px;
+  background:rgba(0,0,0,0.85);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid rgba(0,153,255,0.4);
+  z-index:1000;
+  flex-wrap:wrap;
 }
 
 nav a{
-color:#fff;
-text-decoration:none;
-font-weight:600;
-padding:8px 14px;
-border-radius:25px;
-transition:0.3s;
-font-size:14px;
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+  padding:8px 14px;
+  border-radius:25px;
+  transition:0.3s;
+  font-size:14px;
 }
 
 nav a:hover{
-background:#00F5FF;
-color:#000;
-box-shadow:0 0 15px #00F5FF;
+  background:#00F5FF;
+  color:#000;
+  box-shadow:0 0 15px #00F5FF;
 }
 
 /* ================= CONTAINER ================= */
 
 .container{
-max-width:900px;
-margin:auto;
-padding:130px 20px 80px 20px;
+  max-width:900px;
+  margin:auto;
+  padding:140px 20px 100px 20px;
 }
 
 h2{
-margin-bottom:40px;
-border-left:5px solid #00F5FF;
-padding-left:15px;
-font-size:26px;
+  margin-bottom:40px;
+  border-left:5px solid #00F5FF;
+  padding-left:15px;
+  font-size:26px;
 }
 
 /* ================= CARD ================= */
 
 .card{
-background:rgba(15,20,35,0.95);
-padding:40px;
-border-radius:25px;
-border:1px solid rgba(0,153,255,0.4);
-box-shadow:0 0 40px rgba(0,153,255,0.3);
-line-height:2;
-font-size:16px;
-animation:fadeUp 1s ease;
+  background:rgba(15,20,35,0.95);
+  padding:40px;
+  border-radius:25px;
+  border:1px solid rgba(0,153,255,0.4);
+  box-shadow:0 0 40px rgba(0,153,255,0.25);
+  line-height:1.8;
+  font-size:16px;
+  animation:fadeUp 0.8s ease;
 }
 
 @keyframes fadeUp{
-from{opacity:0;transform:translateY(40px)}
-to{opacity:1;transform:translateY(0)}
+  from{opacity:0;transform:translateY(30px)}
+  to{opacity:1;transform:translateY(0)}
 }
 
 .row{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:12px;
-padding-bottom:8px;
-border-bottom:1px solid rgba(255,255,255,0.05);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+  padding-bottom:10px;
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  font-size:15px;
 }
 
-/* STATUS */
+/* ================= STATUS ================= */
 
 .confirmado{
-color:#00FFAA;
-text-shadow:0 0 8px #00FFAA;
+  color:#00FFAA;
+  text-shadow:0 0 8px #00FFAA;
 }
 
 .indefinido{
-color:#00F5FF;
-text-shadow:0 0 8px #00F5FF;
+  color:#00F5FF;
+  text-shadow:0 0 8px #00F5FF;
 }
 
 .nao{
-color:#FF4C4C;
-text-shadow:0 0 8px #FF4C4C;
+  color:#FF4C4C;
+  text-shadow:0 0 8px #FF4C4C;
 }
 
 /* ================= VAGAS ================= */
 
 .vagas{
-margin-top:35px;
-text-align:center;
-font-size:18px;
-font-weight:bold;
-color:#00F5FF;
-text-shadow:0 0 10px #00F5FF;
+  margin-top:35px;
+  text-align:center;
+  font-size:18px;
+  font-weight:bold;
+  color:#00F5FF;
+  text-shadow:0 0 10px #00F5FF;
 }
 
-/* ================= MOBILE ================= */
+/* ===================================================== */
+/* ================= MOBILE APP STYLE ================= */
+/* ===================================================== */
 
-@media (max-width:600px){
+@media (max-width:768px){
 
-h2{
-font-size:20px;
+  body{
+    padding-bottom:120px;
+  }
+
+  nav{
+    top:auto;
+    bottom:0;
+    justify-content:space-around;
+    padding:12px 0;
+    border-top:1px solid rgba(0,153,255,0.4);
+    border-bottom:none;
+  }
+
+  nav a{
+    font-size:12px;
+    padding:4px 6px;
+  }
+
+  .container{
+    padding:80px 15px 130px 15px;
+  }
+
+  h2{
+    font-size:20px;
+  }
+
+  .card{
+    padding:25px;
+    font-size:14px;
+  }
+
+  .row{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:5px;
+  }
+
+  .vagas{
+    font-size:16px;
+  }
+
 }
 
-.card{
-padding:25px;
-font-size:14px;
-}
-
-.row{
-flex-direction:column;
-align-items:flex-start;
-gap:4px;
-}
-
-}
 
 </style>
 </head>
@@ -160,13 +195,13 @@ gap:4px;
 
 <div id="particles-js"></div>
 
-<nav>
-<a href="index.html">Início</a>
-<a href="membros.html">Membros</a>
-<a href="participantes.html">Participantes</a>
-<a href="videos.html">Vídeos</a>
-<a href="links.html">Links Oficiais</a>
-<a href="formulario.html">Formulário</a>
+<nav class="navbar">
+  <a href="index.html">🏠<span>Início</span></a>
+  <a href="membros.html">👑<span>Membros</span></a>
+  <a href="participantes.html">🎯<span>Participantes</span></a>
+  <a href="videos.html">🎬<span>Vídeos</span></a>
+  <a href="links.html">🔗<span>Links</span></a>
+  <a href="formulario.html">📝<span>Formulário</span></a>
 </nav>
 
 <div class="container">
@@ -223,6 +258,7 @@ carregarVagas();
 <script src="layout.js?v=2"></script>
 </body>
 </html>
+
 
 
 
