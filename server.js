@@ -66,7 +66,7 @@ const LOG_FILE = "./logs.json";
 const IMAGES_DIR = "./images";
 
 /* ===================================================== */
-/* 📦 UPLOAD (mantive porque seu projeto tinha) */
+/* 📦 UPLOAD */
 /* ===================================================== */
 if (!fs.existsSync(IMAGES_DIR)) fs.mkdirSync(IMAGES_DIR);
 
@@ -153,7 +153,7 @@ function middlewareAdmin(req, res, next) {
     return res.status(401).json({ erro: "Sessão expirada" });
   }
 
-  // Renova expiração (sliding session)
+  // ✅ Renova expiração (sliding session)
   sess.expira = Date.now() + SESSION_EXPIRATION;
 
   req.adminRole = sess.role;
@@ -162,7 +162,7 @@ function middlewareAdmin(req, res, next) {
 }
 
 /* ===================================================== */
-/* ✅ ROTAS PÚBLICAS (mantive as básicas do seu projeto) */
+/* ✅ ROTAS PÚBLICAS */
 /* ===================================================== */
 app.get("/vagas", (req, res) => {
   const banco = lerBanco();
@@ -194,6 +194,9 @@ app.post("/admin/login", (req, res) => {
     return res.status(403).json({ erro: "IP bloqueado temporariamente" });
   }
 
+  // se tempo já passou, remove bloqueio
+  if (IP_BLOQUEADO[ip] && Date.now() >= IP_BLOQUEADO[ip]) delete IP_BLOQUEADO[ip];
+
   const { senha } = req.body;
   const admin = ADMINS.find((a) => a.senha && a.senha === senha);
 
@@ -210,10 +213,9 @@ app.post("/admin/login", (req, res) => {
     return res.status(401).json({ erro: "Senha incorreta" });
   }
 
-  // reset tentativas
+  // ✅ reset tentativas no sucesso
   LOGIN_TENTATIVAS[ip] = 0;
 
-  // Se admin ainda não tem secret configurado no ENV, avisa
   const hasSecret = !!admin.twoFASecret && String(admin.twoFASecret).trim().length >= 16;
 
   res.json({
@@ -227,16 +229,8 @@ app.post("/admin/login", (req, res) => {
 });
 
 /* ===================================================== */
-/* 🔧 SETUP 2FA (GERA SECRET + QR) ✅ VOCÊ PRECISA DISSO */
+/* 🔧 SETUP 2FA (GERA SECRET + QR) */
 /* ===================================================== */
-/**
- * Use UMA VEZ para gerar o secret base32 e o QR.
- * Depois você copia o secret e coloca no Render ENV:
- * - SUPERADMIN_2FA_SECRET
- * - MODERADOR_2FA_SECRET
- *
- * Segurança mínima: exige a senha do admin + uma chave extra opcional SETUP_KEY.
- */
 app.post("/admin/2fa/setup", async (req, res) => {
   const ip = req.ip;
   const { senha } = req.body;
@@ -255,12 +249,7 @@ app.post("/admin/2fa/setup", async (req, res) => {
   if (!admin) return res.status(401).json({ erro: "Senha inválida" });
 
   const label = `MindsetElite:${admin.role}`;
-  const secret = speakeasy.generateSecret({
-    name: label,
-    length: 20,
-  });
-
-  // QR code (data URL)
+  const secret = speakeasy.generateSecret({ name: label, length: 20 });
   const qrDataUrl = await QRCode.toDataURL(secret.otpauth_url);
 
   salvarLog("SETUP_2FA", "Gerou secret/QR (copiar para ENV)", admin.role, ip);
@@ -326,15 +315,34 @@ app.post("/admin/inscritos", middlewareAdmin, (req, res) => {
   res.json({ inscritos: banco.inscritos, vagas: banco.vagas, role: req.adminRole });
 });
 
-app.post("/admin/resetar", middlewareAdmin, (req, res) => {
-  // Só superadmin por segurança
-  if (req.adminRole !== "superadmin") {
-    return res.status(403).json({ erro: "Permissão negada" });
-  }
+/* ===================================================== */
+/* 🔄 RESETAR SÓ VAGAS (superadmin) */
+/* ===================================================== */
+app.post("/admin/resetar-vagas", middlewareAdmin, (req, res) => {
+  if (req.adminRole !== "superadmin") return res.status(403).json({ erro: "Permissão negada" });
+
   const banco = lerBanco();
   banco.vagas = 1;
+
   salvarBanco(banco);
   salvarLog("RESET_VAGAS", "Vagas resetadas para 1", req.adminRole, req.adminIp);
+
+  res.json({ ok: true });
+});
+
+/* ===================================================== */
+/* 🔄 RESETAR SISTEMA (vagas + limpa inscritos) (superadmin) */
+/* ===================================================== */
+app.post("/admin/resetar", middlewareAdmin, (req, res) => {
+  if (req.adminRole !== "superadmin") return res.status(403).json({ erro: "Permissão negada" });
+
+  const banco = lerBanco();
+  banco.vagas = 1;
+  banco.inscritos = [];
+
+  salvarBanco(banco);
+  salvarLog("RESET_SISTEMA", "Sistema resetado (vagas=1 e inscritos=[]) ", req.adminRole, req.adminIp);
+
   res.json({ ok: true });
 });
 
@@ -360,11 +368,11 @@ app.post("/admin/excluir", middlewareAdmin, (req, res) => {
 });
 
 /* ===================================================== */
-/* 📜 LOGS */
+/* 📜 LOGS (retorna {logs}) ✅ compatível com seu admin */
 /* ===================================================== */
 app.post("/admin/logs", middlewareAdmin, (req, res) => {
   const logs = lerLogs().reverse();
-  res.json(logs);
+  res.json({ logs });
 });
 
 /* ===================================================== */
@@ -376,7 +384,6 @@ app.post("/admin/metricas", middlewareAdmin, (req, res) => {
 
   const total = inscritos.length;
 
-  // agrupamento por dia (YYYY-MM-DD)
   const porDia = {};
   inscritos.forEach((i) => {
     const dia = (i.data ? new Date(i.data) : new Date()).toISOString().split("T")[0];
@@ -389,7 +396,6 @@ app.post("/admin/metricas", middlewareAdmin, (req, res) => {
   const diasCount = Math.max(diasOrdenados.length, 1);
   const mediaDiaria = total / diasCount;
 
-  // crescimento percentual (último dia vs anterior)
   let crescimentoPct = 0;
   if (valores.length >= 2) {
     const ontem = valores[valores.length - 2];
@@ -406,10 +412,11 @@ app.post("/admin/metricas", middlewareAdmin, (req, res) => {
 });
 
 /* ===================================================== */
-/* 🖼 UPLOAD FOTO (mantive) */
+/* 🖼 UPLOAD FOTO */
 /* ===================================================== */
 app.post("/admin/upload", middlewareAdmin, upload.single("foto"), (req, res) => {
   if (!req.file) return res.status(400).json({ erro: "Arquivo inválido" });
+
   salvarLog("UPLOAD", `arquivo=${req.file.filename}`, req.adminRole, req.adminIp);
   res.json({ arquivo: req.file.filename });
 });
