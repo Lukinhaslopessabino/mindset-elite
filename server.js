@@ -7,7 +7,7 @@ import multer from "multer";
 const app = express();
 
 app.use(cors({
-  origin:[
+  origin: [
     "https://mindset-elite-fcmg.com.br",
     "https://www.mindset-elite-fcmg.com.br"
   ]
@@ -18,16 +18,21 @@ app.use(express.static("./"));
 
 const PORT = process.env.PORT || 3000;
 
+/* ============================== */
+/* 🔐 NÍVEIS DE ADMIN */
+/* ============================== */
+
 const ADMINS = [
   { senha: process.env.SUPERADMIN_PASSWORD, role: "superadmin" },
   { senha: process.env.MODERADOR_PASSWORD, role: "moderador" }
 ];
+
 const RECAPTCHA_SECRET = process.env.RECAPTCHA_SECRET;
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 /* ============================== */
-/* SEGURANÇA */
+/* 🛡 SEGURANÇA */
 /* ============================== */
 
 const SESSIONS = {};
@@ -37,7 +42,7 @@ const SESSION_EXPIRATION = 30 * 60 * 1000;
 const MAX_TENTATIVAS = 5;
 
 /* ============================== */
-/* GARANTIR PASTA IMAGES */
+/* 📁 GARANTIR PASTA IMAGES */
 /* ============================== */
 
 if (!fs.existsSync("./images")) {
@@ -45,7 +50,7 @@ if (!fs.existsSync("./images")) {
 }
 
 /* ============================== */
-/* UPLOAD */
+/* 📤 UPLOAD */
 /* ============================== */
 
 const storage = multer.diskStorage({
@@ -58,7 +63,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 /* ============================== */
-/* BANCO */
+/* 💾 BANCO */
 /* ============================== */
 
 function lerBanco() {
@@ -76,30 +81,34 @@ function salvarBanco(dados) {
 }
 
 /* ============================== */
-/* TOKEN */
+/* 🔑 TOKEN */
 /* ============================== */
 
 function gerarToken() {
   return crypto.randomBytes(32).toString("hex");
 }
 
+/* ============================== */
+/* 🔐 MIDDLEWARE ADMIN */
+/* ============================== */
+
 function middlewareAdmin(req, res, next) {
   const token = req.headers["x-admin-token"];
 
-  if (!token || !SESSIONS[token]) {
+  if (!token || !SESSIONS[token])
     return res.status(401).json({ erro: "Sessão inválida" });
-  }
 
-  if (Date.now() > SESSIONS[token]) {
+  if (Date.now() > SESSIONS[token].expira) {
     delete SESSIONS[token];
     return res.status(401).json({ erro: "Sessão expirada" });
   }
 
+  req.adminRole = SESSIONS[token].role;
   next();
 }
 
 /* ============================== */
-/* ROTAS PÚBLICAS */
+/* 🌍 ROTAS PÚBLICAS */
 /* ============================== */
 
 app.get("/vagas", (req, res) => {
@@ -111,7 +120,7 @@ app.get("/ranking", (req, res) => {
   const banco = lerBanco();
 
   const ranking = banco.inscritos.map((u, i) => ({
-    id: u.id, // 🔥 agora envia ID
+    id: u.id,
     nome: u.nome,
     idade: u.idade,
     rank: i + 1,
@@ -122,12 +131,11 @@ app.get("/ranking", (req, res) => {
 });
 
 /* ============================== */
-/* INSCRIÇÃO */
+/* 📝 INSCRIÇÃO */
 /* ============================== */
 
 app.post("/inscrever", async (req, res) => {
   try {
-
     const { nome, idade, telegram, token } = req.body;
 
     if (!token)
@@ -158,7 +166,7 @@ app.post("/inscrever", async (req, res) => {
     banco.vagas--;
 
     banco.inscritos.push({
-      id: crypto.randomUUID(), // 🔥 ID único
+      id: crypto.randomUUID(),
       nome,
       idade,
       telegram,
@@ -166,26 +174,6 @@ app.post("/inscrever", async (req, res) => {
     });
 
     salvarBanco(banco);
-
-    if (TELEGRAM_TOKEN && TELEGRAM_CHAT_ID) {
-
-      const mensagem = `
-🚀 NOVA INSCRIÇÃO
-
-👤 Nome: ${nome}
-🎂 Idade: ${idade}
-📩 Telegram: ${telegram}
-`;
-
-      await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: TELEGRAM_CHAT_ID,
-          text: mensagem
-        })
-      });
-    }
 
     res.json({ sucesso: true });
 
@@ -196,7 +184,7 @@ app.post("/inscrever", async (req, res) => {
 });
 
 /* ============================== */
-/* ADMIN LOGIN */
+/* 🔐 LOGIN ADMIN COM ROLE */
 /* ============================== */
 
 app.post("/admin/login", (req, res) => {
@@ -208,8 +196,10 @@ app.post("/admin/login", (req, res) => {
 
   if (!TENTATIVAS[ip]) TENTATIVAS[ip] = 0;
 
-  if (req.body.senha !== ADMIN_PASSWORD) {
+  const { senha } = req.body;
+  const admin = ADMINS.find(a => a.senha === senha);
 
+  if (!admin) {
     TENTATIVAS[ip]++;
 
     if (TENTATIVAS[ip] >= MAX_TENTATIVAS) {
@@ -223,13 +213,17 @@ app.post("/admin/login", (req, res) => {
   TENTATIVAS[ip] = 0;
 
   const token = gerarToken();
-  SESSIONS[token] = Date.now() + SESSION_EXPIRATION;
 
-  res.json({ token });
+  SESSIONS[token] = {
+    expira: Date.now() + SESSION_EXPIRATION,
+    role: admin.role
+  };
+
+  res.json({ token, role: admin.role });
 });
 
 /* ============================== */
-/* ADMIN PROTEGIDO */
+/* 📊 ADMIN PROTEGIDO */
 /* ============================== */
 
 app.post("/admin/inscritos", middlewareAdmin, (req, res) => {
@@ -240,18 +234,30 @@ app.post("/admin/inscritos", middlewareAdmin, (req, res) => {
   });
 });
 
+/* ============================== */
+/* ♻ RESETAR (apenas superadmin) */
+/* ============================== */
+
 app.post("/admin/resetar", middlewareAdmin, (req, res) => {
+
+  if (req.adminRole !== "superadmin")
+    return res.status(403).json({ erro: "Permissão negada" });
+
   const banco = lerBanco();
   banco.vagas = 1;
   salvarBanco(banco);
+
   res.json({ ok: true });
 });
 
 /* ============================== */
-/* EXCLUIR POR ID */
+/* 🗑 EXCLUIR POR ID (SUPERADMIN) */
 /* ============================== */
 
 app.post("/admin/excluir", middlewareAdmin, (req, res) => {
+
+  if (req.adminRole !== "superadmin")
+    return res.status(403).json({ erro: "Permissão negada" });
 
   const { id } = req.body;
   const banco = lerBanco();
@@ -270,7 +276,7 @@ app.post("/admin/excluir", middlewareAdmin, (req, res) => {
 });
 
 /* ============================== */
-/* UPLOAD FOTO */
+/* 📤 UPLOAD FOTO */
 /* ============================== */
 
 app.post("/admin/upload", middlewareAdmin, upload.single("foto"), (req, res) => {
@@ -284,6 +290,5 @@ app.post("/admin/upload", middlewareAdmin, upload.single("foto"), (req, res) => 
 /* ============================== */
 
 app.listen(PORT, () => {
-  console.log("Servidor rodando...");
+  console.log("🚀 Servidor rodando...");
 });
-
