@@ -14,17 +14,25 @@ app.set("trust proxy", 1); // ✅ IP real no Render/Proxy
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
+/* ===================================================== */
+/* 🌐 CORS */
+/* ===================================================== */
+const ALLOWED_ORIGINS = [
+  "https://mindset-elite-fcmg.com.br",
+  "https://www.mindset-elite-fcmg.com.br",
+];
+
 app.use(
   cors({
-    origin: [
-      "https://mindset-elite-fcmg.com.br",
-      "https://www.mindset-elite-fcmg.com.br",
-    ],
+    origin: ALLOWED_ORIGINS,
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "x-admin-token", "x-setup-key"],
   })
 );
 
-app.use(express.json());
-app.use(express.static("./"));
+app.use(express.json({ limit: "1mb" }));
+app.use(express.static("./")); // serve html/css/js
+app.use("/images", express.static("./images")); // serve imagens
 
 const PORT = process.env.PORT || 3000;
 
@@ -33,12 +41,12 @@ const PORT = process.env.PORT || 3000;
 /* ===================================================== */
 const ADMINS = [
   {
-    senha: process.env.SUPERADMIN_PASSWORD,
+    senha: process.env.SUPERADMIN_PASSWORD || "",
     role: "superadmin",
     twoFASecret: process.env.SUPERADMIN_2FA_SECRET || "", // base32
   },
   {
-    senha: process.env.MODERADOR_PASSWORD,
+    senha: process.env.MODERADOR_PASSWORD || "",
     role: "moderador",
     twoFASecret: process.env.MODERADOR_2FA_SECRET || "", // base32
   },
@@ -91,6 +99,23 @@ wss.on("connection", (ws) => {
 });
 
 /* ===================================================== */
+/* 🧹 LIMPEZA AUTOMÁTICA (sessions + ip block) */
+/* ===================================================== */
+setInterval(() => {
+  const now = Date.now();
+
+  // limpa sessions expiradas
+  for (const [token, sess] of Object.entries(SESSIONS)) {
+    if (!sess || now > sess.expira) delete SESSIONS[token];
+  }
+
+  // limpa IP bloqueado já vencido
+  for (const [ip, until] of Object.entries(IP_BLOQUEADO)) {
+    if (!until || now >= until) delete IP_BLOQUEADO[ip];
+  }
+}, 30 * 1000);
+
+/* ===================================================== */
 /* 📜 LOGS */
 /* ===================================================== */
 function lerLogs() {
@@ -120,16 +145,19 @@ function salvarLog(tipo, detalhes, role, ip) {
 /* ===================================================== */
 /* 💾 DATABASE */
 /* ===================================================== */
-function lerBanco() {
+function ensureDB() {
   if (!fs.existsSync(DB_FILE)) {
     fs.writeFileSync(DB_FILE, JSON.stringify({ vagas: 1, inscritos: [] }, null, 2));
   }
+}
+function lerBanco() {
+  ensureDB();
   return JSON.parse(fs.readFileSync(DB_FILE));
 }
-
 function salvarBanco(dados) {
   fs.writeFileSync(DB_FILE, JSON.stringify(dados, null, 2));
   broadcast({ type: "data_update" });
+  broadcast({ type: "ranking_update" });
 }
 
 /* ===================================================== */
@@ -153,7 +181,13 @@ function middlewareAdmin(req, res, next) {
     return res.status(401).json({ erro: "Sessão expirada" });
   }
 
-  // ✅ Renova expiração (sliding session)
+  // ✅ trava por IP (evita token roubado)
+  if (sess.ip && sess.ip !== req.ip) {
+    salvarLog("TOKEN_IP_MISMATCH", "Token usado em outro IP", sess.role, req.ip);
+    return res.status(401).json({ erro: "Sessão inválida (IP diferente)" });
+  }
+
+  // ✅ renova expiração (sliding session)
   sess.expira = Date.now() + SESSION_EXPIRATION;
 
   req.adminRole = sess.role;
@@ -162,23 +196,112 @@ function middlewareAdmin(req, res, next) {
 }
 
 /* ===================================================== */
+/* ⚡ XP DINÂMICO (SERVER-SIDE) */
+/* ===================================================== */
+function calcXP(user, idxOldest) {
+  const idade = Number(user?.idade ?? 0);
+  const ageBonus = Math.max(0, Math.min(idade, 60)) * 2; // até 120
+
+  const dt = user?.data ? new Date(user.data) : new Date();
+  const days = Math.max(0, Math.floor((Date.now() - dt.getTime()) / (1000 * 60 * 60 * 24)));
+
+  const timeXP = days * 15;
+  const joinBonus = Math.max(0, 500 - idxOldest * 12);
+
+  return Math.round(200 + timeXP + joinBonus + ageBonus);
+}
+
+/* ===================================================== */
 /* ✅ ROTAS PÚBLICAS */
 /* ===================================================== */
+app.get("/health", (req, res) => res.json({ ok: true }));
+
 app.get("/vagas", (req, res) => {
   const banco = lerBanco();
   res.json({ vagas: banco.vagas });
 });
 
+/**
+ * ✅ INSCRIÇÃO
+ * - cria ID único
+ * - salva data ISO
+ * - impede telegram duplicado
+ * - decrementa vagas
+ */
+app.post("/inscrever", (req, res) => {
+  try {
+    const { nome, idade, telegram } = req.body;
+
+    if (!nome || !telegram) return res.status(400).json({ erro: "Nome e Telegram são obrigatórios" });
+
+    const banco = lerBanco();
+
+    const tg = String(telegram).trim().toLowerCase();
+    if (banco.inscritos.some((i) => String(i.telegram || "").trim().toLowerCase() === tg)) {
+      return res.status(400).json({ erro: "Telegram já cadastrado" });
+    }
+
+    if (banco.vagas <= 0) return res.status(400).json({ erro: "Sem vagas" });
+
+    const novo = {
+      id: crypto.randomUUID(),
+      nome: String(nome).trim(),
+      idade: String(idade ?? "").trim(),
+      telegram: String(telegram).trim(),
+      foto: null,
+      data: new Date().toISOString(),
+    };
+
+    banco.inscritos.push(novo);
+    banco.vagas -= 1;
+
+    salvarBanco(banco);
+    salvarLog("NOVA_INSCRICAO", `id=${novo.id} telegram=${novo.telegram}`, "public", req.ip);
+
+    res.json({ ok: true, id: novo.id });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ erro: "Erro interno" });
+  }
+});
+
+/**
+ * ✅ RANKING
+ * Agora vem:
+ * - ordenado por XP (dinâmico)
+ * - retorna rank e xp
+ * - com fallback de ordenação por data
+ */
 app.get("/ranking", (req, res) => {
   const banco = lerBanco();
-  const ranking = banco.inscritos.map((u, i) => ({
+  const inscritos = Array.isArray(banco.inscritos) ? banco.inscritos : [];
+
+  // oldest index (mais antigo = menor índice)
+  const byOldest = [...inscritos].sort((a, b) => new Date(a.data || 0) - new Date(b.data || 0));
+  const oldestIndex = new Map(byOldest.map((u, i) => [u.id, i]));
+
+  const withXP = inscritos.map((u) => {
+    const idxOld = oldestIndex.has(u.id) ? oldestIndex.get(u.id) : 9999;
+    const xp = calcXP(u, idxOld);
+    return { ...u, xp };
+  });
+
+  withXP.sort((a, b) => {
+    if (b.xp !== a.xp) return b.xp - a.xp;
+    return new Date(a.data || 0) - new Date(b.data || 0);
+  });
+
+  const ranking = withXP.map((u, i) => ({
     id: u.id,
     nome: u.nome,
     idade: u.idade,
-    rank: i + 1,
+    telegram: u.telegram,
     foto: u.foto || null,
     data: u.data,
+    xp: u.xp,
+    rank: i + 1,
   }));
+
   res.json({ ranking });
 });
 
@@ -188,13 +311,10 @@ app.get("/ranking", (req, res) => {
 app.post("/admin/login", (req, res) => {
   const ip = req.ip;
 
-  // ainda bloqueado?
   if (IP_BLOQUEADO[ip] && Date.now() < IP_BLOQUEADO[ip]) {
     salvarLog("LOGIN_BLOQUEADO", "Tentou logar com IP bloqueado", null, ip);
     return res.status(403).json({ erro: "IP bloqueado temporariamente" });
   }
-
-  // se tempo já passou, remove bloqueio
   if (IP_BLOQUEADO[ip] && Date.now() >= IP_BLOQUEADO[ip]) delete IP_BLOQUEADO[ip];
 
   const { senha } = req.body;
@@ -213,7 +333,6 @@ app.post("/admin/login", (req, res) => {
     return res.status(401).json({ erro: "Senha incorreta" });
   }
 
-  // ✅ reset tentativas no sucesso
   LOGIN_TENTATIVAS[ip] = 0;
 
   const hasSecret = !!admin.twoFASecret && String(admin.twoFASecret).trim().length >= 16;
@@ -222,9 +341,7 @@ app.post("/admin/login", (req, res) => {
     precisa2FA: true,
     role: admin.role,
     precisaConfigurar2FA: !hasSecret,
-    dica: !hasSecret
-      ? "Falta configurar o 2FA secret no Render. Use /admin/2fa/setup para gerar QR/secret."
-      : undefined,
+    dica: !hasSecret ? "Falta configurar 2FA secret no Render. Use /admin/2fa/setup." : undefined,
   });
 });
 
@@ -235,7 +352,6 @@ app.post("/admin/2fa/setup", async (req, res) => {
   const ip = req.ip;
   const { senha } = req.body;
 
-  // Opcional (recomendado): defina SETUP_KEY no Render e mande no header
   const setupKey = process.env.SETUP_KEY;
   if (setupKey) {
     const headerKey = req.headers["x-setup-key"];
@@ -280,7 +396,7 @@ app.post("/admin/2fa", (req, res) => {
   if (!secret) {
     return res.status(400).json({
       erro: "2FA não configurado no servidor",
-      dica: "Gere no /admin/2fa/setup e cole o secret no Render ENV.",
+      dica: "Gere em /admin/2fa/setup e cole o secret no Render ENV.",
     });
   }
 
@@ -297,11 +413,7 @@ app.post("/admin/2fa", (req, res) => {
   }
 
   const token = gerarToken();
-  SESSIONS[token] = {
-    role: admin.role,
-    expira: Date.now() + SESSION_EXPIRATION,
-    ip,
-  };
+  SESSIONS[token] = { role: admin.role, expira: Date.now() + SESSION_EXPIRATION, ip };
 
   salvarLog("LOGIN_SUCESSO", "2FA validado e token emitido", admin.role, ip);
   res.json({ token, role: admin.role });
@@ -331,7 +443,7 @@ app.post("/admin/resetar-vagas", middlewareAdmin, (req, res) => {
 });
 
 /* ===================================================== */
-/* 🔄 RESETAR SISTEMA (vagas + limpa inscritos) (superadmin) */
+/* 🔄 RESETAR SISTEMA (opcional) */
 /* ===================================================== */
 app.post("/admin/resetar", middlewareAdmin, (req, res) => {
   if (req.adminRole !== "superadmin") return res.status(403).json({ erro: "Permissão negada" });
@@ -368,7 +480,7 @@ app.post("/admin/excluir", middlewareAdmin, (req, res) => {
 });
 
 /* ===================================================== */
-/* 📜 LOGS (retorna {logs}) ✅ compatível com seu admin */
+/* 📜 LOGS (retorna {logs}) */
 /* ===================================================== */
 app.post("/admin/logs", middlewareAdmin, (req, res) => {
   const logs = lerLogs().reverse();
@@ -380,11 +492,11 @@ app.post("/admin/logs", middlewareAdmin, (req, res) => {
 /* ===================================================== */
 app.post("/admin/metricas", middlewareAdmin, (req, res) => {
   const banco = lerBanco();
-  const inscritos = banco.inscritos;
+  const inscritos = banco.inscritos || [];
 
   const total = inscritos.length;
-
   const porDia = {};
+
   inscritos.forEach((i) => {
     const dia = (i.data ? new Date(i.data) : new Date()).toISOString().split("T")[0];
     porDia[dia] = (porDia[dia] || 0) + 1;
@@ -417,16 +529,12 @@ app.post("/admin/metricas", middlewareAdmin, (req, res) => {
 app.post("/admin/upload", middlewareAdmin, upload.single("foto"), (req, res) => {
   if (!req.file) return res.status(400).json({ erro: "Arquivo inválido" });
 
+  // você precisa depois salvar esse filename no usuário (ex: /admin/set-foto)
   salvarLog("UPLOAD", `arquivo=${req.file.filename}`, req.adminRole, req.adminIp);
   res.json({ arquivo: req.file.filename });
 });
 
 /* ===================================================== */
-/* HEALTH */
-/* ===================================================== */
-app.get("/health", (req, res) => res.json({ ok: true }));
-
-/* ===================================================== */
 server.listen(PORT, () => {
-  console.log("🚀 SaaS Server rodando com WebSocket + 2FA + Logs + Métricas");
+  console.log("🚀 Server rodando com WebSocket + 2FA + Logs + Ranking XP");
 });
