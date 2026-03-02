@@ -9,8 +9,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
 
 <style>
-
-*{margin:0;padding:0;box-sizing:border-box;}
+*{margin:0;padding:0;box-sizing:border-box}
 
 body{
 font-family:'Orbitron',sans-serif;
@@ -18,132 +17,166 @@ background:linear-gradient(135deg,#000,#0a0f1c);
 color:#fff;
 overflow-x:hidden;
 min-height:100vh;
-padding-bottom:100px;
 }
 
-/* NAV */
+/* ================= NAV PADRÃO APP ================= */
 
-nav{
+.navbar{
 position:fixed;
 top:0;
 width:100%;
 display:flex;
 justify-content:center;
-gap:20px;
-padding:16px;
-background:rgba(0,0,0,0.85);
+gap:25px;
+padding:18px;
+background:rgba(0,0,0,0.75);
 backdrop-filter:blur(15px);
-border-bottom:1px solid rgba(0,153,255,0.4);
 z-index:1000;
-flex-wrap:wrap;
 }
 
-nav a{
+.navbar a{
 color:#fff;
 text-decoration:none;
-font-weight:600;
-padding:8px 14px;
+padding:8px 16px;
 border-radius:25px;
-transition:0.3s;
+transition:.3s;
+display:flex;
+align-items:center;
+gap:6px;
 font-size:14px;
 }
 
-nav a:hover{
+.navbar a:hover{
 background:#00F5FF;
 color:#000;
 box-shadow:0 0 20px #00F5FF;
 }
 
-/* CONTAINER */
+/* ================= CONTAINER ================= */
 
 .container{
-max-width:1100px;
+max-width:1200px;
 margin:auto;
 padding:150px 20px 120px;
 }
 
 h2{
-font-size:26px;
-margin-bottom:40px;
-border-left:5px solid #00F5FF;
-padding-left:15px;
+font-size:28px;
+margin-bottom:50px;
+text-align:center;
+background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
-/* GRID */
+/* ================= GRID ================= */
 
 .grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:30px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:35px;
 }
 
-
-/* MEMBER CARD */
+/* ================= CARD ================= */
 
 .member-card{
-  background:rgba(15,20,35,0.95);
-  padding:25px;
-  border-radius:20px;
-  text-align:center;
-  border:1px solid rgba(0,153,255,0.3);
-  box-shadow:0 0 20px rgba(0,153,255,0.2);
-  transition:0.4s;
-  position:relative;
+background:rgba(15,20,35,0.95);
+padding:30px;
+border-radius:25px;
+text-align:center;
+border:1px solid rgba(0,153,255,0.3);
+box-shadow:0 0 25px rgba(0,153,255,0.25);
+transition:.4s;
+position:relative;
+opacity:0;
+transform:translateY(30px);
+}
+
+.member-card.show{
+opacity:1;
+transform:translateY(0);
+transition:all .8s ease;
 }
 
 .member-card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 0 40px rgba(0,153,255,0.7);
+transform:translateY(-8px);
+box-shadow:0 0 45px rgba(0,153,255,0.8);
 }
+
+/* RANK BADGE */
 
 .rank{
-  position:absolute;
-  top:10px;
-  right:15px;
-  font-size:14px;
+position:absolute;
+top:15px;
+right:18px;
+font-size:15px;
+font-weight:700;
+color:#00F5FF;
 }
+
+/* AVATAR */
 
 .avatar-wrapper{
-  width:110px;
-  height:110px;
-  margin:auto;
-  border-radius:50%;
-  overflow:hidden;
-  border:3px solid #00F5FF;
-  margin-bottom:15px;
-}
-.avatar-wrapper img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+width:120px;
+height:120px;
+margin:auto;
+border-radius:50%;
+overflow:hidden;
+border:3px solid #00F5FF;
+margin-bottom:20px;
+box-shadow:0 0 25px rgba(0,245,255,.6);
 }
 
-/* MOBILE */
+.avatar-wrapper img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.member-card h3{
+margin-bottom:5px;
+font-size:18px;
+}
+
+.member-card p{
+opacity:.8;
+font-size:14px;
+}
+
+/* ================= MOBILE APP STYLE ================= */
 
 @media (max-width:768px){
 
-nav{
+body{padding-bottom:100px;}
+
+.navbar{
 top:auto;
 bottom:0;
 justify-content:space-around;
 padding:12px 0;
-border-top:1px solid rgba(0,153,255,0.4);
-border-bottom:none;
+border-top:1px solid rgba(0,153,255,.4);
 }
 
-nav a{
-font-size:12px;
-padding:4px 6px;
+.navbar a{
+flex-direction:column;
+font-size:18px;
 }
 
 .container{
-padding:100px 15px 140px;
+padding:100px 15px 150px;
 }
 
-h2{
-font-size:20px;
+.grid{
+gap:25px;
 }
 
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
 }
 
 </style>
@@ -153,7 +186,7 @@ font-size:20px;
 
 <canvas id="bg3d"></canvas>
 
-<nav>
+<nav class="navbar">
 <a href="index.html">🏠 Início</a>
 <a href="membros.html">👑 Membros</a>
 <a href="participantes.html">🎯 Participantes</a>
@@ -171,82 +204,60 @@ Carregando ranking...
 
 <script>
 
-/* FUNDO 3D */
+/* ================= FUNDO 3D ================= */
+
 if(window.innerWidth > 768){
-  try{
 
-    const canvas = document.getElementById("bg3d");
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth/window.innerHeight,
-      0.1,
-      2000
-    );
+const canvas=document.getElementById("bg3d");
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,2000);
+const renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true});
+renderer.setSize(window.innerWidth,window.innerHeight);
 
-    const renderer = new THREE.WebGLRenderer({
-      canvas:canvas,
-      alpha:true
-    });
+const geometry=new THREE.BufferGeometry();
+const vertices=[];
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
-
-    const geometry = new THREE.BufferGeometry();
-    const vertices = [];
-
-    for(let i=0;i<1000;i++){
-      vertices.push(
-        THREE.MathUtils.randFloatSpread(2000),
-        THREE.MathUtils.randFloatSpread(2000),
-        THREE.MathUtils.randFloatSpread(2000)
-      );
-    }
-
-    geometry.setAttribute(
-      'position',
-      new THREE.Float32BufferAttribute(vertices,3)
-    );
-
-    const material = new THREE.PointsMaterial({
-      color:0x0099ff,
-      size:2
-    });
-
-    const particles = new THREE.Points(geometry, material);
-    scene.add(particles);
-
-    camera.position.z = 600;
-
-    function animate(){
-      requestAnimationFrame(animate);
-      particles.rotation.x += 0.0002;
-      particles.rotation.y += 0.0002;
-      renderer.render(scene, camera);
-    }
-
-    animate();
-
-  } catch(e){
-    console.log("Erro no fundo 3D:", e);
-  }
+for(let i=0;i<1200;i++){
+vertices.push(
+THREE.MathUtils.randFloatSpread(2000),
+THREE.MathUtils.randFloatSpread(2000),
+THREE.MathUtils.randFloatSpread(2000)
+);
 }
 
-/* RANKING */
+geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));
+const material=new THREE.PointsMaterial({color:0x00f5ff,size:2});
+const particles=new THREE.Points(geometry,material);
+scene.add(particles);
+
+camera.position.z=700;
+
+function animate(){
+requestAnimationFrame(animate);
+particles.rotation.x+=0.0003;
+particles.rotation.y+=0.0003;
+renderer.render(scene,camera);
+}
+animate();
+
+}
+
+/* ================= RANKING ================= */
 
 async function carregarRanking(){
 
-const grid = document.getElementById("membersGrid");
+const grid=document.getElementById("membersGrid");
 
 try{
 
-const res = await fetch("https://mindset-elite.onrender.com/ranking");
+const res=await fetch("https://mindset-elite.onrender.com/ranking");
 
 if(!res.ok){
 grid.innerHTML="⚠ Ranking indisponível.";
 return;
 }
 
-const data = await res.json();
+const data=await res.json();
 grid.innerHTML="";
 
 if(!data.ranking || data.ranking.length===0){
@@ -254,18 +265,16 @@ grid.innerHTML="Nenhum membro ainda.";
 return;
 }
 
-data.ranking.forEach(user=>{
+data.ranking.forEach((user,index)=>{
 
 let medal="";
 if(user.rank===1) medal="🥇";
 else if(user.rank===2) medal="🥈";
 else if(user.rank===3) medal="🥉";
 
-const fotoPath = user.foto
-? `/images/${user.foto}`
-: "/images/default.jpg";
+const fotoPath=user.foto?`/images/${user.foto}`:"/images/default.jpg";
 
-const card = document.createElement("div");
+const card=document.createElement("div");
 card.className="member-card";
 
 card.innerHTML=`
@@ -278,6 +287,10 @@ card.innerHTML=`
 `;
 
 grid.appendChild(card);
+
+setTimeout(()=>{
+card.classList.add("show");
+}, index*120);
 
 });
 
@@ -294,7 +307,3 @@ carregarRanking();
 
 </body>
 </html>
-
-
-
-
