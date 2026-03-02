@@ -10,166 +10,230 @@
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
 body{
-font-family:'Orbitron',sans-serif;
-background:linear-gradient(135deg,#000,#0a0f1c);
-color:#fff;
-min-height:100vh;
-overflow-x:hidden;
+  font-family:'Orbitron',sans-serif;
+  background:linear-gradient(135deg,#000,#0a0f1c);
+  color:#fff;
+  min-height:100vh;
+  overflow-x:hidden;
+  padding-bottom:90px;
 }
+
+/* ================= FUNDO ================= */
 
 #particles-js{
-position:fixed;
-width:100%;
-height:100%;
-z-index:-1;
+  position:fixed;
+  width:100%;
+  height:100%;
+  z-index:-1;
 }
 
+/* ================= NAV PADRÃO ================= */
+
 nav{
-position:fixed;
-top:0;
-width:100%;
-display:flex;
-justify-content:center;
-gap:20px;
-padding:15px;
-background:rgba(0,0,0,0.85);
-backdrop-filter:blur(15px);
-border-bottom:1px solid rgba(0,153,255,0.4);
-z-index:1000;
-flex-wrap:wrap;
+  position:fixed;
+  top:0;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  padding:16px;
+  background:rgba(0,0,0,0.85);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid rgba(0,153,255,0.4);
+  z-index:1000;
+  flex-wrap:wrap;
 }
 
 nav a{
-color:#fff;
-text-decoration:none;
-font-weight:600;
-padding:8px 14px;
-border-radius:25px;
-transition:0.3s;
-font-size:14px;
+  color:#fff;
+  text-decoration:none;
+  font-weight:600;
+  padding:8px 14px;
+  border-radius:25px;
+  transition:0.3s;
+  font-size:14px;
 }
 
 nav a:hover{
-background:#00F5FF;
-color:#000;
-box-shadow:0 0 15px #00F5FF;
+  background:#00F5FF;
+  color:#000;
+  box-shadow:0 0 15px #00F5FF;
 }
+
+/* ================= CONTAINER ================= */
 
 .container{
-display:flex;
-justify-content:center;
-align-items:center;
-min-height:100vh;
-padding:120px 15px 40px 15px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:150px 20px 120px;
 }
+
+/* ================= FORM BOX ================= */
 
 .form-box{
-background:rgba(15,20,35,0.95);
-padding:40px;
-border-radius:25px;
-width:100%;
-max-width:420px;
-box-shadow:0 0 40px rgba(0,153,255,0.4);
-border:1px solid rgba(0,153,255,0.4);
-backdrop-filter:blur(10px);
+  background:rgba(15,20,35,0.95);
+  padding:40px;
+  border-radius:25px;
+  width:100%;
+  max-width:420px;
+  box-shadow:0 0 40px rgba(0,153,255,0.35);
+  border:1px solid rgba(0,153,255,0.4);
+  backdrop-filter:blur(10px);
 }
 
-h2{text-align:center;margin-bottom:10px;font-weight:900;}
+h2{
+  text-align:center;
+  margin-bottom:15px;
+  font-weight:900;
+  font-size:24px;
+}
 
 .vagas{
-text-align:center;
-margin-bottom:25px;
-font-size:14px;
-color:#00FFAA;
+  text-align:center;
+  margin-bottom:25px;
+  font-size:14px;
+  color:#00FFAA;
+  text-shadow:0 0 10px #00FFAA;
 }
 
+/* ================= INPUTS ================= */
+
 input{
-width:100%;
-padding:14px;
-margin-bottom:18px;
-border-radius:14px;
-border:1px solid #0099FF;
-background:#0b0f18;
-color:#fff;
-transition:0.3s;
+  width:100%;
+  padding:14px;
+  margin-bottom:18px;
+  border-radius:14px;
+  border:1px solid #0099FF;
+  background:#0b0f18;
+  color:#fff;
+  transition:0.3s;
+  font-size:14px;
 }
 
 input:focus{
-outline:none;
-box-shadow:0 0 15px rgba(0,153,255,0.5);
+  outline:none;
+  box-shadow:0 0 15px rgba(0,153,255,0.6);
+  transform:scale(1.02);
 }
 
+/* ================= BUTTON ================= */
+
 button{
-width:100%;
-padding:14px;
-border:none;
-border-radius:15px;
-background:linear-gradient(90deg,#0099FF,#00F5FF,#0099FF);
-background-size:200% auto;
-color:#fff;
-font-weight:700;
-cursor:pointer;
-animation:btnMove 4s linear infinite;
-position:relative;
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:15px;
+  background:linear-gradient(90deg,#0099FF,#00F5FF,#0099FF);
+  background-size:200% auto;
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+  animation:btnMove 4s linear infinite;
+  position:relative;
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.04);
+  box-shadow:0 0 25px #00F5FF;
 }
 
 @keyframes btnMove{
-0%{background-position:0%}
-100%{background-position:200%}
+  0%{background-position:0%}
+  100%{background-position:200%}
 }
 
 button:disabled{
-background:#333;
-animation:none;
-cursor:not-allowed;
+  background:#333;
+  animation:none;
+  cursor:not-allowed;
 }
 
+/* ================= LOADER ================= */
+
 .loader{
-display:none;
-position:absolute;
-right:20px;
-top:50%;
-transform:translateY(-50%);
-width:18px;
-height:18px;
-border:3px solid #fff;
-border-top:3px solid transparent;
-border-radius:50%;
-animation:spin 1s linear infinite;
+  display:none;
+  position:absolute;
+  right:20px;
+  top:50%;
+  transform:translateY(-50%);
+  width:18px;
+  height:18px;
+  border:3px solid #fff;
+  border-top:3px solid transparent;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
 }
 
 @keyframes spin{
-0%{transform:translateY(-50%) rotate(0deg);}
-100%{transform:translateY(-50%) rotate(360deg);}
+  0%{transform:translateY(-50%) rotate(0deg);}
+  100%{transform:translateY(-50%) rotate(360deg);}
 }
+
+/* ================= MESSAGE ================= */
 
 #formMsg{
-margin-top:18px;
-text-align:center;
-min-height:20px;
-font-size:14px;
+  margin-top:18px;
+  text-align:center;
+  min-height:20px;
+  font-size:14px;
 }
 
-@media (max-width:480px){
-.form-box{padding:25px;}
+/* ================= MOBILE APP STYLE ================= */
+
+@media (max-width:768px){
+
+  body{
+    padding-bottom:120px;
+  }
+
+  nav{
+    top:auto;
+    bottom:0;
+    justify-content:space-around;
+    padding:12px 0;
+    border-top:1px solid rgba(0,153,255,0.4);
+    border-bottom:none;
+  }
+
+  nav a{
+    font-size:12px;
+    padding:4px 6px;
+  }
+
+  .container{
+    padding:100px 15px 140px;
+  }
+
+  .form-box{
+    padding:25px;
+  }
+
 }
+
 </style>
 </head>
 
 <body>
 
 <div id="particles-js"></div>
-<nav>
-<a href="index.html">Início</a>
-<a href="membros.html">Membros</a>
-<a href="participantes.html">Participantes</a>
-<a href="videos.html">Vídeos</a>
-<a href="links.html">Links Oficiais</a>
-<a href="formulario.html">Formulário</a>
+<nav class="navbar">
+  <a href="index.html">🏠<span>Início</span></a>
+  <a href="membros.html">👑<span>Membros</span></a>
+  <a href="participantes.html">🎯<span>Participantes</span></a>
+  <a href="videos.html">🎬<span>Vídeos</span></a>
+  <a href="links.html">🔗<span>Links</span></a>
+  <a href="formulario.html">📝<span>Formulário</span></a>
 </nav>
+
 
 <div class="container">
 <div class="form-box">
@@ -316,6 +380,7 @@ enviando = false;
 <script src="layout.js?v=2"></script>
 </body>
 </html>
+
 
 
 
