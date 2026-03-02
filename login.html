@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login • Mindset Enterprise</title>
+
+<style>
+body{
+background:#070A12;
+color:#EAF2FF;
+font-family:Arial;
+display:flex;
+align-items:center;
+justify-content:center;
+height:100vh;
+margin:0;
+}
+
+.box{
+background:#111827;
+padding:40px;
+border-radius:16px;
+width:320px;
+box-shadow:0 30px 80px rgba(0,0,0,.6);
+}
+
+h2{
+text-align:center;
+margin-bottom:30px;
+}
+
+input{
+width:100%;
+padding:12px;
+margin-bottom:15px;
+border-radius:8px;
+border:none;
+background:#1F2937;
+color:#fff;
+}
+
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:8px;
+background:#635BFF;
+color:#fff;
+font-weight:bold;
+cursor:pointer;
+}
+
+button:hover{
+opacity:.9;
+}
+
+#msg{
+margin-top:15px;
+font-size:13px;
+text-align:center;
+color:#FF4D4D;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h2>Admin Login</h2>
+
+<input type="password" id="senha" placeholder="Senha">
+<input type="text" id="codigo" placeholder="Código 2FA">
+
+<button onclick="login()">Entrar</button>
+
+<div id="msg"></div>
+</div>
+
+<script>
+async function login(){
+
+const senha = document.getElementById("senha").value;
+const codigo = document.getElementById("codigo").value;
+const msg = document.getElementById("msg");
+
+msg.innerText = "";
+
+if(!senha || !codigo){
+msg.innerText = "Preencha senha e código 2FA";
+return;
+}
+
+try{
+
+// 1️⃣ validar 2FA (já faz login completo no seu backend)
+const res = await fetch("/admin/2fa",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({ senha, codigo })
+});
+
+const data = await res.json();
+
+if(!res.ok){
+msg.innerText = data.erro || "Erro no login";
+return;
+}
+
+// 2️⃣ salva token
+sessionStorage.setItem("adminToken", data.token);
+sessionStorage.setItem("adminRole", data.role);
+
+// 3️⃣ vai pro admin
+window.location.href = "/admin";
+
+}catch(e){
+msg.innerText = "Erro de conexão";
+}
+
+}
+</script>
+
+</body>
+</html>
