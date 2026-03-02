@@ -10,8 +10,9 @@ app.use(cors({
   origin:[
     "https://mindset-elite-fcmg.com.br",
     "https://www.mindset-elite-fcmg.com.br"
-    ]
-  }));
+  ]
+}));
+
 app.use(express.json());
 app.use(express.static("./"));
 
@@ -107,6 +108,7 @@ app.get("/ranking", (req, res) => {
   const banco = lerBanco();
 
   const ranking = banco.inscritos.map((u, i) => ({
+    id: u.id, // 🔥 agora envia ID
     nome: u.nome,
     idade: u.idade,
     rank: i + 1,
@@ -153,6 +155,7 @@ app.post("/inscrever", async (req, res) => {
     banco.vagas--;
 
     banco.inscritos.push({
+      id: crypto.randomUUID(), // 🔥 ID único
       nome,
       idade,
       telegram,
@@ -160,8 +163,6 @@ app.post("/inscrever", async (req, res) => {
     });
 
     salvarBanco(banco);
-
-    /* ================= TELEGRAM ================= */
 
     if (TELEGRAM_TOKEN && TELEGRAM_CHAT_ID) {
 
@@ -243,14 +244,19 @@ app.post("/admin/resetar", middlewareAdmin, (req, res) => {
   res.json({ ok: true });
 });
 
+/* ============================== */
+/* EXCLUIR POR ID */
+/* ============================== */
+
 app.post("/admin/excluir", middlewareAdmin, (req, res) => {
 
-  const { rank } = req.body;
+  const { id } = req.body;
   const banco = lerBanco();
-  const index = rank - 1;
 
-  if (index < 0 || index >= banco.inscritos.length)
-    return res.status(400).json({ erro: "Rank inválido" });
+  const index = banco.inscritos.findIndex(u => u.id === id);
+
+  if (index === -1)
+    return res.status(400).json({ erro: "ID inválido" });
 
   banco.inscritos.splice(index, 1);
   banco.vagas++;
@@ -277,5 +283,3 @@ app.post("/admin/upload", middlewareAdmin, upload.single("foto"), (req, res) => 
 app.listen(PORT, () => {
   console.log("Servidor rodando...");
 });
-
-
