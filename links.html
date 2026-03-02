@@ -10,152 +10,141 @@
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box}
 
 body{
-  font-family:'Orbitron',sans-serif;
-  background:linear-gradient(135deg,#000,#0a0f1c);
-  color:#fff;
-  min-height:100vh;
-  overflow-x:hidden;
-  padding-bottom:90px;
+font-family:'Orbitron',sans-serif;
+background:linear-gradient(135deg,#000,#0a0f1c);
+color:#fff;
+min-height:100vh;
+overflow-x:hidden;
 }
 
 /* ================= FUNDO ================= */
 
 #particles-js{
-  position:fixed;
-  width:100%;
-  height:100%;
-  z-index:-1;
+position:fixed;
+width:100%;
+height:100%;
+z-index:-1;
 }
 
 /* ================= NAV PADRÃO ================= */
 
-nav{
-  position:fixed;
-  top:0;
-  width:100%;
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  padding:16px;
-  background:rgba(0,0,0,0.85);
-  backdrop-filter:blur(15px);
-  border-bottom:1px solid rgba(0,153,255,0.4);
-  z-index:1000;
-  flex-wrap:wrap;
+.navbar{
+position:fixed;
+top:0;
+width:100%;
+display:flex;
+justify-content:center;
+gap:25px;
+padding:18px;
+background:rgba(0,0,0,0.75);
+backdrop-filter:blur(15px);
+z-index:1000;
 }
 
-nav a{
-  color:#fff;
-  text-decoration:none;
-  font-weight:600;
-  padding:8px 14px;
-  border-radius:25px;
-  transition:0.3s;
-  font-size:14px;
+.navbar a{
+color:#fff;
+text-decoration:none;
+padding:8px 16px;
+border-radius:25px;
+transition:.3s;
+display:flex;
+align-items:center;
+gap:6px;
+font-size:14px;
 }
 
-nav a:hover{
-  background:#00F5FF;
-  color:#000;
-  box-shadow:0 0 15px #00F5FF;
+.navbar a:hover{
+background:#00F5FF;
+color:#000;
+box-shadow:0 0 20px #00F5FF;
 }
 
 /* ================= CONTAINER ================= */
 
 .container{
-  max-width:650px;
-  margin:auto;
-  padding:140px 20px 100px;
+max-width:700px;
+margin:auto;
+padding:150px 20px 120px;
 }
 
-h2{
-  margin-bottom:40px;
-  border-left:5px solid #00F5FF;
-  padding-left:15px;
-  font-size:26px;
+h1{
+margin-bottom:60px;
+font-size:clamp(1.8rem,4vw,2.5rem);
+border-left:5px solid #00F5FF;
+padding-left:15px;
 }
 
 /* ================= LINK CARD ================= */
 
 .link-card{
-  display:flex;
-  align-items:center;
-  gap:18px;
-  padding:20px;
-  margin-bottom:25px;
-  border-radius:18px;
-  border:1px solid rgba(0,153,255,0.4);
-  background:rgba(15,20,35,0.95);
-  text-decoration:none;
-  color:#fff;
-  transition:all 0.3s ease;
-  box-shadow:0 0 25px rgba(0,153,255,0.2);
-  position:relative;
+display:flex;
+align-items:center;
+gap:20px;
+padding:22px;
+margin-bottom:30px;
+border-radius:25px;
+border:1px solid rgba(0,153,255,.3);
+background:rgba(15,20,35,.95);
+text-decoration:none;
+color:#fff;
+box-shadow:0 0 30px rgba(0,153,255,.15);
+transition:.4s;
+opacity:0;
+transform:translateY(30px);
+}
+
+.link-card.show{
+opacity:1;
+transform:translateY(0);
+transition:all .8s ease;
 }
 
 .link-card img{
-  width:30px;
-  height:30px;
-  object-fit:contain;
+width:35px;
+height:35px;
+object-fit:contain;
 }
 
 .link-card span{
-  font-weight:700;
-  letter-spacing:1px;
-  font-size:15px;
+font-weight:700;
+letter-spacing:1px;
+font-size:16px;
 }
 
 .link-card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 0 45px rgba(0,245,255,0.6);
-  background:linear-gradient(90deg,#00F5FF,#0099FF);
-  color:#000;
+transform:translateY(-8px);
+box-shadow:0 0 50px rgba(0,245,255,.7);
+background:linear-gradient(90deg,#00F5FF,#0099FF);
+color:#000;
 }
 
 /* ================= MOBILE APP STYLE ================= */
 
 @media (max-width:768px){
 
-  body{
-    padding-bottom:120px;
-  }
+body{padding-bottom:100px;}
 
-  nav{
-    top:auto;
-    bottom:0;
-    justify-content:space-around;
-    padding:12px 0;
-    border-top:1px solid rgba(0,153,255,0.4);
-    border-bottom:none;
-  }
-
-  nav a{
-    font-size:12px;
-    padding:4px 6px;
-  }
-
-  .container{
-    padding:80px 15px 130px;
-  }
-
-  h2{
-    font-size:20px;
-  }
-
-  .link-card{
-    font-size:14px;
-    padding:16px;
-  }
-
+.navbar{
+top:auto;
+bottom:0;
+justify-content:space-around;
+padding:12px 0;
+border-top:1px solid rgba(0,153,255,.4);
 }
 
+.navbar a{
+flex-direction:column;
+font-size:18px;
+}
+
+.container{
+padding:100px 15px 150px;
+}
+
+}
 
 </style>
 </head>
@@ -165,30 +154,29 @@ h2{
 <div id="particles-js"></div>
 
 <nav class="navbar">
-  <a href="index.html">🏠<span>Início</span></a>
-  <a href="membros.html">👑<span>Membros</span></a>
-  <a href="participantes.html">🎯<span>Participantes</span></a>
-  <a href="videos.html">🎬<span>Vídeos</span></a>
-  <a href="links.html">🔗<span>Links</span></a>
-  <a href="formulario.html">📝<span>Formulário</span></a>
+<a href="index.html">🏠 Início</a>
+<a href="membros.html">👑 Membros</a>
+<a href="participantes.html">🎯 Participantes</a>
+<a href="videos.html">🎬 Vídeos</a>
+<a href="links.html">🔗 Links</a>
+<a href="formulario.html">📝 Formulário</a>
 </nav>
-
 
 <div class="container">
 
-<h2>Links Oficiais</h2>
+<h1>Links Oficiais</h1>
 
-<a href="https://t.me/GuiRayaMindset" target="_blank" class="link-card fadeUp">
+<a href="https://t.me/GuiRayaMindset" target="_blank" class="link-card">
 <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">
 <span>Telegram do Recrutador</span>
 </a>
 
-<a href="https://chat.whatsapp.com/KcjoGvEv2gtAg6oVEB89sU" target="_blank" class="link-card fadeUp">
+<a href="https://chat.whatsapp.com/KcjoGvEv2gtAg6oVEB89sU" target="_blank" class="link-card">
 <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
 <span>Grupo do Mindset</span>
 </a>
 
-<a href="https://api.whatsapp.com/send/?phone=5531972347144" target="_blank" class="link-card fadeUp">
+<a href="https://api.whatsapp.com/send/?phone=5531972347144" target="_blank" class="link-card">
 <img src="https://cdn-icons-png.flaticon.com/512/597/597177.png">
 <span>Contato Direto</span>
 </a>
@@ -197,7 +185,7 @@ h2{
 
 <script>
 
-/* ================= PARTÍCULAS OTIMIZADAS ================= */
+/* ================= PARTÍCULAS ================= */
 
 if(window.innerWidth > 600){
 particlesJS("particles-js",{
@@ -210,21 +198,18 @@ move:{speed:0.8}
 });
 }
 
-/* ================= ANIMAÇÃO ENTRADA ================= */
+/* ================= FADE ELEGANTE ================= */
 
-gsap.to(".fadeUp",{
-opacity:1,
-y:0,
-duration:1,
-stagger:0.2,
-ease:"power2.out"
+const cards=document.querySelectorAll(".link-card");
+
+cards.forEach((card,index)=>{
+setTimeout(()=>{
+card.classList.add("show");
+}, index*150);
 });
 
 </script>
+
 <script src="layout.js?v=2"></script>
 </body>
 </html>
-
-
-
-
