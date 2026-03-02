@@ -10,212 +10,211 @@
 <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+*{margin:0;padding:0;box-sizing:border-box}
 
 body{
-  font-family:'Orbitron',sans-serif;
-  background:linear-gradient(135deg,#000,#0a0f1c);
-  color:#fff;
-  min-height:100vh;
-  overflow-x:hidden;
-  padding-bottom:90px;
+font-family:'Orbitron',sans-serif;
+background:linear-gradient(135deg,#000,#0a0f1c);
+color:#fff;
+min-height:100vh;
+overflow-x:hidden;
 }
 
 /* ================= FUNDO ================= */
 
 #particles-js{
-  position:fixed;
-  width:100%;
-  height:100%;
-  z-index:-1;
+position:fixed;
+width:100%;
+height:100%;
+z-index:-1;
 }
 
-/* ================= NAV PADRÃO ================= */
+/* ================= NAV ================= */
 
-nav{
-  position:fixed;
-  top:0;
-  width:100%;
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  padding:16px;
-  background:rgba(0,0,0,0.85);
-  backdrop-filter:blur(15px);
-  border-bottom:1px solid rgba(0,153,255,0.4);
-  z-index:1000;
-  flex-wrap:wrap;
+.navbar{
+position:fixed;
+top:0;
+width:100%;
+display:flex;
+justify-content:center;
+gap:25px;
+padding:18px;
+background:rgba(0,0,0,0.75);
+backdrop-filter:blur(15px);
+z-index:1000;
 }
 
-nav a{
-  color:#fff;
-  text-decoration:none;
-  font-weight:600;
-  padding:8px 14px;
-  border-radius:25px;
-  transition:0.3s;
-  font-size:14px;
+.navbar a{
+color:#fff;
+text-decoration:none;
+padding:8px 16px;
+border-radius:25px;
+transition:.3s;
+display:flex;
+align-items:center;
+gap:6px;
+font-size:14px;
 }
 
-nav a:hover{
-  background:#00F5FF;
-  color:#000;
-  box-shadow:0 0 15px #00F5FF;
+.navbar a:hover{
+background:#00F5FF;
+color:#000;
+box-shadow:0 0 20px #00F5FF;
 }
 
 /* ================= CONTAINER ================= */
 
 .container{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:150px 20px 120px;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:160px 20px 120px;
 }
 
 /* ================= FORM BOX ================= */
 
 .form-box{
-  background:rgba(15,20,35,0.95);
-  padding:40px;
-  border-radius:25px;
-  width:100%;
-  max-width:420px;
-  box-shadow:0 0 40px rgba(0,153,255,0.35);
-  border:1px solid rgba(0,153,255,0.4);
-  backdrop-filter:blur(10px);
+background:rgba(15,20,35,0.95);
+padding:50px;
+border-radius:30px;
+width:100%;
+max-width:460px;
+box-shadow:0 0 50px rgba(0,153,255,.35);
+border:1px solid rgba(0,153,255,.3);
+transition:.4s;
 }
 
-h2{
-  text-align:center;
-  margin-bottom:15px;
-  font-weight:900;
-  font-size:24px;
+.form-box:hover{
+box-shadow:0 0 70px rgba(0,153,255,.6);
+transform:translateY(-5px);
+}
+
+h1{
+text-align:center;
+margin-bottom:10px;
+font-size:28px;
+background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
 }
 
 .vagas{
-  text-align:center;
-  margin-bottom:25px;
-  font-size:14px;
-  color:#00FFAA;
-  text-shadow:0 0 10px #00FFAA;
+text-align:center;
+margin-bottom:30px;
+font-size:14px;
+color:#00FFAA;
 }
 
 /* ================= INPUTS ================= */
 
 input{
-  width:100%;
-  padding:14px;
-  margin-bottom:18px;
-  border-radius:14px;
-  border:1px solid #0099FF;
-  background:#0b0f18;
-  color:#fff;
-  transition:0.3s;
-  font-size:14px;
+width:100%;
+padding:16px;
+margin-bottom:20px;
+border-radius:16px;
+border:1px solid rgba(0,153,255,.5);
+background:#0b0f18;
+color:#fff;
+font-size:14px;
+transition:.3s;
 }
 
 input:focus{
-  outline:none;
-  box-shadow:0 0 15px rgba(0,153,255,0.6);
-  transform:scale(1.02);
+outline:none;
+box-shadow:0 0 20px rgba(0,153,255,.6);
+transform:scale(1.02);
 }
 
 /* ================= BUTTON ================= */
 
 button{
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:15px;
-  background:linear-gradient(90deg,#0099FF,#00F5FF,#0099FF);
-  background-size:200% auto;
-  color:#fff;
-  font-weight:700;
-  cursor:pointer;
-  animation:btnMove 4s linear infinite;
-  position:relative;
-  transition:0.3s;
+width:100%;
+padding:16px;
+border:none;
+border-radius:20px;
+background:linear-gradient(90deg,#0099FF,#00F5FF,#0099FF);
+background-size:200%;
+color:#000;
+font-weight:800;
+cursor:pointer;
+animation:btnMove 4s linear infinite;
+transition:.3s;
+position:relative;
 }
 
 button:hover{
-  transform:scale(1.04);
-  box-shadow:0 0 25px #00F5FF;
+transform:scale(1.05);
+box-shadow:0 0 35px #00F5FF;
 }
 
 @keyframes btnMove{
-  0%{background-position:0%}
-  100%{background-position:200%}
+0%{background-position:0%}
+100%{background-position:200%}
 }
 
 button:disabled{
-  background:#333;
-  animation:none;
-  cursor:not-allowed;
+background:#333;
+color:#777;
+animation:none;
+cursor:not-allowed;
 }
 
 /* ================= LOADER ================= */
 
 .loader{
-  display:none;
-  position:absolute;
-  right:20px;
-  top:50%;
-  transform:translateY(-50%);
-  width:18px;
-  height:18px;
-  border:3px solid #fff;
-  border-top:3px solid transparent;
-  border-radius:50%;
-  animation:spin 1s linear infinite;
+display:none;
+position:absolute;
+right:20px;
+top:50%;
+transform:translateY(-50%);
+width:18px;
+height:18px;
+border:3px solid #000;
+border-top:3px solid transparent;
+border-radius:50%;
+animation:spin 1s linear infinite;
 }
 
 @keyframes spin{
-  0%{transform:translateY(-50%) rotate(0deg);}
-  100%{transform:translateY(-50%) rotate(360deg);}
+0%{transform:translateY(-50%) rotate(0deg);}
+100%{transform:translateY(-50%) rotate(360deg);}
 }
 
 /* ================= MESSAGE ================= */
 
 #formMsg{
-  margin-top:18px;
-  text-align:center;
-  min-height:20px;
-  font-size:14px;
+margin-top:18px;
+text-align:center;
+min-height:22px;
+font-size:14px;
 }
 
-/* ================= MOBILE APP STYLE ================= */
+/* ================= MOBILE ================= */
 
 @media (max-width:768px){
 
-  body{
-    padding-bottom:120px;
-  }
+body{padding-bottom:100px;}
 
-  nav{
-    top:auto;
-    bottom:0;
-    justify-content:space-around;
-    padding:12px 0;
-    border-top:1px solid rgba(0,153,255,0.4);
-    border-bottom:none;
-  }
+.navbar{
+top:auto;
+bottom:0;
+justify-content:space-around;
+padding:12px 0;
+border-top:1px solid rgba(0,153,255,.4);
+}
 
-  nav a{
-    font-size:12px;
-    padding:4px 6px;
-  }
+.navbar a{
+flex-direction:column;
+font-size:18px;
+}
 
-  .container{
-    padding:100px 15px 140px;
-  }
+.container{
+padding:100px 15px 150px;
+}
 
-  .form-box{
-    padding:25px;
-  }
+.form-box{
+padding:30px;
+}
 
 }
 
@@ -225,20 +224,20 @@ button:disabled{
 <body>
 
 <div id="particles-js"></div>
-<nav class="navbar">
-  <a href="index.html">🏠<span>Início</span></a>
-  <a href="membros.html">👑<span>Membros</span></a>
-  <a href="participantes.html">🎯<span>Participantes</span></a>
-  <a href="videos.html">🎬<span>Vídeos</span></a>
-  <a href="links.html">🔗<span>Links</span></a>
-  <a href="formulario.html">📝<span>Formulário</span></a>
-</nav>
 
+<nav class="navbar">
+<a href="index.html">🏠 Início</a>
+<a href="membros.html">👑 Membros</a>
+<a href="participantes.html">🎯 Participantes</a>
+<a href="videos.html">🎬 Vídeos</a>
+<a href="links.html">🔗 Links</a>
+<a href="formulario.html">📝 Formulário</a>
+</nav>
 
 <div class="container">
 <div class="form-box">
 
-<h2>Inscrição Oficial</h2>
+<h1>Inscrição Oficial</h1>
 <div class="vagas" id="vagasInfo">Carregando vagas...</div>
 
 <form id="signupForm">
@@ -259,6 +258,7 @@ style="margin-top:20px"></div>
 <p id="formMsg"></p>
 
 </form>
+
 </div>
 </div>
 
@@ -298,36 +298,36 @@ document.getElementById("vagasInfo").innerText =
 "Erro ao carregar vagas.";
 }
 }
+
 carregarVagas();
 
 /* ================= ENVIO ================= */
 
-const form = document.getElementById("signupForm");
-const formMsg = document.getElementById("formMsg");
-const loader = document.getElementById("loader");
-const button = form.querySelector("button");
+const form=document.getElementById("signupForm");
+const formMsg=document.getElementById("formMsg");
+const loader=document.getElementById("loader");
+const button=form.querySelector("button");
 
-let enviando = false;
+let enviando=false;
 
-form.addEventListener("submit", async function(e){
+form.addEventListener("submit",async function(e){
 e.preventDefault();
-
 if(enviando) return;
 
 formMsg.innerText="";
 formMsg.style.color="#FF4C4C";
 
-const token = grecaptcha.getResponse();
+const token=grecaptcha.getResponse();
 if(!token){
 formMsg.innerText="Confirme o reCAPTCHA.";
 return;
 }
 
-const telegram = document.getElementById("telegram").value.trim();
-const nome = document.getElementById("nome").value.trim();
-const idade = parseInt(document.getElementById("idade").value);
+const telegram=document.getElementById("telegram").value.trim();
+const nome=document.getElementById("nome").value.trim();
+const idade=parseInt(document.getElementById("idade").value);
 
-if(nome.length < 2){
+if(nome.length<2){
 formMsg.innerText="Nome inválido.";
 return;
 }
@@ -337,23 +337,23 @@ formMsg.innerText="Telegram deve começar com @";
 return;
 }
 
-if(idade < 16){
+if(idade<16){
 formMsg.innerText="Idade mínima 16 anos.";
 return;
 }
 
 loader.style.display="block";
 button.disabled=true;
-enviando = true;
+enviando=true;
 
 try{
-const res = await fetch("https://mindset-elite.onrender.com/inscrever",{
+const res=await fetch("https://mindset-elite.onrender.com/inscrever",{
 method:"POST",
 headers:{ "Content-Type":"application/json" },
-body: JSON.stringify({ nome, idade, telegram, token })
+body:JSON.stringify({ nome, idade, telegram, token })
 });
 
-const data = await res.json();
+const data=await res.json();
 
 if(!res.ok){
 formMsg.innerText=data.erro;
@@ -372,16 +372,13 @@ formMsg.innerText="Erro de conexão.";
 
 loader.style.display="none";
 button.disabled=false;
-enviando = false;
+enviando=false;
 
 });
 
 </script>
+
 <script src="layout.js?v=2"></script>
+
 </body>
 </html>
-
-
-
-
-
