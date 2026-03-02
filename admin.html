@@ -3,26 +3,176 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Premium</title>
+<title>Mindset Elite • Enterprise Suite</title>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
-body{background:#0B1220;color:#fff;font-family:Arial;padding:30px}
-.card{background:#111827;padding:20px;border-radius:10px;margin-bottom:20px}
-button{padding:6px 10px;border:none;border-radius:6px;cursor:pointer}
-.delete{background:red;color:#fff}
+:root{
+--bg:#0A0F1C;
+--sidebar:#111827;
+--card:#141C2E;
+--accent:#635BFF;
+--cyan:#00F5FF;
+--text:#EAF2FF;
+--muted:#94A3B8;
+--danger:#FF4D4D;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:Inter,Arial}
+
+body{
+display:flex;
+background:var(--bg);
+color:var(--text);
+min-height:100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+width:240px;
+background:var(--sidebar);
+padding:30px 20px;
+display:flex;
+flex-direction:column;
+gap:20px;
+border-right:1px solid rgba(255,255,255,.05);
+}
+
+.sidebar h2{
+color:var(--accent);
+margin-bottom:20px;
+}
+
+.nav-btn{
+background:none;
+border:none;
+color:var(--text);
+text-align:left;
+padding:10px;
+border-radius:8px;
+cursor:pointer;
+transition:.2s;
+}
+
+.nav-btn:hover{
+background:rgba(255,255,255,.05);
+}
+
+.main{
+flex:1;
+padding:40px;
+}
+
+/* CARDS */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+margin-bottom:30px;
+}
+
+.card{
+background:var(--card);
+padding:20px;
+border-radius:14px;
+box-shadow:0 10px 30px rgba(0,0,0,.3);
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-4px);
+}
+
+.metric{
+font-size:28px;
+font-weight:bold;
+color:var(--accent);
+}
+
+/* TABLE */
+table{
+width:100%;
+border-collapse:collapse;
+margin-top:20px;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid rgba(255,255,255,.05);
+}
+
+tr:hover{
+background:rgba(99,91,255,.05);
+}
+
+button{
+padding:6px 12px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.delete{
+background:var(--danger);
+color:#fff;
+}
+
+/* LOGS */
+.log{
+font-size:12px;
+color:var(--muted);
+border-bottom:1px solid rgba(255,255,255,.05);
+padding:6px 0;
+}
 </style>
 </head>
+
 <body>
 
-<h1>Admin Dashboard</h1>
-<p id="roleInfo"></p>
+<div class="sidebar">
+<h2>Mindset Suite</h2>
+<button class="nav-btn" onclick="mostrar('dashboard')">Dashboard</button>
+<button class="nav-btn" onclick="mostrar('usuarios')">Usuários</button>
+<button class="nav-btn" onclick="mostrar('logs')">Logs</button>
+<button class="nav-btn" onclick="logout()">Logout</button>
+</div>
 
+<div class="main">
+
+<div id="dashboard">
+
+<div class="grid">
 <div class="card">
-<input type="text" id="search" placeholder="Buscar...">
+<div>Total</div>
+<div class="metric" id="totalMetric">0</div>
 </div>
 
 <div class="card">
-<table width="100%" id="tabela">
+<div>Média diária</div>
+<div class="metric" id="mediaMetric">0</div>
+</div>
+
+<div class="card">
+<div>Crescimento 7d</div>
+<div class="metric" id="growthMetric">0%</div>
+</div>
+</div>
+
+<div class="grid">
+<div class="card"><canvas id="lineChart"></canvas></div>
+<div class="card"><canvas id="barChart"></canvas></div>
+<div class="card"><canvas id="ageChart"></canvas></div>
+</div>
+
+</div>
+
+<div id="usuarios" style="display:none">
+
+<input type="text" id="search" placeholder="Buscar..." style="padding:8px;margin-bottom:10px;width:100%">
+
+<table>
 <thead>
 <tr>
 <th>#</th>
@@ -32,44 +182,27 @@ button{padding:6px 10px;border:none;border-radius:6px;cursor:pointer}
 <th>Ação</th>
 </tr>
 </thead>
-<tbody></tbody>
+<tbody id="tbody"></tbody>
 </table>
+
 </div>
 
-<canvas id="chart"></canvas>
+<div id="logs" style="display:none">
+<h3>Logs Administrativos</h3>
+<div id="logList"></div>
+</div>
+
+</div>
 
 <script>
 let token=sessionStorage.getItem("adminToken");
 let role=sessionStorage.getItem("adminRole");
 let lista=[];
-let chart;
+let lineChart,barChart,ageChart;
 
-/* LOGIN SIMPLES */
-if(!token){
-let senha=prompt("Senha admin:");
-fetch("https://mindset-elite.onrender.com/admin/login",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({senha})
-})
-.then(r=>r.json())
-.then(data=>{
-if(data.token){
-sessionStorage.setItem("adminToken",data.token);
-sessionStorage.setItem("adminRole",data.role);
-location.reload();
-}else{
-alert("Login inválido");
-location.reload();
-}
-});
-}else{
-document.getElementById("roleInfo").innerText="Nível: "+role;
-}
+if(!token){alert("Login necessário");location.reload();}
 
-/* CARREGAR */
 async function carregar(){
-
 const res=await fetch("https://mindset-elite.onrender.com/admin/inscritos",{
 method:"POST",
 headers:{
@@ -77,36 +210,30 @@ headers:{
 "x-admin-token":token
 }
 });
-
-if(res.status===401){logout();return;}
-
 const data=await res.json();
 lista=data.inscritos;
 render();
-grafico();
+metricas();
+graficos();
 }
 
 carregar();
-
-/* AUTO UPDATE A CADA 10s */
-setInterval(carregar,10000);
-
-/* BUSCA */
-document.getElementById("search").addEventListener("input",render);
+setInterval(carregar,15000);
 
 function render(){
-
-let filtro=document.getElementById("search").value.toLowerCase();
-let tbody=document.querySelector("#tabela tbody");
+let filtro=document.getElementById("search")?.value?.toLowerCase()||"";
+let tbody=document.getElementById("tbody");
+if(!tbody)return;
 tbody.innerHTML="";
 
-lista
-.filter(u=>u.nome.toLowerCase().includes(filtro) || u.telegram.toLowerCase().includes(filtro))
-.forEach((u,i)=>{
+lista.filter(u=>
+u.nome.toLowerCase().includes(filtro)||
+u.telegram.toLowerCase().includes(filtro)
+).forEach((u,i)=>{
 
-let botao = role==="superadmin"
+let botao=role==="superadmin"
 ? `<button class="delete" onclick="excluir('${u.id}')">Excluir</button>`
-: `Sem permissão`;
+: "Sem permissão";
 
 tbody.innerHTML+=`
 <tr>
@@ -119,14 +246,87 @@ tbody.innerHTML+=`
 });
 }
 
-/* EXCLUIR */
-async function excluir(id){
+document.addEventListener("input",e=>{
+if(e.target.id==="search")render();
+});
 
-if(role!=="superadmin"){
-alert("Permissão negada");
-return;
+function metricas(){
+
+let total=lista.length;
+document.getElementById("totalMetric").innerText=total;
+
+let dias={};
+lista.forEach(u=>{
+let d=new Date(u.data).toLocaleDateString();
+dias[d]=(dias[d]||0)+1;
+});
+
+let valores=Object.values(dias);
+let media=(valores.reduce((a,b)=>a+b,0)/valores.length||0).toFixed(1);
+document.getElementById("mediaMetric").innerText=media;
+
+let ult=valores.slice(-7).reduce((a,b)=>a+b,0);
+let ant=valores.slice(-14,-7).reduce((a,b)=>a+b,0);
+let cresc=ant?(((ult-ant)/ant)*100).toFixed(1):0;
+document.getElementById("growthMetric").innerText=cresc+"%";
 }
 
+function graficos(){
+
+let dias={};
+lista.forEach(u=>{
+let d=new Date(u.data).toLocaleDateString();
+dias[d]=(dias[d]||0)+1;
+});
+
+if(lineChart)lineChart.destroy();
+if(barChart)barChart.destroy();
+if(ageChart)ageChart.destroy();
+
+lineChart=new Chart(document.getElementById("lineChart"),{
+type:"line",
+data:{
+labels:Object.keys(dias),
+datasets:[{
+label:"Inscrições",
+data:Object.values(dias),
+borderColor:"#635BFF",
+fill:true,
+backgroundColor:"rgba(99,91,255,.1)"
+}]
+}
+});
+
+barChart=new Chart(document.getElementById("barChart"),{
+type:"bar",
+data:{
+labels:Object.keys(dias),
+datasets:[{
+label:"Inscrições",
+data:Object.values(dias),
+backgroundColor:"#00F5FF"
+}]
+}
+});
+
+let idades={};
+lista.forEach(u=>{
+idades[u.idade]=(idades[u.idade]||0)+1;
+});
+
+ageChart=new Chart(document.getElementById("ageChart"),{
+type:"doughnut",
+data:{
+labels:Object.keys(idades),
+datasets:[{
+data:Object.values(idades),
+backgroundColor:["#635BFF","#00F5FF","#FF4D4D","#00FFAA"]
+}]
+}
+});
+}
+
+async function excluir(id){
 await fetch("https://mindset-elite.onrender.com/admin/excluir",{
 method:"POST",
 headers:{
@@ -135,35 +335,34 @@ headers:{
 },
 body:JSON.stringify({id})
 });
-
 carregar();
 }
 
-/* GRÁFICO */
-function grafico(){
-
-let dias={};
-
-lista.forEach(u=>{
-let dia=new Date(u.data).toLocaleDateString();
-dias[dia]=(dias[dia]||0)+1;
-});
-
-if(chart)chart.destroy();
-
-chart=new Chart(document.getElementById("chart"),{
-type:"line",
-data:{
-labels:Object.keys(dias),
-datasets:[{
-label:"Inscrições por dia",
-data:Object.values(dias),
-borderColor:"#00F5FF",
-backgroundColor:"rgba(0,245,255,.1)",
-fill:true
-}]
+async function carregarLogs(){
+const res=await fetch("https://mindset-elite.onrender.com/admin/logs",{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"x-admin-token":token
 }
 });
+const data=await res.json();
+let div=document.getElementById("logList");
+div.innerHTML="";
+data.logs.forEach(l=>{
+div.innerHTML+=`
+<div class="log">
+${l.data} | ${l.adminRole} | ${l.acao}
+</div>`;
+});
+}
+
+function mostrar(sec){
+document.getElementById("dashboard").style.display="none";
+document.getElementById("usuarios").style.display="none";
+document.getElementById("logs").style.display="none";
+document.getElementById(sec).style.display="block";
+if(sec==="logs")carregarLogs();
 }
 
 function logout(){
