@@ -8,172 +8,222 @@
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-
-body{
-font-family:'Orbitron',sans-serif;
-background:linear-gradient(135deg,#000,#0a0f1c);
-color:#fff;
-overflow-x:hidden;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-/* NAV */
+body{
+  font-family:'Orbitron',sans-serif;
+  background:linear-gradient(135deg,#000,#0a0f1c);
+  color:#fff;
+  overflow-x:hidden;
+  min-height:100vh;
+  padding-bottom:90px;
+}
+
+/* ================= NAV PADRÃO ================= */
+
 nav{
-position:fixed;
-top:0;
-width:100%;
-display:flex;
-justify-content:center;
-gap:20px;
-padding:15px;
-background:rgba(0,0,0,0.85);
-backdrop-filter:blur(15px);
-border-bottom:1px solid rgba(0,153,255,0.4);
-z-index:1000;
-flex-wrap:wrap;
+  position:fixed;
+  top:0;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  padding:16px;
+  background:rgba(0,0,0,0.85);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid rgba(0,153,255,0.4);
+  z-index:1000;
+  flex-wrap:wrap;
 }
 
 nav a{
-color:#fff;
-text-decoration:none;
-padding:8px 14px;
-border-radius:25px;
-transition:0.3s;
-font-size:14px;
+  color:#fff;
+  text-decoration:none;
+  padding:8px 14px;
+  border-radius:25px;
+  transition:0.3s;
+  font-size:14px;
 }
 
 nav a:hover{
-background:#00F5FF;
-color:#000;
-box-shadow:0 0 15px #00F5FF;
+  background:#00F5FF;
+  color:#000;
+  box-shadow:0 0 15px #00F5FF;
 }
 
-/* CONTAINER */
+/* ================= CONTAINER ================= */
+
 .container{
-padding:120px 5% 80px;
-max-width:1400px;
-margin:auto;
+  padding:140px 5% 100px;
+  max-width:1400px;
+  margin:auto;
 }
 
 h1{
-text-align:center;
-margin-bottom:60px;
-font-size:clamp(1.8rem,4vw,2.8rem);
-background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
-background-size:200%;
--webkit-background-clip:text;
--webkit-text-fill-color:transparent;
-animation:shine 6s linear infinite;
+  text-align:center;
+  margin-bottom:60px;
+  font-size:clamp(1.8rem,4vw,2.8rem);
+  background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
+  background-size:200%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:shine 6s linear infinite;
 }
 
 @keyframes shine{
-0%{background-position:0%}
-100%{background-position:200%}
+  0%{background-position:0%}
+  100%{background-position:200%}
 }
 
-/* CANAL CARD */
+/* ================= CANAL ================= */
+
 .channel-box{
-background:rgba(15,20,35,0.95);
-border-radius:25px;
-padding:40px;
-margin-bottom:60px;
-text-align:center;
-box-shadow:0 0 40px rgba(255,0,0,0.3);
-border:1px solid rgba(255,0,0,0.4);
+  background:rgba(15,20,35,0.95);
+  border-radius:25px;
+  padding:40px;
+  margin-bottom:60px;
+  text-align:center;
+  box-shadow:0 0 35px rgba(255,0,0,0.25);
+  border:1px solid rgba(255,0,0,0.4);
+  transition:0.4s;
+}
+
+.channel-box:hover{
+  box-shadow:0 0 60px rgba(255,0,0,0.6);
 }
 
 .channel-thumb{
-width:140px;
-height:140px;
-border-radius:50%;
-margin:auto;
-margin-bottom:20px;
-overflow:hidden;
-border:3px solid #ff0000;
-box-shadow:0 0 25px rgba(255,0,0,0.6);
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  margin:auto;
+  margin-bottom:20px;
+  overflow:hidden;
+  border:3px solid #ff0000;
+  box-shadow:0 0 25px rgba(255,0,0,0.6);
 }
 
 .channel-thumb img{
-width:100%;
-height:100%;
-object-fit:cover;
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
 
 .subscribe-btn{
-display:inline-block;
-margin-top:20px;
-padding:14px 35px;
-border-radius:30px;
-background:linear-gradient(90deg,#ff0000,#ff4444,#ff0000);
-background-size:200%;
-color:#fff;
-text-decoration:none;
-font-weight:700;
-transition:0.4s;
-animation:btnMove 4s linear infinite;
+  display:inline-block;
+  margin-top:20px;
+  padding:14px 35px;
+  border-radius:30px;
+  background:linear-gradient(90deg,#ff0000,#ff4444,#ff0000);
+  background-size:200%;
+  color:#fff;
+  text-decoration:none;
+  font-weight:700;
+  transition:0.4s;
+  animation:btnMove 4s linear infinite;
 }
 
 .subscribe-btn:hover{
-transform:scale(1.08);
-box-shadow:0 0 25px #ff0000;
+  transform:scale(1.08);
+  box-shadow:0 0 25px #ff0000;
 }
 
 @keyframes btnMove{
-0%{background-position:0%}
-100%{background-position:200%}
+  0%{background-position:0%}
+  100%{background-position:200%}
 }
 
-/* GRID */
+/* ================= GRID ================= */
+
 .video-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-gap:30px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:30px;
 }
 
 .video-card{
-background:rgba(15,20,35,0.95);
-border-radius:20px;
-overflow:hidden;
-box-shadow:0 0 25px rgba(0,153,255,0.3);
-transition:0.4s;
+  background:rgba(15,20,35,0.95);
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 0 25px rgba(0,153,255,0.25);
+  transition:0.4s;
 }
 
 .video-card:hover{
-transform:translateY(-6px);
-box-shadow:0 0 40px rgba(0,153,255,0.6);
+  transform:translateY(-8px);
+  box-shadow:0 0 45px rgba(0,153,255,0.6);
 }
 
+/* ================= IFRAME RESPONSIVO ================= */
+
 .video-wrapper{
-position:relative;
-width:100%;
-padding-bottom:177%;
-height:0;
+  position:relative;
+  width:100%;
+  padding-bottom:177%;
+  height:0;
 }
 
 .video-wrapper iframe{
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-border:none;
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  border:none;
 }
 
-@media(max-width:600px){
-.video-grid{gap:20px;}
+/* ================= MOBILE APP STYLE ================= */
+
+@media(max-width:768px){
+
+  body{
+    padding-bottom:120px;
+  }
+
+  nav{
+    top:auto;
+    bottom:0;
+    justify-content:space-around;
+    padding:12px 0;
+    border-top:1px solid rgba(0,153,255,0.4);
+    border-bottom:none;
+  }
+
+  nav a{
+    font-size:12px;
+    padding:4px 6px;
+  }
+
+  .container{
+    padding:80px 15px 130px;
+  }
+
+  h1{
+    margin-bottom:40px;
+  }
+
+  .video-grid{
+    gap:20px;
+  }
+
 }
+
 </style>
 </head>
 
 <body>
 
-<nav>
-<a href="index.html">Início</a>
-<a href="membros.html">Membros</a>
-<a href="participantes.html">Participantes</a>
-<a href="links.html">Links</a>
-<a href="formulario.html">Formulário</a>
-<a href="videos.html">Vídeos</a>
+<nav class="navbar">
+  <a href="index.html">🏠<span>Início</span></a>
+  <a href="membros.html">👑<span>Membros</span></a>
+  <a href="participantes.html">🎯<span>Participantes</span></a>
+  <a href="videos.html">🎬<span>Vídeos</span></a>
+  <a href="links.html">🔗<span>Links</span></a>
+  <a href="formulario.html">📝<span>Formulário</span></a>
 </nav>
 
 <div class="container">
