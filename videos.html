@@ -2,113 +2,156 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Vídeos - Mindset Elite</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --mobile-nav-height:78px;
+  --cyan:#00F5FF;
+}
+
 body{
   font-family:'Orbitron',sans-serif;
   background:#05070d;
   color:#fff;
-  overflow-x:hidden;
   min-height:100vh;
 }
+
+/* ================= NAV ================= */
 .navbar{
   position:fixed;
   top:0;
   width:100%;
   display:flex;
   justify-content:center;
-  gap:25px;
-  padding:18px;
-  background:rgba(0,0,0,0.85);
+  gap:22px;
+  padding:16px;
+  background:rgba(0,0,0,.85);
   backdrop-filter:blur(15px);
   z-index:1000;
 }
+
 .navbar a{
   color:#fff;
   text-decoration:none;
-  padding:8px 16px;
-  border-radius:25px;
-  transition:.3s;
+  padding:8px 14px;
+  border-radius:22px;
+  transition:.25s;
   font-size:14px;
 }
+
 .navbar a:hover{
-  background:#00F5FF;
+  background:var(--cyan);
   color:#000;
-  box-shadow:0 0 20px #00F5FF;
 }
+
+/* ================= CONTAINER ================= */
 .container{
-  padding:150px 5% 120px;
-  max-width:1400px;
+  max-width:1200px;
   margin:auto;
+  padding:150px 20px 120px;
 }
+
 h1{
   text-align:center;
-  margin-bottom:60px;
-  font-size:clamp(1.8rem,4vw,3rem);
-  background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
+  margin-bottom:40px;
+  font-size:clamp(1.6rem,4vw,2.6rem);
+  background:linear-gradient(90deg,var(--cyan),#fff,var(--cyan));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
+
+/* ================= GRID ================= */
 .video-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-  gap:35px;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:25px;
 }
+
+/* ================= CARD ================= */
 .video-card{
-  background:rgba(15,20,35,0.95);
-  border-radius:25px;
+  background:rgba(15,20,35,.95);
+  border-radius:20px;
   overflow:hidden;
-  box-shadow:0 0 30px rgba(0,153,255,.25);
-  transition:.4s;
+  border:1px solid rgba(0,153,255,.25);
+  box-shadow:0 0 25px rgba(0,153,255,.15);
+  transition:.25s;
   opacity:0;
-  transform:translateY(30px);
-  position:relative;
+  transform:translateY(20px);
 }
+
 .video-card.show{
   opacity:1;
   transform:translateY(0);
-  transition:all .8s ease;
 }
+
 .video-card:hover{
-  transform:translateY(-8px);
-  box-shadow:0 0 50px rgba(0,153,255,.7);
+  transform:translateY(-6px);
+  box-shadow:0 0 40px rgba(0,153,255,.35);
 }
+
 .video-wrapper{
   position:relative;
   width:100%;
   padding-bottom:56.25%;
 }
+
 .video-wrapper iframe{
   position:absolute;
   width:100%;
   height:100%;
   border:none;
 }
+
 .video-footer{
-  padding:15px;
+  padding:12px 15px;
   display:flex;
   justify-content:space-between;
   font-size:12px;
-  opacity:.8;
+  opacity:.85;
 }
+
+/* ================= MOBILE ================= */
 @media(max-width:768px){
-  body{padding-bottom:100px;}
+
+  body{
+    padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));
+  }
+
   .navbar{
     top:auto;
     bottom:0;
     justify-content:space-around;
-    padding:12px 0;
-    border-top:1px solid rgba(0,153,255,.4);
+    padding:10px 5px calc(10px + env(safe-area-inset-bottom));
+    border-top:1px solid rgba(0,153,255,.3);
   }
+
+  .navbar a{
+    flex-direction:column;
+    font-size:11px;
+    padding:6px;
+  }
+
   .container{
-    padding:100px 15px 150px;
+    padding:100px 15px 100px;
+  }
+
+  h1{
+    font-size:20px;
+    margin-bottom:30px;
+  }
+
+  .video-grid{
+    gap:18px;
+  }
+
+  .video-footer{
+    font-size:11px;
   }
 }
 </style>
@@ -148,7 +191,7 @@ const videos = [
 "https://youtube.com/shorts/37D3nHE0Eac"
 ];
 
-/* 🔥 CONVERTE AUTOMATICAMENTE SHORTS OU WATCH PARA EMBED */
+/* CONVERTE AUTOMATICAMENTE */
 function converterParaEmbed(url){
   if(url.includes("shorts/")){
     const id = url.split("shorts/")[1].split("?")[0];
@@ -166,7 +209,6 @@ const grid = document.getElementById("videoGrid");
 videos.forEach((link,index)=>{
 
   const embedUrl = converterParaEmbed(link);
-
   const viewsKey = "views_" + embedUrl;
   let views = parseInt(localStorage.getItem(viewsKey)) || 0;
 
@@ -175,10 +217,7 @@ videos.forEach((link,index)=>{
 
   card.innerHTML = `
     <div class="video-wrapper">
-      <iframe loading="lazy"
-      allowfullscreen
-      src="${embedUrl}">
-      </iframe>
+      <iframe loading="lazy" allowfullscreen src="${embedUrl}"></iframe>
     </div>
     <div class="video-footer">
       <span class="views">👁️ ${views} views</span>
@@ -187,8 +226,7 @@ videos.forEach((link,index)=>{
   `;
 
   grid.appendChild(card);
-
-  setTimeout(()=>card.classList.add("show"), index*100);
+  setTimeout(()=>card.classList.add("show"), index*80);
 
   card.addEventListener("click",()=>{
     views++;
@@ -199,8 +237,6 @@ videos.forEach((link,index)=>{
 });
 
 </script>
-
-<script src="layout.v3.js" defer></script>
 
 </body>
 </html>
