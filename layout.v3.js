@@ -21,7 +21,7 @@ if(!getComputedStyle(root).getPropertyValue("--bg-primary")){
    ⚙ CONFIG
 ======================= */
 
-const WEATHER_API_KEY = "SUA_CHAVE_OPENWEATHER_AQUI";
+const WEATHER_API_KEY = "5caa07139301db484fef22221d9243e4";
 const CITY = "Porto Velho";
 
 const THEMES = {
