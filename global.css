@@ -1,19 +1,35 @@
 /* ===============================
-   🔥 MINDSET ELITE CLEAN UI
+   🔥 MINDSET ELITE CLEAN UI v2
 ================================ */
 
 :root{
+
+  /* BACKGROUNDS */
   --bg:#0a0f1c;
   --bg-soft:#111827;
   --card:#1a2336;
 
+  /* PRIMARY */
   --primary:#00e0ff;
   --primary-soft:#00e0ff33;
 
+  /* TEXT */
   --text:#ffffff;
   --text-soft:#cbd5e1;
 
+  /* EXTRA (compatibilidade com suas páginas) */
+  --cyan:#00e0ff;
+  --panel:#1a2336;
+  --stroke:rgba(255,255,255,.08);
+
+  /* SHADOWS */
+  --shadow-1:0 10px 25px rgba(0,0,0,.25);
+  --shadow-2:0 20px 45px rgba(0,224,255,.25);
+
+  /* RADIUS */
   --radius:18px;
+  --radius-lg:18px;
+  --radius-xl:24px;
 }
 
 /* RESET */
@@ -31,6 +47,7 @@ body{
   font-family:'Orbitron',sans-serif;
   background:var(--bg);
   color:var(--text);
+  overflow-x:hidden;
 }
 
 /* ===============================
@@ -85,12 +102,14 @@ body{
   display:flex;
   justify-content:space-around;
   align-items:center;
+  z-index:1000;
 }
 
 .app-footer a{
   color:var(--text-soft);
   text-decoration:none;
   font-size:13px;
+  transition:.2s;
 }
 
 .app-footer a:hover{
