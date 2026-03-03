@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
-<!-- THREE.JS para partículas 3D globais -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
 
 <style>
@@ -17,16 +16,19 @@
 
 :root{
   --mobile-nav-height:78px;
-  --cyan:#00F5FF;
+  --bg-primary:#05070d;
+  --text-primary:#ffffff;
+  --accent:#00F5FF;
   --danger:#FF4D4D;
   --ok:#00FFAA;
 }
 
 body{
   font-family:'Orbitron',sans-serif;
-  color:#fff;
+  color:var(--text-primary);
   overflow-x:hidden;
-  background:transparent; /* Fundo vem do layout global */
+  background:var(--bg-primary);
+  transition:background .4s ease,color .4s ease;
 }
 
 /* NAV */
@@ -44,7 +46,7 @@ body{
 }
 
 .navbar a{
-  color:#fff;
+  color:var(--text-primary);
   text-decoration:none;
   padding:8px 14px;
   border-radius:22px;
@@ -53,7 +55,7 @@ body{
 }
 
 .navbar a:hover{
-  background:var(--cyan);
+  background:var(--accent);
   color:#000;
 }
 
@@ -69,7 +71,7 @@ body{
   padding:8px 12px;
   border-radius:999px;
   background:rgba(0,0,0,.5);
-  border:1px solid rgba(0,153,255,.2);
+  border:1px solid var(--accent);
   font-size:11px;
   z-index:999;
 }
@@ -83,7 +85,7 @@ body{
 .badge{
   padding:4px 8px;
   border-radius:999px;
-  background:rgba(0,245,255,.16);
+  background:rgba(255,255,255,.1);
   font-size:10px;
   font-weight:900;
 }
@@ -94,7 +96,7 @@ body{
   padding:6px 10px;
   border-radius:999px;
   font-weight:900;
-  background:linear-gradient(90deg,var(--cyan),#0099FF);
+  background:linear-gradient(90deg,var(--accent),#0099FF);
   color:#000;
   font-size:11px;
 }
@@ -112,7 +114,7 @@ h2{
   text-align:center;
   font-size:26px;
   margin-bottom:25px;
-  background:linear-gradient(90deg,var(--cyan),#fff,var(--cyan));
+  background:linear-gradient(90deg,var(--accent),#fff,var(--accent));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
@@ -130,15 +132,15 @@ h2{
   padding:22px;
   border-radius:22px;
   text-align:center;
-  border:1px solid rgba(0,153,255,.25);
+  border:1px solid var(--accent);
   transition:.25s;
   position:relative;
-  backdrop-filter:blur(8px);
+  backdrop-filter:blur(10px);
 }
 
 .member-card:hover{
   transform:translateY(-5px);
-  box-shadow:0 0 35px rgba(0,153,255,.35);
+  box-shadow:0 0 35px var(--accent);
 }
 
 .rank{
@@ -147,7 +149,7 @@ h2{
   right:14px;
   font-size:12px;
   font-weight:900;
-  color:var(--cyan);
+  color:var(--accent);
 }
 
 .xp{
@@ -166,7 +168,7 @@ h2{
   margin:auto;
   border-radius:50%;
   overflow:hidden;
-  border:2px solid var(--cyan);
+  border:2px solid var(--accent);
   margin-bottom:14px;
 }
 
@@ -229,7 +231,7 @@ h2{
   <span class="dot" id="liveDot"></span>
   <span id="liveText">Live: offline</span>
   <span class="badge" id="liveBadge">0</span>
-  <button class="btn-mini" onclick="carregarRanking(true)">↻</button>
+  <button class="btn-mini" onclick="carregarRanking()">↻</button>
 </div>
 
 <div class="container">
@@ -259,42 +261,42 @@ async function carregarRanking(){
   grid.innerHTML = "Carregando ranking…";
 
   try{
-    const res = await fetch(RANKING_URL, { cache:"no-store" });
-    if(!res.ok) throw new Error("HTTP " + res.status);
+    const res = await fetch(RANKING_URL,{cache:"no-store"});
+    if(!res.ok) throw new Error();
 
     const data = await res.json();
-    const list = Array.isArray(data?.ranking) ? data.ranking : [];
+    const list = Array.isArray(data?.ranking)?data.ranking:[];
 
-    if(list.length === 0){
-      grid.innerHTML = "Nenhum membro ainda.";
+    if(list.length===0){
+      grid.innerHTML="Nenhum membro ainda.";
       setLive(true);
       return;
     }
 
-    const sorted = list.map(u=>({...u, xp:calcXP(u)}))
-                       .sort((a,b)=>b.xp-a.xp);
+    const sorted=list.map(u=>({...u,xp:calcXP(u)}))
+                     .sort((a,b)=>b.xp-a.xp);
 
-    grid.innerHTML = "";
+    grid.innerHTML="";
 
     sorted.forEach((u,i)=>{
-      const card = document.createElement("div");
+      const card=document.createElement("div");
       card.className="member-card";
-      card.innerHTML = `
+      card.innerHTML=`
         <div class="xp">⚡ XP ${u.xp}</div>
         <div class="rank">#${i+1}</div>
         <div class="avatar-wrapper">
-          <img src="${u.foto ? BACKEND_BASE+"/images/"+u.foto : DEFAULT_AVATAR}">
+          <img src="${u.foto?BACKEND_BASE+"/images/"+u.foto:DEFAULT_AVATAR}">
         </div>
-        <h3>${u.nome || "Sem nome"}</h3>
-        <p>${u.idade || ""} anos</p>
+        <h3>${u.nome||"Sem nome"}</h3>
+        <p>${u.idade||""} anos</p>
       `;
       grid.appendChild(card);
     });
 
     setLive(true);
 
-  }catch(e){
-    grid.innerHTML = "Erro ao carregar ranking.";
+  }catch{
+    grid.innerHTML="Erro ao carregar ranking.";
     setLive(false);
   }
 }
