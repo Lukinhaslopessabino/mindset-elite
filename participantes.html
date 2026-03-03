@@ -5,7 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Participantes - Mindset Elite</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+
+<!-- Three.js para partículas 3D globais -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -19,12 +24,13 @@
 
 body{
   font-family:'Orbitron',sans-serif;
-  background:#05070d;
   color:#fff;
   min-height:100vh;
+  overflow-x:hidden;
+  background:transparent; /* Fundo agora vem do layout global */
 }
 
-/* ================= NAV ================= */
+/* NAV */
 .navbar{
   position:fixed;
   top:0;
@@ -33,7 +39,7 @@ body{
   justify-content:center;
   gap:22px;
   padding:16px;
-  background:rgba(0,0,0,.75);
+  background:rgba(0,0,0,.55);
   backdrop-filter:blur(15px);
   z-index:1000;
 }
@@ -52,11 +58,13 @@ body{
   color:#000;
 }
 
-/* ================= CONTAINER ================= */
+/* CONTAINER */
 .container{
   max-width:900px;
   margin:auto;
   padding:150px 20px 120px;
+  position:relative;
+  z-index:1;
 }
 
 h2{
@@ -68,16 +76,17 @@ h2{
   -webkit-text-fill-color:transparent;
 }
 
-/* ================= CARD ================= */
+/* CARD GLASS */
 .card{
-  background:rgba(15,20,35,.95);
+  background:rgba(15,20,35,.75);
   padding:30px;
   border-radius:25px;
   border:1px solid rgba(0,153,255,.25);
-  box-shadow:0 0 30px rgba(0,153,255,.15);
+  backdrop-filter:blur(12px);
+  box-shadow:0 0 40px rgba(0,153,255,.15);
 }
 
-/* ================= LINHAS ================= */
+/* ROW */
 .row{
   display:flex;
   justify-content:space-between;
@@ -85,7 +94,7 @@ h2{
   padding:14px 0;
   border-bottom:1px solid rgba(255,255,255,.05);
   font-size:14px;
-  transition:.2s;
+  transition:.2s ease;
 }
 
 .row:last-child{
@@ -94,10 +103,10 @@ h2{
 
 .row:hover{
   color:var(--cyan);
-  transform:translateX(5px);
+  transform:translateX(6px);
 }
 
-/* ================= STATUS ================= */
+/* STATUS */
 .status{
   padding:5px 12px;
   border-radius:999px;
@@ -123,7 +132,7 @@ h2{
   border:1px solid var(--danger);
 }
 
-/* ================= VAGAS ================= */
+/* VAGAS */
 .vagas{
   margin-top:25px;
   text-align:center;
@@ -132,7 +141,7 @@ h2{
   color:var(--cyan);
 }
 
-/* ================= MOBILE ================= */
+/* MOBILE */
 @media(max-width:768px){
 
   body{
@@ -215,9 +224,10 @@ h2{
 async function carregarVagas(){
   try{
     const res = await fetch("https://mindset-elite.onrender.com/vagas",{cache:"no-store"});
+    if(!res.ok) throw new Error();
     const data = await res.json();
     document.getElementById("vagasInfo").innerText =
-      "Vagas disponíveis: " + data.vagas;
+      "Vagas disponíveis: " + (data.vagas ?? 0);
   }catch{
     document.getElementById("vagasInfo").innerText =
       "Não foi possível carregar vagas.";
@@ -225,6 +235,8 @@ async function carregarVagas(){
 }
 carregarVagas();
 </script>
+
+<script src="layout.v3.js" defer></script>
 
 </body>
 </html>
