@@ -1,7 +1,6 @@
 /* ======================================================
-   🔥 MINDSET ELITE ULTRA LAYOUT ENGINE v3 (FIXED)
-   Clima real + Partículas dinâmicas + Tema automático
-   Compatível com global.css
+   🔥 MINDSET ELITE ULTRA LAYOUT ENGINE v3 (SAFE DARK)
+   Tema fixo escuro + partículas por clima
    ====================================================== */
 
 const WEATHER_API_KEY = "5caa07139301db484fef22221d9243e4";
@@ -11,59 +10,7 @@ const COUNTRY = "BR";
 document.addEventListener("DOMContentLoaded", async () => {
 
   /* ===============================
-     🎬 TRANSIÇÃO GLOBAL
-  =============================== */
-
-  const transition = document.createElement("div");
-  transition.id = "globalTransition";
-  document.body.appendChild(transition);
-
-  const style = document.createElement("style");
-  style.textContent = `
-    #globalTransition{
-      position:fixed; inset:0;
-      background: radial-gradient(900px 600px at 50% 20%, rgba(0,245,255,.18), transparent 55%),
-                  linear-gradient(135deg, rgba(0,0,0,.92), rgba(0,0,0,.92));
-      backdrop-filter: blur(14px);
-      opacity:0;
-      transform: translateY(10px);
-      pointer-events:none;
-      z-index:99999;
-      transition: opacity .28s ease, transform .28s ease;
-    }
-
-    #globalTransition.show{
-      opacity:1;
-      transform: translateY(0);
-    }
-
-    canvas#particles{
-      position:fixed;
-      inset:0;
-      z-index:-1;
-      pointer-events:none;
-    }
-  `;
-  document.head.appendChild(style);
-
-  const go = (href) => {
-    transition.classList.add("show");
-    setTimeout(() => window.location.href = href, 220);
-  };
-
-  document.querySelectorAll("a").forEach(a=>{
-    a.addEventListener("click",(e)=>{
-      if(a.origin !== location.origin) return;
-      if(a.target === "_blank") return;
-      e.preventDefault();
-      go(a.href);
-    });
-  });
-
-  requestAnimationFrame(()=> transition.classList.remove("show"));
-
-  /* ===============================
-     🌦 CLIMA REAL
+     🌦 CLIMA (apenas para partículas)
   =============================== */
 
   let weatherMain = "Clear";
@@ -81,22 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   /* ===============================
-     🕒 TEMA BASEADO NA HORA
-     (Integrado ao global.css)
-  =============================== */
-
-  const hour = new Date().getHours();
-
-  if(hour >= 6 && hour < 18){
-    document.documentElement.style.setProperty("--bg0","#000814");
-    document.documentElement.style.setProperty("--bg1","#0f172a");
-  }else{
-    document.documentElement.style.setProperty("--bg0","#000000");
-    document.documentElement.style.setProperty("--bg1","#050505");
-  }
-
-  /* ===============================
-     🌈 CORES BASEADAS NO CLIMA
+     🎨 COR APENAS DAS PARTÍCULAS
   =============================== */
 
   let particleColor = "#00f5ff";
@@ -110,25 +42,25 @@ document.addEventListener("DOMContentLoaded", async () => {
       particleColor = "#94a3b8";
       break;
     case "Clear":
-      particleColor = "#facc15";
+      particleColor = "#00f5ff"; // mantém ciano
       break;
     case "Thunderstorm":
       particleColor = "#a855f7";
       break;
-    default:
-      particleColor = "#00f5ff";
   }
 
-  document.documentElement.style.setProperty("--accent", particleColor);
-  document.documentElement.style.setProperty("--cyan", particleColor);
-
   /* ===============================
-     ✨ PARTÍCULAS DINÂMICAS
+     ✨ PARTÍCULAS
   =============================== */
 
   const canvas = document.createElement("canvas");
   canvas.id = "particles";
   document.body.appendChild(canvas);
+
+  canvas.style.position = "fixed";
+  canvas.style.inset = "0";
+  canvas.style.zIndex = "-1";
+  canvas.style.pointerEvents = "none";
 
   const ctx = canvas.getContext("2d");
 
@@ -141,9 +73,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   window.addEventListener("resize", resize);
 
   const particles = [];
-  const PARTICLE_COUNT = 80;
+  const COUNT = 80;
 
-  for(let i=0;i<PARTICLE_COUNT;i++){
+  for(let i=0;i<COUNT;i++){
     particles.push({
       x: Math.random()*canvas.width,
       y: Math.random()*canvas.height,
@@ -155,7 +87,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function animate(){
     ctx.clearRect(0,0,canvas.width,canvas.height);
-
     ctx.fillStyle = particleColor;
 
     particles.forEach(p=>{
