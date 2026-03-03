@@ -10,9 +10,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
-<!-- LIBS -->
+<!-- THREE.JS para 3D global -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -23,9 +22,9 @@
 
 body{
   font-family:'Orbitron',sans-serif;
-  background:#000;
   color:#fff;
   overflow-x:hidden;
+  background:transparent; /* agora o fundo vem do layout premium */
 }
 
 /* LOADER */
@@ -60,7 +59,7 @@ body{
   justify-content:center;
   gap:25px;
   padding:18px;
-  background:rgba(0,0,0,0.75);
+  background:rgba(0,0,0,0.55);
   backdrop-filter:blur(15px);
   z-index:1000;
 }
@@ -92,6 +91,8 @@ body{
   align-items:center;
   text-align:center;
   padding:120px 20px 60px;
+  position:relative;
+  z-index:1;
 }
 
 .hero h1{
@@ -136,6 +137,8 @@ body{
 section{
   padding:120px 10%;
   text-align:center;
+  position:relative;
+  z-index:1;
 }
 
 section h2{
@@ -148,14 +151,6 @@ section p{
   max-width:700px;
   margin:auto;
   opacity:.85;
-}
-
-/* CANVAS */
-canvas{
-  position:fixed;
-  top:0;
-  left:0;
-  z-index:-1;
 }
 
 /* MOBILE */
@@ -205,47 +200,40 @@ canvas{
 <h1>LOADING MINDSET...</h1>
 </div>
 
-<canvas id="bg3d"></canvas>
-
 <nav class="navbar">
-  <a href="index.html">🏠<span>Início</span></a>
-  <a href="membros.html">👑<span>Membros</span></a>
-  <a href="participantes.html">🎯<span>Participantes</span></a>
-  <a href="videos.html">🎬<span>Vídeos</span></a>
-  <a href="links.html">🔗<span>Links</span></a>
-  <a href="formulario.html">📝<span>Formulário</span></a>
+  <a href="index.html">🏠 <span>Início</span></a>
+  <a href="membros.html">👑 <span>Membros</span></a>
+  <a href="participantes.html">🎯 <span>Participantes</span></a>
+  <a href="videos.html">🎬 <span>Vídeos</span></a>
+  <a href="links.html">🔗 <span>Links</span></a>
+  <a href="formulario.html">📝 <span>Formulário</span></a>
 </nav>
 
 <div class="hero">
-<h1>Mindset Elite</h1>
-<p>Elite não nasce. Elite se constrói.</p>
-<a href="formulario.html" class="cta-btn">Entrar para a Elite</a>
+  <h1>Mindset Elite</h1>
+  <p>Elite não nasce. Elite se constrói.</p>
+  <a href="formulario.html" class="cta-btn">Entrar para a Elite</a>
 </div>
 
 <section>
-<h2>Mentalidade Global</h2>
-<p>
-Construindo uma elite com visão internacional.
-Networking forte, crescimento real e mentalidade de alto nível.
-</p>
+  <h2>Mentalidade Global</h2>
+  <p>
+  Construindo uma elite com visão internacional.
+  Networking forte, crescimento real e mentalidade de alto nível.
+  </p>
 </section>
 
-<!-- LOADER FIX DEFINITIVO -->
+<!-- Loader seguro -->
 <script>
 window.addEventListener("load", function(){
-
   const loader = document.getElementById("loader");
   if(!loader) return;
-
-  loader.style.opacity = "0";
-
-  setTimeout(()=>{
-    loader.style.display = "none";
-  }, 600);
-
+  loader.style.opacity="0";
+  setTimeout(()=>loader.style.display="none",500);
 });
 </script>
 
+<!-- Sistema Premium Global -->
 <script src="layout.v3.js" defer></script>
 
 </body>
