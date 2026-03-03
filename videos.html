@@ -11,7 +11,6 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-
 body{
   font-family:'Orbitron',sans-serif;
   background:#05070d;
@@ -19,8 +18,6 @@ body{
   overflow-x:hidden;
   min-height:100vh;
 }
-
-/* NAV */
 .navbar{
   position:fixed;
   top:0;
@@ -33,7 +30,6 @@ body{
   backdrop-filter:blur(15px);
   z-index:1000;
 }
-
 .navbar a{
   color:#fff;
   text-decoration:none;
@@ -42,44 +38,29 @@ body{
   transition:.3s;
   font-size:14px;
 }
-
 .navbar a:hover{
   background:#00F5FF;
   color:#000;
   box-shadow:0 0 20px #00F5FF;
 }
-
-/* CONTAINER */
 .container{
   padding:150px 5% 120px;
   max-width:1400px;
   margin:auto;
 }
-
 h1{
   text-align:center;
   margin-bottom:60px;
   font-size:clamp(1.8rem,4vw,3rem);
   background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
-  background-size:200%;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
-  animation:shine 6s linear infinite;
 }
-
-@keyframes shine{
-  0%{background-position:0%}
-  100%{background-position:200%}
-}
-
-/* GRID */
 .video-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
   gap:35px;
 }
-
-/* CARD */
 .video-card{
   background:rgba(15,20,35,0.95);
   border-radius:25px;
@@ -90,57 +71,26 @@ h1{
   transform:translateY(30px);
   position:relative;
 }
-
 .video-card.show{
   opacity:1;
   transform:translateY(0);
   transition:all .8s ease;
 }
-
 .video-card:hover{
   transform:translateY(-8px);
   box-shadow:0 0 50px rgba(0,153,255,.7);
 }
-
 .video-wrapper{
   position:relative;
   width:100%;
   padding-bottom:56.25%;
 }
-
 .video-wrapper iframe{
   position:absolute;
   width:100%;
   height:100%;
   border:none;
 }
-
-.badge-destaque{
-  position:absolute;
-  top:15px;
-  left:15px;
-  background:gold;
-  color:#000;
-  padding:6px 12px;
-  border-radius:20px;
-  font-weight:bold;
-  font-size:12px;
-  box-shadow:0 0 15px gold;
-}
-
-.overlay-launch{
-  position:absolute;
-  inset:0;
-  background:rgba(0,0,0,.85);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  font-weight:bold;
-  font-size:14px;
-  text-align:center;
-}
-
 .video-footer{
   padding:15px;
   display:flex;
@@ -148,8 +98,6 @@ h1{
   font-size:12px;
   opacity:.8;
 }
-
-/* MOBILE */
 @media(max-width:768px){
   body{padding-bottom:100px;}
   .navbar{
@@ -178,94 +126,75 @@ h1{
 </nav>
 
 <div class="container">
-
 <h1>Plataforma Oficial de Vídeos 🚀</h1>
-
 <div class="video-grid" id="videoGrid"></div>
-
 </div>
 
 <script>
 
-/* ========================================
-   CONFIGURE AQUI SEUS VÍDEOS
-======================================== */
-
+/* 🔥 COLE LINK NORMAL DO YOUTUBE AQUI */
 const videos = [
-{
-  url:"https://www.youtube.com/embed/lS8Sdam5pEA",
-  destaque:true,
-  lancamento:"2026-03-01"
-},
-{
-  url:"https://www.youtube.com/embed/VIDEO2",
-  destaque:false,
-  lancamento:"2026-03-08"
-},
-{
-  url:"https://www.youtube.com/embed/VIDEO3",
-  destaque:false,
-  lancamento:"2026-03-15"
-}
+"https://youtube.com/shorts/lS8Sdam5pEA",
+"https://youtube.com/shorts/v_s2bz8T3a8",
+"https://youtube.com/shorts/g-BJOYE_Zj8",
+"https://youtube.com/shorts/OJMOJnKw77g",
+"https://youtube.com/shorts/NSSgs-AH9vc",
+"https://youtube.com/shorts/pX0lkVI1dkg",
+"https://youtube.com/shorts/CWGaPBbQI6M",
+"https://youtube.com/shorts/QTNoH8Gpho8",
+"https://youtube.com/shorts/lxOMW7GOn44",
+"https://youtube.com/shorts/wYi4Zvc6uuk",
+"https://youtube.com/shorts/tfh5HmCJS0w",
+"https://youtube.com/shorts/37D3nHE0Eac"
 ];
 
-/* ========================================
-   SISTEMA AUTOMÁTICO
-======================================== */
+/* 🔥 CONVERTE AUTOMATICAMENTE SHORTS OU WATCH PARA EMBED */
+function converterParaEmbed(url){
+  if(url.includes("shorts/")){
+    const id = url.split("shorts/")[1].split("?")[0];
+    return "https://www.youtube.com/embed/" + id;
+  }
+  if(url.includes("watch?v=")){
+    const id = url.split("watch?v=")[1].split("&")[0];
+    return "https://www.youtube.com/embed/" + id;
+  }
+  return url;
+}
 
 const grid = document.getElementById("videoGrid");
-const hoje = new Date();
 
-videos.forEach((video,index)=>{
+videos.forEach((link,index)=>{
 
-  const lancamentoData = new Date(video.lancamento);
-  const liberado = hoje >= lancamentoData;
+  const embedUrl = converterParaEmbed(link);
 
-  const viewsKey = "views_" + video.url;
+  const viewsKey = "views_" + embedUrl;
   let views = parseInt(localStorage.getItem(viewsKey)) || 0;
 
   const card = document.createElement("div");
   card.className="video-card";
 
-  let destaqueHTML = video.destaque ? `<div class="badge-destaque">⭐ Destaque</div>` : "";
-  let overlayHTML = "";
-
-  if(!liberado){
-    overlayHTML = `
-      <div class="overlay-launch">
-        🚀 Lançamento em <br>
-        ${video.lancamento}
-      </div>
-    `;
-  }
-
   card.innerHTML = `
-    ${destaqueHTML}
     <div class="video-wrapper">
-      ${liberado ? `
       <iframe loading="lazy"
       allowfullscreen
-      src="${video.url}">
-      </iframe>` : ``}
+      src="${embedUrl}">
+      </iframe>
     </div>
-    ${overlayHTML}
     <div class="video-footer">
       <span class="views">👁️ ${views} views</span>
-      ${liberado ? `<span style="color:#00FFAA">Disponível</span>` : `<span style="color:#FF4D4D">Em breve</span>`}
+      <span style="color:#00FFAA">Disponível</span>
     </div>
   `;
 
   grid.appendChild(card);
 
-  setTimeout(()=>card.classList.add("show"), index*120);
+  setTimeout(()=>card.classList.add("show"), index*100);
 
-  if(liberado){
-    card.addEventListener("click",()=>{
-      views++;
-      localStorage.setItem(viewsKey, views);
-      card.querySelector(".views").innerText = "👁️ " + views + " views";
-    });
-  }
+  card.addEventListener("click",()=>{
+    views++;
+    localStorage.setItem(viewsKey, views);
+    card.querySelector(".views").innerText = "👁️ " + views + " views";
+  });
 
 });
 
