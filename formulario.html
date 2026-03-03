@@ -2,96 +2,95 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inscrição - Mindset Elite</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="global.css">
 
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
 
 <style>
 
-/* CENTRALIZAÇÃO */
-.form-wrapper{
+/* ESPAÇAMENTO */
+.container{
+  padding-top:150px;
   display:flex;
   justify-content:center;
-  align-items:center;
-  min-height:70vh;
 }
 
 /* FORM BOX */
 .form-box{
-  background:var(--panel);
-  backdrop-filter:blur(18px);
+  background:#111827;
   padding:50px;
-  border-radius:var(--radius-xl);
+  border-radius:24px;
   width:100%;
-  max-width:480px;
-  border:1px solid var(--stroke);
-  box-shadow:var(--shadow-1);
-  transition:.3s;
+  max-width:500px;
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:0 25px 80px rgba(0,0,0,.5);
+  transition:.3s ease;
 }
 
 .form-box:hover{
-  box-shadow:var(--shadow-2);
+  box-shadow:0 30px 100px rgba(0,0,0,.7);
 }
 
 /* TÍTULO */
 .page-title{
   text-align:center;
+  font-size:30px;
+  font-weight:900;
   margin-bottom:10px;
-  font-size:26px;
+  color:#00e0ff;
 }
 
 /* VAGAS */
 .vagas{
   text-align:center;
-  margin-bottom:25px;
-  font-size:14px;
-  color:#00FFAA;
+  margin-bottom:30px;
+  font-size:15px;
+  font-weight:600;
+  color:#00ffaa;
 }
 
 /* INPUTS */
 input{
   width:100%;
-  padding:15px;
-  margin-bottom:16px;
+  padding:16px;
+  margin-bottom:18px;
   border-radius:14px;
-  border:1px solid var(--stroke);
-  background:#0c1220;
+  border:1px solid rgba(255,255,255,.08);
+  background:#0f172a;
   color:#fff;
   font-size:14px;
-  transition:.2s;
+  transition:.2s ease;
 }
 
 input:focus{
   outline:none;
-  box-shadow:0 0 18px var(--cyan);
-  border-color:var(--cyan);
+  border-color:#00e0ff;
+  box-shadow:0 0 20px rgba(0,224,255,.3);
 }
 
 /* BOTÃO */
 button{
   width:100%;
-  padding:15px;
+  padding:16px;
   border:none;
   border-radius:18px;
   font-weight:900;
-  background:linear-gradient(90deg,var(--cyan),#00aaff,var(--cyan));
+  font-size:15px;
+  background:#00e0ff;
   color:#000;
   cursor:pointer;
-  transition:.3s;
+  transition:.2s ease;
   position:relative;
 }
 
 button:hover{
-  transform:translateY(-2px);
-  box-shadow:var(--shadow-2);
+  transform:translateY(-3px);
 }
 
 button:disabled{
@@ -121,7 +120,7 @@ button:disabled{
 }
 
 #formMsg{
-  margin-top:14px;
+  margin-top:18px;
   text-align:center;
   min-height:22px;
   font-size:14px;
@@ -130,9 +129,21 @@ button:disabled{
 .honeypot{display:none;}
 
 @media(max-width:768px){
+
+  .container{
+    padding-top:120px;
+    padding-left:15px;
+    padding-right:15px;
+  }
+
   .form-box{
     padding:30px;
   }
+
+  .page-title{
+    font-size:22px;
+  }
+
 }
 
 </style>
@@ -140,7 +151,6 @@ button:disabled{
 
 <body>
 
-<!-- NAV DESKTOP -->
 <nav class="navbar">
   <a href="index.html">🏠 Início</a>
   <a href="membros.html">👑 Membros</a>
@@ -152,43 +162,38 @@ button:disabled{
 
 <div class="container">
 
-  <div class="form-wrapper">
+  <div class="form-box">
 
-    <div class="form-box">
+    <h1 class="page-title">Inscrição Oficial</h1>
 
-      <h1 class="holo-title page-title">Inscrição Oficial</h1>
+    <div class="vagas" id="vagasInfo">Carregando vagas...</div>
 
-      <div class="vagas" id="vagasInfo">Carregando vagas...</div>
+    <form id="signupForm">
 
-      <form id="signupForm">
+      <input type="text" id="telegram" placeholder="@SeuTelegram" required>
+      <input type="text" id="nome" placeholder="Seu Nome" required>
+      <input type="number" id="idade" placeholder="Sua Idade" required>
 
-        <input type="text" id="telegram" placeholder="@SeuTelegram" required>
-        <input type="text" id="nome" placeholder="Seu Nome" required>
-        <input type="number" id="idade" placeholder="Sua Idade" required>
+      <input type="text" id="hp" class="honeypot" autocomplete="off">
 
-        <input type="text" id="hp" class="honeypot" autocomplete="off">
+      <button type="submit">
+        Enviar Inscrição
+        <div class="loader" id="loader"></div>
+      </button>
 
-        <button type="submit">
-          Enviar Inscrição
-          <div class="loader" id="loader"></div>
-        </button>
+      <div style="margin-top:20px;text-align:center">
+        <div class="g-recaptcha"
+        data-sitekey="6LefpnEsAAAAAE46Eao6qyQQL_6nGBT08Dc3pGTo"></div>
+      </div>
 
-        <div style="margin-top:20px;text-align:center">
-          <div class="g-recaptcha"
-          data-sitekey="6LefpnEsAAAAAE46Eao6qyQQL_6nGBT08Dc3pGTo"></div>
-        </div>
+      <p id="formMsg"></p>
 
-        <p id="formMsg"></p>
-
-      </form>
-
-    </div>
+    </form>
 
   </div>
 
 </div>
 
-<!-- FOOTER MOBILE -->
 <div class="app-footer">
   <a href="index.html">🏠<br>Início</a>
   <a href="membros.html">👑<br>Membros</a>
@@ -201,77 +206,90 @@ const pageLoadedAt = Date.now();
 
 async function carregarVagas(){
   try{
-    const res=await fetch("https://mindset-elite.onrender.com/vagas",{cache:"no-store"});
-    const data=await res.json();
-    const el=document.getElementById("vagasInfo");
-    el.innerText = data.vagas <= 0 ? "❌ Vagas esgotadas" : "Vagas restantes: "+data.vagas;
+    const res = await fetch("https://mindset-elite.onrender.com/vagas",{cache:"no-store"});
+    const data = await res.json();
+    const el = document.getElementById("vagasInfo");
+    el.innerText = data.vagas <= 0 
+      ? "❌ Vagas esgotadas"
+      : "Vagas restantes: " + data.vagas;
   }catch{
-    document.getElementById("vagasInfo").innerText="Erro ao carregar vagas.";
+    document.getElementById("vagasInfo").innerText = "Erro ao carregar vagas.";
   }
 }
 carregarVagas();
 
-const form=document.getElementById("signupForm");
-const formMsg=document.getElementById("formMsg");
-const loader=document.getElementById("loader");
-const button=form.querySelector("button");
+const form = document.getElementById("signupForm");
+const formMsg = document.getElementById("formMsg");
+const loader = document.getElementById("loader");
+const button = form.querySelector("button");
 
-let enviando=false;
+let enviando = false;
 
-form.addEventListener("submit",async(e)=>{
-e.preventDefault();
-if(enviando) return;
+form.addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  if(enviando) return;
 
-formMsg.innerText="";
-formMsg.style.color="#FF4C4C";
+  formMsg.innerText="";
+  formMsg.style.color="#ff4c4c";
 
-const token=grecaptcha.getResponse();
-if(!token){
-  formMsg.innerText="Confirme o reCAPTCHA.";
-  return;
-}
+  const token = grecaptcha.getResponse();
+  if(!token){
+    formMsg.innerText="Confirme o reCAPTCHA.";
+    return;
+  }
 
-const telegram=document.getElementById("telegram").value.trim();
-const nome=document.getElementById("nome").value.trim();
-const idade=parseInt(document.getElementById("idade").value);
-const hp=document.getElementById("hp").value;
+  const telegram=document.getElementById("telegram").value.trim();
+  const nome=document.getElementById("nome").value.trim();
+  const idade=parseInt(document.getElementById("idade").value);
+  const hp=document.getElementById("hp").value;
 
-if(hp){ return; }
+  if(hp) return;
 
-if(nome.length<2){ formMsg.innerText="Nome inválido."; return; }
-if(!telegram.startsWith("@")){ formMsg.innerText="Telegram deve começar com @"; return; }
-if(idade<16){ formMsg.innerText="Idade mínima 16 anos."; return; }
+  if(nome.length<2){
+    formMsg.innerText="Nome inválido.";
+    return;
+  }
 
-loader.style.display="block";
-button.disabled=true;
-enviando=true;
+  if(!telegram.startsWith("@")){
+    formMsg.innerText="Telegram deve começar com @";
+    return;
+  }
 
-try{
-const res=await fetch("https://mindset-elite.onrender.com/inscrever",{
-method:"POST",
-headers:{ "Content-Type":"application/json" },
-body:JSON.stringify({ nome, idade, telegram, token, hp, ts:pageLoadedAt })
-});
+  if(idade<16){
+    formMsg.innerText="Idade mínima 16 anos.";
+    return;
+  }
 
-const data=await res.json();
+  loader.style.display="block";
+  button.disabled=true;
+  enviando=true;
 
-if(!res.ok){
-  formMsg.innerText=data.erro || "Erro no envio.";
-}else{
-  formMsg.style.color="#00FFAA";
-  formMsg.innerText="✅ Inscrição confirmada!";
-  form.reset();
-  grecaptcha.reset();
-  carregarVagas();
-}
+  try{
+    const res=await fetch("https://mindset-elite.onrender.com/inscrever",{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({ nome, idade, telegram, token, hp, ts:pageLoadedAt })
+    });
 
-}catch{
-  formMsg.innerText="Erro de conexão.";
-}
+    const data=await res.json();
 
-loader.style.display="none";
-button.disabled=false;
-enviando=false;
+    if(!res.ok){
+      formMsg.innerText=data.erro || "Erro no envio.";
+    }else{
+      formMsg.style.color="#00ffaa";
+      formMsg.innerText="✅ Inscrição confirmada!";
+      form.reset();
+      grecaptcha.reset();
+      carregarVagas();
+    }
+
+  }catch{
+    formMsg.innerText="Erro de conexão.";
+  }
+
+  loader.style.display="none";
+  button.disabled=false;
+  enviando=false;
 });
 </script>
 
