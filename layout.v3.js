@@ -1,3 +1,4 @@
+alert("layout rodando");
 document.addEventListener("DOMContentLoaded", () => {
 
 /* =========================================================
