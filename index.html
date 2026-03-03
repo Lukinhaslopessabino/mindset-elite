@@ -10,27 +10,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
-<!-- THREE.JS -->
+<link rel="stylesheet" href="global.css">
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-
-/* Variáveis obrigatórias para tema dinâmico */
-:root{
-  --mobile-nav-height:78px;
-  --bg-primary:#05070d;
-  --text-primary:#ffffff;
-  --accent:#00F5FF;
-}
-
-body{
-  font-family:'Orbitron',sans-serif;
-  color:var(--text-primary);
-  overflow-x:hidden;
-  background:var(--bg-primary);
-  transition:background .4s ease,color .4s ease;
-}
 
 /* LOADER */
 #loader{
@@ -55,63 +39,18 @@ body{
   100%{opacity:.4}
 }
 
-/* NAV */
-.navbar{
-  position:fixed;
-  top:0;
-  width:100%;
-  display:flex;
-  justify-content:center;
-  gap:25px;
-  padding:18px;
-  background:rgba(0,0,0,0.55);
-  backdrop-filter:blur(15px);
-  z-index:1000;
-}
-
-.navbar a{
-  color:var(--text-primary);
-  text-decoration:none;
-  padding:8px 16px;
-  border-radius:25px;
-  transition:.3s;
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-size:14px;
-}
-
-.navbar a:hover{
-  background:var(--accent);
-  color:#000;
-  box-shadow:0 0 20px var(--accent);
-}
-
 /* HERO */
 .hero{
-  min-height:100vh;
+  min-height:80vh;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
   text-align:center;
-  padding:120px 20px 60px;
-  position:relative;
-  z-index:1;
 }
 
 .hero h1{
   font-size:clamp(2.5rem,6vw,4.5rem);
-  background:linear-gradient(90deg,var(--accent),#fff,var(--accent));
-  background-size:200%;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:glowMove 6s linear infinite;
-}
-
-@keyframes glowMove{
-  0%{background-position:0%}
-  100%{background-position:200%}
 }
 
 .hero p{
@@ -127,29 +66,25 @@ body{
   border-radius:40px;
   text-decoration:none;
   font-weight:700;
-  background:linear-gradient(90deg,var(--accent),#0099FF);
+  background:linear-gradient(90deg,var(--cyan),#0099FF);
   color:#000;
   transition:.4s;
-  box-shadow:0 0 25px var(--accent);
+  box-shadow:var(--shadow-2);
 }
 
 .cta-btn:hover{
   transform:scale(1.08);
-  box-shadow:0 0 40px var(--accent);
 }
 
-/* SECTION */
 section{
-  padding:120px 10%;
+  margin-top:80px;
   text-align:center;
-  position:relative;
-  z-index:1;
 }
 
 section h2{
   font-size:2rem;
-  margin-bottom:25px;
-  color:var(--accent);
+  margin-bottom:20px;
+  color:var(--cyan);
 }
 
 section p{
@@ -158,43 +93,6 @@ section p{
   opacity:.85;
 }
 
-/* MOBILE */
-@media (max-width:768px){
-
-  body{
-    padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));
-  }
-
-  .navbar{
-    top:auto;
-    bottom:0;
-    justify-content:space-around;
-    padding:10px 5px calc(10px + env(safe-area-inset-bottom));
-    border-top:1px solid rgba(255,255,255,.1);
-  }
-
-  .navbar a{
-    flex-direction:column;
-    font-size:11px;
-    padding:6px;
-  }
-
-  .hero{
-    padding:90px 15px 60px;
-  }
-
-  .hero h1{
-    font-size:26px;
-  }
-
-  .hero p{
-    font-size:14px;
-  }
-
-  section{
-    padding:80px 20px;
-  }
-}
 </style>
 </head>
 
@@ -204,6 +102,7 @@ section p{
 <h1>LOADING MINDSET...</h1>
 </div>
 
+<!-- NAV DESKTOP -->
 <nav class="navbar">
   <a href="index.html">🏠 Início</a>
   <a href="membros.html">👑 Membros</a>
@@ -213,19 +112,32 @@ section p{
   <a href="formulario.html">📝 Formulário</a>
 </nav>
 
-<div class="hero">
-  <h1>Mindset Elite</h1>
-  <p>Elite não nasce. Elite se constrói.</p>
-  <a href="formulario.html" class="cta-btn">Entrar para a Elite</a>
+<!-- CONTAINER GLOBAL -->
+<div class="container">
+
+  <div class="hero">
+    <h1 class="holo-title">Mindset Elite</h1>
+    <p>Elite não nasce. Elite se constrói.</p>
+    <a href="formulario.html" class="cta-btn">Entrar para a Elite</a>
+  </div>
+
+  <section>
+    <h2>Mentalidade Global</h2>
+    <p>
+      Construindo uma elite com visão internacional.
+      Networking forte, crescimento real e mentalidade de alto nível.
+    </p>
+  </section>
+
 </div>
 
-<section>
-  <h2>Mentalidade Global</h2>
-  <p>
-  Construindo uma elite com visão internacional.
-  Networking forte, crescimento real e mentalidade de alto nível.
-  </p>
-</section>
+<!-- FOOTER MOBILE -->
+<div class="app-footer">
+  <a href="index.html">🏠<br>Início</a>
+  <a href="membros.html">👑<br>Membros</a>
+  <a href="videos.html">🎬<br>Vídeos</a>
+  <a href="links.html">🔗<br>Links</a>
+</div>
 
 <script>
 window.addEventListener("load", function(){
