@@ -2,10 +2,9 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Links Oficiais - Mindset Elite</title>
 
-<!-- PERFORMANCE -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
@@ -14,6 +13,11 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --mobile-nav-height:78px;
+  --cyan:#00F5FF;
+}
 
 body{
   font-family:'Orbitron',sans-serif;
@@ -24,7 +28,6 @@ body{
 }
 
 /* ================= NAV ================= */
-
 .navbar{
   position:fixed;
   top:0;
@@ -48,13 +51,12 @@ body{
 }
 
 .navbar a:hover{
-  background:#00F5FF;
+  background:var(--cyan);
   color:#000;
-  box-shadow:0 0 20px #00F5FF;
+  box-shadow:0 0 20px var(--cyan);
 }
 
 /* ================= FUNDO ================= */
-
 #particles-js{
   position:fixed;
   inset:0;
@@ -62,88 +64,104 @@ body{
 }
 
 /* ================= CONTAINER ================= */
-
 .container{
-  max-width:700px;
+  max-width:650px;
   margin:auto;
   padding:150px 20px 120px;
 }
 
 h1{
-  margin-bottom:70px;
-  font-size:clamp(1.8rem,4vw,2.5rem);
-  border-left:5px solid #00F5FF;
+  margin-bottom:50px;
+  font-size:clamp(1.6rem,4vw,2.2rem);
+  border-left:4px solid var(--cyan);
   padding-left:15px;
-  letter-spacing:1px;
 }
 
 /* ================= LINK CARD ================= */
-
 .link-card{
   display:flex;
   align-items:center;
-  gap:20px;
-  padding:24px;
-  margin-bottom:35px;
-  border-radius:30px;
+  gap:18px;
+  padding:22px;
+  margin-bottom:25px;
+  border-radius:22px;
   border:1px solid rgba(0,153,255,.25);
   background:rgba(15,20,35,.95);
   text-decoration:none;
   color:#fff;
-  box-shadow:0 0 35px rgba(0,153,255,.15);
-  transition:.4s ease;
+  box-shadow:0 0 25px rgba(0,153,255,.15);
+  transition:.25s ease;
   opacity:0;
-  transform:translateY(30px);
+  transform:translateY(20px);
 }
 
 .link-card.show{
   opacity:1;
   transform:translateY(0);
-  transition:all .8s ease;
 }
 
 .link-card img{
-  width:38px;
-  height:38px;
+  width:34px;
+  height:34px;
   object-fit:contain;
 }
 
 .link-card span{
   font-weight:700;
   letter-spacing:1px;
-  font-size:16px;
+  font-size:15px;
 }
 
 .link-card:hover{
-  transform:translateY(-10px);
-  box-shadow:0 0 60px rgba(0,245,255,.6);
+  transform:translateY(-6px);
+  box-shadow:0 0 40px rgba(0,245,255,.5);
   background:linear-gradient(90deg,#00F5FF,#0099FF);
   color:#000;
 }
 
 /* ================= MOBILE ================= */
-
 @media (max-width:768px){
 
-  body{padding-bottom:100px;}
+  body{
+    padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));
+  }
 
   .navbar{
     top:auto;
     bottom:0;
     justify-content:space-around;
-    padding:12px 0;
-    border-top:1px solid rgba(0,153,255,.4);
+    padding:10px 5px calc(10px + env(safe-area-inset-bottom));
+    border-top:1px solid rgba(0,153,255,.3);
   }
 
   .navbar a{
     flex-direction:column;
-    font-size:18px;
+    font-size:11px;
+    padding:6px;
   }
 
   .container{
-    padding:100px 15px 150px;
+    padding:100px 15px 100px;
   }
 
+  h1{
+    font-size:20px;
+    margin-bottom:35px;
+  }
+
+  .link-card{
+    padding:18px;
+    gap:12px;
+  }
+
+  .link-card img{
+    width:28px;
+    height:28px;
+  }
+
+  .link-card span{
+    font-size:13px;
+  }
 }
 </style>
 </head>
@@ -182,7 +200,7 @@ h1{
 
 </div>
 
-<script defer>
+<script>
 
 /* PARTÍCULAS */
 if(window.innerWidth > 600 && window.particlesJS){
@@ -199,12 +217,10 @@ if(window.innerWidth > 600 && window.particlesJS){
 /* ANIMAÇÃO ENTRADA */
 const cards=document.querySelectorAll(".link-card");
 cards.forEach((card,index)=>{
-  setTimeout(()=>card.classList.add("show"), index*120);
+  setTimeout(()=>card.classList.add("show"), index*100);
 });
 
 </script>
-
-<script src="layout.v3.js" defer></script>
 
 </body>
 </html>
