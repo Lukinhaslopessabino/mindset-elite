@@ -1,96 +1,86 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mindset Elite</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="global.css">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
-
 <style>
-
-/* LOADER */
-#loader{
-  position:fixed;
-  inset:0;
-  background:#000;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:9999;
-  transition:opacity .6s ease;
-}
-
-#loader h1{
-  letter-spacing:3px;
-  animation:pulse 1.5s infinite;
-}
-
-@keyframes pulse{
-  0%{opacity:.4}
-  50%{opacity:1}
-  100%{opacity:.4}
-}
 
 /* HERO */
 .hero{
-  min-height:80vh;
+  min-height:85vh;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
   text-align:center;
+  padding:0 20px;
 }
 
 .hero h1{
-  font-size:clamp(2.5rem,6vw,4.5rem);
+  font-size:clamp(2.8rem,6vw,4.5rem);
+  margin-bottom:20px;
+  color:#ffffff;
 }
 
 .hero p{
-  margin-top:20px;
-  font-size:1.1rem;
-  opacity:.9;
-  max-width:600px;
+  font-size:1.2rem;
+  color:#cbd5e1;
+  max-width:650px;
+  margin-bottom:40px;
 }
 
+/* BOTÃO */
 .cta-btn{
-  margin-top:35px;
-  padding:14px 35px;
-  border-radius:40px;
-  text-decoration:none;
-  font-weight:700;
-  background:linear-gradient(90deg,var(--cyan),#0099FF);
+  display:inline-block;
+  padding:16px 40px;
+  background:#00e0ff;
   color:#000;
-  transition:.4s;
-  box-shadow:var(--shadow-2);
+  border-radius:16px;
+  font-weight:bold;
+  text-decoration:none;
+  transition:.2s ease;
 }
 
 .cta-btn:hover{
-  transform:scale(1.08);
+  transform:translateY(-3px);
 }
 
-section{
+/* SECTION */
+.section{
   margin-top:80px;
   text-align:center;
 }
 
-section h2{
+.section h2{
   font-size:2rem;
   margin-bottom:20px;
-  color:var(--cyan);
+  color:#00e0ff;
 }
 
-section p{
-  max-width:700px;
+.section p{
+  max-width:750px;
   margin:auto;
-  opacity:.85;
+  color:#cbd5e1;
+  font-size:1.05rem;
+}
+
+@media(max-width:768px){
+
+  .hero h1{
+    font-size:2.2rem;
+  }
+
+  .hero p{
+    font-size:1rem;
+  }
+
 }
 
 </style>
@@ -98,11 +88,6 @@ section p{
 
 <body>
 
-<div id="loader">
-<h1>LOADING MINDSET...</h1>
-</div>
-
-<!-- NAV DESKTOP -->
 <nav class="navbar">
   <a href="index.html">🏠 Início</a>
   <a href="membros.html">👑 Membros</a>
@@ -112,41 +97,30 @@ section p{
   <a href="formulario.html">📝 Formulário</a>
 </nav>
 
-<!-- CONTAINER GLOBAL -->
 <div class="container">
 
   <div class="hero">
-    <h1 class="holo-title">Mindset Elite</h1>
+    <h1>Mindset Elite</h1>
     <p>Elite não nasce. Elite se constrói.</p>
     <a href="formulario.html" class="cta-btn">Entrar para a Elite</a>
   </div>
 
-  <section>
+  <div class="section">
     <h2>Mentalidade Global</h2>
     <p>
       Construindo uma elite com visão internacional.
       Networking forte, crescimento real e mentalidade de alto nível.
     </p>
-  </section>
+  </div>
 
 </div>
 
-<!-- FOOTER MOBILE -->
 <div class="app-footer">
   <a href="index.html">🏠<br>Início</a>
   <a href="membros.html">👑<br>Membros</a>
   <a href="videos.html">🎬<br>Vídeos</a>
   <a href="links.html">🔗<br>Links</a>
 </div>
-
-<script>
-window.addEventListener("load", function(){
-  const loader = document.getElementById("loader");
-  if(!loader) return;
-  loader.style.opacity="0";
-  setTimeout(()=>loader.style.display="none",500);
-});
-</script>
 
 <script src="layout.v3.js" defer></script>
 
