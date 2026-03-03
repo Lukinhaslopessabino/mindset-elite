@@ -3,10 +3,9 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Mindset Elite</title>
 
-<!-- PERFORMANCE -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -17,6 +16,10 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --mobile-nav-height:78px;
+}
 
 body{
   font-family:'Orbitron',sans-serif;
@@ -60,6 +63,7 @@ body{
   background:rgba(0,0,0,0.75);
   backdrop-filter:blur(15px);
   z-index:1000;
+  transition:.3s;
 }
 
 .navbar a{
@@ -71,6 +75,7 @@ body{
   display:flex;
   align-items:center;
   gap:6px;
+  font-size:14px;
 }
 
 .navbar a:hover{
@@ -91,7 +96,7 @@ body{
 }
 
 .hero h1{
-  font-size:clamp(2.8rem,6vw,4.5rem);
+  font-size:clamp(2.5rem,6vw,4.5rem);
   background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
   background-size:200%;
   -webkit-background-clip:text;
@@ -106,12 +111,11 @@ body{
 
 .hero p{
   margin-top:20px;
-  font-size:1.2rem;
+  font-size:1.1rem;
   opacity:.9;
   max-width:600px;
 }
 
-/* CTA */
 .cta-btn{
   margin-top:35px;
   padding:14px 35px;
@@ -147,18 +151,6 @@ section p{
   opacity:.85;
 }
 
-/* REVEAL */
-.reveal{
-  opacity:0;
-  transform:translateY(40px);
-  transition:all 1s ease;
-}
-
-.reveal.active{
-  opacity:1;
-  transform:translateY(0);
-}
-
 /* CANVAS */
 canvas{
   position:fixed;
@@ -167,24 +159,52 @@ canvas{
   z-index:-1;
 }
 
-/* MOBILE */
+/* MOBILE PROFISSIONAL */
 @media (max-width:768px){
 
-  body{padding-bottom:90px;}
+  body{
+    padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));
+  }
 
   .navbar{
     top:auto;
     bottom:0;
+    left:0;
+    right:0;
+    width:100%;
     justify-content:space-around;
-    padding:10px 0;
-    border-top:1px solid rgba(0,153,255,.4);
+    gap:0;
+    padding:10px 5px calc(10px + env(safe-area-inset-bottom));
+    border-top:1px solid rgba(0,153,255,.35);
+    background:rgba(0,0,0,0.85);
   }
 
-  .hero h1{font-size:30px;}
-  .hero p{font-size:15px;}
-  section{padding:80px 20px;}
+  .navbar a{
+    flex-direction:column;
+    font-size:11px;
+    gap:4px;
+    padding:8px 6px;
+    min-width:60px;
+    text-align:center;
+  }
 
+  .hero{
+    padding:90px 15px 60px;
+  }
+
+  .hero h1{
+    font-size:26px;
+  }
+
+  .hero p{
+    font-size:14px;
+  }
+
+  section{
+    padding:80px 20px;
+  }
 }
+
 </style>
 </head>
 
@@ -197,99 +217,27 @@ canvas{
 <canvas id="bg3d"></canvas>
 
 <nav class="navbar">
-  <a href="index.html">🏠 Início</a>
-  <a href="membros.html">👑 Membros</a>
-  <a href="participantes.html">🎯 Participantes</a>
-  <a href="videos.html">🎬 Vídeos</a>
-  <a href="links.html">🔗 Links</a>
-  <a href="formulario.html">📝 Formulário</a>
+  <a href="index.html">🏠<span>Início</span></a>
+  <a href="membros.html">👑<span>Membros</span></a>
+  <a href="participantes.html">🎯<span>Participantes</span></a>
+  <a href="videos.html">🎬<span>Vídeos</span></a>
+  <a href="links.html">🔗<span>Links</span></a>
+  <a href="formulario.html">📝<span>Formulário</span></a>
 </nav>
 
 <div class="hero">
-<h1 class="reveal">Mindset Elite</h1>
-<p class="reveal">Elite não nasce. Elite se constrói.</p>
-<a href="formulario.html" class="cta-btn reveal">Entrar para a Elite</a>
+<h1>Mindset Elite</h1>
+<p>Elite não nasce. Elite se constrói.</p>
+<a href="formulario.html" class="cta-btn">Entrar para a Elite</a>
 </div>
 
 <section>
-<h2 class="reveal">Mentalidade Global</h2>
-<p class="reveal">
+<h2>Mentalidade Global</h2>
+<p>
 Construindo uma elite com visão internacional.
 Networking forte, crescimento real e mentalidade de alto nível.
 </p>
 </section>
-
-<script defer>
-
-/* LOADER */
-window.addEventListener("load",()=>{
-  if(window.gsap){
-    gsap.to("#loader",{opacity:0,duration:.8,onComplete:()=>{
-      document.getElementById("loader").style.display="none";
-    }});
-  } else {
-    document.getElementById("loader").style.display="none";
-  }
-});
-
-/* THREE.JS */
-if(window.innerWidth > 768 && window.THREE){
-
-const canvas=document.getElementById("bg3d");
-const scene=new THREE.Scene();
-const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,2000);
-const renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true});
-renderer.setSize(window.innerWidth,window.innerHeight);
-
-const geometry=new THREE.BufferGeometry();
-const vertices=[];
-
-for(let i=0;i<1200;i++){
-vertices.push(
-THREE.MathUtils.randFloatSpread(2000),
-THREE.MathUtils.randFloatSpread(2000),
-THREE.MathUtils.randFloatSpread(2000)
-);
-}
-
-geometry.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));
-
-const material=new THREE.PointsMaterial({color:0x00f5ff,size:2});
-const particles=new THREE.Points(geometry,material);
-scene.add(particles);
-
-camera.position.z=700;
-
-function animate(){
-requestAnimationFrame(animate);
-particles.rotation.x+=0.0003;
-particles.rotation.y+=0.0003;
-renderer.render(scene,camera);
-}
-animate();
-
-window.addEventListener("resize",()=>{
-camera.aspect=window.innerWidth/window.innerHeight;
-camera.updateProjectionMatrix();
-renderer.setSize(window.innerWidth,window.innerHeight);
-});
-
-}
-
-/* REVEAL PROFISSIONAL */
-const observer=new IntersectionObserver(entries=>{
-entries.forEach(entry=>{
-if(entry.isIntersecting){
-entry.target.classList.add("active");
-}
-});
-},{threshold:0.2});
-
-document.querySelectorAll(".reveal").forEach(el=>{
-observer.observe(el);
-});
-
-</script>
 
 <script src="layout.v3.js" defer></script>
 
