@@ -5,38 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Links Oficiais - Mindset Elite</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
 :root{
-  --mobile-nav-height:78px;
   --cyan:#00F5FF;
+  --mobile-nav-height:78px;
 }
 
 body{
   font-family:'Orbitron',sans-serif;
-  background:#05070d;
+  background:transparent;
   color:#fff;
   min-height:100vh;
   overflow-x:hidden;
 }
 
-/* ================= NAV ================= */
+/* NAV */
 .navbar{
   position:fixed;
   top:0;
   width:100%;
   display:flex;
   justify-content:center;
-  gap:25px;
-  padding:18px;
-  background:rgba(0,0,0,0.85);
+  gap:20px;
+  padding:16px;
+  background:rgba(0,0,0,.55);
   backdrop-filter:blur(15px);
   z-index:1000;
 }
@@ -44,55 +41,50 @@ body{
 .navbar a{
   color:#fff;
   text-decoration:none;
-  padding:8px 16px;
-  border-radius:25px;
-  transition:.3s;
+  padding:8px 14px;
+  border-radius:20px;
   font-size:14px;
+  transition:.2s;
 }
 
 .navbar a:hover{
   background:var(--cyan);
   color:#000;
-  box-shadow:0 0 20px var(--cyan);
 }
 
-/* ================= FUNDO ================= */
-#particles-js{
-  position:fixed;
-  inset:0;
-  z-index:-1;
-}
-
-/* ================= CONTAINER ================= */
+/* CONTAINER */
 .container{
-  max-width:650px;
+  max-width:600px;
   margin:auto;
-  padding:150px 20px 120px;
+  padding:150px 20px 140px;
+  position:relative;
+  z-index:1;
 }
 
 h1{
-  margin-bottom:50px;
-  font-size:clamp(1.6rem,4vw,2.2rem);
-  border-left:4px solid var(--cyan);
-  padding-left:15px;
+  font-size:26px;
+  margin-bottom:40px;
+  background:linear-gradient(90deg,var(--cyan),#fff,var(--cyan));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
 }
 
-/* ================= LINK CARD ================= */
+/* LINK CARD */
 .link-card{
   display:flex;
   align-items:center;
   gap:18px;
-  padding:22px;
-  margin-bottom:25px;
-  border-radius:22px;
+  padding:20px 22px;
+  margin-bottom:22px;
+  border-radius:18px;
   border:1px solid rgba(0,153,255,.25);
-  background:rgba(15,20,35,.95);
+  background:rgba(15,20,35,.75);
+  backdrop-filter:blur(16px);
   text-decoration:none;
   color:#fff;
-  box-shadow:0 0 25px rgba(0,153,255,.15);
-  transition:.25s ease;
+  transition:.3s;
   opacity:0;
-  transform:translateY(20px);
+  transform:translateY(15px);
 }
 
 .link-card.show{
@@ -104,23 +96,29 @@ h1{
   width:34px;
   height:34px;
   object-fit:contain;
+  transition:.3s;
 }
 
 .link-card span{
   font-weight:700;
-  letter-spacing:1px;
   font-size:15px;
+  letter-spacing:1px;
 }
 
 .link-card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 0 40px rgba(0,245,255,.5);
+  transform:translateY(-4px);
+  box-shadow:0 0 40px rgba(0,245,255,.35);
   background:linear-gradient(90deg,#00F5FF,#0099FF);
   color:#000;
 }
 
-/* ================= MOBILE ================= */
-@media (max-width:768px){
+.link-card:hover img{
+  transform:scale(1.1);
+  filter:brightness(0);
+}
+
+/* MOBILE */
+@media(max-width:768px){
 
   body{
     padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));
@@ -131,32 +129,24 @@ h1{
     bottom:0;
     justify-content:space-around;
     padding:10px 5px calc(10px + env(safe-area-inset-bottom));
-    border-top:1px solid rgba(0,153,255,.3);
   }
 
   .navbar a{
-    flex-direction:column;
     font-size:11px;
     padding:6px;
   }
 
   .container{
-    padding:100px 15px 100px;
+    padding:100px 15px 120px;
   }
 
   h1{
     font-size:20px;
-    margin-bottom:35px;
   }
 
   .link-card{
     padding:18px;
-    gap:12px;
-  }
-
-  .link-card img{
-    width:28px;
-    height:28px;
+    gap:14px;
   }
 
   .link-card span{
@@ -167,8 +157,6 @@ h1{
 </head>
 
 <body>
-
-<div id="particles-js"></div>
 
 <nav class="navbar">
   <a href="index.html">🏠 Início</a>
@@ -201,26 +189,13 @@ h1{
 </div>
 
 <script>
-
-/* PARTÍCULAS */
-if(window.innerWidth > 600 && window.particlesJS){
-  particlesJS("particles-js",{
-    particles:{
-      number:{value:35},
-      color:{value:"#00F5FF"},
-      line_linked:{enable:true,color:"#00F5FF"},
-      move:{speed:0.6}
-    }
-  });
-}
-
-/* ANIMAÇÃO ENTRADA */
 const cards=document.querySelectorAll(".link-card");
 cards.forEach((card,index)=>{
-  setTimeout(()=>card.classList.add("show"), index*100);
+  setTimeout(()=>card.classList.add("show"), index*120);
 });
-
 </script>
+
+<script src="layout.v3.js" defer></script>
 
 </body>
 </html>
