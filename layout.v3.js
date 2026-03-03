@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  /* =====================================================
+     TRANSIÇÃO GLOBAL
+  ===================================================== */
+
   const t = document.createElement("div");
   t.id = "globalTransition";
   document.body.appendChild(t);
@@ -14,12 +18,15 @@ document.addEventListener("DOMContentLoaded", () => {
       backdrop-filter: blur(10px);
       opacity:0;
       pointer-events:none;
-      z-index:5000; /* MENOR que loader */
+      z-index:5000;
       transition: opacity .25s ease;
     }
+    #globalTransition.show{ opacity:1; }
 
-    #globalTransition.show{
-      opacity:1;
+    #globalParticles{
+      position:fixed;
+      inset:0;
+      z-index:-1;
     }
   `;
   document.head.appendChild(style);
@@ -40,25 +47,57 @@ document.addEventListener("DOMContentLoaded", () => {
     return false;
   };
 
-  const go = (href) => {
-    t.classList.add("show");
-    setTimeout(() => {
-      window.location.href = href;
-    }, 180);
-  };
-
   document.addEventListener("click", (e) => {
     const a = e.target.closest("a");
     if (!a) return;
     if (shouldSkip(a)) return;
 
     e.preventDefault();
-    go(a.href);
+    t.classList.add("show");
+    setTimeout(() => window.location.href = a.href, 180);
   });
 
-  // GARANTE que overlay nunca fica preso
   window.addEventListener("pageshow", () => {
     t.classList.remove("show");
   });
+
+  /* =====================================================
+     PARTÍCULAS GLOBAL (LEVE)
+  ===================================================== */
+
+  const particlesDiv = document.createElement("div");
+  particlesDiv.id = "globalParticles";
+  document.body.appendChild(particlesDiv);
+
+  if(window.innerWidth > 600){
+
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js";
+    script.onload = () => {
+
+      particlesJS("globalParticles", {
+        particles: {
+          number: { value: 40 },
+          color: { value: "#00F5FF" },
+          line_linked: {
+            enable: true,
+            color: "#00F5FF",
+            opacity: 0.3
+          },
+          move: { speed: 0.6 }
+        },
+        interactivity: {
+          events: {
+            onhover: { enable: false },
+            onclick: { enable: false }
+          }
+        },
+        retina_detect: true
+      });
+
+    };
+
+    document.body.appendChild(script);
+  }
 
 });
