@@ -10,21 +10,26 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
-<!-- THREE.JS para 3D global -->
+<!-- THREE.JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
+/* Variáveis obrigatórias para tema dinâmico */
 :root{
   --mobile-nav-height:78px;
+  --bg-primary:#05070d;
+  --text-primary:#ffffff;
+  --accent:#00F5FF;
 }
 
 body{
   font-family:'Orbitron',sans-serif;
-  color:#fff;
+  color:var(--text-primary);
   overflow-x:hidden;
-  background:transparent; /* agora o fundo vem do layout premium */
+  background:var(--bg-primary);
+  transition:background .4s ease,color .4s ease;
 }
 
 /* LOADER */
@@ -65,7 +70,7 @@ body{
 }
 
 .navbar a{
-  color:#fff;
+  color:var(--text-primary);
   text-decoration:none;
   padding:8px 16px;
   border-radius:25px;
@@ -77,9 +82,9 @@ body{
 }
 
 .navbar a:hover{
-  background:#00F5FF;
+  background:var(--accent);
   color:#000;
-  box-shadow:0 0 20px #00F5FF;
+  box-shadow:0 0 20px var(--accent);
 }
 
 /* HERO */
@@ -97,7 +102,7 @@ body{
 
 .hero h1{
   font-size:clamp(2.5rem,6vw,4.5rem);
-  background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
+  background:linear-gradient(90deg,var(--accent),#fff,var(--accent));
   background-size:200%;
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
@@ -122,15 +127,15 @@ body{
   border-radius:40px;
   text-decoration:none;
   font-weight:700;
-  background:linear-gradient(90deg,#00F5FF,#0099FF);
+  background:linear-gradient(90deg,var(--accent),#0099FF);
   color:#000;
   transition:.4s;
-  box-shadow:0 0 25px rgba(0,245,255,.5);
+  box-shadow:0 0 25px var(--accent);
 }
 
 .cta-btn:hover{
   transform:scale(1.08);
-  box-shadow:0 0 40px rgba(0,245,255,.9);
+  box-shadow:0 0 40px var(--accent);
 }
 
 /* SECTION */
@@ -144,7 +149,7 @@ section{
 section h2{
   font-size:2rem;
   margin-bottom:25px;
-  color:#00F5FF;
+  color:var(--accent);
 }
 
 section p{
@@ -165,7 +170,7 @@ section p{
     bottom:0;
     justify-content:space-around;
     padding:10px 5px calc(10px + env(safe-area-inset-bottom));
-    border-top:1px solid rgba(0,153,255,.35);
+    border-top:1px solid rgba(255,255,255,.1);
   }
 
   .navbar a{
@@ -195,18 +200,17 @@ section p{
 
 <body>
 
-<!-- LOADER -->
 <div id="loader">
 <h1>LOADING MINDSET...</h1>
 </div>
 
 <nav class="navbar">
-  <a href="index.html">🏠 <span>Início</span></a>
-  <a href="membros.html">👑 <span>Membros</span></a>
-  <a href="participantes.html">🎯 <span>Participantes</span></a>
-  <a href="videos.html">🎬 <span>Vídeos</span></a>
-  <a href="links.html">🔗 <span>Links</span></a>
-  <a href="formulario.html">📝 <span>Formulário</span></a>
+  <a href="index.html">🏠 Início</a>
+  <a href="membros.html">👑 Membros</a>
+  <a href="participantes.html">🎯 Participantes</a>
+  <a href="videos.html">🎬 Vídeos</a>
+  <a href="links.html">🔗 Links</a>
+  <a href="formulario.html">📝 Formulário</a>
 </nav>
 
 <div class="hero">
@@ -223,7 +227,6 @@ section p{
   </p>
 </section>
 
-<!-- Loader seguro -->
 <script>
 window.addEventListener("load", function(){
   const loader = document.getElementById("loader");
@@ -233,7 +236,6 @@ window.addEventListener("load", function(){
 });
 </script>
 
-<!-- Sistema Premium Global -->
 <script src="layout.v3.js" defer></script>
 
 </body>
