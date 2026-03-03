@@ -12,19 +12,15 @@
 *{margin:0;padding:0;box-sizing:border-box}
 
 :root{
-  --mobile-nav-height:78px;
-  --bg-primary:#05070d;
-  --text-primary:#ffffff;
   --accent:#00F5FF;
-  --green:#00FFAA;
+  --mobile-nav-height:78px;
 }
 
 body{
   font-family:'Orbitron',sans-serif;
-  background:var(--bg-primary);
-  color:var(--text-primary);
+  background:transparent;
+  color:#fff;
   overflow-x:hidden;
-  transition:background .4s ease,color .4s ease;
 }
 
 /* NAV */
@@ -42,7 +38,7 @@ body{
 }
 
 .navbar a{
-  color:var(--text-primary);
+  color:#fff;
   text-decoration:none;
   padding:8px 14px;
   border-radius:20px;
@@ -58,7 +54,7 @@ body{
 /* PAGE */
 .container{
   padding:140px 30px 140px;
-  max-width:1300px;
+  max-width:1400px;
   margin:auto;
   position:relative;
   z-index:1;
@@ -66,7 +62,7 @@ body{
 
 h1{
   font-size:26px;
-  margin-bottom:20px;
+  margin-bottom:30px;
   background:linear-gradient(90deg,var(--accent),#fff,var(--accent));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
@@ -82,32 +78,39 @@ h3{
   display:flex;
   gap:18px;
   overflow-x:auto;
-  padding:20px 0;
-  scrollbar-width:none;
+  padding:30px 0;
+  position:relative;
 }
+
 .row::-webkit-scrollbar{display:none}
 
-/* CARD */
+/* NETFLIX STYLE CARD */
 .card{
   min-width:260px;
   position:relative;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1);
 }
 
 .card-inner{
-  background:rgba(15,20,35,.75);
-  border:1px solid var(--accent);
+  background:rgba(15,20,35,.85);
+  border:1px solid rgba(0,153,255,.25);
   border-radius:14px;
   overflow:hidden;
-  transition:.3s;
+  transition:all .35s cubic-bezier(.2,.8,.2,1);
   cursor:pointer;
+  backdrop-filter:blur(12px);
   position:relative;
-  backdrop-filter:blur(10px);
+  z-index:1;
 }
 
-.card-inner:hover{
-  transform:scale(1.1);
-  box-shadow:0 0 40px var(--accent);
-  z-index:5;
+.card:hover{
+  transform:scale(1.15);
+  z-index:20;
+}
+
+.card:hover .card-inner{
+  box-shadow:0 30px 80px rgba(0,0,0,.8);
+  border:1px solid var(--accent);
 }
 
 /* THUMB */
@@ -121,13 +124,15 @@ h3{
   width:100%;
   height:100%;
   object-fit:cover;
+  transition:.3s;
 }
 
 .preview{
   position:absolute;
   inset:0;
   opacity:0;
-  transition:.2s;
+  transform:scale(1.05);
+  transition:opacity .3s ease, transform .3s ease;
 }
 
 .preview iframe{
@@ -136,86 +141,34 @@ h3{
   border:none;
 }
 
-.card-inner:hover .preview{opacity:1}
-.card-inner:hover img{opacity:0}
-
-/* Volume */
-.volume-btn{
-  position:absolute;
-  bottom:8px;
-  right:8px;
-  background:rgba(0,0,0,.6);
-  border:none;
-  color:#fff;
-  padding:6px;
-  border-radius:50%;
-  cursor:pointer;
-  font-size:12px;
+.card:hover .preview{
+  opacity:1;
+  transform:scale(1);
 }
 
-/* Footer */
+.card:hover img{
+  opacity:0;
+}
+
 .strip{
   padding:10px;
   font-size:12px;
-  display:flex;
-  justify-content:space-between;
+  text-align:center;
 }
 
-.fav-btn{
-  cursor:pointer;
-  font-size:14px;
-}
-
-/* Skeleton */
-.skeleton{
-  min-width:260px;
-  height:190px;
-  border-radius:14px;
-  background:linear-gradient(90deg,#1a1f2e 25%,#222 50%,#1a1f2e 75%);
-  background-size:200% 100%;
-  animation:loading 1.2s infinite;
-}
-@keyframes loading{
-  0%{background-position:200% 0}
-  100%{background-position:-200% 0}
-}
-
-/* MODAL */
-#modal{
+/* OVERLAY ESCURO */
+#hoverOverlay{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.85);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:99999;
-}
-#modal.show{display:flex}
-
-.modal-video{
-  width:90%;
-  max-width:900px;
-  position:relative;
-  padding-bottom:56.25%;
+  background:rgba(0,0,0,.4);
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+  z-index:5;
 }
 
-.modal-video iframe{
-  position:absolute;
-  width:100%;
-  height:100%;
-  border:none;
-}
-
-.close-btn{
-  position:absolute;
-  top:-40px;
-  right:0;
-  background:var(--accent);
-  border:none;
-  padding:8px 12px;
-  cursor:pointer;
-  font-weight:bold;
-  color:#000;
+#hoverOverlay.active{
+  opacity:1;
 }
 
 /* MOBILE */
@@ -232,7 +185,6 @@ h3{
   }
 
   .navbar a{
-    flex-direction:column;
     font-size:11px;
   }
 
@@ -244,6 +196,8 @@ h3{
 </head>
 
 <body>
+
+<div id="hoverOverlay"></div>
 
 <nav class="navbar">
   <a href="index.html">🏠 Início</a>
@@ -257,49 +211,41 @@ h3{
 <div class="container">
 <h1>Streaming Mindset Elite</h1>
 
-<h3>▶ Continue Assistindo</h3>
-<div class="row" id="continueRow"></div>
-
-<h3>⭐ Minha Lista</h3>
-<div class="row" id="favRow"></div>
-
 <h3>🔥 Catálogo</h3>
 <div class="row" id="mainRow"></div>
-</div>
 
-<div id="modal">
-  <div class="modal-video">
-    <button class="close-btn">Fechar</button>
-    <iframe id="modalIframe" allow="autoplay" allowfullscreen></iframe>
-  </div>
 </div>
 
 <script>
-/* SEU JS ORIGINAL MANTIDO */
 const videos=[
 "https://youtube.com/shorts/lS8Sdam5pEA",
 "https://youtube.com/shorts/v_s2bz8T3a8",
-"https://youtube.com/shorts/g-BJOYE_Zj8"
+"https://youtube.com/shorts/g-BJOYE_Zj8",
+"https://youtube.com/shorts/OJMOJnKw77g",
+"https://youtube.com/shorts/NSSgs-AH9vc",
+"https://youtube.com/shorts/pX0lkVI1dkg",
+"https://youtube.com/shorts/CWGaPBbQI6M",
+"https://youtube.com/shorts/QTNoH8Gpho8",
+"https://youtube.com/shorts/lxOMW7GOn44",
+"https://youtube.com/shorts/wYi4Zvc6uuk",
+"https://youtube.com/shorts/tfh5HmCJS0w",
+"https://youtube.com/shorts/37D3nHE0Eac"
 ];
 
 const mainRow=document.getElementById("mainRow");
-const continueRow=document.getElementById("continueRow");
-const favRow=document.getElementById("favRow");
+const overlay=document.getElementById("hoverOverlay");
 
 function getID(url){
- if(url.includes("shorts/")) return url.split("shorts/")[1];
- if(url.includes("watch?v=")) return url.split("watch?v=")[1];
+ return url.split("shorts/")[1].split("?")[0];
 }
 
-function embed(id,mute=true){
- return `https://www.youtube.com/embed/${id}?${mute?"mute=1":""}&controls=0&rel=0`;
+function embed(id){
+ return `https://www.youtube.com/embed/${id}?mute=1&controls=0&rel=0&autoplay=1`;
 }
 
 function createCard(url){
+
  const id=getID(url);
- const favKey="fav_"+id;
- const contKey="cont_"+id;
- let isFav=localStorage.getItem(favKey)==="1";
 
  const card=document.createElement("div");
  card.className="card";
@@ -309,96 +255,27 @@ function createCard(url){
     <div class="thumb">
       <img src="https://img.youtube.com/vi/${id}/hqdefault.jpg">
       <div class="preview">
-        <iframe src="${embed(id,true)}"></iframe>
+        <iframe src="${embed(id)}"></iframe>
       </div>
-      <button class="volume-btn">🔇</button>
     </div>
-    <div class="strip">
-      <span>${id}</span>
-      <span class="fav-btn">${isFav?"⭐":"☆"}</span>
-    </div>
+    <div class="strip">${id}</div>
   </div>
  `;
 
- const iframe=card.querySelector("iframe");
- const volBtn=card.querySelector(".volume-btn");
- const favBtn=card.querySelector(".fav-btn");
-
- let muted=true;
-
- card.querySelector(".card-inner").addEventListener("mouseenter",()=>{
-   iframe.src=embed(id,true)+"&autoplay=1";
-   setTimeout(()=>iframe.src=embed(id,true),3000);
+ card.addEventListener("mouseenter",()=>{
+   overlay.classList.add("active");
  });
 
- volBtn.onclick=(e)=>{
-   e.stopPropagation();
-   muted=!muted;
-   iframe.src=embed(id,!muted)+"&autoplay=1";
-   volBtn.innerText=muted?"🔇":"🔊";
- };
-
- favBtn.onclick=(e)=>{
-   e.stopPropagation();
-   isFav=!isFav;
-   localStorage.setItem(favKey,isFav?"1":"0");
-   favBtn.innerText=isFav?"⭐":"☆";
-   renderFav();
- };
-
- card.querySelector(".card-inner").onclick=()=>{
-   document.getElementById("modal").classList.add("show");
-   document.getElementById("modalIframe").src=embed(id,false)+"&autoplay=1";
-   localStorage.setItem(contKey,"1");
-   renderContinue();
- };
+ card.addEventListener("mouseleave",()=>{
+   overlay.classList.remove("active");
+ });
 
  return card;
 }
 
-function renderMain(){
- mainRow.innerHTML="";
- videos.forEach(v=>mainRow.appendChild(createCard(v)));
-}
-
-function renderContinue(){
- continueRow.innerHTML="";
- videos.forEach(v=>{
-   const id=getID(v);
-   if(localStorage.getItem("cont_"+id)==="1"){
-     continueRow.appendChild(createCard(v));
-   }
- });
-}
-
-function renderFav(){
- favRow.innerHTML="";
- videos.forEach(v=>{
-   const id=getID(v);
-   if(localStorage.getItem("fav_"+id)==="1"){
-     favRow.appendChild(createCard(v));
-   }
- });
-}
-
-function showSkeleton(){
- for(let i=0;i<3;i++){
-   mainRow.appendChild(document.createElement("div")).className="skeleton";
- }
-}
-showSkeleton();
-
-setTimeout(()=>{
- mainRow.innerHTML="";
- renderMain();
- renderContinue();
- renderFav();
-},1000);
-
-document.querySelector(".close-btn").onclick=()=>{
- document.getElementById("modal").classList.remove("show");
- document.getElementById("modalIframe").src="";
-};
+videos.forEach(v=>{
+ mainRow.appendChild(createCard(v));
+});
 </script>
 
 <script src="layout.v3.js" defer></script>
