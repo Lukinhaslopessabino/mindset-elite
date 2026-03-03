@@ -2,38 +2,38 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Participantes - Mindset Elite</title>
 
-<!-- PERFORMANCE -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --mobile-nav-height:78px;
+  --cyan:#00F5FF;
+  --ok:#00FFAA;
+  --danger:#FF4C4C;
+}
 
 body{
   font-family:'Orbitron',sans-serif;
   background:#05070d;
   color:#fff;
-  overflow-x:hidden;
   min-height:100vh;
 }
 
 /* ================= NAV ================= */
-
 .navbar{
   position:fixed;
   top:0;
   width:100%;
   display:flex;
   justify-content:center;
-  gap:25px;
-  padding:18px;
-  background:rgba(0,0,0,0.8);
+  gap:22px;
+  padding:16px;
+  background:rgba(0,0,0,.75);
   backdrop-filter:blur(15px);
   z-index:1000;
 }
@@ -41,70 +41,51 @@ body{
 .navbar a{
   color:#fff;
   text-decoration:none;
-  padding:8px 16px;
-  border-radius:25px;
-  transition:.3s;
+  padding:8px 14px;
+  border-radius:22px;
+  transition:.25s;
   font-size:14px;
 }
 
 .navbar a:hover{
-  background:#00F5FF;
+  background:var(--cyan);
   color:#000;
-  box-shadow:0 0 20px #00F5FF;
-}
-
-/* ================= FUNDO ================= */
-
-#particles-js{
-  position:fixed;
-  inset:0;
-  z-index:-1;
 }
 
 /* ================= CONTAINER ================= */
-
 .container{
-  max-width:1000px;
+  max-width:900px;
   margin:auto;
   padding:150px 20px 120px;
 }
 
 h2{
-  font-size:30px;
   text-align:center;
-  margin-bottom:60px;
-  background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
+  font-size:26px;
+  margin-bottom:35px;
+  background:linear-gradient(90deg,var(--cyan),#fff,var(--cyan));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
 
 /* ================= CARD ================= */
-
 .card{
-  background:rgba(15,20,35,0.95);
-  padding:40px;
-  border-radius:30px;
-  border:1px solid rgba(0,153,255,0.25);
-  box-shadow:0 0 50px rgba(0,153,255,0.15);
+  background:rgba(15,20,35,.95);
+  padding:30px;
+  border-radius:25px;
+  border:1px solid rgba(0,153,255,.25);
+  box-shadow:0 0 30px rgba(0,153,255,.15);
 }
 
 /* ================= LINHAS ================= */
-
 .row{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:16px 0;
-  border-bottom:1px solid rgba(255,255,255,0.05);
-  transition:.3s ease;
-  opacity:0;
-  transform:translateY(20px);
-}
-
-.row.show{
-  opacity:1;
-  transform:translateY(0);
-  transition:all .6s ease;
+  padding:14px 0;
+  border-bottom:1px solid rgba(255,255,255,.05);
+  font-size:14px;
+  transition:.2s;
 }
 
 .row:last-child{
@@ -112,86 +93,94 @@ h2{
 }
 
 .row:hover{
-  transform:translateX(8px);
-  color:#00F5FF;
+  color:var(--cyan);
+  transform:translateX(5px);
 }
 
-/* ================= STATUS BADGES ================= */
-
+/* ================= STATUS ================= */
 .status{
-  padding:6px 14px;
-  border-radius:20px;
-  font-size:12px;
+  padding:5px 12px;
+  border-radius:999px;
+  font-size:11px;
   font-weight:700;
-  letter-spacing:.5px;
 }
 
 .confirmado{
   background:rgba(0,255,170,.15);
-  color:#00FFAA;
-  border:1px solid #00FFAA;
-  box-shadow:0 0 10px rgba(0,255,170,.3);
+  color:var(--ok);
+  border:1px solid var(--ok);
 }
 
 .indefinido{
   background:rgba(0,245,255,.15);
-  color:#00F5FF;
-  border:1px solid #00F5FF;
+  color:var(--cyan);
+  border:1px solid var(--cyan);
 }
 
 .nao{
   background:rgba(255,76,76,.15);
-  color:#FF4C4C;
-  border:1px solid #FF4C4C;
+  color:var(--danger);
+  border:1px solid var(--danger);
 }
 
 /* ================= VAGAS ================= */
-
 .vagas{
-  margin-top:40px;
+  margin-top:25px;
   text-align:center;
-  font-size:18px;
-  font-weight:bold;
-  color:#00F5FF;
-  text-shadow:0 0 12px #00F5FF;
+  font-size:15px;
+  font-weight:700;
+  color:var(--cyan);
 }
 
-/* ================= MOBILE APP ================= */
+/* ================= MOBILE ================= */
+@media(max-width:768px){
 
-@media (max-width:768px){
-
-  body{padding-bottom:100px;}
+  body{
+    padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));
+  }
 
   .navbar{
     top:auto;
     bottom:0;
     justify-content:space-around;
-    padding:12px 0;
-    border-top:1px solid rgba(0,153,255,.4);
+    padding:10px 5px calc(10px + env(safe-area-inset-bottom));
+    border-top:1px solid rgba(0,153,255,.3);
   }
 
   .navbar a{
     flex-direction:column;
-    font-size:18px;
+    font-size:11px;
+    padding:6px;
   }
 
   .container{
-    padding:100px 15px 150px;
+    padding:100px 15px 100px;
+  }
+
+  h2{
+    font-size:20px;
+  }
+
+  .card{
+    padding:22px;
   }
 
   .row{
     flex-direction:column;
     align-items:flex-start;
     gap:6px;
+    font-size:13px;
   }
 
+  .status{
+    font-size:10px;
+    padding:4px 10px;
+  }
 }
 </style>
 </head>
 
 <body>
-
-<div id="particles-js"></div>
 
 <nav class="navbar">
   <a href="index.html">🏠 Início</a>
@@ -205,7 +194,7 @@ h2{
 <div class="container">
   <h2>Participantes Mindset 2029</h2>
 
-  <div class="card" id="listaParticipantes">
+  <div class="card">
 
     <div class="row"><span>Tuzin</span> <span class="status confirmado">Confirmado</span></div>
     <div class="row"><span>Luqueta</span> <span class="status confirmado">Confirmado</span></div>
@@ -222,34 +211,10 @@ h2{
   </div>
 </div>
 
-<script defer>
-
-/* ================= PARTÍCULAS OTIMIZADAS ================= */
-if(window.innerWidth > 600 && window.particlesJS){
-  particlesJS("particles-js",{
-    particles:{
-      number:{value:35},
-      color:{value:"#00F5FF"},
-      line_linked:{enable:true,color:"#00F5FF"},
-      move:{speed:0.6}
-    }
-  });
-}
-
-/* ================= ANIMAÇÃO ENTRADA ================= */
-const rows=document.querySelectorAll(".row");
-rows.forEach((row,index)=>{
-  setTimeout(()=>{
-    row.classList.add("show");
-  }, index*100);
-});
-
-/* ================= VAGAS ================= */
+<script>
 async function carregarVagas(){
   try{
-    const res = await fetch("https://mindset-elite.onrender.com/vagas", {
-      cache: "no-store"
-    });
+    const res = await fetch("https://mindset-elite.onrender.com/vagas",{cache:"no-store"});
     const data = await res.json();
     document.getElementById("vagasInfo").innerText =
       "Vagas disponíveis: " + data.vagas;
@@ -259,10 +224,7 @@ async function carregarVagas(){
   }
 }
 carregarVagas();
-
 </script>
-
-<script src="layout.v3.js" defer></script>
 
 </body>
 </html>
