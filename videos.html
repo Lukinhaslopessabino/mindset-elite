@@ -1,158 +1,200 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>Vídeos - Mindset Elite</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
 :root{
-  --mobile-nav-height:78px;
   --cyan:#00F5FF;
+  --green:#00FFAA;
+  --mobile-nav-height:78px;
 }
 
 body{
   font-family:'Orbitron',sans-serif;
-  background:#05070d;
+  background:transparent;
   color:#fff;
-  min-height:100vh;
+  overflow-x:hidden;
 }
 
-/* ================= NAV ================= */
+/* NAV */
 .navbar{
   position:fixed;
   top:0;
   width:100%;
   display:flex;
   justify-content:center;
-  gap:22px;
+  gap:20px;
   padding:16px;
-  background:rgba(0,0,0,.85);
+  background:rgba(0,0,0,.55);
   backdrop-filter:blur(15px);
   z-index:1000;
 }
-
 .navbar a{
   color:#fff;
   text-decoration:none;
   padding:8px 14px;
-  border-radius:22px;
-  transition:.25s;
+  border-radius:20px;
   font-size:14px;
+  transition:.2s;
 }
+.navbar a:hover{background:var(--cyan);color:#000}
 
-.navbar a:hover{
-  background:var(--cyan);
-  color:#000;
-}
-
-/* ================= CONTAINER ================= */
+/* PAGE */
 .container{
-  max-width:1200px;
+  padding:140px 30px 140px;
+  max-width:1300px;
   margin:auto;
-  padding:150px 20px 120px;
+  position:relative;
+  z-index:1;
 }
 
 h1{
-  text-align:center;
-  margin-bottom:40px;
-  font-size:clamp(1.6rem,4vw,2.6rem);
+  font-size:26px;
+  margin-bottom:20px;
   background:linear-gradient(90deg,var(--cyan),#fff,var(--cyan));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
 
-/* ================= GRID ================= */
-.video-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:25px;
+/* ROW */
+.row{
+  display:flex;
+  gap:18px;
+  overflow-x:auto;
+  padding:20px 0;
+  scrollbar-width:none;
 }
+.row::-webkit-scrollbar{display:none}
 
-/* ================= CARD ================= */
-.video-card{
-  background:rgba(15,20,35,.95);
-  border-radius:20px;
-  overflow:hidden;
-  border:1px solid rgba(0,153,255,.25);
-  box-shadow:0 0 25px rgba(0,153,255,.15);
-  transition:.25s;
-  opacity:0;
-  transform:translateY(20px);
-}
-
-.video-card.show{
-  opacity:1;
-  transform:translateY(0);
-}
-
-.video-card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 0 40px rgba(0,153,255,.35);
-}
-
-.video-wrapper{
+/* CARD */
+.card{
+  min-width:260px;
   position:relative;
+}
+
+.card-inner{
+  background:rgba(15,20,35,.75);
+  border:1px solid rgba(0,153,255,.25);
+  border-radius:14px;
+  overflow:hidden;
+  transition:.3s;
+  cursor:pointer;
+  position:relative;
+}
+
+.card-inner:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 40px rgba(0,153,255,.35);
+  z-index:5;
+}
+
+/* THUMB */
+.thumb{
+  position:relative;
+  height:150px;
+  overflow:hidden;
+}
+.thumb img{
   width:100%;
+  height:100%;
+  object-fit:cover;
+}
+.preview{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  transition:.2s;
+}
+.preview iframe{
+  width:100%;
+  height:100%;
+  border:none;
+}
+.card-inner:hover .preview{opacity:1}
+.card-inner:hover img{opacity:0}
+
+/* Volume Button */
+.volume-btn{
+  position:absolute;
+  bottom:8px;
+  right:8px;
+  background:rgba(0,0,0,.6);
+  border:none;
+  color:#fff;
+  padding:6px;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:12px;
+}
+
+/* Footer */
+.strip{
+  padding:10px;
+  font-size:12px;
+  display:flex;
+  justify-content:space-between;
+}
+
+/* FAVORITE */
+.fav-btn{
+  cursor:pointer;
+  font-size:14px;
+}
+
+/* Skeleton */
+.skeleton{
+  min-width:260px;
+  height:190px;
+  border-radius:14px;
+  background:linear-gradient(90deg,#1a1f2e 25%,#222 50%,#1a1f2e 75%);
+  background-size:200% 100%;
+  animation:loading 1.2s infinite;
+}
+@keyframes loading{
+  0%{background-position:200% 0}
+  100%{background-position:-200% 0}
+}
+
+/* MODAL */
+#modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:99999;
+}
+#modal.show{display:flex}
+.modal-video{
+  width:90%;
+  max-width:900px;
+  position:relative;
   padding-bottom:56.25%;
 }
-
-.video-wrapper iframe{
+.modal-video iframe{
   position:absolute;
   width:100%;
   height:100%;
   border:none;
 }
-
-.video-footer{
-  padding:12px 15px;
-  display:flex;
-  justify-content:space-between;
-  font-size:12px;
-  opacity:.85;
-}
-
-/* ================= MOBILE ================= */
-@media(max-width:768px){
-
-  body{
-    padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));
-  }
-
-  .navbar{
-    top:auto;
-    bottom:0;
-    justify-content:space-around;
-    padding:10px 5px calc(10px + env(safe-area-inset-bottom));
-    border-top:1px solid rgba(0,153,255,.3);
-  }
-
-  .navbar a{
-    flex-direction:column;
-    font-size:11px;
-    padding:6px;
-  }
-
-  .container{
-    padding:100px 15px 100px;
-  }
-
-  h1{
-    font-size:20px;
-    margin-bottom:30px;
-  }
-
-  .video-grid{
-    gap:18px;
-  }
-
-  .video-footer{
-    font-size:11px;
-  }
+.close-btn{
+  position:absolute;
+  top:-40px;
+  right:0;
+  background:var(--cyan);
+  border:none;
+  padding:8px 12px;
+  cursor:pointer;
+  font-weight:bold;
 }
 </style>
 </head>
@@ -169,74 +211,155 @@ h1{
 </nav>
 
 <div class="container">
-<h1>Plataforma Oficial de Vídeos 🚀</h1>
-<div class="video-grid" id="videoGrid"></div>
+<h1>Streaming Mindset Elite</h1>
+
+<h3>▶ Continue Assistindo</h3>
+<div class="row" id="continueRow"></div>
+
+<h3>⭐ Minha Lista</h3>
+<div class="row" id="favRow"></div>
+
+<h3>🔥 Catálogo</h3>
+<div class="row" id="mainRow"></div>
+</div>
+
+<div id="modal">
+  <div class="modal-video">
+    <button class="close-btn">Fechar</button>
+    <iframe id="modalIframe" allow="autoplay" allowfullscreen></iframe>
+  </div>
 </div>
 
 <script>
 
-/* 🔥 COLE LINK NORMAL DO YOUTUBE AQUI */
-const videos = [
+const videos=[
 "https://youtube.com/shorts/lS8Sdam5pEA",
 "https://youtube.com/shorts/v_s2bz8T3a8",
-"https://youtube.com/shorts/g-BJOYE_Zj8",
-"https://youtube.com/shorts/OJMOJnKw77g",
-"https://youtube.com/shorts/NSSgs-AH9vc",
-"https://youtube.com/shorts/pX0lkVI1dkg",
-"https://youtube.com/shorts/CWGaPBbQI6M",
-"https://youtube.com/shorts/QTNoH8Gpho8",
-"https://youtube.com/shorts/lxOMW7GOn44",
-"https://youtube.com/shorts/wYi4Zvc6uuk",
-"https://youtube.com/shorts/tfh5HmCJS0w",
-"https://youtube.com/shorts/37D3nHE0Eac"
+"https://youtube.com/shorts/g-BJOYE_Zj8"
 ];
 
-/* CONVERTE AUTOMATICAMENTE */
-function converterParaEmbed(url){
-  if(url.includes("shorts/")){
-    const id = url.split("shorts/")[1].split("?")[0];
-    return "https://www.youtube.com/embed/" + id;
-  }
-  if(url.includes("watch?v=")){
-    const id = url.split("watch?v=")[1].split("&")[0];
-    return "https://www.youtube.com/embed/" + id;
-  }
-  return url;
+const mainRow=document.getElementById("mainRow");
+const continueRow=document.getElementById("continueRow");
+const favRow=document.getElementById("favRow");
+
+function getID(url){
+ if(url.includes("shorts/")) return url.split("shorts/")[1];
+ if(url.includes("watch?v=")) return url.split("watch?v=")[1];
 }
 
-const grid = document.getElementById("videoGrid");
+function embed(id,mute=true){
+ return `https://www.youtube.com/embed/${id}?${mute?"mute=1":""}&controls=0&rel=0`;
+}
 
-videos.forEach((link,index)=>{
+function createCard(url){
+ const id=getID(url);
+ const favKey="fav_"+id;
+ const contKey="cont_"+id;
+ let isFav=localStorage.getItem(favKey)==="1";
 
-  const embedUrl = converterParaEmbed(link);
-  const viewsKey = "views_" + embedUrl;
-  let views = parseInt(localStorage.getItem(viewsKey)) || 0;
+ const card=document.createElement("div");
+ card.className="card";
 
-  const card = document.createElement("div");
-  card.className="video-card";
-
-  card.innerHTML = `
-    <div class="video-wrapper">
-      <iframe loading="lazy" allowfullscreen src="${embedUrl}"></iframe>
+ card.innerHTML=`
+  <div class="card-inner">
+    <div class="thumb">
+      <img src="https://img.youtube.com/vi/${id}/hqdefault.jpg">
+      <div class="preview">
+        <iframe src="${embed(id,true)}"></iframe>
+      </div>
+      <button class="volume-btn">🔇</button>
     </div>
-    <div class="video-footer">
-      <span class="views">👁️ ${views} views</span>
-      <span style="color:#00FFAA">Disponível</span>
+    <div class="strip">
+      <span>${id}</span>
+      <span class="fav-btn">${isFav?"⭐":"☆"}</span>
     </div>
-  `;
+  </div>
+ `;
 
-  grid.appendChild(card);
-  setTimeout(()=>card.classList.add("show"), index*80);
+ const iframe=card.querySelector("iframe");
+ const volBtn=card.querySelector(".volume-btn");
+ const favBtn=card.querySelector(".fav-btn");
 
-  card.addEventListener("click",()=>{
-    views++;
-    localStorage.setItem(viewsKey, views);
-    card.querySelector(".views").innerText = "👁️ " + views + " views";
-  });
+ let muted=true;
 
-});
+ card.querySelector(".card-inner").addEventListener("mouseenter",()=>{
+   iframe.src=embed(id,true)+"&autoplay=1";
+   setTimeout(()=>iframe.src=embed(id,true),3000);
+ });
+
+ volBtn.onclick=(e)=>{
+   e.stopPropagation();
+   muted=!muted;
+   iframe.src=embed(id,!muted)+"&autoplay=1";
+   volBtn.innerText=muted?"🔇":"🔊";
+ };
+
+ favBtn.onclick=(e)=>{
+   e.stopPropagation();
+   isFav=!isFav;
+   localStorage.setItem(favKey,isFav?"1":"0");
+   favBtn.innerText=isFav?"⭐":"☆";
+   renderFav();
+ };
+
+ card.querySelector(".card-inner").onclick=()=>{
+   document.getElementById("modal").classList.add("show");
+   document.getElementById("modalIframe").src=embed(id,false)+"&autoplay=1";
+   localStorage.setItem(contKey,"1");
+   renderContinue();
+ };
+
+ return card;
+}
+
+function renderMain(){
+ mainRow.innerHTML="";
+ videos.forEach(v=>mainRow.appendChild(createCard(v)));
+}
+
+function renderContinue(){
+ continueRow.innerHTML="";
+ videos.forEach(v=>{
+   const id=getID(v);
+   if(localStorage.getItem("cont_"+id)==="1"){
+     continueRow.appendChild(createCard(v));
+   }
+ });
+}
+
+function renderFav(){
+ favRow.innerHTML="";
+ videos.forEach(v=>{
+   const id=getID(v);
+   if(localStorage.getItem("fav_"+id)==="1"){
+     favRow.appendChild(createCard(v));
+   }
+ });
+}
+
+/* Skeleton loading */
+function showSkeleton(){
+ for(let i=0;i<3;i++){
+   mainRow.appendChild(document.createElement("div")).className="skeleton";
+ }
+}
+showSkeleton();
+
+setTimeout(()=>{
+ mainRow.innerHTML="";
+ renderMain();
+ renderContinue();
+ renderFav();
+},1000);
+
+document.querySelector(".close-btn").onclick=()=>{
+ document.getElementById("modal").classList.remove("show");
+ document.getElementById("modalIframe").src="";
+};
 
 </script>
+
+<script src="layout.v3.js" defer></script>
 
 </body>
 </html>
