@@ -13,17 +13,21 @@
 *{margin:0;padding:0;box-sizing:border-box}
 
 :root{
-  --cyan:#00F5FF;
-  --green:#00FFAA;
   --mobile-nav-height:78px;
+  --bg-primary:#05070d;
+  --text-primary:#ffffff;
+  --accent:#00F5FF;
+  --green:#00FFAA;
+  --danger:#FF4C4C;
 }
 
 body{
   font-family:'Orbitron',sans-serif;
-  background:transparent;
-  color:#fff;
+  background:var(--bg-primary);
+  color:var(--text-primary);
   min-height:100vh;
   overflow-x:hidden;
+  transition:background .4s ease,color .4s ease;
 }
 
 /* NAV */
@@ -41,7 +45,7 @@ body{
 }
 
 .navbar a{
-  color:#fff;
+  color:var(--text-primary);
   text-decoration:none;
   padding:8px 14px;
   border-radius:20px;
@@ -50,7 +54,7 @@ body{
 }
 
 .navbar a:hover{
-  background:var(--cyan);
+  background:var(--accent);
   color:#000;
 }
 
@@ -62,7 +66,7 @@ body{
   padding:150px 20px 140px;
 }
 
-/* FORM BOX */
+/* FORM BOX (Glass real) */
 .form-box{
   background:rgba(15,20,35,.75);
   backdrop-filter:blur(18px);
@@ -70,20 +74,20 @@ body{
   border-radius:24px;
   width:100%;
   max-width:460px;
-  border:1px solid rgba(0,153,255,.25);
-  box-shadow:0 0 60px rgba(0,153,255,.25);
+  border:1px solid var(--accent);
+  box-shadow:0 0 60px rgba(0,0,0,.35);
   transition:.3s;
 }
 
 .form-box:hover{
-  box-shadow:0 0 90px rgba(0,153,255,.35);
+  box-shadow:0 0 90px var(--accent);
 }
 
 h1{
   text-align:center;
   margin-bottom:10px;
   font-size:26px;
-  background:linear-gradient(90deg,var(--cyan),#fff,var(--cyan));
+  background:linear-gradient(90deg,var(--accent),#fff,var(--accent));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
@@ -101,7 +105,7 @@ input{
   padding:15px;
   margin-bottom:16px;
   border-radius:14px;
-  border:1px solid rgba(0,153,255,.35);
+  border:1px solid var(--accent);
   background:#0c1220;
   color:#fff;
   font-size:14px;
@@ -110,7 +114,7 @@ input{
 
 input:focus{
   outline:none;
-  box-shadow:0 0 18px rgba(0,153,255,.5);
+  box-shadow:0 0 18px var(--accent);
 }
 
 /* BUTTON */
@@ -120,7 +124,7 @@ button{
   border:none;
   border-radius:18px;
   font-weight:900;
-  background:linear-gradient(90deg,#0099FF,#00F5FF,#0099FF);
+  background:linear-gradient(90deg,var(--accent),#00aaff,var(--accent));
   background-size:200%;
   color:#000;
   cursor:pointer;
@@ -130,7 +134,7 @@ button{
 
 button:hover{
   transform:translateY(-2px);
-  box-shadow:0 0 35px var(--cyan);
+  box-shadow:0 0 35px var(--accent);
 }
 
 button:disabled{
@@ -268,7 +272,7 @@ e.preventDefault();
 if(enviando) return;
 
 formMsg.innerText="";
-formMsg.style.color="#FF4C4C";
+formMsg.style.color="var(--danger)";
 
 const token=grecaptcha.getResponse();
 if(!token){
@@ -303,7 +307,7 @@ const data=await res.json();
 if(!res.ok){
   formMsg.innerText=data.erro || "Erro no envio.";
 }else{
-  formMsg.style.color="#00FFAA";
+  formMsg.style.color="var(--green)";
   formMsg.innerText="✅ Inscrição confirmada!";
   form.reset();
   grecaptcha.reset();
