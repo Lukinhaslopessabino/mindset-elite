@@ -12,16 +12,19 @@
 *{margin:0;padding:0;box-sizing:border-box}
 
 :root{
-  --cyan:#00F5FF;
-  --green:#00FFAA;
   --mobile-nav-height:78px;
+  --bg-primary:#05070d;
+  --text-primary:#ffffff;
+  --accent:#00F5FF;
+  --green:#00FFAA;
 }
 
 body{
   font-family:'Orbitron',sans-serif;
-  background:transparent;
-  color:#fff;
+  background:var(--bg-primary);
+  color:var(--text-primary);
   overflow-x:hidden;
+  transition:background .4s ease,color .4s ease;
 }
 
 /* NAV */
@@ -37,15 +40,20 @@ body{
   backdrop-filter:blur(15px);
   z-index:1000;
 }
+
 .navbar a{
-  color:#fff;
+  color:var(--text-primary);
   text-decoration:none;
   padding:8px 14px;
   border-radius:20px;
   font-size:14px;
   transition:.2s;
 }
-.navbar a:hover{background:var(--cyan);color:#000}
+
+.navbar a:hover{
+  background:var(--accent);
+  color:#000;
+}
 
 /* PAGE */
 .container{
@@ -59,9 +67,14 @@ body{
 h1{
   font-size:26px;
   margin-bottom:20px;
-  background:linear-gradient(90deg,var(--cyan),#fff,var(--cyan));
+  background:linear-gradient(90deg,var(--accent),#fff,var(--accent));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
+}
+
+h3{
+  margin-top:30px;
+  color:var(--accent);
 }
 
 /* ROW */
@@ -82,17 +95,18 @@ h1{
 
 .card-inner{
   background:rgba(15,20,35,.75);
-  border:1px solid rgba(0,153,255,.25);
+  border:1px solid var(--accent);
   border-radius:14px;
   overflow:hidden;
   transition:.3s;
   cursor:pointer;
   position:relative;
+  backdrop-filter:blur(10px);
 }
 
 .card-inner:hover{
   transform:scale(1.1);
-  box-shadow:0 0 40px rgba(0,153,255,.35);
+  box-shadow:0 0 40px var(--accent);
   z-index:5;
 }
 
@@ -102,26 +116,30 @@ h1{
   height:150px;
   overflow:hidden;
 }
+
 .thumb img{
   width:100%;
   height:100%;
   object-fit:cover;
 }
+
 .preview{
   position:absolute;
   inset:0;
   opacity:0;
   transition:.2s;
 }
+
 .preview iframe{
   width:100%;
   height:100%;
   border:none;
 }
+
 .card-inner:hover .preview{opacity:1}
 .card-inner:hover img{opacity:0}
 
-/* Volume Button */
+/* Volume */
 .volume-btn{
   position:absolute;
   bottom:8px;
@@ -143,7 +161,6 @@ h1{
   justify-content:space-between;
 }
 
-/* FAVORITE */
 .fav-btn{
   cursor:pointer;
   font-size:14px;
@@ -174,27 +191,54 @@ h1{
   z-index:99999;
 }
 #modal.show{display:flex}
+
 .modal-video{
   width:90%;
   max-width:900px;
   position:relative;
   padding-bottom:56.25%;
 }
+
 .modal-video iframe{
   position:absolute;
   width:100%;
   height:100%;
   border:none;
 }
+
 .close-btn{
   position:absolute;
   top:-40px;
   right:0;
-  background:var(--cyan);
+  background:var(--accent);
   border:none;
   padding:8px 12px;
   cursor:pointer;
   font-weight:bold;
+  color:#000;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+  body{
+    padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));
+  }
+
+  .navbar{
+    top:auto;
+    bottom:0;
+    justify-content:space-around;
+    padding:10px 6px calc(10px + env(safe-area-inset-bottom));
+  }
+
+  .navbar a{
+    flex-direction:column;
+    font-size:11px;
+  }
+
+  .container{
+    padding:100px 15px 100px;
+  }
 }
 </style>
 </head>
@@ -231,7 +275,7 @@ h1{
 </div>
 
 <script>
-
+/* SEU JS ORIGINAL MANTIDO */
 const videos=[
 "https://youtube.com/shorts/lS8Sdam5pEA",
 "https://youtube.com/shorts/v_s2bz8T3a8",
@@ -337,7 +381,6 @@ function renderFav(){
  });
 }
 
-/* Skeleton loading */
 function showSkeleton(){
  for(let i=0;i<3;i++){
    mainRow.appendChild(document.createElement("div")).className="skeleton";
@@ -356,7 +399,6 @@ document.querySelector(".close-btn").onclick=()=>{
  document.getElementById("modal").classList.remove("show");
  document.getElementById("modalIframe").src="";
 };
-
 </script>
 
 <script src="layout.v3.js" defer></script>
