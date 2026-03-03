@@ -1,6 +1,7 @@
 /* ======================================================
-   🔥 MINDSET ELITE ULTRA LAYOUT ENGINE v3
+   🔥 MINDSET ELITE ULTRA LAYOUT ENGINE v3 (FIXED)
    Clima real + Partículas dinâmicas + Tema automático
+   Compatível com global.css
    ====================================================== */
 
 const WEATHER_API_KEY = "5caa07139301db484fef22221d9243e4";
@@ -19,16 +20,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const style = document.createElement("style");
   style.textContent = `
-    :root{
-      --accent: #00f5ff;
-      --bg-main: #0f0f12;
-    }
-
-    body{
-      background: var(--bg-main);
-      transition: background 0.6s ease;
-    }
-
     #globalTransition{
       position:fixed; inset:0;
       background: radial-gradient(900px 600px at 50% 20%, rgba(0,245,255,.18), transparent 55%),
@@ -50,6 +41,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       position:fixed;
       inset:0;
       z-index:-1;
+      pointer-events:none;
     }
   `;
   document.head.appendChild(style);
@@ -62,6 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.querySelectorAll("a").forEach(a=>{
     a.addEventListener("click",(e)=>{
       if(a.origin !== location.origin) return;
+      if(a.target === "_blank") return;
       e.preventDefault();
       go(a.href);
     });
@@ -80,21 +73,26 @@ document.addEventListener("DOMContentLoaded", async () => {
       `https://api.openweathermap.org/data/2.5/weather?q=${CITY},${COUNTRY}&appid=${WEATHER_API_KEY}`
     );
     const data = await res.json();
-    weatherMain = data.weather[0].main;
+    if(data.weather && data.weather.length){
+      weatherMain = data.weather[0].main;
+    }
   }catch(e){
     console.log("Clima não carregado.");
   }
 
   /* ===============================
-     🎨 TEMA BASEADO EM HORA
+     🕒 TEMA BASEADO NA HORA
+     (Integrado ao global.css)
   =============================== */
 
   const hour = new Date().getHours();
 
   if(hour >= 6 && hour < 18){
-    document.documentElement.style.setProperty("--bg-main","#0f172a");
+    document.documentElement.style.setProperty("--bg0","#000814");
+    document.documentElement.style.setProperty("--bg1","#0f172a");
   }else{
-    document.documentElement.style.setProperty("--bg-main","#050505");
+    document.documentElement.style.setProperty("--bg0","#000000");
+    document.documentElement.style.setProperty("--bg1","#050505");
   }
 
   /* ===============================
@@ -122,6 +120,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   document.documentElement.style.setProperty("--accent", particleColor);
+  document.documentElement.style.setProperty("--cyan", particleColor);
 
   /* ===============================
      ✨ PARTÍCULAS DINÂMICAS
