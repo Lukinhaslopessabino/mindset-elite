@@ -1,59 +1,64 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vídeos - Mindset Elite</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="global.css">
 
 <style>
 
-/* TÍTULO */
-.page-title{
-  font-size:32px;
-  margin-bottom:30px;
+/* ESPAÇAMENTO */
+.container{
+  padding-top:150px;
 }
 
-/* ROW WRAPPER */
+/* TÍTULO */
+.page-title{
+  font-size:34px;
+  margin-bottom:50px;
+  font-weight:900;
+  color:#00e0ff;
+}
+
+/* WRAPPER */
 .row-wrapper{
   position:relative;
   overflow:hidden;
-  border-radius:18px;
+  border-radius:20px;
 }
 
-/* FADE EDGES */
+/* FADE LATERAL */
 .row-wrapper::before,
 .row-wrapper::after{
   content:"";
   position:absolute;
   top:0;
-  width:120px;
+  width:100px;
   height:100%;
-  z-index:10;
+  z-index:5;
   pointer-events:none;
 }
 .row-wrapper::before{
   left:0;
-  background:linear-gradient(to right,var(--bg1) 0%,transparent 100%);
+  background:linear-gradient(to right,#0f172a 0%,transparent 100%);
 }
 .row-wrapper::after{
   right:0;
-  background:linear-gradient(to left,var(--bg1) 0%,transparent 100%);
+  background:linear-gradient(to left,#0f172a 0%,transparent 100%);
 }
 
 /* ROW */
 .row{
   display:flex;
-  gap:18px;
+  gap:24px;
   overflow-x:auto;
   scroll-behavior:smooth;
-  padding:40px 0;
-  perspective:1100px;
+  padding:50px 0;
 }
 .row::-webkit-scrollbar{display:none}
 
@@ -62,115 +67,112 @@
   position:absolute;
   top:50%;
   transform:translateY(-50%);
-  width:60px;
-  height:95px;
-  background:rgba(0,0,0,.65);
-  border:1px solid var(--stroke);
+  width:55px;
+  height:85px;
+  background:rgba(0,0,0,.7);
+  border:none;
   color:#fff;
-  font-size:32px;
+  font-size:28px;
   cursor:pointer;
-  z-index:20;
-  backdrop-filter:blur(10px);
+  z-index:10;
   opacity:0;
-  transition:.25s;
+  transition:.25s ease;
 }
 .row-wrapper:hover .scroll-btn{opacity:1}
-
 .scroll-btn:hover{
-  background:var(--cyan);
+  background:#00e0ff;
   color:#000;
-  box-shadow:var(--shadow-2);
 }
-
-.scroll-left{left:0;border-radius:0 14px 14px 0}
-.scroll-right{right:0;border-radius:14px 0 0 14px}
+.scroll-left{left:0;border-radius:0 12px 12px 0}
+.scroll-right{right:0;border-radius:12px 0 0 12px}
 
 /* CARD */
 .card{
-  min-width:270px;
-  max-width:270px;
-  transform-style:preserve-3d;
+  min-width:300px;
+  max-width:300px;
 }
 
 .card-inner{
-  background:var(--panel);
-  border:1px solid var(--stroke);
-  border-radius:var(--radius-lg);
+  background:#111827;
+  border-radius:18px;
   overflow:hidden;
   transition:transform .3s ease, box-shadow .3s ease;
+  box-shadow:0 15px 50px rgba(0,0,0,.4);
 }
 
-.card.is-hover .card-inner{
-  transform:translateZ(60px) scale(1.16);
-  box-shadow:var(--shadow-2);
-  border-color:var(--cyan);
+.card:hover .card-inner{
+  transform:scale(1.08);
+  box-shadow:0 25px 80px rgba(0,0,0,.6);
 }
 
 /* THUMB */
-.thumb{height:155px;overflow:hidden;position:relative}
+.thumb{
+  height:170px;
+  position:relative;
+  overflow:hidden;
+}
+
 .thumb img{
   width:100%;
   height:100%;
   object-fit:cover;
   transition:.3s;
 }
+
 .preview{
   position:absolute;
   inset:0;
   opacity:0;
   transition:.3s;
 }
-.preview iframe{width:100%;height:100%;border:none}
+.preview iframe{
+  width:100%;
+  height:100%;
+  border:none;
+}
 
-.card.is-hover img{opacity:0}
-.card.is-hover .preview{opacity:1}
+.card:hover img{opacity:0}
+.card:hover .preview{opacity:1}
 
+/* STRIP */
 .strip{
-  padding:12px;
+  padding:14px;
   text-align:center;
-  font-size:12px;
-  opacity:.85;
+  font-size:13px;
+  color:#cbd5e1;
+  font-weight:600;
 }
 
-/* CURSOR TRAIL */
-#cursorTrail,#cursorAura{display:none}
-
-@media(min-width:769px){
-  #cursorTrail,#cursorAura{display:block}
-}
-
-#cursorTrail{
-  position:fixed;
-  width:24px;height:24px;
-  border-radius:50%;
-  pointer-events:none;
-  z-index:99999;
-  transform:translate(-50%,-50%);
-  background:radial-gradient(circle,var(--cyan),transparent 70%);
-  opacity:0;
-}
-#cursorAura{
-  position:fixed;
-  width:180px;height:180px;
-  border-radius:50%;
-  pointer-events:none;
-  z-index:99998;
-  transform:translate(-50%,-50%);
-  background:radial-gradient(circle,rgba(0,245,255,.15),transparent 60%);
-  opacity:0;
-}
-
+/* MOBILE */
 @media(max-width:768px){
-  .scroll-btn{display:none}
+
+  .container{
+    padding-top:120px;
+  }
+
+  .page-title{
+    font-size:24px;
+  }
+
+  .card{
+    min-width:220px;
+    max-width:220px;
+  }
+
+  .thumb{
+    height:140px;
+  }
+
+  .scroll-btn{
+    display:none;
+  }
+
 }
 
 </style>
 </head>
 
 <body>
-
-<div id="cursorAura"></div>
-<div id="cursorTrail"></div>
 
 <nav class="navbar">
   <a href="index.html">🏠 Início</a>
@@ -183,9 +185,9 @@
 
 <div class="container">
 
-  <h1 class="holo-title page-title">Streaming Mindset Elite</h1>
+  <h1 class="page-title">Streaming Mindset Elite</h1>
 
-  <div class="row-wrapper" id="rowWrap">
+  <div class="row-wrapper">
     <button class="scroll-btn scroll-left" id="btnLeft">‹</button>
     <div class="row" id="mainRow"></div>
     <button class="scroll-btn scroll-right" id="btnRight">›</button>
@@ -202,9 +204,7 @@
 
 <script>
 
-/* =========================
-   LISTA DE VÍDEOS
-========================= */
+/* LISTA */
 const videos=[
   "https://youtube.com/shorts/lS8Sdam5pEA",
   "https://youtube.com/shorts/v_s2bz8T3a8",
@@ -227,6 +227,7 @@ const btnRight=document.getElementById("btnRight");
 function getID(url){
   return url.split("shorts/")[1].split("?")[0];
 }
+
 function embed(id){
   return `https://www.youtube.com/embed/${id}?mute=1&controls=0&rel=0&autoplay=1&playsinline=1`;
 }
@@ -244,49 +245,21 @@ function createCard(url){
           <iframe src="${embed(id)}"></iframe>
         </div>
       </div>
-      <div class="strip">${id}</div>
+      <div class="strip">Mindset Elite</div>
     </div>
   `;
-
-  card.addEventListener("mouseenter",()=>card.classList.add("is-hover"));
-  card.addEventListener("mouseleave",()=>card.classList.remove("is-hover"));
 
   return card;
 }
 
 videos.forEach(v=>mainRow.appendChild(createCard(v)));
 
-btnLeft.onclick=()=>mainRow.scrollBy({left:-520,behavior:"smooth"});
-btnRight.onclick=()=>mainRow.scrollBy({left:520,behavior:"smooth"});
-
-/* CURSOR TRAIL */
-const trail=document.getElementById("cursorTrail");
-const aura=document.getElementById("cursorAura");
-let tx=0,ty=0,cx=0,cy=0,ax=0,ay=0;
-
-function animate(){
-  cx+=(tx-cx)*.2;
-  cy+=(ty-cy)*.2;
-  ax+=(tx-ax)*.08;
-  ay+=(ty-ay)*.08;
-
-  trail.style.left=cx+"px";
-  trail.style.top=cy+"px";
-  aura.style.left=ax+"px";
-  aura.style.top=ay+"px";
-
-  requestAnimationFrame(animate);
-}
-animate();
-
-document.addEventListener("mousemove",(e)=>{
-  tx=e.clientX; ty=e.clientY;
-  trail.style.opacity=1;
-  aura.style.opacity=1;
-});
+btnLeft.onclick=()=>mainRow.scrollBy({left:-500,behavior:"smooth"});
+btnRight.onclick=()=>mainRow.scrollBy({left:500,behavior:"smooth"});
 
 </script>
 
 <script src="layout.v3.js" defer></script>
+
 </body>
 </html>
