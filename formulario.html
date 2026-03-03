@@ -5,38 +5,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Inscrição - Mindset Elite</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
 :root{
+  --cyan:#00F5FF;
+  --green:#00FFAA;
   --mobile-nav-height:78px;
 }
 
 body{
   font-family:'Orbitron',sans-serif;
-  background:#05070d;
+  background:transparent;
   color:#fff;
   min-height:100vh;
   overflow-x:hidden;
 }
 
-/* NAVBAR */
+/* NAV */
 .navbar{
   position:fixed;
   top:0;
   width:100%;
   display:flex;
   justify-content:center;
-  gap:25px;
-  padding:18px;
-  background:rgba(0,0,0,0.85);
+  gap:20px;
+  padding:16px;
+  background:rgba(0,0,0,.55);
   backdrop-filter:blur(15px);
   z-index:1000;
 }
@@ -44,23 +43,15 @@ body{
 .navbar a{
   color:#fff;
   text-decoration:none;
-  padding:8px 16px;
-  border-radius:25px;
-  transition:.3s;
+  padding:8px 14px;
+  border-radius:20px;
   font-size:14px;
+  transition:.2s;
 }
 
 .navbar a:hover{
-  background:#00F5FF;
+  background:var(--cyan);
   color:#000;
-  box-shadow:0 0 20px #00F5FF;
-}
-
-/* PARTICLES */
-#particles-js{
-  position:fixed;
-  inset:0;
-  z-index:-1;
 }
 
 /* CONTAINER */
@@ -68,70 +59,78 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  padding:160px 20px 120px;
+  padding:150px 20px 140px;
 }
 
-/* FORM */
+/* FORM BOX */
 .form-box{
-  background:rgba(15,20,35,0.98);
+  background:rgba(15,20,35,.75);
+  backdrop-filter:blur(18px);
   padding:50px;
-  border-radius:30px;
+  border-radius:24px;
   width:100%;
-  max-width:480px;
+  max-width:460px;
   border:1px solid rgba(0,153,255,.25);
-  box-shadow:0 0 50px rgba(0,153,255,.25);
+  box-shadow:0 0 60px rgba(0,153,255,.25);
+  transition:.3s;
+}
+
+.form-box:hover{
+  box-shadow:0 0 90px rgba(0,153,255,.35);
 }
 
 h1{
   text-align:center;
-  margin-bottom:15px;
-  font-size:28px;
-  background:linear-gradient(90deg,#00F5FF,#fff,#00F5FF);
+  margin-bottom:10px;
+  font-size:26px;
+  background:linear-gradient(90deg,var(--cyan),#fff,var(--cyan));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
 
 .vagas{
   text-align:center;
-  margin-bottom:30px;
+  margin-bottom:25px;
   font-size:14px;
-  color:#00FFAA;
+  color:var(--green);
 }
 
+/* INPUTS */
 input{
   width:100%;
-  padding:16px;
-  margin-bottom:18px;
-  border-radius:16px;
-  border:1px solid rgba(0,153,255,.4);
-  background:#0b0f18;
+  padding:15px;
+  margin-bottom:16px;
+  border-radius:14px;
+  border:1px solid rgba(0,153,255,.35);
+  background:#0c1220;
   color:#fff;
   font-size:14px;
-  transition:.3s;
+  transition:.2s;
 }
 
 input:focus{
   outline:none;
-  box-shadow:0 0 20px rgba(0,153,255,.6);
+  box-shadow:0 0 18px rgba(0,153,255,.5);
 }
 
+/* BUTTON */
 button{
   width:100%;
-  padding:16px;
+  padding:15px;
   border:none;
-  border-radius:22px;
+  border-radius:18px;
+  font-weight:900;
   background:linear-gradient(90deg,#0099FF,#00F5FF,#0099FF);
   background-size:200%;
   color:#000;
-  font-weight:900;
   cursor:pointer;
   transition:.3s;
   position:relative;
 }
 
 button:hover{
-  transform:scale(1.04);
-  box-shadow:0 0 35px #00F5FF;
+  transform:translateY(-2px);
+  box-shadow:0 0 35px var(--cyan);
 }
 
 button:disabled{
@@ -140,6 +139,7 @@ button:disabled{
   cursor:not-allowed;
 }
 
+/* LOADER */
 .loader{
   display:none;
   position:absolute;
@@ -160,16 +160,16 @@ button:disabled{
 }
 
 #formMsg{
-  margin-top:15px;
+  margin-top:14px;
   text-align:center;
-  min-height:20px;
+  min-height:22px;
   font-size:14px;
 }
 
 .honeypot{display:none;}
 
 /* MOBILE */
-@media (max-width:768px){
+@media(max-width:768px){
 
   body{
     padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));
@@ -180,34 +180,27 @@ button:disabled{
     bottom:0;
     justify-content:space-around;
     padding:10px 5px calc(10px + env(safe-area-inset-bottom));
-    border-top:1px solid rgba(0,153,255,.3);
   }
 
   .navbar a{
-    flex-direction:column;
     font-size:11px;
     padding:6px;
   }
 
   .container{
-    padding:100px 15px 100px;
+    padding:100px 15px 120px;
   }
 
   .form-box{
-    padding:25px;
+    padding:30px;
   }
 
-  h1{
-    font-size:20px;
-  }
-
+  h1{font-size:20px;}
 }
 </style>
 </head>
 
 <body>
-
-<div id="particles-js"></div>
 
 <nav class="navbar">
   <a href="index.html">🏠 Início</a>
@@ -237,9 +230,10 @@ Enviar Inscrição
 <div class="loader" id="loader"></div>
 </button>
 
+<div style="margin-top:20px;text-align:center">
 <div class="g-recaptcha"
-data-sitekey="6LefpnEsAAAAAE46Eao6qyQQL_6nGBT08Dc3pGTo"
-style="margin-top:20px"></div>
+data-sitekey="6LefpnEsAAAAAE46Eao6qyQQL_6nGBT08Dc3pGTo"></div>
+</div>
 
 <p id="formMsg"></p>
 
@@ -249,17 +243,6 @@ style="margin-top:20px"></div>
 
 <script>
 const pageLoadedAt = Date.now();
-
-if(window.innerWidth > 600 && window.particlesJS){
-  particlesJS("particles-js",{
-    particles:{
-      number:{value:35},
-      color:{value:"#00F5FF"},
-      line_linked:{enable:true,color:"#00F5FF"},
-      move:{speed:0.6}
-    }
-  });
-}
 
 async function carregarVagas(){
   try{
@@ -287,11 +270,6 @@ if(enviando) return;
 formMsg.innerText="";
 formMsg.style.color="#FF4C4C";
 
-if(!window.grecaptcha){
-  formMsg.innerText="reCAPTCHA não carregado.";
-  return;
-}
-
 const token=grecaptcha.getResponse();
 if(!token){
   formMsg.innerText="Confirme o reCAPTCHA.";
@@ -303,7 +281,7 @@ const nome=document.getElementById("nome").value.trim();
 const idade=parseInt(document.getElementById("idade").value);
 const hp=document.getElementById("hp").value;
 
-if(hp){ return; } // bot detectado silenciosamente
+if(hp){ return; }
 
 if(nome.length<2){ formMsg.innerText="Nome inválido."; return; }
 if(!telegram.startsWith("@")){ formMsg.innerText="Telegram deve começar com @"; return; }
@@ -317,14 +295,7 @@ try{
 const res=await fetch("https://mindset-elite.onrender.com/inscrever",{
 method:"POST",
 headers:{ "Content-Type":"application/json" },
-body:JSON.stringify({
-  nome,
-  idade,
-  telegram,
-  token,
-  hp,
-  ts: pageLoadedAt
-})
+body:JSON.stringify({ nome, idade, telegram, token, hp, ts:pageLoadedAt })
 });
 
 const data=await res.json();
@@ -348,6 +319,8 @@ button.disabled=false;
 enviando=false;
 });
 </script>
+
+<script src="layout.v3.js" defer></script>
 
 </body>
 </html>
