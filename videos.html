@@ -6,21 +6,21 @@
 <title>Vídeos - Mindset Elite</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
 :root{
   --accent:#00F5FF;
-  --mobile-nav-height:78px;
+  --bg:#0f172a;
 }
 
 body{
   font-family:'Orbitron',sans-serif;
-  background:transparent;
+  background:var(--bg);
   color:#fff;
   overflow-x:hidden;
+  min-height:100vh;
 }
 
 /* NAV */
@@ -36,7 +36,6 @@ body{
   backdrop-filter:blur(15px);
   z-index:1000;
 }
-
 .navbar a{
   color:#fff;
   text-decoration:none;
@@ -45,32 +44,49 @@ body{
   font-size:14px;
   transition:.2s;
 }
-
-.navbar a:hover{
-  background:var(--accent);
-  color:#000;
-}
+.navbar a:hover{background:var(--accent);color:#000}
 
 /* PAGE */
 .container{
-  padding:140px 30px 140px;
-  max-width:1400px;
+  padding:140px 50px 120px;
+  max-width:1500px;
   margin:auto;
   position:relative;
-  z-index:1;
+  z-index:2;
 }
-
 h1{
-  font-size:26px;
-  margin-bottom:30px;
+  font-size:30px;
+  margin-bottom:26px;
   background:linear-gradient(90deg,var(--accent),#fff,var(--accent));
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
 }
 
-h3{
-  margin-top:30px;
-  color:var(--accent);
+/* ROW WRAPPER */
+.row-wrapper{
+  position:relative;
+  overflow:hidden;
+  border-radius:18px;
+}
+
+/* FADE EDGES */
+.row-wrapper::before,
+.row-wrapper::after{
+  content:"";
+  position:absolute;
+  top:0;
+  width:140px;
+  height:100%;
+  z-index:10;
+  pointer-events:none;
+}
+.row-wrapper::before{
+  left:0;
+  background:linear-gradient(to right,var(--bg) 0%,transparent 100%);
+}
+.row-wrapper::after{
+  right:0;
+  background:linear-gradient(to left,var(--bg) 0%,transparent 100%);
 }
 
 /* ROW */
@@ -78,126 +94,135 @@ h3{
   display:flex;
   gap:18px;
   overflow-x:auto;
-  padding:30px 0;
-  position:relative;
+  scroll-behavior:smooth;
+  padding:34px 0;
+  perspective:1100px; /* importante pro 3D */
+  transform-style:preserve-3d;
 }
-
 .row::-webkit-scrollbar{display:none}
 
-/* NETFLIX STYLE CARD */
-.card{
-  min-width:260px;
-  position:relative;
-  transition:transform .35s cubic-bezier(.2,.8,.2,1);
-}
-
-.card-inner{
-  background:rgba(15,20,35,.85);
-  border:1px solid rgba(0,153,255,.25);
-  border-radius:14px;
-  overflow:hidden;
-  transition:all .35s cubic-bezier(.2,.8,.2,1);
+/* SCROLL BUTTONS */
+.scroll-btn{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  width:58px;
+  height:92px;
+  background:rgba(0,0,0,.55);
+  border:1px solid rgba(255,255,255,.06);
+  color:#fff;
+  font-size:34px;
   cursor:pointer;
-  backdrop-filter:blur(12px);
-  position:relative;
-  z-index:1;
-}
-
-.card:hover{
-  transform:scale(1.15);
   z-index:20;
+  backdrop-filter:blur(10px);
+  opacity:0;
+  transition:.25s ease;
+}
+.row-wrapper:hover .scroll-btn{opacity:1}
+.scroll-btn:hover{
+  background:rgba(0,245,255,.95);
+  color:#000;
+  box-shadow:0 0 18px var(--accent), 0 0 40px rgba(0,245,255,.45);
+}
+.scroll-left{left:0;border-radius:0 14px 14px 0}
+.scroll-right{right:0;border-radius:14px 0 0 14px}
+
+/* CARD */
+.card{
+  min-width:270px;
+  max-width:270px;
+  position:relative;
+  transform-style:preserve-3d;
+  will-change:transform;
+}
+.card-inner{
+  background:rgba(15,20,35,.86);
+  border:1px solid rgba(0,153,255,.22);
+  border-radius:16px;
+  overflow:hidden;
+  backdrop-filter:blur(12px);
+  transition:transform .28s cubic-bezier(.2,.8,.2,1), box-shadow .28s ease, border-color .28s ease;
+  transform:translateZ(0);
 }
 
-.card:hover .card-inner{
-  box-shadow:0 30px 80px rgba(0,0,0,.8);
-  border:1px solid var(--accent);
+/* ZOOM 3D AO CENTRO (hover “puxa” pra frente) */
+.card.is-hover .card-inner{
+  transform:translateZ(60px) scale(1.16);
+  border-color:rgba(0,245,255,.9);
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.85),
+    0 0 40px rgba(0,245,255,.25);
+  z-index:30;
 }
 
 /* THUMB */
-.thumb{
-  position:relative;
-  height:150px;
-  overflow:hidden;
-}
-
+.thumb{position:relative;height:155px;overflow:hidden}
 .thumb img{
-  width:100%;
-  height:100%;
+  width:100%;height:100%;
   object-fit:cover;
-  transition:.3s;
+  transition:opacity .25s ease;
 }
-
 .preview{
-  position:absolute;
-  inset:0;
+  position:absolute;inset:0;
   opacity:0;
-  transform:scale(1.05);
-  transition:opacity .3s ease, transform .3s ease;
+  transition:opacity .25s ease;
 }
+.preview iframe{width:100%;height:100%;border:none}
 
-.preview iframe{
-  width:100%;
-  height:100%;
-  border:none;
-}
-
-.card:hover .preview{
-  opacity:1;
-  transform:scale(1);
-}
-
-.card:hover img{
-  opacity:0;
-}
+/* mostra preview no hover */
+.card.is-hover .preview{opacity:1}
+.card.is-hover img{opacity:0}
 
 .strip{
-  padding:10px;
+  padding:10px 10px 12px;
   font-size:12px;
   text-align:center;
+  opacity:.85;
 }
 
-/* OVERLAY ESCURO */
-#hoverOverlay{
+/* TRAILING GLOW */
+#cursorTrail{
   position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.4);
-  opacity:0;
+  left:0; top:0;
+  width:24px; height:24px;
+  border-radius:999px;
   pointer-events:none;
-  transition:.3s;
-  z-index:5;
+  z-index:999999;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle at 30% 30%, rgba(0,245,255,.95), rgba(0,245,255,.22) 45%, rgba(0,245,255,0) 70%);
+  filter:blur(.2px);
+  opacity:.0;
+  transition:opacity .2s ease;
 }
+#cursorTrail.on{opacity:1}
 
-#hoverOverlay.active{
-  opacity:1;
+#cursorAura{
+  position:fixed;
+  left:0; top:0;
+  width:180px; height:180px;
+  border-radius:999px;
+  pointer-events:none;
+  z-index:999998;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(circle, rgba(0,245,255,.14), rgba(0,245,255,0) 60%);
+  opacity:.0;
+  transition:opacity .25s ease;
 }
+#cursorAura.on{opacity:1}
 
 /* MOBILE */
 @media(max-width:768px){
-  body{
-    padding-bottom:calc(var(--mobile-nav-height) + env(safe-area-inset-bottom));
-  }
-
-  .navbar{
-    top:auto;
-    bottom:0;
-    justify-content:space-around;
-    padding:10px 6px calc(10px + env(safe-area-inset-bottom));
-  }
-
-  .navbar a{
-    font-size:11px;
-  }
-
-  .container{
-    padding:100px 15px 100px;
-  }
+  .scroll-btn{display:none}
+  #cursorTrail,#cursorAura{display:none}
+  .container{padding:100px 15px 100px}
 }
 </style>
 </head>
 
 <body>
 
-<div id="hoverOverlay"></div>
+<div id="cursorAura"></div>
+<div id="cursorTrail"></div>
 
 <nav class="navbar">
   <a href="index.html">🏠 Início</a>
@@ -209,73 +234,252 @@ h3{
 </nav>
 
 <div class="container">
-<h1>Streaming Mindset Elite</h1>
+  <h1>Streaming Mindset Elite</h1>
 
-<h3>🔥 Catálogo</h3>
-<div class="row" id="mainRow"></div>
-
+  <div class="row-wrapper" id="rowWrap">
+    <button class="scroll-btn scroll-left" id="btnLeft">‹</button>
+    <div class="row" id="mainRow"></div>
+    <button class="scroll-btn scroll-right" id="btnRight">›</button>
+  </div>
 </div>
 
 <script>
+/* =========================
+   CONFIG
+========================= */
 const videos=[
-"https://youtube.com/shorts/lS8Sdam5pEA",
-"https://youtube.com/shorts/v_s2bz8T3a8",
-"https://youtube.com/shorts/g-BJOYE_Zj8",
-"https://youtube.com/shorts/OJMOJnKw77g",
-"https://youtube.com/shorts/NSSgs-AH9vc",
-"https://youtube.com/shorts/pX0lkVI1dkg",
-"https://youtube.com/shorts/CWGaPBbQI6M",
-"https://youtube.com/shorts/QTNoH8Gpho8",
-"https://youtube.com/shorts/lxOMW7GOn44",
-"https://youtube.com/shorts/wYi4Zvc6uuk",
-"https://youtube.com/shorts/tfh5HmCJS0w",
-"https://youtube.com/shorts/37D3nHE0Eac"
+  "https://youtube.com/shorts/lS8Sdam5pEA",
+  "https://youtube.com/shorts/v_s2bz8T3a8",
+  "https://youtube.com/shorts/g-BJOYE_Zj8",
+  "https://youtube.com/shorts/OJMOJnKw77g",
+  "https://youtube.com/shorts/NSSgs-AH9vc",
+  "https://youtube.com/shorts/pX0lkVI1dkg",
+  "https://youtube.com/shorts/CWGaPBbQI6M",
+  "https://youtube.com/shorts/QTNoH8Gpho8",
+  "https://youtube.com/shorts/lxOMW7GOn44",
+  "https://youtube.com/shorts/wYi4Zvc6uuk",
+  "https://youtube.com/shorts/tfh5HmCJS0w",
+  "https://youtube.com/shorts/37D3nHE0Eac"
 ];
 
-const mainRow=document.getElementById("mainRow");
-const overlay=document.getElementById("hoverOverlay");
+const mainRow = document.getElementById("mainRow");
+const rowWrap = document.getElementById("rowWrap");
+const btnLeft = document.getElementById("btnLeft");
+const btnRight = document.getElementById("btnRight");
 
+/* =========================
+   YOUTUBE HELPERS
+========================= */
 function getID(url){
- return url.split("shorts/")[1].split("?")[0];
+  // shorts/ID?...
+  const part = url.split("shorts/")[1] || "";
+  return part.split("?")[0];
 }
-
 function embed(id){
- return `https://www.youtube.com/embed/${id}?mute=1&controls=0&rel=0&autoplay=1`;
+  // preview silencioso
+  return `https://www.youtube.com/embed/${id}?mute=1&controls=0&rel=0&autoplay=1&playsinline=1`;
 }
 
+/* =========================
+   SOM AMBIENTE (WebAudio)
+   (precisa de 1 clique do usuário)
+========================= */
+let audioCtx = null;
+let hoverGain = null;
+let hoverOsc = null;
+let audioUnlocked = false;
+
+function unlockAudio(){
+  if(audioUnlocked) return;
+  audioUnlocked = true;
+
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  hoverGain = audioCtx.createGain();
+  hoverGain.gain.value = 0.0;
+  hoverGain.connect(audioCtx.destination);
+
+  // “ambiente” leve: 2 osciladores + filtro
+  const filt = audioCtx.createBiquadFilter();
+  filt.type = "lowpass";
+  filt.frequency.value = 650;
+  filt.Q.value = 0.8;
+
+  filt.connect(hoverGain);
+
+  const osc1 = audioCtx.createOscillator();
+  osc1.type = "sine";
+  osc1.frequency.value = 110;
+
+  const osc2 = audioCtx.createOscillator();
+  osc2.type = "triangle";
+  osc2.frequency.value = 220;
+
+  // leve “tremolo”
+  const lfo = audioCtx.createOscillator();
+  lfo.type = "sine";
+  lfo.frequency.value = 6;
+
+  const lfoGain = audioCtx.createGain();
+  lfoGain.gain.value = 0.03;
+
+  lfo.connect(lfoGain);
+  lfoGain.connect(hoverGain.gain);
+
+  osc1.connect(filt);
+  osc2.connect(filt);
+
+  osc1.start();
+  osc2.start();
+  lfo.start();
+
+  hoverOsc = {osc1, osc2, lfo};
+}
+
+document.addEventListener("pointerdown", unlockAudio, {once:true});
+document.addEventListener("keydown", unlockAudio, {once:true});
+
+function hoverSoundOn(){
+  if(!audioUnlocked || !hoverGain) return;
+  // sobe suave
+  hoverGain.gain.cancelScheduledValues(audioCtx.currentTime);
+  hoverGain.gain.setTargetAtTime(0.06, audioCtx.currentTime, 0.03);
+}
+function hoverSoundOff(){
+  if(!audioUnlocked || !hoverGain) return;
+  hoverGain.gain.cancelScheduledValues(audioCtx.currentTime);
+  hoverGain.gain.setTargetAtTime(0.0, audioCtx.currentTime, 0.04);
+}
+
+/* =========================
+   CARD + TILT 3D
+========================= */
 function createCard(url){
+  const id = getID(url);
+  const card = document.createElement("div");
+  card.className = "card";
 
- const id=getID(url);
-
- const card=document.createElement("div");
- card.className="card";
-
- card.innerHTML=`
-  <div class="card-inner">
-    <div class="thumb">
-      <img src="https://img.youtube.com/vi/${id}/hqdefault.jpg">
-      <div class="preview">
-        <iframe src="${embed(id)}"></iframe>
+  card.innerHTML = `
+    <div class="card-inner">
+      <div class="thumb">
+        <img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="">
+        <div class="preview">
+          <iframe src="${embed(id)}" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
       </div>
+      <div class="strip">${id}</div>
     </div>
-    <div class="strip">${id}</div>
-  </div>
- `;
+  `;
 
- card.addEventListener("mouseenter",()=>{
-   overlay.classList.add("active");
- });
+  const inner = card.querySelector(".card-inner");
 
- card.addEventListener("mouseleave",()=>{
-   overlay.classList.remove("active");
- });
+  // hover liga classe + som
+  card.addEventListener("mouseenter", ()=>{
+    card.classList.add("is-hover");
+    hoverSoundOn();
+  });
 
- return card;
+  card.addEventListener("mouseleave", ()=>{
+    card.classList.remove("is-hover");
+    hoverSoundOff();
+    // reseta tilt
+    inner.style.transform = "";
+  });
+
+  // TILT 3D baseado no mouse
+  card.addEventListener("mousemove", (e)=>{
+    if(!card.classList.contains("is-hover")) return;
+    const r = card.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width; // 0..1
+    const y = (e.clientY - r.top) / r.height; // 0..1
+
+    const rotY = (x - 0.5) * 18; // -9..9
+    const rotX = (0.5 - y) * 14; // -7..7
+
+    // combina tilt + zoom 3D (mantém translateZ)
+    inner.style.transform =
+      `translateZ(60px) scale(1.16) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+  });
+
+  return card;
 }
 
-videos.forEach(v=>{
- mainRow.appendChild(createCard(v));
+videos.forEach(v => mainRow.appendChild(createCard(v)));
+
+/* =========================
+   BOTÕES / SCROLL
+========================= */
+function scrollRow(px){
+  mainRow.scrollBy({left:px, behavior:"smooth"});
+}
+btnLeft.addEventListener("click", ()=>scrollRow(-520));
+btnRight.addEventListener("click", ()=>scrollRow(520));
+
+/* Auto-scroll inteligente: só desktop + só em hover do wrapper */
+let autoTimer = null;
+let dir = 1;
+
+function startAuto(){
+  if(window.matchMedia("(max-width:768px)").matches) return;
+  stopAuto();
+  autoTimer = setInterval(()=>{
+    const max = mainRow.scrollWidth - mainRow.clientWidth;
+    if(mainRow.scrollLeft >= max-2) dir = -1;
+    if(mainRow.scrollLeft <= 2) dir = 1;
+    mainRow.scrollBy({left: 2.6 * dir});
+  }, 16);
+}
+function stopAuto(){
+  if(autoTimer) clearInterval(autoTimer);
+  autoTimer = null;
+}
+rowWrap.addEventListener("mouseenter", startAuto);
+rowWrap.addEventListener("mouseleave", stopAuto);
+
+/* =========================
+   TRAILING GLOW (cursor)
+========================= */
+const trail = document.getElementById("cursorTrail");
+const aura = document.getElementById("cursorAura");
+
+let tx = window.innerWidth/2, ty = window.innerHeight/2;
+let cx = tx, cy = ty;
+let ax = tx, ay = ty;
+
+function raf(){
+  // trail rápido
+  cx += (tx - cx) * 0.22;
+  cy += (ty - cy) * 0.22;
+
+  // aura mais lenta
+  ax += (tx - ax) * 0.08;
+  ay += (ty - ay) * 0.08;
+
+  trail.style.left = cx + "px";
+  trail.style.top = cy + "px";
+
+  aura.style.left = ax + "px";
+  aura.style.top = ay + "px";
+
+  requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
+
+document.addEventListener("mousemove", (e)=>{
+  tx = e.clientX; ty = e.clientY;
+  trail.classList.add("on");
+  aura.classList.add("on");
 });
+
+/* some quando sai da janela */
+window.addEventListener("mouseleave", ()=>{
+  trail.classList.remove("on");
+  aura.classList.remove("on");
+});
+
+/* =========================
+   (opcional) seu layout global
+========================= */
 </script>
 
 <script src="layout.v3.js" defer></script>
