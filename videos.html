@@ -5,61 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>Vídeos - Mindset Elite</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
+<link rel="stylesheet" href="global.css">
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
 
-:root{
-  --accent:#00F5FF;
-  --bg:#0f172a;
-}
-
-body{
-  font-family:'Orbitron',sans-serif;
-  background:var(--bg);
-  color:#fff;
-  overflow-x:hidden;
-  min-height:100vh;
-}
-
-/* NAV */
-.navbar{
-  position:fixed;
-  top:0;
-  width:100%;
-  display:flex;
-  justify-content:center;
-  gap:20px;
-  padding:16px;
-  background:rgba(0,0,0,.55);
-  backdrop-filter:blur(15px);
-  z-index:1000;
-}
-.navbar a{
-  color:#fff;
-  text-decoration:none;
-  padding:8px 14px;
-  border-radius:20px;
-  font-size:14px;
-  transition:.2s;
-}
-.navbar a:hover{background:var(--accent);color:#000}
-
-/* PAGE */
-.container{
-  padding:140px 50px 120px;
-  max-width:1500px;
-  margin:auto;
-  position:relative;
-  z-index:2;
-}
-h1{
-  font-size:30px;
-  margin-bottom:26px;
-  background:linear-gradient(90deg,var(--accent),#fff,var(--accent));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+/* TÍTULO */
+.page-title{
+  font-size:32px;
+  margin-bottom:30px;
 }
 
 /* ROW WRAPPER */
@@ -75,18 +32,18 @@ h1{
   content:"";
   position:absolute;
   top:0;
-  width:140px;
+  width:120px;
   height:100%;
   z-index:10;
   pointer-events:none;
 }
 .row-wrapper::before{
   left:0;
-  background:linear-gradient(to right,var(--bg) 0%,transparent 100%);
+  background:linear-gradient(to right,var(--bg1) 0%,transparent 100%);
 }
 .row-wrapper::after{
   right:0;
-  background:linear-gradient(to left,var(--bg) 0%,transparent 100%);
+  background:linear-gradient(to left,var(--bg1) 0%,transparent 100%);
 }
 
 /* ROW */
@@ -95,35 +52,36 @@ h1{
   gap:18px;
   overflow-x:auto;
   scroll-behavior:smooth;
-  padding:34px 0;
-  perspective:1100px; /* importante pro 3D */
-  transform-style:preserve-3d;
+  padding:40px 0;
+  perspective:1100px;
 }
 .row::-webkit-scrollbar{display:none}
 
-/* SCROLL BUTTONS */
+/* BOTÕES */
 .scroll-btn{
   position:absolute;
   top:50%;
   transform:translateY(-50%);
-  width:58px;
-  height:92px;
-  background:rgba(0,0,0,.55);
-  border:1px solid rgba(255,255,255,.06);
+  width:60px;
+  height:95px;
+  background:rgba(0,0,0,.65);
+  border:1px solid var(--stroke);
   color:#fff;
-  font-size:34px;
+  font-size:32px;
   cursor:pointer;
   z-index:20;
   backdrop-filter:blur(10px);
   opacity:0;
-  transition:.25s ease;
+  transition:.25s;
 }
 .row-wrapper:hover .scroll-btn{opacity:1}
+
 .scroll-btn:hover{
-  background:rgba(0,245,255,.95);
+  background:var(--cyan);
   color:#000;
-  box-shadow:0 0 18px var(--accent), 0 0 40px rgba(0,245,255,.45);
+  box-shadow:var(--shadow-2);
 }
+
 .scroll-left{left:0;border-radius:0 14px 14px 0}
 .scroll-right{right:0;border-radius:14px 0 0 14px}
 
@@ -131,91 +89,81 @@ h1{
 .card{
   min-width:270px;
   max-width:270px;
-  position:relative;
   transform-style:preserve-3d;
-  will-change:transform;
-}
-.card-inner{
-  background:rgba(15,20,35,.86);
-  border:1px solid rgba(0,153,255,.22);
-  border-radius:16px;
-  overflow:hidden;
-  backdrop-filter:blur(12px);
-  transition:transform .28s cubic-bezier(.2,.8,.2,1), box-shadow .28s ease, border-color .28s ease;
-  transform:translateZ(0);
 }
 
-/* ZOOM 3D AO CENTRO (hover “puxa” pra frente) */
+.card-inner{
+  background:var(--panel);
+  border:1px solid var(--stroke);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+
 .card.is-hover .card-inner{
   transform:translateZ(60px) scale(1.16);
-  border-color:rgba(0,245,255,.9);
-  box-shadow:
-    0 30px 90px rgba(0,0,0,.85),
-    0 0 40px rgba(0,245,255,.25);
-  z-index:30;
+  box-shadow:var(--shadow-2);
+  border-color:var(--cyan);
 }
 
 /* THUMB */
-.thumb{position:relative;height:155px;overflow:hidden}
+.thumb{height:155px;overflow:hidden;position:relative}
 .thumb img{
-  width:100%;height:100%;
+  width:100%;
+  height:100%;
   object-fit:cover;
-  transition:opacity .25s ease;
+  transition:.3s;
 }
 .preview{
-  position:absolute;inset:0;
+  position:absolute;
+  inset:0;
   opacity:0;
-  transition:opacity .25s ease;
+  transition:.3s;
 }
 .preview iframe{width:100%;height:100%;border:none}
 
-/* mostra preview no hover */
-.card.is-hover .preview{opacity:1}
 .card.is-hover img{opacity:0}
+.card.is-hover .preview{opacity:1}
 
 .strip{
-  padding:10px 10px 12px;
-  font-size:12px;
+  padding:12px;
   text-align:center;
+  font-size:12px;
   opacity:.85;
 }
 
-/* TRAILING GLOW */
+/* CURSOR TRAIL */
+#cursorTrail,#cursorAura{display:none}
+
+@media(min-width:769px){
+  #cursorTrail,#cursorAura{display:block}
+}
+
 #cursorTrail{
   position:fixed;
-  left:0; top:0;
-  width:24px; height:24px;
-  border-radius:999px;
+  width:24px;height:24px;
+  border-radius:50%;
   pointer-events:none;
-  z-index:999999;
+  z-index:99999;
   transform:translate(-50%,-50%);
-  background:radial-gradient(circle at 30% 30%, rgba(0,245,255,.95), rgba(0,245,255,.22) 45%, rgba(0,245,255,0) 70%);
-  filter:blur(.2px);
-  opacity:.0;
-  transition:opacity .2s ease;
+  background:radial-gradient(circle,var(--cyan),transparent 70%);
+  opacity:0;
 }
-#cursorTrail.on{opacity:1}
-
 #cursorAura{
   position:fixed;
-  left:0; top:0;
-  width:180px; height:180px;
-  border-radius:999px;
+  width:180px;height:180px;
+  border-radius:50%;
   pointer-events:none;
-  z-index:999998;
+  z-index:99998;
   transform:translate(-50%,-50%);
-  background:radial-gradient(circle, rgba(0,245,255,.14), rgba(0,245,255,0) 60%);
-  opacity:.0;
-  transition:opacity .25s ease;
+  background:radial-gradient(circle,rgba(0,245,255,.15),transparent 60%);
+  opacity:0;
 }
-#cursorAura.on{opacity:1}
 
-/* MOBILE */
 @media(max-width:768px){
   .scroll-btn{display:none}
-  #cursorTrail,#cursorAura{display:none}
-  .container{padding:100px 15px 100px}
 }
+
 </style>
 </head>
 
@@ -234,18 +182,28 @@ h1{
 </nav>
 
 <div class="container">
-  <h1>Streaming Mindset Elite</h1>
+
+  <h1 class="holo-title page-title">Streaming Mindset Elite</h1>
 
   <div class="row-wrapper" id="rowWrap">
     <button class="scroll-btn scroll-left" id="btnLeft">‹</button>
     <div class="row" id="mainRow"></div>
     <button class="scroll-btn scroll-right" id="btnRight">›</button>
   </div>
+
+</div>
+
+<div class="app-footer">
+  <a href="index.html">🏠<br>Início</a>
+  <a href="membros.html">👑<br>Membros</a>
+  <a href="videos.html">🎬<br>Vídeos</a>
+  <a href="links.html">🔗<br>Links</a>
 </div>
 
 <script>
+
 /* =========================
-   CONFIG
+   LISTA DE VÍDEOS
 ========================= */
 const videos=[
   "https://youtube.com/shorts/lS8Sdam5pEA",
@@ -262,224 +220,71 @@ const videos=[
   "https://youtube.com/shorts/37D3nHE0Eac"
 ];
 
-const mainRow = document.getElementById("mainRow");
-const rowWrap = document.getElementById("rowWrap");
-const btnLeft = document.getElementById("btnLeft");
-const btnRight = document.getElementById("btnRight");
+const mainRow=document.getElementById("mainRow");
+const btnLeft=document.getElementById("btnLeft");
+const btnRight=document.getElementById("btnRight");
 
-/* =========================
-   YOUTUBE HELPERS
-========================= */
 function getID(url){
-  // shorts/ID?...
-  const part = url.split("shorts/")[1] || "";
-  return part.split("?")[0];
+  return url.split("shorts/")[1].split("?")[0];
 }
 function embed(id){
-  // preview silencioso
   return `https://www.youtube.com/embed/${id}?mute=1&controls=0&rel=0&autoplay=1&playsinline=1`;
 }
 
-/* =========================
-   SOM AMBIENTE (WebAudio)
-   (precisa de 1 clique do usuário)
-========================= */
-let audioCtx = null;
-let hoverGain = null;
-let hoverOsc = null;
-let audioUnlocked = false;
-
-function unlockAudio(){
-  if(audioUnlocked) return;
-  audioUnlocked = true;
-
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-  hoverGain = audioCtx.createGain();
-  hoverGain.gain.value = 0.0;
-  hoverGain.connect(audioCtx.destination);
-
-  // “ambiente” leve: 2 osciladores + filtro
-  const filt = audioCtx.createBiquadFilter();
-  filt.type = "lowpass";
-  filt.frequency.value = 650;
-  filt.Q.value = 0.8;
-
-  filt.connect(hoverGain);
-
-  const osc1 = audioCtx.createOscillator();
-  osc1.type = "sine";
-  osc1.frequency.value = 110;
-
-  const osc2 = audioCtx.createOscillator();
-  osc2.type = "triangle";
-  osc2.frequency.value = 220;
-
-  // leve “tremolo”
-  const lfo = audioCtx.createOscillator();
-  lfo.type = "sine";
-  lfo.frequency.value = 6;
-
-  const lfoGain = audioCtx.createGain();
-  lfoGain.gain.value = 0.03;
-
-  lfo.connect(lfoGain);
-  lfoGain.connect(hoverGain.gain);
-
-  osc1.connect(filt);
-  osc2.connect(filt);
-
-  osc1.start();
-  osc2.start();
-  lfo.start();
-
-  hoverOsc = {osc1, osc2, lfo};
-}
-
-document.addEventListener("pointerdown", unlockAudio, {once:true});
-document.addEventListener("keydown", unlockAudio, {once:true});
-
-function hoverSoundOn(){
-  if(!audioUnlocked || !hoverGain) return;
-  // sobe suave
-  hoverGain.gain.cancelScheduledValues(audioCtx.currentTime);
-  hoverGain.gain.setTargetAtTime(0.06, audioCtx.currentTime, 0.03);
-}
-function hoverSoundOff(){
-  if(!audioUnlocked || !hoverGain) return;
-  hoverGain.gain.cancelScheduledValues(audioCtx.currentTime);
-  hoverGain.gain.setTargetAtTime(0.0, audioCtx.currentTime, 0.04);
-}
-
-/* =========================
-   CARD + TILT 3D
-========================= */
 function createCard(url){
-  const id = getID(url);
-  const card = document.createElement("div");
-  card.className = "card";
+  const id=getID(url);
+  const card=document.createElement("div");
+  card.className="card";
 
-  card.innerHTML = `
+  card.innerHTML=`
     <div class="card-inner">
       <div class="thumb">
-        <img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="">
+        <img src="https://img.youtube.com/vi/${id}/hqdefault.jpg">
         <div class="preview">
-          <iframe src="${embed(id)}" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          <iframe src="${embed(id)}"></iframe>
         </div>
       </div>
       <div class="strip">${id}</div>
     </div>
   `;
 
-  const inner = card.querySelector(".card-inner");
-
-  // hover liga classe + som
-  card.addEventListener("mouseenter", ()=>{
-    card.classList.add("is-hover");
-    hoverSoundOn();
-  });
-
-  card.addEventListener("mouseleave", ()=>{
-    card.classList.remove("is-hover");
-    hoverSoundOff();
-    // reseta tilt
-    inner.style.transform = "";
-  });
-
-  // TILT 3D baseado no mouse
-  card.addEventListener("mousemove", (e)=>{
-    if(!card.classList.contains("is-hover")) return;
-    const r = card.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width; // 0..1
-    const y = (e.clientY - r.top) / r.height; // 0..1
-
-    const rotY = (x - 0.5) * 18; // -9..9
-    const rotX = (0.5 - y) * 14; // -7..7
-
-    // combina tilt + zoom 3D (mantém translateZ)
-    inner.style.transform =
-      `translateZ(60px) scale(1.16) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
-  });
+  card.addEventListener("mouseenter",()=>card.classList.add("is-hover"));
+  card.addEventListener("mouseleave",()=>card.classList.remove("is-hover"));
 
   return card;
 }
 
-videos.forEach(v => mainRow.appendChild(createCard(v)));
+videos.forEach(v=>mainRow.appendChild(createCard(v)));
 
-/* =========================
-   BOTÕES / SCROLL
-========================= */
-function scrollRow(px){
-  mainRow.scrollBy({left:px, behavior:"smooth"});
+btnLeft.onclick=()=>mainRow.scrollBy({left:-520,behavior:"smooth"});
+btnRight.onclick=()=>mainRow.scrollBy({left:520,behavior:"smooth"});
+
+/* CURSOR TRAIL */
+const trail=document.getElementById("cursorTrail");
+const aura=document.getElementById("cursorAura");
+let tx=0,ty=0,cx=0,cy=0,ax=0,ay=0;
+
+function animate(){
+  cx+=(tx-cx)*.2;
+  cy+=(ty-cy)*.2;
+  ax+=(tx-ax)*.08;
+  ay+=(ty-ay)*.08;
+
+  trail.style.left=cx+"px";
+  trail.style.top=cy+"px";
+  aura.style.left=ax+"px";
+  aura.style.top=ay+"px";
+
+  requestAnimationFrame(animate);
 }
-btnLeft.addEventListener("click", ()=>scrollRow(-520));
-btnRight.addEventListener("click", ()=>scrollRow(520));
+animate();
 
-/* Auto-scroll inteligente: só desktop + só em hover do wrapper */
-let autoTimer = null;
-let dir = 1;
-
-function startAuto(){
-  if(window.matchMedia("(max-width:768px)").matches) return;
-  stopAuto();
-  autoTimer = setInterval(()=>{
-    const max = mainRow.scrollWidth - mainRow.clientWidth;
-    if(mainRow.scrollLeft >= max-2) dir = -1;
-    if(mainRow.scrollLeft <= 2) dir = 1;
-    mainRow.scrollBy({left: 2.6 * dir});
-  }, 16);
-}
-function stopAuto(){
-  if(autoTimer) clearInterval(autoTimer);
-  autoTimer = null;
-}
-rowWrap.addEventListener("mouseenter", startAuto);
-rowWrap.addEventListener("mouseleave", stopAuto);
-
-/* =========================
-   TRAILING GLOW (cursor)
-========================= */
-const trail = document.getElementById("cursorTrail");
-const aura = document.getElementById("cursorAura");
-
-let tx = window.innerWidth/2, ty = window.innerHeight/2;
-let cx = tx, cy = ty;
-let ax = tx, ay = ty;
-
-function raf(){
-  // trail rápido
-  cx += (tx - cx) * 0.22;
-  cy += (ty - cy) * 0.22;
-
-  // aura mais lenta
-  ax += (tx - ax) * 0.08;
-  ay += (ty - ay) * 0.08;
-
-  trail.style.left = cx + "px";
-  trail.style.top = cy + "px";
-
-  aura.style.left = ax + "px";
-  aura.style.top = ay + "px";
-
-  requestAnimationFrame(raf);
-}
-requestAnimationFrame(raf);
-
-document.addEventListener("mousemove", (e)=>{
-  tx = e.clientX; ty = e.clientY;
-  trail.classList.add("on");
-  aura.classList.add("on");
+document.addEventListener("mousemove",(e)=>{
+  tx=e.clientX; ty=e.clientY;
+  trail.style.opacity=1;
+  aura.style.opacity=1;
 });
 
-/* some quando sai da janela */
-window.addEventListener("mouseleave", ()=>{
-  trail.classList.remove("on");
-  aura.classList.remove("on");
-});
-
-/* =========================
-   (opcional) seu layout global
-========================= */
 </script>
 
 <script src="layout.v3.js" defer></script>
