@@ -9,27 +9,27 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
+<!-- THREE.JS para partículas 3D globais -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js" defer></script>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 
 :root{
   --mobile-nav-height:78px;
   --cyan:#00F5FF;
-  --bg1:#000;
-  --bg2:#0a0f1c;
   --danger:#FF4D4D;
   --ok:#00FFAA;
 }
 
 body{
   font-family:'Orbitron',sans-serif;
-  background:linear-gradient(135deg,var(--bg1),var(--bg2));
   color:#fff;
-  min-height:100vh;
   overflow-x:hidden;
+  background:transparent; /* Fundo vem do layout global */
 }
 
-/* ================= NAV ================= */
+/* NAV */
 .navbar{
   position:fixed;
   top:0;
@@ -38,7 +38,7 @@ body{
   justify-content:center;
   gap:22px;
   padding:16px;
-  background:rgba(0,0,0,.75);
+  background:rgba(0,0,0,.55);
   backdrop-filter:blur(15px);
   z-index:1000;
 }
@@ -50,9 +50,6 @@ body{
   border-radius:22px;
   transition:.25s;
   font-size:14px;
-  display:flex;
-  align-items:center;
-  gap:6px;
 }
 
 .navbar a:hover{
@@ -60,7 +57,7 @@ body{
   color:#000;
 }
 
-/* ================= STATUS ================= */
+/* STATUS */
 .statusbar{
   position:fixed;
   top:75px;
@@ -71,7 +68,7 @@ body{
   align-items:center;
   padding:8px 12px;
   border-radius:999px;
-  background:rgba(0,0,0,.6);
+  background:rgba(0,0,0,.5);
   border:1px solid rgba(0,153,255,.2);
   font-size:11px;
   z-index:999;
@@ -79,17 +76,14 @@ body{
 
 .dot{
   width:8px;height:8px;border-radius:50%;
-  background:rgba(255,255,255,.25);
-  box-shadow:0 0 0 3px rgba(255,255,255,.08);
+  background:var(--danger);
 }
-.dot.ok{ background:var(--ok); box-shadow:0 0 0 3px rgba(0,255,170,.12); }
-.dot.bad{ background:var(--danger); box-shadow:0 0 0 3px rgba(255,77,77,.12); }
+.dot.ok{ background:var(--ok); }
 
 .badge{
   padding:4px 8px;
   border-radius:999px;
   background:rgba(0,245,255,.16);
-  border:1px solid rgba(0,245,255,.25);
   font-size:10px;
   font-weight:900;
 }
@@ -97,7 +91,7 @@ body{
 .btn-mini{
   border:none;
   cursor:pointer;
-  padding:7px 10px;
+  padding:6px 10px;
   border-radius:999px;
   font-weight:900;
   background:linear-gradient(90deg,var(--cyan),#0099FF);
@@ -105,11 +99,13 @@ body{
   font-size:11px;
 }
 
-/* ================= CONTAINER ================= */
+/* CONTAINER */
 .container{
   max-width:1100px;
   margin:auto;
   padding:150px 20px 120px;
+  position:relative;
+  z-index:1;
 }
 
 h2{
@@ -121,23 +117,23 @@ h2{
   -webkit-text-fill-color:transparent;
 }
 
-/* ================= GRID ================= */
+/* GRID */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
   gap:25px;
 }
 
-/* ================= CARD ================= */
+/* CARD */
 .member-card{
-  background:rgba(15,20,35,.95);
+  background:rgba(15,20,35,.85);
   padding:22px;
   border-radius:22px;
   text-align:center;
   border:1px solid rgba(0,153,255,.25);
   transition:.25s;
   position:relative;
-  overflow:hidden;
+  backdrop-filter:blur(8px);
 }
 
 .member-card:hover{
@@ -161,8 +157,7 @@ h2{
   font-size:11px;
   padding:5px 8px;
   border-radius:999px;
-  background:rgba(0,0,0,.4);
-  border:1px solid rgba(255,255,255,.10);
+  background:rgba(0,0,0,.5);
 }
 
 .avatar-wrapper{
@@ -173,14 +168,12 @@ h2{
   overflow:hidden;
   border:2px solid var(--cyan);
   margin-bottom:14px;
-  box-shadow:0 0 22px rgba(0,245,255,.22);
 }
 
 .avatar-wrapper img{
   width:100%;
   height:100%;
   object-fit:cover;
-  display:block;
 }
 
 .member-card h3{
@@ -193,25 +186,7 @@ h2{
   opacity:.8;
 }
 
-.subline{
-  margin-top:8px;
-  font-size:11px;
-  opacity:.75;
-}
-
-.msg{
-  grid-column:1 / -1;
-  padding:14px 16px;
-  border-radius:16px;
-  background:rgba(0,0,0,.35);
-  border:1px solid rgba(255,255,255,.10);
-  color:rgba(255,255,255,.88);
-  text-align:center;
-}
-
-.msg strong{ color:#fff; }
-
-/* ================= MOBILE ================= */
+/* MOBILE */
 @media(max-width:768px){
 
   body{
@@ -222,24 +197,12 @@ h2{
     top:auto;
     bottom:0;
     justify-content:space-around;
-    gap:0;
     padding:10px 6px calc(10px + env(safe-area-inset-bottom));
-    border-top:1px solid rgba(0,153,255,.3);
   }
 
   .navbar a{
     flex-direction:column;
     font-size:11px;
-    padding:6px;
-    min-width:56px;
-    text-align:center;
-  }
-
-  .statusbar{
-    top:12px;
-    font-size:10px;
-    padding:6px 10px;
-    gap:8px;
   }
 
   .container{
@@ -247,19 +210,6 @@ h2{
   }
 
   h2{ font-size:20px; }
-
-  .grid{ gap:18px; }
-
-  .member-card{ padding:18px; }
-
-  .avatar-wrapper{
-    width:75px;
-    height:75px;
-  }
-
-  .member-card h3{ font-size:14px; }
-
-  .member-card p{ font-size:11px; }
 }
 </style>
 </head>
@@ -267,200 +217,91 @@ h2{
 <body>
 
 <nav class="navbar">
-  <a href="index.html">🏠 <span>Início</span></a>
-  <a href="membros.html">👑 <span>Membros</span></a>
-  <a href="participantes.html">🎯 <span>Participantes</span></a>
-  <a href="videos.html">🎬 <span>Vídeos</span></a>
-  <a href="links.html">🔗 <span>Links</span></a>
-  <a href="formulario.html">📝 <span>Formulário</span></a>
+  <a href="index.html">🏠 Início</a>
+  <a href="membros.html">👑 Membros</a>
+  <a href="participantes.html">🎯 Participantes</a>
+  <a href="videos.html">🎬 Vídeos</a>
+  <a href="links.html">🔗 Links</a>
+  <a href="formulario.html">📝 Formulário</a>
 </nav>
 
-<div class="statusbar" id="statusbar">
-  <span class="dot bad" id="liveDot"></span>
+<div class="statusbar">
+  <span class="dot" id="liveDot"></span>
   <span id="liveText">Live: offline</span>
   <span class="badge" id="liveBadge">0</span>
-  <button class="btn-mini" id="btnReload" type="button">↻ Atualizar</button>
+  <button class="btn-mini" onclick="carregarRanking(true)">↻</button>
 </div>
 
 <div class="container">
   <h2>🏆 Ranking Mindset Elite</h2>
   <div class="grid" id="membersGrid">
-    <div class="msg">Carregando ranking…</div>
+    Carregando ranking…
   </div>
 </div>
 
 <script>
-/* =========================================================
-  CONFIG
-========================================================= */
 const BACKEND_BASE = "https://mindset-elite.onrender.com";
 const RANKING_URL = BACKEND_BASE + "/ranking";
 const DEFAULT_AVATAR = BACKEND_BASE + "/images/default.jpg";
 
-/* Se você não quiser auto-refresh, coloque false */
-const AUTO_REFRESH = true;
-const AUTO_REFRESH_MS = 30000;
-
-/* =========================================================
-  HELPERS
-========================================================= */
-const $ = (id) => document.getElementById(id);
-
-function escapeHtml(str){
-  return String(str ?? "")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
-}
-
 function setLive(ok){
-  $("liveDot").classList.toggle("ok", !!ok);
-  $("liveDot").classList.toggle("bad", !ok);
-  $("liveText").textContent = ok ? "Live: online" : "Live: offline";
+  document.getElementById("liveDot").className = ok ? "dot ok" : "dot";
+  document.getElementById("liveText").textContent = ok ? "Live: online" : "Live: offline";
 }
 
-function bumpLive(n=1){
-  const v = Number($("liveBadge").textContent || "0") + n;
-  $("liveBadge").textContent = String(v);
-}
-
-/* Timeout para não ficar preso */
-async function fetchWithTimeout(url, options={}, timeoutMs=9000){
-  const ctrl = new AbortController();
-  const t = setTimeout(() => ctrl.abort(), timeoutMs);
-  try{
-    const res = await fetch(url, { ...options, signal: ctrl.signal, cache: "no-store" });
-    return res;
-  } finally {
-    clearTimeout(t);
-  }
-}
-
-/* XP simples (você pode ajustar) */
 function calcXP(user){
   const idade = Number(user?.idade ?? 0);
-  const dt = user?.data ? new Date(user.data) : null;
-  const days = dt ? Math.max(0, Math.floor((Date.now() - dt.getTime())/(1000*60*60*24))) : 0;
-  return Math.round(500 + (days * 20) + (idade * 2));
+  return 500 + (idade * 3);
 }
 
-/* =========================================================
-  RENDER
-========================================================= */
-function renderError(msg){
-  $("membersGrid").innerHTML = `
-    <div class="msg">
-      <strong>⚠ Não carregou o ranking.</strong><br>
-      ${escapeHtml(msg)}<br><br>
-      <button class="btn-mini" type="button" onclick="carregarRanking(true)">Tentar novamente</button>
-    </div>
-  `;
-}
-
-function renderEmpty(){
-  $("membersGrid").innerHTML = `<div class="msg">Nenhum membro no ranking ainda.</div>`;
-}
-
-function renderList(list){
-  const grid = $("membersGrid");
-  grid.innerHTML = "";
-
-  list.forEach((u, idx) => {
-    const rank = idx + 1;
-    const nome = escapeHtml(u?.nome || "Sem nome");
-    const idade = escapeHtml(u?.idade ?? "");
-    const tg = escapeHtml(String(u?.telegram || "").replace("@",""));
-
-    const xp = u?.xp ?? calcXP(u);
-
-    const fotoPath = u?.foto ? (BACKEND_BASE + "/images/" + u.foto) : DEFAULT_AVATAR;
-
-    const card = document.createElement("div");
-    card.className = "member-card";
-
-    card.innerHTML = `
-      <div class="xp">⚡ XP ${xp}</div>
-      <div class="rank">#${rank}</div>
-      <div class="avatar-wrapper">
-        <img src="${fotoPath}" alt="${nome}">
-      </div>
-      <h3>${nome}</h3>
-      <p>${idade ? `${idade} anos` : ""}</p>
-      <div class="subline">@${tg || "-"}</div>
-    `;
-
-    const img = card.querySelector("img");
-    img.onerror = () => { img.src = DEFAULT_AVATAR; };
-
-    grid.appendChild(card);
-  });
-}
-
-/* =========================================================
-  LOAD
-========================================================= */
-let isLoading = false;
-
-async function carregarRanking(countAsLive=false){
-  if(isLoading) return;
-  isLoading = true;
-
-  $("membersGrid").innerHTML = `<div class="msg">Carregando ranking…</div>`;
+async function carregarRanking(){
+  const grid = document.getElementById("membersGrid");
+  grid.innerHTML = "Carregando ranking…";
 
   try{
-    const res = await fetchWithTimeout(RANKING_URL, {}, 9000);
-
-    if(!res.ok){
-      setLive(false);
-      renderError("Backend respondeu: HTTP " + res.status);
-      return;
-    }
+    const res = await fetch(RANKING_URL, { cache:"no-store" });
+    if(!res.ok) throw new Error("HTTP " + res.status);
 
     const data = await res.json();
     const list = Array.isArray(data?.ranking) ? data.ranking : [];
 
     if(list.length === 0){
+      grid.innerHTML = "Nenhum membro ainda.";
       setLive(true);
-      if(countAsLive) bumpLive(1);
-      renderEmpty();
       return;
     }
 
-    // aplica XP e ordena
-    const withXP = list.map(u => ({ ...u, xp: calcXP(u) }));
-    withXP.sort((a,b)=> (b.xp||0) - (a.xp||0));
+    const sorted = list.map(u=>({...u, xp:calcXP(u)}))
+                       .sort((a,b)=>b.xp-a.xp);
+
+    grid.innerHTML = "";
+
+    sorted.forEach((u,i)=>{
+      const card = document.createElement("div");
+      card.className="member-card";
+      card.innerHTML = `
+        <div class="xp">⚡ XP ${u.xp}</div>
+        <div class="rank">#${i+1}</div>
+        <div class="avatar-wrapper">
+          <img src="${u.foto ? BACKEND_BASE+"/images/"+u.foto : DEFAULT_AVATAR}">
+        </div>
+        <h3>${u.nome || "Sem nome"}</h3>
+        <p>${u.idade || ""} anos</p>
+      `;
+      grid.appendChild(card);
+    });
 
     setLive(true);
-    if(countAsLive) bumpLive(1);
 
-    renderList(withXP);
-
-  }catch(err){
+  }catch(e){
+    grid.innerHTML = "Erro ao carregar ranking.";
     setLive(false);
-
-    const msg =
-      (err && err.name === "AbortError")
-        ? "Timeout ao conectar no backend."
-        : "Falha de conexão (CORS, internet ou backend offline).";
-
-    renderError(msg);
-  }finally{
-    isLoading = false;
   }
 }
 
-$("btnReload").addEventListener("click", () => carregarRanking(true));
-
-carregarRanking(false);
-
-if(AUTO_REFRESH){
-  setInterval(() => carregarRanking(true), AUTO_REFRESH_MS);
-}
+carregarRanking();
 </script>
 
-<!-- transição global entre páginas (seu layout.v3.js) -->
 <script src="layout.v3.js" defer></script>
 
 </body>
