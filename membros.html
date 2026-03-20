@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
     <link rel="stylesheet" href="global.css">
 
     <style>
@@ -23,13 +24,13 @@
         }
 
         .page-header { text-align: center; margin-bottom: 50px; }
-        .page-header h1 { font-family: 'Orbitron', sans-serif; }
-        .page-header p { letter-spacing: 3px; font-size: 11px; opacity: 0.7; font-weight: 700; }
+        .page-header h1 { font-family: 'Orbitron', sans-serif; margin-bottom: 10px; }
+        .page-header p { letter-spacing: 3px; font-size: 11px; opacity: 0.7; font-weight: 700; color: var(--text-dim); }
 
-        /* GRID RESPONSIVO DE MEMBROS */
+        /* GRID DE MEMBROS */
         .membros-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
             padding: 0 20px;
         }
@@ -38,12 +39,22 @@
             background: var(--bg-card);
             border: 1px solid var(--border-glass);
             border-radius: var(--radius-lg);
-            padding: 40px 30px;
+            padding: 45px 30px;
             text-align: center;
             transition: var(--transition);
             backdrop-filter: var(--glass-blur);
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 0.6s forwards;
+        }
+
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .membro-card:hover {
@@ -52,58 +63,76 @@
             box-shadow: var(--shadow-neon);
         }
 
-        /* Detalhe de linha no topo */
+        /* Detalhe Superior */
         .membro-card::before {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 3px;
             background: var(--primary);
-            opacity: 0;
+            opacity: 0.3;
             transition: 0.3s;
         }
 
-        .membro-card:hover::before { opacity: 1; }
+        .membro-card:hover::before { opacity: 1; box-shadow: 0 0 15px var(--primary-glow); }
+
+        .membro-img-wrapper {
+            position: relative;
+            margin-bottom: 25px;
+        }
 
         .membro-img {
-            width: 110px;
-            height: 110px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
-            border: 3px solid var(--primary);
-            margin-bottom: 20px;
+            border: 2px solid var(--primary-soft);
             object-fit: cover;
-            box-shadow: 0 0 20px var(--primary-glow);
-            padding: 3px;
+            padding: 5px;
             background: var(--bg-dark);
+            transition: var(--transition);
+        }
+
+        .membro-card:hover .membro-img {
+            border-color: var(--primary);
+            box-shadow: 0 0 25px var(--primary-glow);
+            transform: scale(1.05);
         }
 
         .membro-nome {
             font-family: 'Orbitron', sans-serif;
-            font-size: 18px;
+            font-size: 19px;
             color: #fff;
             margin-bottom: 8px;
+            font-weight: 700;
         }
 
         .membro-cargo {
-            font-size: 11px;
+            font-size: 10px;
             text-transform: uppercase;
             color: var(--primary);
-            font-weight: 800;
+            font-weight: 900;
             letter-spacing: 2px;
-            margin-bottom: 15px;
-            display: block;
+            margin-bottom: 20px;
+            padding: 4px 12px;
+            background: rgba(0, 224, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 224, 255, 0.1);
         }
 
         .membro-bio {
-            font-size: 13px;
+            font-size: 13.5px;
             color: var(--text-dim);
             line-height: 1.6;
+            max-width: 240px;
         }
 
-        /* AJUSTES MOBILE */
+        /* DELAY NAS ANIMAÇÕES */
+        .membro-card:nth-child(1) { animation-delay: 0.1s; }
+        .membro-card:nth-child(2) { animation-delay: 0.2s; }
+        .membro-card:nth-child(3) { animation-delay: 0.3s; }
+
         @media (max-width: 850px) {
             .container { padding-top: 110px; }
             .membros-grid { grid-template-columns: 1fr; gap: 20px; }
-            .membro-card { padding: 30px 20px; }
         }
     </style>
 </head>
@@ -134,24 +163,30 @@
 
     <div class="membros-grid">
         <div class="membro-card">
-            <img src="https://ui-avatars.com/api/?name=Guilherme+Raya&background=050a15&color=00e0ff&size=128" class="membro-img" alt="Líder">
+            <div class="membro-img-wrapper">
+                <img src="https://ui-avatars.com/api/?name=Guilherme+Raya&background=050a15&color=00e0ff&size=128" class="membro-img" alt="Líder">
+            </div>
             <div class="membro-nome">Guilherme Raya</div>
             <span class="membro-cargo">Fundador / Recrutador</span>
             <p class="membro-bio">Visão estratégica e liderança focada em alta performance e expansão do ecossistema Mindset Elite.</p>
         </div>
 
         <div class="membro-card">
-            <img src="https://ui-avatars.com/api/?name=Admin+Elite&background=050a15&color=00e0ff&size=128" class="membro-img" alt="Admin">
+            <div class="membro-img-wrapper">
+                <img src="https://ui-avatars.com/api/?name=Admin+Elite&background=050a15&color=00e0ff&size=128" class="membro-img" alt="Admin">
+            </div>
             <div class="membro-nome">Conselho Interno</div>
             <span class="membro-cargo">Administração</span>
             <p class="membro-bio">Gestão de infraestrutura e suporte operacional garantindo a fluidez para todos os membros ativos.</p>
         </div>
 
         <div class="membro-card">
-            <img src="https://ui-avatars.com/api/?name=Mod+Elite&background=050a15&color=00e0ff&size=128" class="membro-img" alt="Moderador">
+            <div class="membro-img-wrapper">
+                <img src="https://ui-avatars.com/api/?name=Mod+Elite&background=050a15&color=00e0ff&size=128" class="membro-img" alt="Moderador">
+            </div>
             <div class="membro-nome">Moderação</div>
             <span class="membro-cargo">Segurança</span>
-            <p class="membro-bio">Garantindo a ordem e o estrito cumprimento dos protocolos de elite em todos os nossos canais oficiais.</p>
+            <p class="membro-bio">Garantindo a ordem e o estrito cumprimento dos protocolos de elite em todos os nossos canais.</p>
         </div>
     </div>
 </div>
