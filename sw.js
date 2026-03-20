@@ -1,24 +1,22 @@
 /* ============================================================
-    🚀 MINDSET ELITE - PWA SERVICE WORKER v1.3 (ESTÁVEL)
-    Cache de Alta Disponibilidade & Performance Offline
+    🚀 MINDSET ELITE - PWA SERVICE WORKER v1.4 (ESTÁVEL)
+    Correção de Erro de Acesso (ERR_FAILED) & Domínio Oficial
    ============================================================ */
 
-const CACHE_NAME = 'mindset-elite-v1.3';
+const CACHE_NAME = 'mindset-elite-v1.4'; // Versão atualizada para forçar limpeza
 
-// Lista de ativos otimizada (Caminhos relativos para maior compatibilidade)
+// Lista de ativos - Removido o "./" para evitar erro de resolução em domínios .com.br
 const ASSETS = [
-    './',
-    './index.html',
-    './membros.html',
-    './participantes.html',
-    './videos.html',
-    './links.html',
-    './formulario.html',
-    './global.css',
-    './manifest.json',
-    './layout.v3.js',
-    './logo.png',
-    './banner.jpg'
+    '/',
+    '/index.html',
+    '/membros.html',
+    '/participantes.html',
+    '/videos.html',
+    '/links.html',
+    '/formulario.html',
+    '/global.css',
+    '/manifest.json',
+    '/layout.v3.js'
 ];
 
 // 1. INSTALAÇÃO: Armazena os ativos essenciais
@@ -26,13 +24,18 @@ self.addEventListener('install', (e) => {
     self.skipWaiting(); 
     e.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            console.log('%c [SW] Sincronizando Ecossistema Elite...', 'color: #00e0ff;');
-            return cache.addAll(ASSETS);
+            console.log('%c [SW] Ecossistema Elite Sincronizado!', 'color: #00e0ff;');
+            // Usamos map para tentar adicionar um por um e não travar se um arquivo (ex: logo) faltar
+            return Promise.all(
+                ASSETS.map(url => {
+                    return cache.add(url).catch(err => console.warn(`[SW] Falha ao cachear: ${url}`, err));
+                })
+            );
         })
     );
 });
 
-// 2. ATIVAÇÃO: Limpa versões obsoletas
+// 2. ATIVAÇÃO: Limpa versões obsoletas e assume controle imediato
 self.addEventListener('activate', (e) => {
     e.waitUntil(
         caches.keys().then((keys) => {
@@ -48,32 +51,37 @@ self.addEventListener('activate', (e) => {
     );
 });
 
-// 3. INTERCEPTAÇÃO (FETCH): Estratégia Stale-While-Revalidate
+// 3. INTERCEPTAÇÃO (FETCH): Estratégia Network-First para evitar ERR_FAILED
 self.addEventListener('fetch', (e) => {
     const url = new URL(e.request.url);
 
-    // IGNORAR: Requisições de API (Clima deve ser sempre tempo real)
-    if (url.host.includes('api.openweathermap.org') || url.pathname.includes('/vagas')) {
+    // Ignorar APIs e extensões de navegador
+    if (url.host.includes('api.openweathermap.org') || !e.request.url.startsWith('http')) {
         return; 
     }
 
     e.respondWith(
-        caches.open(CACHE_NAME).then((cache) => {
-            return cache.match(e.request).then((cachedResponse) => {
-                const fetchedResponse = fetch(e.request).then((networkResponse) => {
-                    // Se a rede responder, atualiza o cache em background
-                    if (networkResponse && networkResponse.status === 200) {
-                        cache.put(e.request, networkResponse.clone());
+        fetch(e.request)
+            .then((networkResponse) => {
+                // Se a rede funcionar, clona para o cache e entrega
+                if (networkResponse && networkResponse.status === 200) {
+                    const responseClone = networkResponse.clone();
+                    caches.open(CACHE_NAME).then((cache) => {
+                        cache.put(e.request, responseClone);
+                    });
+                }
+                return networkResponse;
+            })
+            .catch(() => {
+                // Se a rede falhar (ERR_FAILED), tenta o cache
+                return caches.match(e.request).then((cachedResponse) => {
+                    if (cachedResponse) return cachedResponse;
+                    
+                    // Se não tiver nem cache nem rede, e for uma página, manda pro início
+                    if (e.request.mode === 'navigate') {
+                        return caches.match('/');
                     }
-                    return networkResponse;
-                }).catch(() => {
-                    // Se a rede falhar totalmente, tenta entregar o que tiver no cache
-                    return cachedResponse;
                 });
-
-                // Retorna o cache imediatamente (velocidade) ou espera a rede se não houver cache
-                return cachedResponse || fetchedResponse;
-            });
-        })
+            })
     );
 });
