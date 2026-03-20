@@ -63,26 +63,17 @@ const ADMINS = [
 
 const SESSIONS = {}; 
 const SESSION_EXPIRATION = 30 * 60 * 1000;
-const LOGIN_TENTATIVAS = {}; 
-const IP_BLOQUEADO = {}; 
-const MAX_TENTATIVAS = 5;
-const BLOQUEIO_TEMPO = 15 * 60 * 1000;
-
-const signupCooldown = new Map(); 
-const rlMap = new Map();
 
 /* ===================================================== */
-/* 💾 PERSISTÊNCIA DE DADOS (CORRIGIDA) */
+/* 💾 PERSISTÊNCIA DE DADOS */
 /* ===================================================== */
 function lerBanco() {
   if (!fs.existsSync(DB_FILE)) {
     fs.writeFileSync(DB_FILE, JSON.stringify({ vagas: 1, inscritos: [] }, null, 2));
   }
   try {
-    const data = fs.readFileSync(DB_FILE, "utf-8");
-    return JSON.parse(data);
+    return JSON.parse(fs.readFileSync(DB_FILE, "utf-8"));
   } catch (err) {
-    console.error("Erro ao ler banco, resetando para padrão.");
     return { vagas: 1, inscritos: [] };
   }
 }
@@ -91,10 +82,10 @@ function salvarBanco(dados) {
   try {
     const tempFile = DB_FILE + ".tmp";
     fs.writeFileSync(tempFile, JSON.stringify(dados, null, 2));
-    fs.renameSync(tempFile, DB_FILE); // Operação atômica
+    fs.renameSync(tempFile, DB_FILE); 
     broadcast({ type: "data_update", vagas: dados.vagas });
   } catch (err) {
-    console.error("Erro crítico ao salvar banco:", err);
+    console.error("Erro ao salvar banco:", err);
   }
 }
 
@@ -115,9 +106,39 @@ function salvarLog(tipo, detalhes, role, ip) {
     try { logs = JSON.parse(fs.readFileSync(LOG_FILE, "utf-8")); } catch (e) { logs = []; }
   }
   logs.push(log);
-  if (logs.length > 500) logs.shift(); // Mantém apenas os últimos 500 logs
+  if (logs.length > 500) logs.shift();
   fs.writeFileSync(LOG_FILE, JSON.stringify(logs, null, 2));
   broadcast({ type: "log_update" });
+}
+
+/* ===================================================== */
+/* 🤖 INTEGRAÇÃO TELEGRAM (WEBHOOK) */
+/* ===================================================== */
+async function enviarMensagemTelegram(nome, telegram, idade) {
+  const token = process.env.TELEGRAM_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+
+  if (!token || !chatId) return;
+
+  const texto = `🚀 *Nova Inscrição - Mindset Elite*\n\n` +
+                `👤 *Nome:* ${nome}\n` +
+                `📱 *Telegram:* ${telegram}\n` +
+                `🎂 *Idade:* ${idade} anos\n\n` +
+                `⚡ _Verifique o painel admin para detalhes._`;
+
+  try {
+    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: texto,
+        parse_mode: "Markdown"
+      }),
+    });
+  } catch (e) {
+    console.error("Erro Telegram:", e);
+  }
 }
 
 /* ===================================================== */
@@ -127,8 +148,7 @@ function middlewareAdmin(req, res, next) {
   const token = req.headers["x-admin-token"];
   const sess = SESSIONS[token];
   if (!token || !sess || Date.now() > sess.expira) {
-    if (token) delete SESSIONS[token];
-    return res.status(401).json({ erro: "Sessão inválida ou expirada" });
+    return res.status(401).json({ erro: "Sessão inválida" });
   }
   sess.expira = Date.now() + SESSION_EXPIRATION;
   req.adminRole = sess.role;
@@ -136,49 +156,36 @@ function middlewareAdmin(req, res, next) {
 }
 
 /* ===================================================== */
-/* ✅ ROTAS PÚBLICAS (VAGAS E RANKING) */
-/* ===================================================== */
-app.get("/vagas", (req, res) => {
-  const banco = lerBanco();
-  res.json({ vagas: banco.vagas });
-});
-
-app.get("/ranking", (req, res) => {
-  const banco = lerBanco();
-  const ranking = [...banco.inscritos]
-    .sort((a, b) => (b.xp || 0) - (a.xp || 0))
-    .map((u, i) => ({ ...u, rank: i + 1 }));
-  res.json({ ranking });
-});
-
-/* ===================================================== */
-/* 📝 INSCRIÇÃO */
+/* 📝 ROTA DE INSCRIÇÃO (COM TELEGRAM) */
 /* ===================================================== */
 app.post("/inscrever", async (req, res) => {
   const ip = req.ip || "unknown";
   const { nome, idade, telegram, hp } = req.body;
 
-  if (hp) return res.status(403).json({ erro: "Acesso negado." });
+  if (hp) return res.status(403).json({ erro: "Bot detectado." });
 
   const banco = lerBanco();
   if (banco.vagas <= 0) return res.status(400).json({ erro: "Vagas esgotadas." });
 
   const novoInscrito = {
     id: crypto.randomBytes(4).toString("hex"),
-    nome: nome.trim(),
+    nome: nome?.trim(),
     idade: Number(idade),
-    telegram: telegram.trim(),
+    telegram: telegram?.trim(),
     data: new Date().toISOString(),
-    xp: 200, // XP Inicial
-    nivel: "Bronze",
-    ip
+    xp: 200,
+    nivel: "Bronze"
   };
 
   banco.inscritos.push(novoInscrito);
   banco.vagas = Math.max(0, banco.vagas - 1);
+  
   salvarBanco(banco);
-  salvarLog("INSCRICAO", `Novo membro: ${nome}`, null, ip);
+  
+  // 🔥 CHAMA O BOT DO TELEGRAM
+  enviarMensagemTelegram(novoInscrito.nome, novoInscrito.telegram, novoInscrito.idade);
 
+  salvarLog("INSCRICAO", `Novo membro: ${nome}`, null, ip);
   res.json({ ok: true });
 });
 
@@ -188,9 +195,7 @@ app.post("/inscrever", async (req, res) => {
 app.post("/admin/login", (req, res) => {
   const { senha } = req.body;
   const admin = ADMINS.find(a => a.senha === senha && senha !== undefined);
-  
-  if (!admin) return res.status(401).json({ erro: "Credenciais inválidas." });
-  
+  if (!admin) return res.status(401).json({ erro: "Senha incorreta." });
   res.json({ precisa2FA: true, role: admin.role });
 });
 
@@ -198,7 +203,7 @@ app.post("/admin/2fa", (req, res) => {
   const { senha, codigo } = req.body;
   const admin = ADMINS.find(a => a.senha === senha);
 
-  if (!admin) return res.status(401).json({ erro: "Erro de autenticação." });
+  if (!admin || !admin.twoFASecret) return res.status(400).json({ erro: "Configuração pendente." });
 
   const verificado = speakeasy.totp.verify({
     secret: admin.twoFASecret,
@@ -207,11 +212,10 @@ app.post("/admin/2fa", (req, res) => {
     window: 1
   });
 
-  if (!verificado) return res.status(401).json({ erro: "Código 2FA incorreto." });
+  if (!verificado) return res.status(401).json({ erro: "Código inválido." });
 
   const token = crypto.randomBytes(32).toString("hex");
   SESSIONS[token] = { role: admin.role, expira: Date.now() + SESSION_EXPIRATION };
-  
   res.json({ token, role: admin.role });
 });
 
@@ -224,7 +228,7 @@ app.post("/admin/inscritos", middlewareAdmin, (req, res) => {
 });
 
 app.post("/admin/excluir", middlewareAdmin, (req, res) => {
-  if (req.adminRole !== "superadmin") return res.status(403).json({ erro: "Apenas Superadmin." });
+  if (req.adminRole !== "superadmin") return res.status(403).json({ erro: "Permissão negada." });
   const { id } = req.body;
   const banco = lerBanco();
   banco.inscritos = banco.inscritos.filter(u => u.id !== id);
@@ -235,8 +239,6 @@ app.post("/admin/excluir", middlewareAdmin, (req, res) => {
 
 app.get("/health", (req, res) => res.json({ status: "online" }));
 
-/* ===================================================== */
-/* 🚀 INICIAR SERVIDOR */
 /* ===================================================== */
 server.listen(PORT, () => {
   console.log(`🚀 HQ Mindset Elite online na porta ${PORT}`);
