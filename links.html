@@ -1,149 +1,183 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Links Oficiais - Mindset Elite</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Links Oficiais • Mindset Elite</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="global.css">
 
-<link rel="stylesheet" href="global.css">
+    <style>
+        /* Ajuste do Container para Linktree Style */
+        .container {
+            padding-top: 130px;
+            max-width: 600px;
+            margin: auto;
+        }
 
-<style>
+        .page-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
 
-/* ESPAÇAMENTO */
-.container{
-  padding-top:150px;
-  max-width:700px;
-}
+        .page-header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
 
-/* TÍTULO */
-.page-title{
-  text-align:center;
-  font-size:32px;
-  margin-bottom:60px;
-  font-weight:900;
-  color:#00e0ff;
-}
+        .page-header p {
+            color: var(--text-dim);
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
 
-/* LINK CARD */
-.link-card{
-  display:flex;
-  align-items:center;
-  gap:22px;
-  padding:26px;
-  margin-bottom:28px;
-  border-radius:20px;
-  background:#111827;
-  border:1px solid rgba(255,255,255,.08);
-  text-decoration:none;
-  color:#ffffff;
-  transition:.3s ease;
-  box-shadow:0 15px 50px rgba(0,0,0,.4);
-  transform:translateY(15px);
-  opacity:0;
-}
+        /* LINK CARD EVOLUTION */
+        .link-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 22px 28px;
+            margin-bottom: 20px;
+            border-radius: var(--radius-lg);
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            text-decoration: none;
+            color: var(--text-main);
+            backdrop-filter: var(--glass-blur);
+            transition: var(--transition);
+            opacity: 0;
+            transform: translateY(20px);
+        }
 
-.link-card.show{
-  transform:translateY(0);
-  opacity:1;
-}
+        .link-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-.link-card img{
-  width:38px;
-  height:38px;
-  object-fit:contain;
-  transition:.3s ease;
-}
+        .link-content {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
 
-.link-card span{
-  font-weight:700;
-  font-size:16px;
-  letter-spacing:.5px;
-}
+        .link-icon {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            font-size: 20px;
+            color: var(--primary);
+            transition: var(--transition);
+        }
 
-/* HOVER */
-.link-card:hover{
-  transform:translateY(-6px);
-  box-shadow:0 25px 80px rgba(0,0,0,.6);
-  border-color:#00e0ff;
-}
+        .link-card span {
+            font-weight: 600;
+            font-size: 16px;
+            letter-spacing: 0.5px;
+        }
 
-.link-card:hover img{
-  transform:scale(1.1);
-}
+        .external-icon {
+            font-size: 12px;
+            color: var(--text-dim);
+            opacity: 0.5;
+            transition: var(--transition);
+        }
 
-/* MOBILE */
-@media(max-width:768px){
+        /* HOVER STATES */
+        .link-card:hover {
+            border-color: var(--primary);
+            background: rgba(0, 224, 255, 0.05);
+            transform: scale(1.02);
+            box-shadow: var(--shadow-neon);
+        }
 
-  .container{
-    padding-top:120px;
-  }
+        .link-card:hover .link-icon {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
 
-  .page-title{
-    font-size:24px;
-    margin-bottom:40px;
-  }
+        .link-card:hover .external-icon {
+            opacity: 1;
+            color: var(--primary);
+            transform: translateX(5px);
+        }
 
-  .link-card{
-    padding:18px;
-    gap:16px;
-  }
-
-  .link-card span{
-    font-size:14px;
-  }
-
-}
-
-</style>
+        @media(max-width: 768px) {
+            .container { padding-top: 100px; padding-bottom: 120px; }
+            .page-header h1 { font-size: 24px; }
+            .link-card { padding: 18px 22px; }
+        }
+    </style>
 </head>
 
 <body>
 
 <nav class="navbar">
-  <a href="index.html">🏠 Início</a>
-  <a href="membros.html">👑 Membros</a>
-  <a href="participantes.html">🎯 Participantes</a>
-  <a href="videos.html">🎬 Vídeos</a>
-  <a href="links.html">🔗 Links</a>
-  <a href="formulario.html">📝 Formulário</a>
+    <div class="nav-brand" style="font-family: 'Orbitron'; font-weight: 800; color: var(--primary);">ME</div>
+    <div class="nav-links">
+        <a href="index.html"><i class="fa-solid fa-house"></i> Início</a>
+        <a href="membros.html"><i class="fa-solid fa-crown"></i> Membros</a>
+        <a href="videos.html"><i class="fa-solid fa-play"></i> Vídeos</a>
+        <a href="links.html" class="active"><i class="fa-solid fa-link"></i> Links</a>
+    </div>
 </nav>
 
 <div class="container">
+    <header class="page-header">
+        <h1 class="text-gradient">Canais Oficiais</h1>
+        <p>CONECTE-SE COM A ELITE</p>
+    </header>
 
-  <h1 class="page-title">Links Oficiais</h1>
+    <div id="links-wrapper">
+        <a href="https://t.me/GuiRayaMindset" target="_blank" class="link-card">
+            <div class="link-content">
+                <div class="link-icon"><i class="fa-brands fa-telegram"></i></div>
+                <span>Telegram do Recrutador</span>
+            </div>
+            <i class="fa-solid fa-arrow-up-right-from-square external-icon"></i>
+        </a>
 
-  <a href="https://t.me/GuiRayaMindset" target="_blank" class="link-card">
-    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111646.png">
-    <span>Telegram do Recrutador</span>
-  </a>
+        <a href="https://chat.whatsapp.com/KcjoGvEv2gtAg6oVEB89sU" target="_blank" class="link-card">
+            <div class="link-content">
+                <div class="link-icon"><i class="fa-brands fa-whatsapp"></i></div>
+                <span>Grupo do Mindset</span>
+            </div>
+            <i class="fa-solid fa-arrow-up-right-from-square external-icon"></i>
+        </a>
 
-  <a href="https://chat.whatsapp.com/KcjoGvEv2gtAg6oVEB89sU" target="_blank" class="link-card">
-    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png">
-    <span>Grupo do Mindset</span>
-  </a>
-
-  <a href="https://api.whatsapp.com/send/?phone=5531972347144" target="_blank" class="link-card">
-    <img src="https://cdn-icons-png.flaticon.com/512/597/597177.png">
-    <span>Contato Direto</span>
-  </a>
-
+        <a href="https://api.whatsapp.com/send/?phone=5531972347144" target="_blank" class="link-card">
+            <div class="link-content">
+                <div class="link-icon"><i class="fa-solid fa-headset"></i></div>
+                <span>Suporte Direto</span>
+            </div>
+            <i class="fa-solid fa-arrow-up-right-from-square external-icon"></i>
+        </a>
+    </div>
 </div>
 
 <div class="app-footer">
-  <a href="index.html">🏠<br>Início</a>
-  <a href="membros.html">👑<br>Membros</a>
-  <a href="videos.html">🎬<br>Vídeos</a>
-  <a href="links.html">🔗<br>Links</a>
+    <a href="index.html"><i class="fa-solid fa-house"></i><span>Início</span></a>
+    <a href="membros.html"><i class="fa-solid fa-crown"></i><span>Membros</span></a>
+    <a href="videos.html"><i class="fa-solid fa-play"></i><span>Vídeos</span></a>
+    <a href="links.html" class="active"><i class="fa-solid fa-link"></i><span>Links</span></a>
 </div>
 
 <script>
-const cards=document.querySelectorAll(".link-card");
-cards.forEach((card,index)=>{
-  setTimeout(()=>card.classList.add("show"), index*150);
-});
+    // Animação de revelação sequencial
+    document.addEventListener("DOMContentLoaded", () => {
+        const cards = document.querySelectorAll(".link-card");
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.classList.add("show");
+            }, index * 120);
+        });
+    });
 </script>
 
 <script src="layout.v3.js" defer></script>
