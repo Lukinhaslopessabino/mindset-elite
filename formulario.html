@@ -2,28 +2,33 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Inscrição • Mindset Elite</title>
 
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050a15">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="global.css">
 
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
     <style>
-        .container { padding-top: 140px; display: flex; justify-content: center; align-items: center; min-height: 80vh; }
+        .container { padding-top: 100px; display: flex; justify-content: center; align-items: center; min-height: 90vh; }
+        
         .form-box {
-            background: rgba(17, 24, 39, 0.95);
+            background: var(--bg-card);
             padding: 40px;
-            border-radius: 20px;
+            border-radius: var(--radius-lg);
             width: 100%;
             max-width: 450px;
             border: 1px solid var(--border-glass);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-            backdrop-filter: blur(10px);
+            backdrop-filter: var(--glass-blur);
+            box-shadow: var(--shadow-neon);
         }
+
         .page-title {
             text-align: center;
             font-size: 28px;
@@ -31,7 +36,9 @@
             margin-bottom: 8px;
             color: var(--primary);
             letter-spacing: 1px;
+            text-transform: uppercase;
         }
+
         .vagas {
             text-align: center;
             margin-bottom: 30px;
@@ -39,64 +46,78 @@
             font-weight: 700;
             color: #00ffaa;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
+
         .input-group { position: relative; margin-bottom: 20px; }
+        
         .input-group i {
             position: absolute;
             left: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--primary-soft);
+            color: var(--primary);
+            opacity: 0.6;
             font-size: 16px;
         }
+
         input {
             width: 100%;
             padding: 15px 15px 15px 45px;
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.1);
-            background: #0f172a;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-glass);
+            background: rgba(15, 23, 42, 0.6);
             color: #fff;
             font-size: 14px;
-            transition: 0.3s ease;
+            transition: var(--transition);
         }
+
         input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 15px rgba(0, 224, 255, 0.2);
-            background: #161e31;
+            background: rgba(22, 30, 49, 0.9);
+            box-shadow: 0 0 15px var(--primary-glow);
         }
+
         .btn-submit {
             width: 100%;
             padding: 18px;
             border: none;
-            border-radius: 12px;
+            border-radius: var(--radius-md);
             font-weight: 900;
             font-size: 14px;
             text-transform: uppercase;
             background: var(--primary);
-            color: #000;
+            color: #050a15;
             cursor: pointer;
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: var(--transition);
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 10px;
+            font-family: 'Orbitron', sans-serif;
         }
+
         .btn-submit:hover:not(:disabled) {
-            transform: scale(1.02);
-            box-shadow: 0 0 25px var(--primary-soft);
+            transform: scale(1.03);
+            filter: brightness(1.1);
+            box-shadow: 0 0 20px var(--primary-glow);
         }
+
         .btn-submit:disabled { background: #2d3748; color: #718096; cursor: not-allowed; }
+
         .loader {
             width: 18px;
             height: 18px;
-            border: 2px solid rgba(0,0,0,0.3);
-            border-top: 2px solid #000;
+            border: 3px solid rgba(0,0,0,0.2);
+            border-top: 3px solid #000;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
             display: none;
         }
+
         @keyframes spin { to { transform: rotate(360deg); } }
+
         #formMsg {
             margin-top: 20px;
             text-align: center;
@@ -104,15 +125,19 @@
             font-weight: 600;
             min-height: 20px;
         }
+
         .honeypot { display: none !important; }
+
         .captcha-container {
             display: flex;
             justify-content: center;
             margin-bottom: 20px;
             transform: scale(0.9);
         }
+
         @media(max-width: 480px) {
             .form-box { padding: 25px; border-radius: 0; border: none; background: transparent; box-shadow: none; }
+            .container { padding-top: 80px; }
         }
     </style>
 </head>
@@ -136,7 +161,7 @@
         <form id="signupForm">
             <div class="input-group">
                 <i class="fa-brands fa-telegram"></i>
-                <input type="text" id="telegram" placeholder="@seu_usuario" required>
+                <input type="text" id="telegram" placeholder="@seu_usuario" required autocomplete="off">
             </div>
 
             <div class="input-group">
@@ -156,7 +181,7 @@
             </div>
 
             <button type="submit" class="btn-submit" id="submitBtn">
-                <span>Enviar Dados</span>
+                <span>Enviar Candidatura</span>
                 <div class="loader" id="loader"></div>
             </button>
 
@@ -173,32 +198,35 @@
 </div>
 
 <script>
-// CONFIGURAÇÃO DA API - Altere aqui se o link do Render mudar
+// --- CONFIGURAÇÃO DA CENTRAL ELITE ---
 const API_BASE_URL = "https://mindset-elite.onrender.com";
-const pageLoadedAt = Date.now();
 let enviando = false;
 
 async function carregarVagas() {
     const el = document.getElementById("vagasInfo");
     const btn = document.getElementById("submitBtn");
     try {
-        const res = await fetch(`${API_BASE_URL}/vagas`, { cache: "no-store" });
+        const res = await fetch(`${API_BASE_URL}/vagas`, { 
+            method: 'GET',
+            headers: { 'Accept': 'application/json' }
+        });
         const data = await res.json();
         const v = data.vagas ?? 0;
         
         if (v <= 0) {
             el.innerHTML = '<span style="color:#ff4c4c">⚠️ Inscrições Encerradas</span>';
             btn.disabled = true;
-            btn.innerText = "SEM VAGAS";
+            btn.innerHTML = "SEM VAGAS";
         } else {
             el.innerText = `Slots Disponíveis: ${v}`;
         }
-    } catch {
-        el.innerText = "Servidor Offline";
+    } catch (err) {
+        el.innerText = "HQ Offline (Verifique Conexão)";
+        console.error("Erro ao conectar na API:", err);
     }
 }
 
-// Inicializa vagas ao carregar
+// Inicializa vagas
 carregarVagas();
 
 const form = document.getElementById("signupForm");
@@ -213,7 +241,7 @@ form.addEventListener("submit", async (e) => {
     const captchaToken = grecaptcha.getResponse();
     if (!captchaToken) {
         formMsg.style.color = "#ffcc00";
-        formMsg.innerText = "Por favor, valide o reCAPTCHA.";
+        formMsg.innerText = "Valide que você é humano (reCAPTCHA).";
         return;
     }
 
@@ -225,24 +253,26 @@ form.addEventListener("submit", async (e) => {
         token: captchaToken
     };
 
-    // Validação de formato de Telegram
     if (!payload.telegram.startsWith("@")) {
         formMsg.style.color = "#ff4c4c";
-        formMsg.innerText = "O Telegram deve começar com @";
+        formMsg.innerText = "Erro: Telegram deve iniciar com @";
         return;
     }
 
-    // Interface de carregamento
+    // Estado de Envio
     loader.style.display = "block";
     btn.disabled = true;
     enviando = true;
-    formMsg.innerText = "Enviando para o servidor...";
+    formMsg.innerText = "Transmitindo dados para a HQ...";
     formMsg.style.color = "var(--primary)";
 
     try {
         const res = await fetch(`${API_BASE_URL}/inscrever`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
             body: JSON.stringify(payload)
         });
 
@@ -250,19 +280,18 @@ form.addEventListener("submit", async (e) => {
 
         if (!res.ok) {
             formMsg.style.color = "#ff4c4c";
-            formMsg.innerText = data.erro || "Falha na inscrição.";
+            formMsg.innerText = data.erro || "Falha na transmissão.";
             grecaptcha.reset();
         } else {
             formMsg.style.color = "#00ffaa";
-            formMsg.innerText = "✅ SUCESSO! Verifique seu Telegram em breve.";
+            formMsg.innerText = "✅ SUCESSO! Aguarde contato no Telegram.";
             form.reset();
             grecaptcha.reset();
-            carregarVagas(); // Atualiza contador de vagas na tela
+            carregarVagas();
         }
     } catch (err) {
         formMsg.style.color = "#ff4c4c";
-        formMsg.innerText = "Erro de conexão com a HQ.";
-        console.error(err);
+        formMsg.innerText = "Erro de conexão fatal com o servidor.";
     } finally {
         loader.style.display = "none";
         btn.disabled = false;
