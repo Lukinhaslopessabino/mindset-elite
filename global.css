@@ -63,17 +63,16 @@ body {
     display: flex;
     align-items: center;
     text-decoration: none;
-    height: 100%; /* Garante que o link ocupe a altura da barra */
+    height: 100%;
 }
 
-/* AJUSTE DEFINITIVO DA LOGO */
 .nav-brand img {
-    height: 45px; /* Altura ideal para não estourar a barra */
+    height: 45px;
     max-height: 50px;
-    width: auto; /* Mantém a proporção largura/altura */
+    width: auto;
     filter: drop-shadow(0 0 8px var(--primary-glow));
     transition: var(--transition);
-    object-fit: contain; /* Garante que a imagem não seja cortada */
+    object-fit: contain;
     display: block;
 }
 
@@ -132,6 +131,28 @@ body {
 }
 
 /* ===============================
+    HERO BANNER (Ajuste da Imagem Gigante)
+================================ */
+.hero-banner {
+    width: 100%;
+    max-width: 1200px; /* Limite de largura para desktop */
+    margin: 40px auto; /* Centraliza na página */
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-banner img {
+    width: 100%;
+    height: auto;
+    max-height: 450px; /* Impede que a imagem fique muito alta */
+    object-fit: contain; /* Garante que não corte o texto da imagem */
+    filter: drop-shadow(0 0 15px rgba(0, 224, 255, 0.2));
+    border-radius: var(--radius-md);
+}
+
+/* ===============================
     APP FOOTER (MENU MOBILE)
 ================================ */
 .app-footer {
@@ -187,11 +208,19 @@ body {
     }
 
     .nav-brand img {
-        height: 38px; /* Redução para telas menores */
+        height: 38px;
     }
 
     .app-footer {
         display: flex; 
+    }
+
+    .hero-banner {
+        margin: 20px auto;
+    }
+
+    .hero-banner img {
+        max-height: 300px; /* Menor no celular */
     }
 }
 
