@@ -1,11 +1,11 @@
 /* ============================================================
     🚀 MINDSET ELITE - PWA SERVICE WORKER v1.4 (ESTÁVEL)
-    Correção de Erro de Acesso (ERR_FAILED) & Domínio Oficial
+    Otimizado para Domínio Oficial & Performance Offline
    ============================================================ */
 
-const CACHE_NAME = 'mindset-elite-v1.4'; // Versão atualizada para forçar limpeza
+const CACHE_NAME = 'mindset-elite-v1.4';
 
-// Lista de ativos - Removido o "./" para evitar erro de resolução em domínios .com.br
+// Lista de ativos estratégicos para cache imediato
 const ASSETS = [
     '/',
     '/index.html',
@@ -16,7 +16,8 @@ const ASSETS = [
     '/formulario.html',
     '/global.css',
     '/manifest.json',
-    '/layout.v3.js'
+    '/layout.v3.js',
+    '/logo.png' // Essencial para a identidade visual offline
 ];
 
 // 1. INSTALAÇÃO: Armazena os ativos essenciais
@@ -24,8 +25,7 @@ self.addEventListener('install', (e) => {
     self.skipWaiting(); 
     e.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            console.log('%c [SW] Ecossistema Elite Sincronizado!', 'color: #00e0ff;');
-            // Usamos map para tentar adicionar um por um e não travar se um arquivo (ex: logo) faltar
+            console.log('%c [SW] Ecossistema Elite Sincronizado!', 'color: #00e0ff; font-weight: bold;');
             return Promise.all(
                 ASSETS.map(url => {
                     return cache.add(url).catch(err => console.warn(`[SW] Falha ao cachear: ${url}`, err));
@@ -51,20 +51,24 @@ self.addEventListener('activate', (e) => {
     );
 });
 
-// 3. INTERCEPTAÇÃO (FETCH): Estratégia Network-First para evitar ERR_FAILED
+// 3. INTERCEPTAÇÃO (FETCH): Estratégia Network-First com Fallback de Cache
 self.addEventListener('fetch', (e) => {
     const url = new URL(e.request.url);
 
-    // Ignorar APIs e extensões de navegador
-    if (url.host.includes('api.openweathermap.org') || !e.request.url.startsWith('http')) {
+    // Ignorar requisições de API (Clima/Vagas) e Extensões para não corromper o cache
+    if (
+        url.host.includes('api.openweathermap.org') || 
+        url.host.includes('onrender.com') || 
+        !e.request.url.startsWith('http')
+    ) {
         return; 
     }
 
     e.respondWith(
         fetch(e.request)
             .then((networkResponse) => {
-                // Se a rede funcionar, clona para o cache e entrega
-                if (networkResponse && networkResponse.status === 200) {
+                // Se a rede retornar OK, atualiza o cache e entrega a resposta
+                if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
                     const responseClone = networkResponse.clone();
                     caches.open(CACHE_NAME).then((cache) => {
                         cache.put(e.request, responseClone);
@@ -73,11 +77,11 @@ self.addEventListener('fetch', (e) => {
                 return networkResponse;
             })
             .catch(() => {
-                // Se a rede falhar (ERR_FAILED), tenta o cache
+                // Se a rede falhar (OFFLINE), busca no cache
                 return caches.match(e.request).then((cachedResponse) => {
                     if (cachedResponse) return cachedResponse;
                     
-                    // Se não tiver nem cache nem rede, e for uma página, manda pro início
+                    // Se for uma navegação de página e não houver cache, volta para a home
                     if (e.request.mode === 'navigate') {
                         return caches.match('/');
                     }
