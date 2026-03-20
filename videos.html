@@ -12,14 +12,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
     <link rel="stylesheet" href="global.css">
 
     <style>
-        /* CONTAINER E TÍTULO */
         .container { 
             padding-top: 140px; 
             padding-bottom: 120px; 
-            overflow-x: hidden; 
             max-width: 1400px;
             margin: 0 auto;
         }
@@ -35,7 +34,6 @@
         .page-title {
             font-size: clamp(22px, 5vw, 34px);
             font-weight: 900;
-            color: var(--primary);
             text-transform: uppercase;
             letter-spacing: 2px;
             font-family: 'Orbitron', sans-serif;
@@ -52,11 +50,12 @@
             align-items: center;
             gap: 6px;
             background: rgba(0, 255, 170, 0.05);
+            backdrop-filter: blur(4px);
         }
 
-        .badge-live i { font-size: 8px; animation: pulse-neon 1.5s infinite; }
+        .badge-live i { font-size: 8px; animation: pulse-live 1.5s infinite; }
 
-        @keyframes pulse-neon {
+        @keyframes pulse-live {
             0% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.4; transform: scale(1.2); }
             100% { opacity: 1; transform: scale(1); }
@@ -79,22 +78,21 @@
         }
         .row::-webkit-scrollbar { display: none; }
 
-        /* CONTROLES DESKTOP */
+        /* CONTROLES */
         .scroll-btn {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            width: 50px;
-            height: 100px;
-            background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
+            width: 45px;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
             border: 1px solid var(--border-glass);
             color: #fff;
-            font-size: 20px;
             cursor: pointer;
             z-index: 100;
             opacity: 0;
-            transition: 0.3s;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -151,7 +149,7 @@
             inset: 0;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.6s ease;
             overflow: hidden;
         }
 
@@ -163,13 +161,13 @@
             width: 100%;
             height: 100%;
             border: none;
-            transform: scale(1.4); 
+            transform: scale(1.35); 
         }
 
         /* INFOS */
         .video-info {
             padding: 15px;
-            background: linear-gradient(to bottom, rgba(10, 20, 40, 0.8), rgba(5, 10, 21, 1));
+            background: linear-gradient(to bottom, rgba(10, 20, 40, 0.4), rgba(5, 10, 21, 0.9));
         }
 
         .video-tag {
@@ -178,7 +176,7 @@
             text-transform: uppercase;
             font-weight: 800;
             margin-bottom: 6px;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
 
         .video-title {
@@ -198,7 +196,7 @@
             .card:hover { transform: none; }
             .video-preview { display: none !important; }
             .row { gap: 12px; padding: 15px 5%; }
-            .header-section { margin-bottom: 15px; }
+            .header-section { margin-bottom: 15px; padding: 0 6%; }
         }
     </style>
 </head>
@@ -208,7 +206,7 @@
 <nav class="navbar">
     <div class="nav-brand">
         <a href="index.html">
-            <img src="logo.png" alt="Logo">
+            <img src="logo.png" alt="Mindset Elite Logo">
         </a>
     </div>
     <div class="nav-links">
@@ -281,15 +279,18 @@ function createVideoCard(video) {
         </div>
     `;
 
-    // Carrega vídeo no Hover (Desktop)
+    // Preview On Hover (Só carrega o iframe se for Desktop e hover)
     card.onmouseenter = () => {
         if(window.innerWidth > 850) {
             const preview = document.getElementById(`preview-${video.id}`);
-            preview.innerHTML = `<iframe src="https://www.youtube.com/embed/${video.id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${video.id}&rel=0&modestbranding=1" allow="autoplay"></iframe>`;
+            // Evita carregar múltiplas vezes o mesmo iframe
+            if (!preview.innerHTML) {
+                preview.innerHTML = `<iframe src="https://www.youtube.com/embed/${video.id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${video.id}&rel=0&modestbranding=1" allow="autoplay"></iframe>`;
+            }
         }
     };
 
-    // Limpa vídeo ao sair
+    // Limpa para economizar RAM
     card.onmouseleave = () => {
         if(window.innerWidth > 850) {
             const preview = document.getElementById(`preview-${video.id}`);
@@ -297,17 +298,18 @@ function createVideoCard(video) {
         }
     };
 
-    // Abrir como Shorts ao clicar
+    // Abrir Shorts/Vídeo
     card.onclick = () => window.open(`https://www.youtube.com/shorts/${video.id}`, '_blank');
 
     return card;
 }
 
+// Inicia Renderização
 videoLinks.forEach(video => container.appendChild(createVideoCard(video)));
 
-// Controles de Scroll Suave
-document.getElementById("btnLeft").onclick = () => container.scrollBy({left: -400, behavior: "smooth"});
-document.getElementById("btnRight").onclick = () => container.scrollBy({left: 400, behavior: "smooth"});
+// Scroll Lógica
+document.getElementById("btnLeft").onclick = () => container.scrollBy({left: -container.clientWidth * 0.7, behavior: "smooth"});
+document.getElementById("btnRight").onclick = () => container.scrollBy({left: container.clientWidth * 0.7, behavior: "smooth"});
 </script>
 
 <script src="layout.v3.js" defer></script>
