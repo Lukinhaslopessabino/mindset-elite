@@ -41,14 +41,14 @@ body {
 }
 
 /* ===============================
-    NAVBAR (FIXA NO TOPO)
+    NAVBAR (AJUSTE DEFINITIVO DA LOGO)
 ================================ */
 .navbar {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 80px;
+    height: 70px; /* Reduzi de 80px para 70px para ser mais elegante */
     background: rgba(5, 10, 21, 0.9);
     backdrop-filter: var(--glass-blur);
     border-bottom: 1px solid var(--border-glass);
@@ -62,14 +62,14 @@ body {
 .nav-brand {
     display: flex;
     align-items: center;
-    text-decoration: none;
     height: 100%;
 }
 
 .nav-brand img {
-    height: 45px;
-    max-height: 50px;
-    width: auto;
+    /* FORÇANDO O TAMANHO PEQUENO AQUI */
+    height: 35px !important;  /* Antes estava 45px, agora 35px para garantir que fique pequena */
+    width: auto !important;
+    max-width: 180px !important;
     filter: drop-shadow(0 0 8px var(--primary-glow));
     transition: var(--transition);
     object-fit: contain;
@@ -114,7 +114,7 @@ body {
     letter-spacing: 1px;
     box-shadow: 0 0 15px var(--primary-glow);
     text-decoration: none;
-    padding: 12px 25px;
+    padding: 10px 20px; /* Reduzi um pouco o padding */
     border-radius: var(--radius-sm);
     display: inline-flex;
     align-items: center;
@@ -124,19 +124,13 @@ body {
     transition: var(--transition);
 }
 
-.btn:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
-    box-shadow: 0 5px 20px var(--primary-glow);
-}
-
 /* ===============================
-    HERO BANNER (Ajuste da Imagem Gigante)
+    HERO BANNER (Ajuste da Imagem Central)
 ================================ */
 .hero-banner {
     width: 100%;
-    max-width: 1200px; /* Limite de largura para desktop */
-    margin: 40px auto; /* Centraliza na página */
+    max-width: 800px; /* Reduzi de 1200 para 800 para não ficar gigante no meio */
+    margin: 30px auto;
     padding: 0 20px;
     display: flex;
     justify-content: center;
@@ -146,10 +140,9 @@ body {
 .hero-banner img {
     width: 100%;
     height: auto;
-    max-height: 450px; /* Impede que a imagem fique muito alta */
-    object-fit: contain; /* Garante que não corte o texto da imagem */
+    max-height: 350px; /* Reduzi de 450 para 350 */
+    object-fit: contain;
     filter: drop-shadow(0 0 15px rgba(0, 224, 255, 0.2));
-    border-radius: var(--radius-md);
 }
 
 /* ===============================
@@ -160,7 +153,7 @@ body {
     bottom: 0;
     left: 0;
     width: 100%;
-    height: 70px;
+    height: 65px;
     background: rgba(5, 10, 21, 0.95);
     backdrop-filter: var(--glass-blur);
     border-top: 1px solid var(--border-glass);
@@ -180,15 +173,7 @@ body {
     font-size: 10px;
     font-weight: 700;
     gap: 5px;
-    transition: var(--transition);
     flex: 1;
-}
-
-.app-footer a i { font-size: 20px; }
-
-.app-footer a.active {
-    color: var(--primary);
-    text-shadow: 0 0 10px var(--primary-glow);
 }
 
 /* ===============================
@@ -203,28 +188,18 @@ body {
 
     .navbar {
         justify-content: center; 
-        height: 70px;
-        padding: 0 20px;
+        height: 65px;
     }
 
     .nav-brand img {
-        height: 38px;
+        height: 28px !important; /* No celular a logo fica ainda menor */
     }
 
     .app-footer {
         display: flex; 
     }
 
-    .hero-banner {
-        margin: 20px auto;
-    }
-
     .hero-banner img {
-        max-height: 300px; /* Menor no celular */
+        max-height: 250px;
     }
-}
-
-@media (max-width: 480px) {
-    .text-gradient { font-size: 28px; }
-    .app-footer span { display: none; }
 }
