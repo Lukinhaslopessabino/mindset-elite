@@ -3,86 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Participantes • Mindset Elite</title>
-    
+    <title>Membros • Mindset Elite</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="global.css">
-    
+
     <style>
-        .container { padding-top: 130px; max-width: 900px; padding-bottom: 120px; }
-        
-        .user-list { 
-            background: var(--bg-card); 
-            border-radius: 15px; 
-            border: 1px solid var(--border-glass); 
+        .container { 
+            padding-top: 140px; 
+            padding-bottom: 120px; 
+            max-width: 1100px; 
+            margin: auto;
+        }
+
+        .page-header { text-align: center; margin-bottom: 50px; }
+        .page-header p { letter-spacing: 3px; font-size: 12px; opacity: 0.7; }
+
+        /* GRID RESPONSIVO DE MEMBROS */
+        .membros-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 0 20px;
+        }
+
+        .membro-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            text-align: center;
+            transition: var(--transition);
             backdrop-filter: var(--glass-blur);
+            position: relative;
             overflow: hidden;
         }
-        
-        .user-item { 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
-            padding: 18px 25px; 
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            transition: var(--transition);
-        }
-        
-        .user-item:hover {
-            background: rgba(255, 255, 255, 0.02);
+
+        .membro-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-neon);
         }
 
-        .user-item:last-child { border-bottom: none; }
-        
-        .user-info { display: flex; align-items: center; gap: 15px; }
-        
-        .user-img { 
-            width: 48px; 
-            height: 48px; 
-            border-radius: 50%; 
-            border: 2px solid var(--primary); 
-            object-fit: cover; 
-            background: #1a202c;
+        .membro-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: var(--primary);
+            opacity: 0;
+            transition: 0.3s;
         }
 
-        .user-details h4 {
-            font-size: 16px;
-            color: #fff;
-            margin: 0;
-            font-weight: 700;
+        .membro-card:hover::before { opacity: 1; }
+
+        .membro-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            margin-bottom: 20px;
+            object-fit: cover;
+            box-shadow: 0 0 15px var(--primary-glow);
         }
 
-        .user-details span {
-            font-size: 12px;
-            color: var(--primary);
-            opacity: 0.8;
-        }
-
-        .user-meta {
-            text-align: right;
+        .membro-nome {
             font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
+            font-size: 18px;
             color: #fff;
-            letter-spacing: 1px;
+            margin-bottom: 5px;
         }
 
-        @media(max-width: 600px) {
-            .user-item { padding: 15px; }
-            .user-img { width: 40px; height: 40px; }
-            .user-details h4 { font-size: 14px; }
+        .membro-cargo {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--primary);
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .membro-bio {
+            font-size: 13px;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        /* AJUSTES MOBILE */
+        @media (max-width: 768px) {
+            .container { padding-top: 110px; }
+            .membros-grid { grid-template-columns: 1fr; } /* Coluna única no celular */
+            .membro-card { padding: 20px; }
         }
     </style>
 </head>
+
 <body>
 
 <nav class="navbar">
     <div class="nav-brand">ME</div>
     <div class="nav-links">
         <a href="index.html">Início</a>
-        <a href="membros.html">Membros</a>
-        <a href="participantes.html" class="active">Participantes</a>
+        <a href="membros.html" class="active">Membros</a>
+        <a href="participantes.html">Participantes</a>
         <a href="videos.html">Vídeos</a>
         <a href="links.html">Links</a>
         <a href="formulario.html" class="btn" style="padding: 10px 25px; margin-left: 15px;">Entrar</a>
@@ -90,68 +114,41 @@
 </nav>
 
 <div class="container">
-    <h1 class="text-gradient" style="margin-bottom:30px; text-align: center;">Base de Participantes</h1>
-    <div class="user-list" id="userList">
-        <div style="padding:40px; text-align:center;">
-            <i class="fa-solid fa-circle-notch fa-spin" style="color: var(--primary); font-size: 24px; margin-bottom: 10px;"></i>
-            <p style="opacity: 0.6;">Sincronizando com a HQ...</p>
+    <header class="page-header">
+        <h1 class="text-gradient">Conselho de Elite</h1>
+        <p>LIDERANÇA E ESTRATÉGIA</p>
+    </header>
+
+    <div class="membros-grid">
+        <div class="membro-card">
+            <img src="https://ui-avatars.com/api/?name=Guilherme+Raya&background=050a15&color=00e0ff&size=128" class="membro-img" alt="Líder">
+            <div class="membro-nome">Guilherme Raya</div>
+            <div class="membro-cargo">Fundador / Recrutador</div>
+            <p class="membro-bio">Visão estratégica e liderança focada em alta performance e expansão do ecossistema Mindset.</p>
+        </div>
+
+        <div class="membro-card">
+            <img src="https://ui-avatars.com/api/?name=Admin+Elite&background=050a15&color=00e0ff&size=128" class="membro-img" alt="Admin">
+            <div class="membro-nome">Conselho Interno</div>
+            <div class="membro-cargo">Administração</div>
+            <p class="membro-bio">Gestão de infraestrutura e suporte operacional para todos os membros ativos.</p>
+        </div>
+
+        <div class="membro-card">
+            <img src="https://ui-avatars.com/api/?name=Mod+Elite&background=050a15&color=00e0ff&size=128" class="membro-img" alt="Moderador">
+            <div class="membro-nome">Moderação</div>
+            <div class="membro-cargo">Segurança</div>
+            <p class="membro-bio">Garantindo a ordem e o cumprimento dos protocolos de elite em todos os canais.</p>
         </div>
     </div>
 </div>
 
 <div class="app-footer">
     <a href="index.html"><i class="fa-solid fa-house"></i><span>Início</span></a>
-    <a href="membros.html"><i class="fa-solid fa-crown"></i><span>Membros</span></a>
-    <a href="participantes.html" class="active"><i class="fa-solid fa-users"></i><span>Inscritos</span></a>
+    <a href="membros.html" class="active"><i class="fa-solid fa-crown"></i><span>Membros</span></a>
+    <a href="participantes.html"><i class="fa-solid fa-users"></i><span>Inscritos</span></a>
     <a href="videos.html"><i class="fa-solid fa-play"></i><span>Vídeos</span></a>
 </div>
-
-<script>
-    async function carregarLista() {
-        const listEl = document.getElementById("userList");
-        const API_URL = "https://mindset-elite.onrender.com/ranking";
-
-        try {
-            const res = await fetch(API_URL);
-            if (!res.ok) throw new Error("Erro na resposta");
-            
-            const data = await res.json();
-            const users = data.ranking || [];
-            
-            if (users.length === 0) {
-                listEl.innerHTML = '<p style="padding:40px; text-align:center; opacity:0.5;">Nenhum participante recrutado ainda.</p>';
-                return;
-            }
-
-            listEl.innerHTML = users.map(u => `
-                <div class="user-item">
-                    <div class="user-info">
-                        <img class="user-img" src="${u.foto || 'https://ui-avatars.com/api/?background=050a15&color=00e0ff&name='+encodeURIComponent(u.nome)}" alt="Avatar">
-                        <div class="user-details">
-                            <h4>${u.nome}</h4>
-                            <span>${u.telegram}</span>
-                        </div>
-                    </div>
-                    <div class="user-meta">
-                        <div>${u.idade} ANOS</div>
-                        <div style="font-size:9px; opacity:0.5; margin-top:4px;">NÍVEL ${u.nivel || 'BRONZE'}</div>
-                    </div>
-                </div>
-            `).join('');
-
-        } catch (e) { 
-            console.error("Erro ao carregar participantes:", e);
-            listEl.innerHTML = `
-                <div style="padding:40px; text-align:center;">
-                    <i class="fa-solid fa-triangle-exclamation" style="color: #ff4c4c; font-size: 24px; margin-bottom: 10px;"></i>
-                    <p style="color:#ff4c4c;">Falha na conexão com o servidor.</p>
-                </div>
-            `;
-        }
-    }
-    
-    carregarLista();
-</script>
 
 <script src="layout.v3.js" defer></script>
 
