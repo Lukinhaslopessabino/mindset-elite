@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
     <link rel="stylesheet" href="global.css">
 
     <style>
@@ -41,6 +42,7 @@
             font-size: 11px;
             letter-spacing: 2px;
             font-weight: 700;
+            text-transform: uppercase;
         }
 
         /* LINK CARD EVOLUTION */
@@ -56,9 +58,9 @@
             text-decoration: none;
             color: var(--text-main);
             backdrop-filter: var(--glass-blur);
-            transition: var(--transition);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             opacity: 0;
-            transform: translateY(15px);
+            transform: translateY(20px);
         }
 
         .link-card.show {
@@ -73,14 +75,14 @@
         }
 
         .link-icon {
-            width: 42px;
-            height: 42px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
             background: rgba(255, 255, 255, 0.03);
             border-radius: 12px;
-            font-size: 18px;
+            font-size: 20px;
             color: var(--primary);
             transition: var(--transition);
         }
@@ -92,9 +94,9 @@
         }
 
         .external-icon {
-            font-size: 11px;
+            font-size: 12px;
             color: var(--text-dim);
-            opacity: 0.4;
+            opacity: 0.3;
             transition: var(--transition);
         }
 
@@ -102,7 +104,7 @@
         .link-card:hover {
             border-color: var(--primary);
             background: rgba(0, 224, 255, 0.08);
-            transform: scale(1.02);
+            transform: scale(1.03);
             box-shadow: var(--shadow-neon);
         }
 
@@ -118,10 +120,15 @@
             transform: translateX(3px);
         }
 
+        /* ACTIVE / CLICK STATE */
+        .link-card:active {
+            transform: scale(0.98);
+        }
+
         @media(max-width: 850px) {
             .container { padding-top: 110px; }
-            .link-card { padding: 16px 20px; }
-            .link-icon { width: 38px; height: 38px; font-size: 16px; }
+            .link-card { padding: 18px 20px; }
+            .link-icon { width: 40px; height: 40px; font-size: 18px; }
             .link-card span { font-size: 14px; }
         }
     </style>
@@ -186,14 +193,20 @@
 </div>
 
 <script>
-    // Animação de revelação sequencial otimizada
+    // Animação de revelação sequencial com Intersection Observer para performance
     document.addEventListener("DOMContentLoaded", () => {
         const cards = document.querySelectorAll(".link-card");
-        cards.forEach((card, index) => {
-            setTimeout(() => {
-                card.classList.add("show");
-            }, index * 150);
-        });
+        
+        const revealCards = () => {
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add("show");
+                }, index * 120);
+            });
+        };
+
+        // Pequeno atraso para garantir que o layout esteja pronto
+        setTimeout(revealCards, 100);
     });
 </script>
 
