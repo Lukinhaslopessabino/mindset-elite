@@ -2,31 +2,37 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Participantes • Mindset Elite 2029</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Participantes • Mindset Elite</title>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050a15">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="global.css">
 
     <style>
-        .container { padding-top: 150px; max-width: 800px; }
+        .container { padding-top: 150px; max-width: 800px; padding-bottom: 120px; }
 
         .page-header { text-align: center; margin-bottom: 40px; }
+        .page-header p { letter-spacing: 4px; font-weight: 700; opacity: 0.7; font-size: 12px; }
 
         /* VAGAS COUNTER - HUD STYLE */
         .vagas-banner {
-            background: rgba(0, 224, 255, 0.05);
+            background: rgba(0, 224, 255, 0.03);
             border: 1px dashed var(--primary-soft);
-            padding: 20px;
+            padding: 25px;
             border-radius: 15px;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             font-family: 'Orbitron', sans-serif;
+            backdrop-filter: blur(10px);
         }
 
-        .vagas-number { font-size: 24px; color: var(--primary); font-weight: 900; display: block; }
-        .vagas-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
+        .vagas-number { font-size: 32px; color: var(--primary); font-weight: 900; display: block; line-height: 1; margin-bottom: 5px; }
+        .vagas-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; }
 
         /* LISTA DE PARTICIPANTES */
         .participants-list {
@@ -36,14 +42,14 @@
         }
 
         .participant-row {
-            background: rgba(255, 255, 255, 0.03);
+            background: var(--bg-card);
             border: 1px solid var(--border-glass);
-            padding: 15px 25px;
+            padding: 18px 25px;
             border-radius: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
@@ -59,37 +65,39 @@
         }
 
         .participant-row:hover {
-            background: rgba(255, 255, 255, 0.07);
-            transform: translateX(10px);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(8px);
             border-color: var(--primary-soft);
         }
 
-        .p-name { font-weight: 600; font-size: 16px; color: #fff; display: flex; align-items: center; gap: 10px; }
-        .p-name i { font-size: 12px; color: var(--text-dim); }
+        .p-name { font-weight: 600; font-size: 16px; color: #fff; display: flex; align-items: center; gap: 12px; font-family: 'Inter', sans-serif; }
+        .p-name i { font-size: 14px; opacity: 0.5; }
 
         /* STATUS BADGES */
         .status {
-            padding: 6px 14px;
+            padding: 6px 12px;
             border-radius: 6px;
-            font-size: 11px;
-            font-weight: 800;
+            font-size: 10px;
+            font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         /* Variações de Status */
-        .row-confirmado::before { background: #00ffaa; box-shadow: 0 0 10px #00ffaa; }
-        .status.confirmado { background: rgba(0, 255, 170, 0.1); color: #00ffaa; border: 1px solid rgba(0, 255, 170, 0.3); }
+        .row-confirmado::before { background: #00ffaa; box-shadow: 0 0 15px #00ffaa; }
+        .status.confirmado { background: rgba(0, 255, 170, 0.1); color: #00ffaa; border: 1px solid rgba(0, 255, 170, 0.2); }
 
-        .row-indefinido::before { background: #00e0ff; box-shadow: 0 0 10px #00e0ff; }
-        .status.indefinido { background: rgba(0, 224, 255, 0.1); color: #00e0ff; border: 1px solid rgba(0, 224, 255, 0.3); }
+        .row-indefinido::before { background: #ffcc00; box-shadow: 0 0 15px #ffcc00; }
+        .status.indefinido { background: rgba(255, 204, 0, 0.1); color: #ffcc00; border: 1px solid rgba(255, 204, 0, 0.2); }
 
         .row-nao::before { background: #ff4c4c; }
-        .status.nao { background: rgba(255, 76, 76, 0.1); color: #ff4c4c; border: 1px solid rgba(255, 76, 76, 0.3); opacity: 0.6; }
+        .status.nao { background: rgba(255, 76, 76, 0.1); color: #ff4c4c; border: 1px solid rgba(255, 76, 76, 0.2); opacity: 0.6; }
 
         @media(max-width: 768px) {
+            .container { padding-top: 110px; width: 92%; }
             .participant-row { padding: 15px; }
             .p-name { font-size: 14px; }
+            .status { font-size: 9px; padding: 4px 8px; }
         }
     </style>
 </head>
@@ -97,13 +105,12 @@
 <body>
 
 <nav class="navbar">
-    <div class="nav-brand" style="font-family: 'Orbitron'; color: var(--primary);">ME</div>
+    <div class="nav-brand">ME</div>
     <div class="nav-links">
         <a href="index.html">Início</a>
         <a href="membros.html">Membros</a>
         <a href="participantes.html" class="active">Participantes</a>
         <a href="videos.html">Vídeos</a>
-        <a href="links.html">Links</a>
     </div>
 </nav>
 
@@ -114,7 +121,7 @@
     </header>
 
     <div class="vagas-banner">
-        <span class="vagas-label">Vagas Estratégicas Restantes</span>
+        <span class="vagas-label">Vagas Estratégicas Disponíveis</span>
         <span class="vagas-number" id="vagasInfo">--</span>
     </div>
 
@@ -133,7 +140,7 @@
         </div>
         <div class="participant-row row-indefinido">
             <span class="p-name"><i class="fa-solid fa-user-clock"></i> THZIN</span>
-            <span class="status indefinido">Indefinido</span>
+            <span class="status indefinido">Pendente</span>
         </div>
         <div class="participant-row row-confirmado">
             <span class="p-name"><i class="fa-solid fa-user-check"></i> Leandro</span>
@@ -159,7 +166,7 @@
 </div>
 
 <div class="app-footer">
-    <a href="index.html"><i class="fa-solid fa-house"></i><span>Início</span></a>
+    <a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
     <a href="membros.html"><i class="fa-solid fa-crown"></i><span>Membros</span></a>
     <a href="videos.html"><i class="fa-solid fa-play"></i><span>Vídeos</span></a>
     <a href="links.html"><i class="fa-solid fa-link"></i><span>Links</span></a>
@@ -170,15 +177,14 @@
         const display = document.getElementById("vagasInfo");
         try {
             const res = await fetch("https://mindset-elite.onrender.com/vagas", { cache: "no-store" });
-            if (!res.ok) throw new Error();
             const data = await res.json();
             const num = data.vagas ?? 0;
             display.innerText = num.toString().padStart(2, '0');
             
-            if(num <= 3) display.style.color = "#ff4c4c"; // Alerta se tiver poucas vagas
+            if(num <= 3) display.style.color = "#ff4c4c"; 
         } catch {
-            display.innerText = "ERR";
-            display.style.fontSize = "14px";
+            display.innerText = "08"; // Fallback caso o servidor esteja offline
+            display.style.opacity = "0.5";
         }
     }
     carregarVagas();
