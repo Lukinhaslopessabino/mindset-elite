@@ -5,14 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mindset Elite • O Próximo Nível</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <meta name="description" content="A excelência não é um ato, mas um hábito. Construa sua mentalidade de alto nível.">
+    <meta property="og:title" content="Mindset Elite • Acesso Restrito">
+    <meta property="og:image" content="https://sua-url.com/preview.png"> <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="global.css">
 
     <style>
         /* Ajustes específicos para a Home */
+        body {
+            overflow-x: hidden;
+        }
+
         .hero {
-            min-height: 80vh;
+            min-height: 85vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -20,46 +28,88 @@
             text-align: center;
             padding: 0 20px;
             position: relative;
+            z-index: 1;
+        }
+
+        /* Efeito de brilho de fundo */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            filter: blur(150px);
+            opacity: 0.15;
+            z-index: -1;
         }
 
         .hero h1 {
             font-size: clamp(2.5rem, 8vw, 5rem);
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             line-height: 1.1;
-            filter: drop-shadow(0 0 15px var(--primary-glow));
+            font-weight: 900;
+            letter-spacing: -2px;
+            filter: drop-shadow(0 0 20px rgba(0, 224, 255, 0.4));
         }
 
         .hero p {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin-bottom: 40px;
-            font-weight: 300;
+            font-size: clamp(1rem, 4vw, 1.25rem);
+            color: #a0aec0;
+            max-width: 650px;
+            margin-bottom: 45px;
+            font-weight: 400;
+            line-height: 1.6;
         }
 
         /* Seção de Features */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-top: 60px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+            margin-bottom: 120px;
+            padding: 0 10px;
+        }
+
+        .feature-card {
+            padding: 40px 30px;
+            text-align: left;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(17, 24, 39, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            background: rgba(17, 24, 39, 0.7);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
         }
 
         .feature-card i {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             color: var(--primary);
-            margin-bottom: 20px;
-            display: block;
+            margin-bottom: 25px;
+            display: inline-block;
+            background: rgba(0, 224, 255, 0.1);
+            padding: 15px;
+            border-radius: 12px;
         }
 
         .feature-card h3 {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             color: #fff;
+            font-size: 1.5rem;
+            font-family: 'Orbitron', sans-serif;
         }
 
         .feature-card p {
             font-size: 0.95rem;
-            color: var(--text-dim);
+            color: #94a3b8;
+            line-height: 1.7;
         }
 
         /* Badge Exclusiva */
@@ -67,18 +117,26 @@
             background: rgba(0, 224, 255, 0.1);
             border: 1px solid var(--primary);
             color: var(--primary);
-            padding: 5px 15px;
+            padding: 6px 18px;
             border-radius: 100px;
-            font-size: 12px;
+            font-size: 11px;
             font-family: 'Orbitron', sans-serif;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 224, 255, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 224, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 224, 255, 0); }
         }
 
         @media(max-width: 768px) {
-            .hero { min-height: 70vh; }
-            .features-grid { grid-template-columns: 1fr; }
+            .hero { min-height: 75vh; }
+            .features-grid { grid-template-columns: 1fr; margin-bottom: 100px; }
+            .feature-card { text-align: center; }
         }
     </style>
 </head>
@@ -86,13 +144,13 @@
 <body>
 
 <nav class="navbar">
-    <div class="nav-brand" style="font-family: 'Orbitron'; font-weight: 800; color: var(--primary);">ME</div>
+    <div class="nav-brand" style="font-family: 'Orbitron'; font-weight: 800; color: var(--primary); font-size: 1.5rem;">ME</div>
     <div class="nav-links">
         <a href="index.html" class="active"><i class="fa-solid fa-house"></i> Início</a>
         <a href="membros.html"><i class="fa-solid fa-crown"></i> Membros</a>
         <a href="videos.html"><i class="fa-solid fa-play"></i> Vídeos</a>
         <a href="links.html"><i class="fa-solid fa-link"></i> Links</a>
-        <a href="formulario.html" class="btn" style="padding: 8px 20px; margin-left: 15px;">Participar</a>
+        <a href="formulario.html" class="btn btn-nav" style="padding: 10px 25px; margin-left: 15px;">Participar</a>
     </div>
 </nav>
 
@@ -114,19 +172,19 @@
         <div class="card-elite feature-card">
             <i class="fa-solid fa-earth-americas"></i>
             <h3>Visão Global</h3>
-            <p>Estratégias e conexões que transcendem fronteiras para o crescimento real.</p>
+            <p>Estratégias e conexões que transcendem fronteiras geográficas para um crescimento real e escalável.</p>
         </div>
 
         <div class="card-elite feature-card">
             <i class="fa-solid fa-users-rays"></i>
             <h3>Networking Forte</h3>
-            <p>Esteja entre os melhores. Acesso direto a uma comunidade de alta performance.</p>
+            <p>Esteja entre os 1%. Acesso direto a uma comunidade de alta performance focada em resultados práticos.</p>
         </div>
 
         <div class="card-elite feature-card">
             <i class="fa-solid fa-brain"></i>
             <h3>Mentalidade</h3>
-            <p>Desenvolvimento contínuo da mente para suportar grandes desafios e conquistas.</p>
+            <p>Reprogramação contínua da mente para suportar grandes pressões, desafios e conquistas de longo prazo.</p>
         </div>
     </section>
 
