@@ -1,173 +1,187 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Participantes - Mindset Elite</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Participantes • Mindset Elite 2029</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="global.css">
 
-<link rel="stylesheet" href="global.css">
+    <style>
+        .container { padding-top: 150px; max-width: 800px; }
 
-<style>
+        .page-header { text-align: center; margin-bottom: 40px; }
 
-/* ESPAÇAMENTO */
-.container{
-  padding-top:140px;
-  max-width:900px;
-}
+        /* VAGAS COUNTER - HUD STYLE */
+        .vagas-banner {
+            background: rgba(0, 224, 255, 0.05);
+            border: 1px dashed var(--primary-soft);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 30px;
+            font-family: 'Orbitron', sans-serif;
+        }
 
-/* TÍTULO */
-.page-title{
-  text-align:center;
-  font-size:30px;
-  margin-bottom:50px;
-  color:#00e0ff;
-}
+        .vagas-number { font-size: 24px; color: var(--primary); font-weight: 900; display: block; }
+        .vagas-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
 
-/* CARD */
-.card{
-  background:#111827;
-  padding:40px;
-  border-radius:20px;
-  border:1px solid rgba(255,255,255,.08);
-}
+        /* LISTA DE PARTICIPANTES */
+        .participants-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
 
-/* LINHAS */
-.row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:18px 0;
-  border-bottom:1px solid rgba(255,255,255,.05);
-  font-size:15px;
-  transition:.2s ease;
-}
+        .participant-row {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            padding: 15px 25px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
 
-.row:last-child{
-  border-bottom:none;
-}
+        .participant-row::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: transparent;
+        }
 
-.row:hover{
-  transform:translateX(6px);
-}
+        .participant-row:hover {
+            background: rgba(255, 255, 255, 0.07);
+            transform: translateX(10px);
+            border-color: var(--primary-soft);
+        }
 
-/* STATUS */
-.status{
-  padding:7px 16px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:700;
-}
+        .p-name { font-weight: 600; font-size: 16px; color: #fff; display: flex; align-items: center; gap: 10px; }
+        .p-name i { font-size: 12px; color: var(--text-dim); }
 
-.confirmado{
-  background:rgba(0,255,170,.15);
-  color:#00ffaa;
-  border:1px solid #00ffaa;
-}
+        /* STATUS BADGES */
+        .status {
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
 
-.indefinido{
-  background:rgba(0,224,255,.12);
-  color:#00e0ff;
-  border:1px solid #00e0ff;
-}
+        /* Variações de Status */
+        .row-confirmado::before { background: #00ffaa; box-shadow: 0 0 10px #00ffaa; }
+        .status.confirmado { background: rgba(0, 255, 170, 0.1); color: #00ffaa; border: 1px solid rgba(0, 255, 170, 0.3); }
 
-.nao{
-  background:rgba(255,76,76,.15);
-  color:#ff4c4c;
-  border:1px solid #ff4c4c;
-}
+        .row-indefinido::before { background: #00e0ff; box-shadow: 0 0 10px #00e0ff; }
+        .status.indefinido { background: rgba(0, 224, 255, 0.1); color: #00e0ff; border: 1px solid rgba(0, 224, 255, 0.3); }
 
-/* VAGAS */
-.vagas{
-  margin-top:40px;
-  text-align:center;
-  font-size:18px;
-  font-weight:bold;
-  color:#00e0ff;
-}
+        .row-nao::before { background: #ff4c4c; }
+        .status.nao { background: rgba(255, 76, 76, 0.1); color: #ff4c4c; border: 1px solid rgba(255, 76, 76, 0.3); opacity: 0.6; }
 
-/* MOBILE */
-@media(max-width:768px){
-
-  .container{
-    padding-top:120px;
-  }
-
-  .card{
-    padding:25px;
-  }
-
-  .row{
-    flex-direction:column;
-    align-items:flex-start;
-    gap:8px;
-  }
-
-  .page-title{
-    font-size:22px;
-  }
-
-}
-
-</style>
+        @media(max-width: 768px) {
+            .participant-row { padding: 15px; }
+            .p-name { font-size: 14px; }
+        }
+    </style>
 </head>
 
 <body>
 
 <nav class="navbar">
-  <a href="index.html">🏠 Início</a>
-  <a href="membros.html">👑 Membros</a>
-  <a href="participantes.html">🎯 Participantes</a>
-  <a href="videos.html">🎬 Vídeos</a>
-  <a href="links.html">🔗 Links</a>
-  <a href="formulario.html">📝 Formulário</a>
+    <div class="nav-brand" style="font-family: 'Orbitron'; color: var(--primary);">ME</div>
+    <div class="nav-links">
+        <a href="index.html">Início</a>
+        <a href="membros.html">Membros</a>
+        <a href="participantes.html" class="active">Participantes</a>
+        <a href="videos.html">Vídeos</a>
+        <a href="links.html">Links</a>
+    </div>
 </nav>
 
 <div class="container">
+    <header class="page-header">
+        <h1 class="text-gradient">Mindset 2029</h1>
+        <p>LISTA OFICIAL DE CONVOCADOS</p>
+    </header>
 
-  <h2 class="page-title">Participantes Mindset 2029</h2>
+    <div class="vagas-banner">
+        <span class="vagas-label">Vagas Estratégicas Restantes</span>
+        <span class="vagas-number" id="vagasInfo">--</span>
+    </div>
 
-  <div class="card">
-
-    <div class="row"><span>Tuzin</span> <span class="status confirmado">Confirmado</span></div>
-    <div class="row"><span>Luqueta</span> <span class="status confirmado">Confirmado</span></div>
-    <div class="row"><span>Vini</span> <span class="status confirmado">Confirmado</span></div>
-    <div class="row"><span>THZIN</span> <span class="status indefinido">Indefinido</span></div>
-    <div class="row"><span>Leandro</span> <span class="status confirmado">Confirmado</span></div>
-    <div class="row"><span>Elizeu</span> <span class="status nao">Não participa</span></div>
-    <div class="row"><span>Mistério</span> <span class="status confirmado">Confirmado</span></div>
-    <div class="row"><span>Pandinha</span> <span class="status confirmado">Confirmado</span></div>
-    <div class="row"><span>Daniel Nascimento</span> <span class="status confirmado">Confirmado</span></div>
-
-    <div class="vagas" id="vagasInfo">Carregando vagas...</div>
-
-  </div>
-
+    <div class="participants-list">
+        <div class="participant-row row-confirmado">
+            <span class="p-name"><i class="fa-solid fa-user-check"></i> Tuzin</span>
+            <span class="status confirmado">Confirmado</span>
+        </div>
+        <div class="participant-row row-confirmado">
+            <span class="p-name"><i class="fa-solid fa-user-check"></i> Luqueta</span>
+            <span class="status confirmado">Confirmado</span>
+        </div>
+        <div class="participant-row row-confirmado">
+            <span class="p-name"><i class="fa-solid fa-user-check"></i> Vini</span>
+            <span class="status confirmado">Confirmado</span>
+        </div>
+        <div class="participant-row row-indefinido">
+            <span class="p-name"><i class="fa-solid fa-user-clock"></i> THZIN</span>
+            <span class="status indefinido">Indefinido</span>
+        </div>
+        <div class="participant-row row-confirmado">
+            <span class="p-name"><i class="fa-solid fa-user-check"></i> Leandro</span>
+            <span class="status confirmado">Confirmado</span>
+        </div>
+        <div class="participant-row row-nao">
+            <span class="p-name"><i class="fa-solid fa-user-xmark"></i> Elizeu</span>
+            <span class="status nao">Ausente</span>
+        </div>
+        <div class="participant-row row-confirmado">
+            <span class="p-name"><i class="fa-solid fa-user-check"></i> Mistério</span>
+            <span class="status confirmado">Confirmado</span>
+        </div>
+        <div class="participant-row row-confirmado">
+            <span class="p-name"><i class="fa-solid fa-user-check"></i> Pandinha</span>
+            <span class="status confirmado">Confirmado</span>
+        </div>
+        <div class="participant-row row-confirmado">
+            <span class="p-name"><i class="fa-solid fa-user-check"></i> Daniel Nascimento</span>
+            <span class="status confirmado">Confirmado</span>
+        </div>
+    </div>
 </div>
 
 <div class="app-footer">
-  <a href="index.html">🏠<br>Início</a>
-  <a href="membros.html">👑<br>Membros</a>
-  <a href="videos.html">🎬<br>Vídeos</a>
-  <a href="links.html">🔗<br>Links</a>
+    <a href="index.html"><i class="fa-solid fa-house"></i><span>Início</span></a>
+    <a href="membros.html"><i class="fa-solid fa-crown"></i><span>Membros</span></a>
+    <a href="videos.html"><i class="fa-solid fa-play"></i><span>Vídeos</span></a>
+    <a href="links.html"><i class="fa-solid fa-link"></i><span>Links</span></a>
 </div>
 
 <script>
-async function carregarVagas(){
-  try{
-    const res = await fetch("https://mindset-elite.onrender.com/vagas",{cache:"no-store"});
-    if(!res.ok) throw new Error();
-    const data = await res.json();
-    document.getElementById("vagasInfo").innerText =
-      "Vagas disponíveis: " + (data.vagas ?? 0);
-  }catch{
-    document.getElementById("vagasInfo").innerText =
-      "Não foi possível carregar vagas.";
-  }
-}
-carregarVagas();
+    async function carregarVagas() {
+        const display = document.getElementById("vagasInfo");
+        try {
+            const res = await fetch("https://mindset-elite.onrender.com/vagas", { cache: "no-store" });
+            if (!res.ok) throw new Error();
+            const data = await res.json();
+            const num = data.vagas ?? 0;
+            display.innerText = num.toString().padStart(2, '0');
+            
+            if(num <= 3) display.style.color = "#ff4c4c"; // Alerta se tiver poucas vagas
+        } catch {
+            display.innerText = "ERR";
+            display.style.fontSize = "14px";
+        }
+    }
+    carregarVagas();
 </script>
 
 <script src="layout.v3.js" defer></script>
