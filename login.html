@@ -1,131 +1,202 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login • Mindset Enterprise</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acesso Restrito • Mindset Elite</title>
+    
+    <link rel="stylesheet" href="global.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-<style>
-body{
-background:#070A12;
-color:#EAF2FF;
-font-family:Arial;
-display:flex;
-align-items:center;
-justify-content:center;
-height:100vh;
-margin:0;
-}
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: radial-gradient(circle at center, #0a0f1c 0%, #050a15 100%);
+        }
 
-.box{
-background:#111827;
-padding:40px;
-border-radius:16px;
-width:320px;
-box-shadow:0 30px 80px rgba(0,0,0,.6);
-}
+        .login-card {
+            background: var(--bg-card);
+            backdrop-filter: var(--glass-blur);
+            padding: 40px;
+            border-radius: var(--radius-xl);
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            animation: fadeIn 0.6s ease-out;
+        }
 
-h2{
-text-align:center;
-margin-bottom:30px;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-input{
-width:100%;
-padding:12px;
-margin-bottom:15px;
-border-radius:8px;
-border:none;
-background:#1F2937;
-color:#fff;
-}
+        .login-card i.main-icon {
+            font-size: 48px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 10px var(--primary-glow));
+        }
 
-button{
-width:100%;
-padding:12px;
-border:none;
-border-radius:8px;
-background:#635BFF;
-color:#fff;
-font-weight:bold;
-cursor:pointer;
-}
+        h2 {
+            margin-bottom: 10px;
+            font-size: 22px;
+            color: #fff;
+        }
 
-button:hover{
-opacity:.9;
-}
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
 
-#msg{
-margin-top:15px;
-font-size:13px;
-text-align:center;
-color:#FF4D4D;
-}
-</style>
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-dim);
+            font-size: 18px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 14px 14px 45px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-glass);
+            background: rgba(15, 23, 42, 0.6);
+            color: #fff;
+            font-size: 15px;
+            transition: var(--transition);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(15, 23, 42, 0.9);
+            box-shadow: 0 0 15px rgba(0, 224, 255, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        #msg {
+            margin-top: 20px;
+            font-size: 13px;
+            min-height: 20px;
+            color: #ff4d4d;
+            font-weight: 500;
+        }
+
+        .footer-brand {
+            margin-top: 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="box">
-<h2>Admin Login</h2>
+    <div class="login-card">
+        <i class="fa-solid fa-shield-halved main-icon"></i>
+        <h2>Admin Login</h2>
+        <p class="subtitle">Acesso exclusivo para administradores Elite</p>
 
-<input type="password" id="senha" placeholder="Senha">
-<input type="text" id="codigo" placeholder="Código 2FA">
+        <div class="input-group">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="senha" placeholder="Sua senha mestre">
+        </div>
 
-<button onclick="login()">Entrar</button>
+        <div class="input-group">
+            <i class="fa-solid fa-key"></i>
+            <input type="text" id="codigo" placeholder="Código 2FA">
+        </div>
 
-<div id="msg"></div>
-</div>
+        <button class="btn btn-login" onclick="login()" id="btnLogin">
+            <i class="fa-solid fa-right-to-bracket"></i> Autenticar
+        </button>
 
-<script>
+        <div id="msg"></div>
 
-const API = "https://mindset-elite.onrender.com";
+        <div class="footer-brand">Mindset Enterprise v3.0</div>
+    </div>
 
-async function login(){
+    <script>
+        const API = "https://mindset-elite.onrender.com";
 
-const senha = document.getElementById("senha").value.trim();
-const codigo = document.getElementById("codigo").value.trim();
-const msg = document.getElementById("msg");
+        async function login() {
+            const senha = document.getElementById("senha").value.trim();
+            const codigo = document.getElementById("codigo").value.trim();
+            const msg = document.getElementById("msg");
+            const btn = document.getElementById("btnLogin");
 
-msg.innerText = "";
+            msg.innerText = "";
 
-if(!senha || !codigo){
-msg.innerText = "Preencha senha e código 2FA";
-return;
-}
+            if (!senha || !codigo) {
+                msg.innerText = "Preencha todos os campos para continuar.";
+                return;
+            }
 
-try{
+            // Efeito de Loading no Botão
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Processando...';
 
-// 🔐 Login direto com 2FA
-const res = await fetch(API + "/admin/2fa",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({ senha, codigo })
-});
+            try {
+                const res = await fetch(API + "/admin/2fa", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ senha, codigo })
+                });
 
-const data = await res.json();
+                const data = await res.json();
 
-if(!res.ok){
-msg.innerText = data.erro || "Erro no login";
-return;
-}
+                if (!res.ok) {
+                    msg.innerText = data.erro || "Falha na autenticação.";
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Autenticar';
+                    return;
+                }
 
-// ✅ salva token corretamente
-sessionStorage.setItem("adminToken", data.token);
-sessionStorage.setItem("adminRole", data.role);
+                // Armazenamento Seguro
+                sessionStorage.setItem("adminToken", data.token);
+                sessionStorage.setItem("adminRole", data.role);
 
-// ✅ redireciona corretamente para admin.html
-window.location.href = "admin.html";
+                // Feedback de Sucesso antes de redirecionar
+                msg.style.color = "var(--primary)";
+                msg.innerText = "Acesso autorizado. Redirecionando...";
+                
+                setTimeout(() => {
+                    window.location.href = "admin.html";
+                }, 800);
 
-}catch(e){
-msg.innerText = "Erro de conexão com o servidor";
-}
+            } catch (e) {
+                msg.innerText = "Erro crítico: Sem resposta do servidor.";
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Autenticar';
+            }
+        }
 
-}
-
-</script>
+        // Permitir Login com a tecla Enter
+        document.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') login();
+        });
+    </script>
 
 </body>
 </html>
