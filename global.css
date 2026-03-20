@@ -30,7 +30,6 @@ body {
     color: var(--text-main);
     line-height: 1.6;
     overflow-x: hidden;
-    /* Adicionado para o conteúdo não "sumir" sob a navbar */
     padding-top: 80px; 
 }
 
@@ -64,15 +63,18 @@ body {
     display: flex;
     align-items: center;
     text-decoration: none;
+    height: 100%; /* Garante que o link ocupe a altura da barra */
 }
 
-/* Ajuste específico para a nova logo.png */
+/* AJUSTE DEFINITIVO DA LOGO */
 .nav-brand img {
-    height: 50px; 
-    width: auto;
+    height: 45px; /* Altura ideal para não estourar a barra */
+    max-height: 50px;
+    width: auto; /* Mantém a proporção largura/altura */
     filter: drop-shadow(0 0 8px var(--primary-glow));
     transition: var(--transition);
-    object-fit: contain;
+    object-fit: contain; /* Garante que a imagem não seja cortada */
+    display: block;
 }
 
 .nav-brand img:hover {
@@ -103,7 +105,7 @@ body {
     background: var(--primary-soft);
 }
 
-/* Botão padrão para formulários e links de destaque */
+/* Botão padrão */
 .btn {
     background: var(--primary);
     color: #050a15 !important;
@@ -181,21 +183,15 @@ body {
     .navbar {
         justify-content: center; 
         height: 70px;
+        padding: 0 20px;
     }
 
     .nav-brand img {
-        height: 42px; 
+        height: 38px; /* Redução para telas menores */
     }
 
     .app-footer {
         display: flex; 
-    }
-
-    .container {
-        width: 100%;
-        padding: 20px;
-        padding-top: 40px;
-        padding-bottom: 100px; /* Espaço para o menu inferior */
     }
 }
 
