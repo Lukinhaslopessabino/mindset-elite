@@ -1,6 +1,6 @@
 /* ============================================================
-    🔥 MINDSET ELITE - ULTRA VISUAL ENGINE v3.6
-    Partículas, Clima Real, PWA & Registro de Service Worker
+    🔥 MINDSET ELITE - ULTRA VISUAL ENGINE v3.6 (RESPONSIVE)
+    Partículas, Clima Real, PWA & Performance Mobile
    ============================================================ */
 
 const WEATHER_CONFIG = {
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await updateWeatherTheme();
 
-    // --- 2. SISTEMA DE PARTÍCULAS NEON ---
+    // --- 2. SISTEMA DE PARTÍCULAS NEON (OTIMIZADO) ---
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d", { alpha: true });
     document.body.appendChild(canvas);
@@ -62,16 +62,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     canvas.style.left = "0";
     canvas.style.width = "100%";
     canvas.style.height = "100%";
-    canvas.style.zIndex = "-1";
+    canvas.style.zIndex = "-1"; // Atrás de tudo
     canvas.style.pointerEvents = "none";
     canvas.style.opacity = "0.4"; 
 
     let particles = [];
-    const particleCount = window.innerWidth < 768 ? 30 : 70;
+    // Reduz partículas no mobile para economizar bateria
+    let particleCount = window.innerWidth < 768 ? 25 : 60;
 
     function initCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        particleCount = window.innerWidth < 768 ? 25 : 60;
         particles = [];
         for (let i = 0; i < particleCount; i++) {
             particles.push(new Particle());
@@ -83,8 +85,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
             this.size = Math.random() * 1.2 + 0.5;
-            this.speedX = (Math.random() - 0.5) * 0.5;
-            this.speedY = (Math.random() - 0.5) * 0.5;
+            this.speedX = (Math.random() - 0.5) * 0.4;
+            this.speedY = (Math.random() - 0.5) * 0.4;
         }
 
         update() {
@@ -105,7 +107,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function connectParticles() {
-        const maxDistance = 120;
+        const maxDistance = window.innerWidth < 768 ? 90 : 120;
         for (let a = 0; a < particles.length; a++) {
             for (let b = a + 1; b < particles.length; b++) {
                 const dx = particles[a].x - particles[b].x;
@@ -115,7 +117,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (distance < maxDistance) {
                     const opacity = 1 - (distance / maxDistance);
                     ctx.strokeStyle = accentColor;
-                    ctx.globalAlpha = opacity * 0.15;
+                    ctx.globalAlpha = opacity * 0.12;
                     ctx.lineWidth = 0.5;
                     ctx.beginPath();
                     ctx.moveTo(particles[a].x, particles[a].y);
@@ -149,20 +151,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     // --- 3. REGISTRO DO SERVICE WORKER (PWA) ---
     if ('serviceWorker' in navigator) {
         try {
-            const reg = await navigator.serviceWorker.register('/sw.js');
+            // Caminho relativo para funcionar em qualquer subpasta
+            await navigator.serviceWorker.register('sw.js');
             console.log('%c Mindset Elite PWA: Ativo ✅', 'color: #00ffaa; font-weight: bold;');
         } catch (err) {
-            console.error('Mindset Elite PWA: Falha no registro ❌', err);
+            console.warn('PWA: Rodando em modo local ou erro de SW.');
         }
     }
-
-    // --- 4. LÓGICA DE INSTALAÇÃO (PROMPT) ---
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        console.log('Prompt de instalação pronto para a Elite.');
-    });
 
     console.log(`%c Engine v3.6 Ativa | Clima: ${weatherStatus}`, `color: ${accentColor}; font-weight: bold;`);
 });
