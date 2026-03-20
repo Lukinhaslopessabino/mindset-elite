@@ -1,5 +1,5 @@
 /* ============================================================
-    🔥 MINDSET ELITE - ULTRA VISUAL ENGINE v3.8 (ESTÁVEL)
+    🔥 MINDSET ELITE - ULTRA VISUAL ENGINE v3.9 (OTIMIZADO)
     Partículas, Clima Real, PWA & Performance Mobile
    ============================================================ */
 
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function updateWeatherTheme() {
         try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 4000); // Timeout mais curto para não travar o carregamento
+            const timeoutId = setTimeout(() => controller.abort(), 3000);
 
             const response = await fetch(
                 `https://api.openweathermap.org/data/2.5/weather?q=${WEATHER_CONFIG.city},${WEATHER_CONFIG.country}&appid=${WEATHER_CONFIG.key}`,
@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 weatherStatus = data.weather[0].main;
             }
         } catch (err) {
-            console.warn("Mindset Engine: Usando tema padrão (Offline ou API Limitada).");
+            console.warn("Mindset Engine: Usando tema padrão.");
         }
 
         const themes = {
@@ -48,15 +48,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         accentColor = themes[weatherStatus] || WEATHER_CONFIG.defaultColor;
 
-        // Aplica a cor do clima nas variáveis do CSS Global com segurança
         document.documentElement.style.setProperty('--primary', accentColor);
         document.documentElement.style.setProperty('--primary-glow', `${accentColor}66`);
     }
 
-    // Executa o tema antes de iniciar as partículas
     await updateWeatherTheme();
 
-    // --- 2. SISTEMA DE PARTÍCULAS NEON (OTIMIZADO) ---
+    // --- 2. SISTEMA DE PARTÍCULAS NEON ---
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d", { alpha: true });
     document.body.appendChild(canvas);
@@ -73,12 +71,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     let particles = [];
-    let particleCount = window.innerWidth < 768 ? 20 : 55; // Menos partículas para fluidez total
+    let particleCount = window.innerWidth < 768 ? 15 : 45;
 
     function initCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        particleCount = window.innerWidth < 768 ? 20 : 55;
         particles = [];
         for (let i = 0; i < particleCount; i++) {
             particles.push(new Particle());
@@ -93,7 +90,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             this.speedX = (Math.random() - 0.5) * 0.3;
             this.speedY = (Math.random() - 0.5) * 0.3;
         }
-
         update() {
             this.x += this.speedX;
             this.y += this.speedY;
@@ -102,7 +98,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (this.y > canvas.height) this.y = 0;
             else if (this.y < 0) this.y = canvas.height;
         }
-
         draw() {
             ctx.fillStyle = accentColor;
             ctx.beginPath();
@@ -111,56 +106,31 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    function connectParticles() {
-        const maxDistance = window.innerWidth < 768 ? 80 : 110;
-        for (let a = 0; a < particles.length; a++) {
-            for (let b = a + 1; b < particles.length; b++) {
-                const dx = particles[a].x - particles[b].x;
-                const dy = particles[a].y - particles[b].y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-
-                if (distance < maxDistance) {
-                    const opacity = 1 - (distance / maxDistance);
-                    ctx.strokeStyle = accentColor;
-                    ctx.globalAlpha = opacity * 0.1;
-                    ctx.lineWidth = 0.5;
-                    ctx.beginPath();
-                    ctx.moveTo(particles[a].x, particles[a].y);
-                    ctx.lineTo(particles[b].x, particles[b].y);
-                    ctx.stroke();
-                    ctx.globalAlpha = 1;
-                }
-            }
-        }
-    }
-
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let i = 0; i < particles.length; i++) {
-            particles[i].update();
-            particles[i].draw();
-        }
-        connectParticles();
+        particles.forEach(p => { p.update(); p.draw(); });
         requestAnimationFrame(animate);
     }
 
-    let resizeTimer;
     window.addEventListener("resize", () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(initCanvas, 250);
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
     });
 
     initCanvas();
     animate();
 
-    // --- 3. REGISTRO DO SERVICE WORKER (PWA) ---
+    // --- 3. REGISTRO DO SERVICE WORKER (CORREÇÃO DE DOMÍNIO) ---
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js')
-                .then(reg => console.log('%c Mindset Elite PWA: Ativo ✅', 'color: #00ffaa; font-weight: bold;'))
-                .catch(err => console.warn('PWA: Service Worker não encontrado no diretório.'));
+            // Usando caminho absoluto "/" para evitar ERR_FAILED em subpáginas
+            navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                .then(reg => {
+                    console.log('%c Mindset Elite PWA: Ativo ✅', 'color: #00ffaa; font-weight: bold;');
+                    // Força atualização se houver mudança de domínio
+                    reg.update();
+                })
+                .catch(err => console.error('Erro ao registrar Service Worker:', err));
         });
     }
-
-    console.log(`%c Engine v3.8 Ativa | Clima: ${weatherStatus}`, `color: ${accentColor}; font-weight: bold;`);
 });
