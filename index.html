@@ -7,24 +7,14 @@
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#050a15">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="icon-192.png">
-
-    <meta name="description" content="A excelência não é um ato, mas um hábito. Construa sua mentalidade de alto nível.">
-    <meta property="og:title" content="Mindset Elite • Acesso Restrito">
-    <meta property="og:image" content="mindset-hero.jpg"> 
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
     <link rel="stylesheet" href="global.css">
 
     <style>
-        body { overflow-x: hidden; }
-
         .hero {
             min-height: 85vh;
             display: flex;
@@ -34,18 +24,14 @@
             text-align: center;
             padding: 0 20px;
             position: relative;
-            z-index: 1;
         }
 
-        /* Efeito de brilho de fundo */
         .hero::before {
             content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 300px;
-            height: 300px;
+            width: 300px; height: 300px;
             background: var(--primary);
             filter: blur(150px);
             opacity: 0.15;
@@ -55,71 +41,42 @@
         .hero h1 {
             font-size: clamp(2.5rem, 8vw, 5rem);
             margin-bottom: 20px;
-            line-height: 1.1;
             font-weight: 900;
-            letter-spacing: -2px;
             filter: drop-shadow(0 0 20px rgba(0, 224, 255, 0.4));
-        }
-
-        .hero p {
-            font-size: clamp(1rem, 4vw, 1.25rem);
-            color: #a0aec0;
-            max-width: 650px;
-            margin-bottom: 45px;
-            font-weight: 400;
-            line-height: 1.6;
         }
 
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
-            margin-top: 40px;
             margin-bottom: 120px;
             padding: 0 10px;
         }
 
         .feature-card {
             padding: 40px 30px;
-            text-align: left;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: rgba(17, 24, 39, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
             border-radius: 15px;
+            transition: var(--transition);
         }
 
         .feature-card:hover {
             transform: translateY(-10px);
             border-color: var(--primary);
-            background: rgba(17, 24, 39, 0.7);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            box-shadow: var(--shadow-neon);
         }
 
         .feature-card i {
-            font-size: 2.2rem;
+            font-size: 2rem;
             color: var(--primary);
-            margin-bottom: 25px;
-            display: inline-block;
-            background: rgba(0, 224, 255, 0.1);
+            margin-bottom: 20px;
+            background: var(--primary-soft);
             padding: 15px;
             border-radius: 12px;
         }
 
-        .feature-card h3 {
-            margin-bottom: 15px;
-            color: #fff;
-            font-size: 1.5rem;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .feature-card p {
-            font-size: 0.95rem;
-            color: #94a3b8;
-            line-height: 1.7;
-        }
-
         .elite-badge {
-            background: rgba(0, 224, 255, 0.1);
             border: 1px solid var(--primary);
             color: var(--primary);
             padding: 6px 18px;
@@ -138,25 +95,27 @@
             100% { box-shadow: 0 0 0 0 rgba(0, 224, 255, 0); }
         }
 
-        @media(max-width: 768px) {
-            .hero { min-height: 75vh; }
+        @media(max-width: 850px) {
+            .hero { min-height: 70vh; padding-top: 60px; }
             .features-grid { grid-template-columns: 1fr; margin-bottom: 100px; }
-            .feature-card { text-align: center; }
         }
     </style>
 </head>
-
 <body>
 
 <nav class="navbar">
-    <div class="nav-brand">ME</div>
+    <div class="nav-brand">
+        <a href="index.html">
+            <img src="favicon.ico" alt="Mindset Elite Logo">
+        </a>
+    </div>
     <div class="nav-links">
         <a href="index.html" class="active">Início</a>
         <a href="membros.html">Membros</a>
         <a href="participantes.html">Participantes</a>
         <a href="videos.html">Vídeos</a>
         <a href="links.html">Links</a>
-        <a href="formulario.html" class="btn" style="padding: 10px 25px; margin-left: 15px;">Entrar</a>
+        <a href="formulario.html" class="btn">Entrar</a>
     </div>
 </nav>
 
@@ -164,12 +123,9 @@
     <header class="hero">
         <span class="elite-badge">Acesso Restrito</span>
         <h1 class="text-gradient">Mindset Elite</h1>
-        <p>A excelência não é um ato, mas um hábito. Construa sua mentalidade de alto nível e domine o jogo global.</p>
-        
+        <p>A excelência não é um ato, mas um hábito. Construa sua mentalidade de alto nível e domine o jogo.</p>
         <div class="hero-actions">
-            <a href="formulario.html" class="btn">
-                <i class="fa-solid fa-bolt"></i> Começar Agora
-            </a>
+            <a href="formulario.html" class="btn"><i class="fa-solid fa-bolt"></i> Começar Agora</a>
         </div>
     </header>
 
@@ -177,19 +133,17 @@
         <div class="feature-card">
             <i class="fa-solid fa-earth-americas"></i>
             <h3>Visão Global</h3>
-            <p>Estratégias e conexões que transcendem fronteiras geográficas para um crescimento real e escalável.</p>
+            <p>Estratégias e conexões que transcendem fronteiras para um crescimento escalável.</p>
         </div>
-
         <div class="feature-card">
             <i class="fa-solid fa-users-rays"></i>
             <h3>Networking Forte</h3>
-            <p>Esteja entre os 1%. Acesso direto a uma comunidade de alta performance focada em resultados práticos.</p>
+            <p>Esteja entre os 1%. Acesso direto a uma comunidade focada em resultados reais.</p>
         </div>
-
         <div class="feature-card">
             <i class="fa-solid fa-brain"></i>
             <h3>Mentalidade</h3>
-            <p>Reprogramação contínua da mente para suportar grandes pressões, desafios e conquistas de longo prazo.</p>
+            <p>Reprogramação da mente para suportar grandes pressões e conquistas de elite.</p>
         </div>
     </section>
 </div>
@@ -202,6 +156,5 @@
 </div>
 
 <script src="layout.v3.js" defer></script>
-
 </body>
 </html>
