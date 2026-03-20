@@ -2,63 +2,158 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Participantes • Mindset Elite</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="global.css">
+    
     <style>
-        .container { padding-top: 140px; max-width: 900px; }
-        .user-list { background: var(--bg-card); border-radius: 15px; border: 1px solid var(--border-glass); }
-        .user-item { 
-            display: flex; align-items: center; justify-content: space-between; 
-            padding: 15px 25px; border-bottom: 1px solid rgba(255,255,255,0.05);
+        .container { padding-top: 130px; max-width: 900px; padding-bottom: 120px; }
+        
+        .user-list { 
+            background: var(--bg-card); 
+            border-radius: 15px; 
+            border: 1px solid var(--border-glass); 
+            backdrop-filter: var(--glass-blur);
+            overflow: hidden;
         }
+        
+        .user-item { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 18px 25px; 
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: var(--transition);
+        }
+        
+        .user-item:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .user-item:last-child { border-bottom: none; }
+        
         .user-info { display: flex; align-items: center; gap: 15px; }
-        .user-img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; }
+        
+        .user-img { 
+            width: 48px; 
+            height: 48px; 
+            border-radius: 50%; 
+            border: 2px solid var(--primary); 
+            object-fit: cover; 
+            background: #1a202c;
+        }
+
+        .user-details h4 {
+            font-size: 16px;
+            color: #fff;
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .user-details span {
+            font-size: 12px;
+            color: var(--primary);
+            opacity: 0.8;
+        }
+
+        .user-meta {
+            text-align: right;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        @media(max-width: 600px) {
+            .user-item { padding: 15px; }
+            .user-img { width: 40px; height: 40px; }
+            .user-details h4 { font-size: 14px; }
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar">
+
+<nav class="navbar">
     <div class="nav-brand">ME</div>
     <div class="nav-links">
         <a href="index.html">Início</a>
-        <a href="membros.html" class="active">Membros</a>
-        <a href="participantes.html">Participantes</a>
+        <a href="membros.html">Membros</a>
+        <a href="participantes.html" class="active">Participantes</a>
         <a href="videos.html">Vídeos</a>
         <a href="links.html">Links</a>
-        <a href="formulario.html" class="btn">Participar</a>
+        <a href="formulario.html" class="btn" style="padding: 10px 25px; margin-left: 15px;">Entrar</a>
     </div>
 </nav>
-    <div class="container">
-        <h1 class="text-gradient" style="margin-bottom:30px;">Base de Participantes</h1>
-        <div class="user-list" id="userList">
-            <p style="padding:20px; text-align:center;">Buscando registros...</p>
+
+<div class="container">
+    <h1 class="text-gradient" style="margin-bottom:30px; text-align: center;">Base de Participantes</h1>
+    <div class="user-list" id="userList">
+        <div style="padding:40px; text-align:center;">
+            <i class="fa-solid fa-circle-notch fa-spin" style="color: var(--primary); font-size: 24px; margin-bottom: 10px;"></i>
+            <p style="opacity: 0.6;">Sincronizando com a HQ...</p>
         </div>
     </div>
+</div>
 
-    <script>
-        async function carregarLista() {
-            const listEl = document.getElementById("userList");
-            try {
-                const res = await fetch("https://mindset-elite.onrender.com/ranking");
-                const data = await res.json();
-                const users = data.ranking || [];
-                
-                listEl.innerHTML = users.map(u => `
-                    <div class="user-item">
-                        <div class="user-info">
-                            <img class="user-img" src="${u.foto || 'https://ui-avatars.com/api/?name='+u.nome}">
-                            <div>
-                                <div style="font-weight:700; color:#fff;">${u.nome}</div>
-                                <div style="font-size:12px; opacity:0.6; color:var(--primary);">${u.telegram}</div>
-                            </div>
+<div class="app-footer">
+    <a href="index.html"><i class="fa-solid fa-house"></i><span>Início</span></a>
+    <a href="membros.html"><i class="fa-solid fa-crown"></i><span>Membros</span></a>
+    <a href="participantes.html" class="active"><i class="fa-solid fa-users"></i><span>Inscritos</span></a>
+    <a href="videos.html"><i class="fa-solid fa-play"></i><span>Vídeos</span></a>
+</div>
+
+<script>
+    async function carregarLista() {
+        const listEl = document.getElementById("userList");
+        const API_URL = "https://mindset-elite.onrender.com/ranking";
+
+        try {
+            const res = await fetch(API_URL);
+            if (!res.ok) throw new Error("Erro na resposta");
+            
+            const data = await res.json();
+            const users = data.ranking || [];
+            
+            if (users.length === 0) {
+                listEl.innerHTML = '<p style="padding:40px; text-align:center; opacity:0.5;">Nenhum participante recrutado ainda.</p>';
+                return;
+            }
+
+            listEl.innerHTML = users.map(u => `
+                <div class="user-item">
+                    <div class="user-info">
+                        <img class="user-img" src="${u.foto || 'https://ui-avatars.com/api/?background=050a15&color=00e0ff&name='+encodeURIComponent(u.nome)}" alt="Avatar">
+                        <div class="user-details">
+                            <h4>${u.nome}</h4>
+                            <span>${u.telegram}</span>
                         </div>
-                        <div style="font-family:'Orbitron'; font-size:12px; color:#fff;">${u.idade} ANOS</div>
                     </div>
-                `).join('');
-            } catch (e) { listEl.innerHTML = "<p>Erro de conexão.</p>"; }
+                    <div class="user-meta">
+                        <div>${u.idade} ANOS</div>
+                        <div style="font-size:9px; opacity:0.5; margin-top:4px;">NÍVEL ${u.nivel || 'BRONZE'}</div>
+                    </div>
+                </div>
+            `).join('');
+
+        } catch (e) { 
+            console.error("Erro ao carregar participantes:", e);
+            listEl.innerHTML = `
+                <div style="padding:40px; text-align:center;">
+                    <i class="fa-solid fa-triangle-exclamation" style="color: #ff4c4c; font-size: 24px; margin-bottom: 10px;"></i>
+                    <p style="color:#ff4c4c;">Falha na conexão com o servidor.</p>
+                </div>
+            `;
         }
-        carregarLista();
-    </script>
+    }
+    
+    carregarLista();
+</script>
+
+<script src="layout.v3.js" defer></script>
+
 </body>
 </html>
