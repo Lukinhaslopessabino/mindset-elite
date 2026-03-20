@@ -7,7 +7,7 @@
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#050a15">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" href="logo.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
 
     <style>
         .hero {
-            min-height: 85vh;
+            min-height: 80vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -26,6 +26,7 @@
             position: relative;
         }
 
+        /* Efeito de luz no fundo do título */
         .hero::before {
             content: '';
             position: absolute;
@@ -45,6 +46,13 @@
             filter: drop-shadow(0 0 20px rgba(0, 224, 255, 0.4));
         }
 
+        .hero p {
+            max-width: 600px;
+            color: var(--text-dim);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -57,8 +65,9 @@
             padding: 40px 30px;
             background: var(--bg-card);
             border: 1px solid var(--border-glass);
-            border-radius: 15px;
+            border-radius: var(--radius-lg);
             transition: var(--transition);
+            backdrop-filter: var(--glass-blur);
         }
 
         .feature-card:hover {
@@ -72,32 +81,39 @@
             color: var(--primary);
             margin-bottom: 20px;
             background: var(--primary-soft);
-            padding: 15px;
-            border-radius: 12px;
+            padding: 20px;
+            border-radius: var(--radius-md);
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
         }
 
         .elite-badge {
             border: 1px solid var(--primary);
             color: var(--primary);
-            padding: 6px 18px;
+            padding: 8px 20px;
             border-radius: 100px;
-            font-size: 11px;
+            font-size: 10px;
             font-family: 'Orbitron', sans-serif;
             margin-bottom: 25px;
             text-transform: uppercase;
             letter-spacing: 3px;
             animation: pulse 2s infinite;
+            background: rgba(0, 224, 255, 0.05);
         }
 
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(0, 224, 255, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(0, 224, 255, 0); }
+            70% { box-shadow: 0 0 0 12px rgba(0, 224, 255, 0); }
             100% { box-shadow: 0 0 0 0 rgba(0, 224, 255, 0); }
         }
 
         @media(max-width: 850px) {
-            .hero { min-height: 70vh; padding-top: 60px; }
-            .features-grid { grid-template-columns: 1fr; margin-bottom: 100px; }
+            .hero { min-height: 60vh; }
+            .features-grid { grid-template-columns: 1fr; margin-bottom: 80px; }
         }
     </style>
 </head>
@@ -106,7 +122,7 @@
 <nav class="navbar">
     <div class="nav-brand">
         <a href="index.html">
-            <img src="favicon.ico" alt="Mindset Elite Logo">
+            <img src="logo.png" alt="Mindset Elite Logo">
         </a>
     </div>
     <div class="nav-links">
@@ -123,7 +139,7 @@
     <header class="hero">
         <span class="elite-badge">Acesso Restrito</span>
         <h1 class="text-gradient">Mindset Elite</h1>
-        <p>A excelência não é um ato, mas um hábito. Construa sua mentalidade de alto nível e domine o jogo.</p>
+        <p>A excelência não é um ato, mas um hábito. Construa sua mentalidade de alto nível e domine o jogo hoje mesmo.</p>
         <div class="hero-actions">
             <a href="formulario.html" class="btn"><i class="fa-solid fa-bolt"></i> Começar Agora</a>
         </div>
@@ -133,17 +149,17 @@
         <div class="feature-card">
             <i class="fa-solid fa-earth-americas"></i>
             <h3>Visão Global</h3>
-            <p>Estratégias e conexões que transcendem fronteiras para um crescimento escalável.</p>
+            <p>Estratégias e conexões que transcendem fronteiras para um crescimento escalável e duradouro.</p>
         </div>
         <div class="feature-card">
             <i class="fa-solid fa-users-rays"></i>
             <h3>Networking Forte</h3>
-            <p>Esteja entre os 1%. Acesso direto a uma comunidade focada em resultados reais.</p>
+            <p>Esteja entre os 1%. Tenha acesso direto a uma comunidade focada em resultados reais e suporte mútuo.</p>
         </div>
         <div class="feature-card">
             <i class="fa-solid fa-brain"></i>
             <h3>Mentalidade</h3>
-            <p>Reprogramação da mente para suportar grandes pressões e conquistas de elite.</p>
+            <p>Reprogramação cognitiva para suportar grandes pressões e alcançar conquistas de nível elite.</p>
         </div>
     </section>
 </div>
