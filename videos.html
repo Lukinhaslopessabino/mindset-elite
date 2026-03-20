@@ -7,7 +7,7 @@
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#050a15">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" href="logo.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
@@ -38,6 +38,7 @@
             color: var(--primary);
             text-transform: uppercase;
             letter-spacing: 2px;
+            font-family: 'Orbitron', sans-serif;
         }
 
         .badge-live {
@@ -84,9 +85,9 @@
             top: 50%;
             transform: translateY(-50%);
             width: 50px;
-            height: 80px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
+            height: 100px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
             border: 1px solid var(--border-glass);
             color: #fff;
             font-size: 20px;
@@ -100,27 +101,27 @@
         }
 
         .row-wrapper:hover .scroll-btn { opacity: 1; }
-        .scroll-btn:hover { background: var(--primary); color: #000; border-color: var(--primary); }
+        .scroll-btn:hover { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
 
-        .scroll-left { left: 0; border-radius: 0 10px 10px 0; }
-        .scroll-right { right: 0; border-radius: 10px 0 0 10px; }
+        .scroll-left { left: 0; border-radius: 0 12px 12px 0; }
+        .scroll-right { right: 0; border-radius: 12px 0 0 12px; }
 
         /* CARD DE VÍDEO */
         .card {
-            min-width: 260px;
+            min-width: 280px;
             position: relative;
             cursor: pointer;
             transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
         }
 
         .card:hover {
-            transform: scale(1.08);
+            transform: scale(1.06);
             z-index: 50;
         }
 
         .card-inner {
             background: var(--bg-card);
-            border-radius: 12px;
+            border-radius: var(--radius-md);
             overflow: hidden;
             border: 1px solid var(--border-glass);
             box-shadow: 0 10px 25px rgba(0,0,0,0.4);
@@ -162,12 +163,12 @@
             width: 100%;
             height: 100%;
             border: none;
-            transform: scale(1.3); 
+            transform: scale(1.4); 
         }
 
         /* INFOS */
         .video-info {
-            padding: 12px;
+            padding: 15px;
             background: linear-gradient(to bottom, rgba(10, 20, 40, 0.8), rgba(5, 10, 21, 1));
         }
 
@@ -176,12 +177,12 @@
             color: var(--primary);
             text-transform: uppercase;
             font-weight: 800;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             letter-spacing: 1px;
         }
 
         .video-title {
-            font-size: 13px;
+            font-size: 14px;
             color: #fff;
             white-space: nowrap;
             overflow: hidden;
@@ -193,10 +194,11 @@
         @media(max-width:850px){
             .container { padding-top: 100px; }
             .scroll-btn { display: none; }
-            .card { min-width: 200px; }
+            .card { min-width: 220px; }
             .card:hover { transform: none; }
-            .video-preview { display: none !important; } /* Desativa preview no mobile */
+            .video-preview { display: none !important; }
             .row { gap: 12px; padding: 15px 5%; }
+            .header-section { margin-bottom: 15px; }
         }
     </style>
 </head>
@@ -206,7 +208,7 @@
 <nav class="navbar">
     <div class="nav-brand">
         <a href="index.html">
-            <img src="favicon.ico" alt="Logo">
+            <img src="logo.png" alt="Logo">
         </a>
     </div>
     <div class="nav-links">
@@ -267,7 +269,9 @@ function createVideoCard(video) {
     card.innerHTML = `
         <div class="card-inner">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="Thumbnail" loading="lazy">
+                <img src="https://img.youtube.com/vi/${video.id}/maxresdefault.jpg" 
+                     onerror="this.src='https://img.youtube.com/vi/${video.id}/hqdefault.jpg'" 
+                     alt="Thumbnail" loading="lazy">
                 <div class="video-preview" id="preview-${video.id}"></div>
             </div>
             <div class="video-info">
@@ -277,11 +281,11 @@ function createVideoCard(video) {
         </div>
     `;
 
-    // Carrega vídeo no Hover (apenas Desktop)
+    // Carrega vídeo no Hover (Desktop)
     card.onmouseenter = () => {
         if(window.innerWidth > 850) {
             const preview = document.getElementById(`preview-${video.id}`);
-            preview.innerHTML = `<iframe src="https://www.youtube.com/embed/${video.id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${video.id}&rel=0" allow="autoplay"></iframe>`;
+            preview.innerHTML = `<iframe src="https://www.youtube.com/embed/${video.id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${video.id}&rel=0&modestbranding=1" allow="autoplay"></iframe>`;
         }
     };
 
@@ -293,16 +297,17 @@ function createVideoCard(video) {
         }
     };
 
-    card.onclick = () => window.open(`https://youtube.com/shorts/${video.id}`, '_blank');
+    // Abrir como Shorts ao clicar
+    card.onclick = () => window.open(`https://www.youtube.com/shorts/${video.id}`, '_blank');
 
     return card;
 }
 
 videoLinks.forEach(video => container.appendChild(createVideoCard(video)));
 
-// Controles de Scroll
-document.getElementById("btnLeft").onclick = () => container.scrollBy({left: -300, behavior: "smooth"});
-document.getElementById("btnRight").onclick = () => container.scrollBy({left: 300, behavior: "smooth"});
+// Controles de Scroll Suave
+document.getElementById("btnLeft").onclick = () => container.scrollBy({left: -400, behavior: "smooth"});
+document.getElementById("btnRight").onclick = () => container.scrollBy({left: 400, behavior: "smooth"});
 </script>
 
 <script src="layout.v3.js" defer></script>
