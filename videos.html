@@ -7,6 +7,7 @@
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#050a15">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
@@ -15,7 +16,13 @@
 
     <style>
         /* CONTAINER E TÍTULO */
-        .container { padding-top: 140px; padding-bottom: 120px; overflow-x: hidden; }
+        .container { 
+            padding-top: 140px; 
+            padding-bottom: 120px; 
+            overflow-x: hidden; 
+            max-width: 1400px;
+            margin: 0 auto;
+        }
 
         .header-section {
             display: flex;
@@ -26,7 +33,7 @@
         }
 
         .page-title {
-            font-size: clamp(24px, 4vw, 34px);
+            font-size: clamp(22px, 5vw, 34px);
             font-weight: 900;
             color: var(--primary);
             text-transform: uppercase;
@@ -37,49 +44,52 @@
             font-size: 10px;
             font-weight: 800;
             color: #00ffaa;
-            border: 1px solid #00ffaa;
+            border: 1px solid rgba(0, 255, 170, 0.3);
             padding: 5px 12px;
             border-radius: 4px;
             display: flex;
             align-items: center;
             gap: 6px;
+            background: rgba(0, 255, 170, 0.05);
         }
 
-        .badge-live i { font-size: 8px; animation: pulse-red 1.5s infinite; }
+        .badge-live i { font-size: 8px; animation: pulse-neon 1.5s infinite; }
 
-        @keyframes pulse-red {
-            0% { opacity: 1; }
-            50% { opacity: 0.3; }
-            100% { opacity: 1; }
+        @keyframes pulse-neon {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
         }
 
         /* CARROSSEL STYLE NETFLIX */
         .row-wrapper {
             position: relative;
-            padding: 20px 0 60px 0;
+            padding: 10px 0;
         }
 
         .row {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             overflow-x: auto;
             scroll-behavior: smooth;
             padding: 20px 5%;
             scrollbar-width: none; 
+            -webkit-overflow-scrolling: touch;
         }
         .row::-webkit-scrollbar { display: none; }
 
-        /* CONTROLES */
+        /* CONTROLES DESKTOP */
         .scroll-btn {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            width: 60px;
-            height: 100px;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid rgba(0, 224, 255, 0.2);
+            width: 50px;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--border-glass);
             color: #fff;
-            font-size: 30px;
+            font-size: 20px;
             cursor: pointer;
             z-index: 100;
             opacity: 0;
@@ -90,21 +100,21 @@
         }
 
         .row-wrapper:hover .scroll-btn { opacity: 1; }
-        .scroll-btn:hover { background: var(--primary); color: #000; }
+        .scroll-btn:hover { background: var(--primary); color: #000; border-color: var(--primary); }
 
-        .scroll-left { left: 0; border-radius: 0 15px 15px 0; }
-        .scroll-right { right: 0; border-radius: 15px 0 0 15px; }
+        .scroll-left { left: 0; border-radius: 0 10px 10px 0; }
+        .scroll-right { right: 0; border-radius: 10px 0 0 10px; }
 
         /* CARD DE VÍDEO */
         .card {
-            min-width: 280px;
+            min-width: 260px;
             position: relative;
             cursor: pointer;
             transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
         }
 
         .card:hover {
-            transform: scale(1.1);
+            transform: scale(1.08);
             z-index: 50;
         }
 
@@ -113,7 +123,7 @@
             border-radius: 12px;
             overflow: hidden;
             border: 1px solid var(--border-glass);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
         }
 
         .card:hover .card-inner {
@@ -152,21 +162,21 @@
             width: 100%;
             height: 100%;
             border: none;
-            transform: scale(1.4); 
+            transform: scale(1.3); 
         }
 
         /* INFOS */
         .video-info {
-            padding: 15px;
-            background: rgba(15, 23, 42, 0.9);
+            padding: 12px;
+            background: linear-gradient(to bottom, rgba(10, 20, 40, 0.8), rgba(5, 10, 21, 1));
         }
 
         .video-tag {
-            font-size: 10px;
+            font-size: 9px;
             color: var(--primary);
             text-transform: uppercase;
             font-weight: 800;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             letter-spacing: 1px;
         }
 
@@ -179,13 +189,14 @@
             font-weight: 600;
         }
 
-        /* MOBILE */
-        @media(max-width:768px){
+        /* MOBILE OPTIMIZATION */
+        @media(max-width:850px){
             .container { padding-top: 100px; }
             .scroll-btn { display: none; }
-            .card { min-width: 220px; }
+            .card { min-width: 200px; }
             .card:hover { transform: none; }
-            .video-preview { display: none; }
+            .video-preview { display: none !important; } /* Desativa preview no mobile */
+            .row { gap: 12px; padding: 15px 5%; }
         }
     </style>
 </head>
@@ -193,22 +204,26 @@
 <body>
 
 <nav class="navbar">
-    <div class="nav-brand">ME</div>
+    <div class="nav-brand">
+        <a href="index.html">
+            <img src="favicon.ico" alt="Logo">
+        </a>
+    </div>
     <div class="nav-links">
         <a href="index.html">Início</a>
         <a href="membros.html">Membros</a>
         <a href="participantes.html">Participantes</a>
         <a href="videos.html" class="active">Vídeos</a>
         <a href="links.html">Links</a>
-        <a href="formulario.html" class="btn" style="padding: 10px 25px; margin-left: 15px;">Entrar</a>
+        <a href="formulario.html" class="btn">Entrar</a>
     </div>
 </nav>
 
 <div class="container">
-    <div class="header-section">
+    <header class="header-section">
         <h1 class="page-title text-gradient">Streaming Elite</h1>
         <div class="badge-live"><i class="fa-solid fa-circle"></i> ON DEMAND</div>
-    </div>
+    </header>
 
     <div class="row-wrapper">
         <button class="scroll-btn scroll-left" id="btnLeft"><i class="fa-solid fa-chevron-left"></i></button>
@@ -252,7 +267,7 @@ function createVideoCard(video) {
     card.innerHTML = `
         <div class="card-inner">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="Thumbnail">
+                <img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="Thumbnail" loading="lazy">
                 <div class="video-preview" id="preview-${video.id}"></div>
             </div>
             <div class="video-info">
@@ -264,16 +279,18 @@ function createVideoCard(video) {
 
     // Carrega vídeo no Hover (apenas Desktop)
     card.onmouseenter = () => {
-        if(window.innerWidth > 768) {
+        if(window.innerWidth > 850) {
             const preview = document.getElementById(`preview-${video.id}`);
             preview.innerHTML = `<iframe src="https://www.youtube.com/embed/${video.id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${video.id}&rel=0" allow="autoplay"></iframe>`;
         }
     };
 
-    // Limpa vídeo ao sair para poupar memória/CPU
+    // Limpa vídeo ao sair
     card.onmouseleave = () => {
-        const preview = document.getElementById(`preview-${video.id}`);
-        preview.innerHTML = "";
+        if(window.innerWidth > 850) {
+            const preview = document.getElementById(`preview-${video.id}`);
+            preview.innerHTML = "";
+        }
     };
 
     card.onclick = () => window.open(`https://youtube.com/shorts/${video.id}`, '_blank');
@@ -284,8 +301,8 @@ function createVideoCard(video) {
 videoLinks.forEach(video => container.appendChild(createVideoCard(video)));
 
 // Controles de Scroll
-document.getElementById("btnLeft").onclick = () => container.scrollBy({left: -container.offsetWidth * 0.8, behavior: "smooth"});
-document.getElementById("btnRight").onclick = () => container.scrollBy({left: container.offsetWidth * 0.8, behavior: "smooth"});
+document.getElementById("btnLeft").onclick = () => container.scrollBy({left: -300, behavior: "smooth"});
+document.getElementById("btnRight").onclick = () => container.scrollBy({left: 300, behavior: "smooth"});
 </script>
 
 <script src="layout.v3.js" defer></script>
