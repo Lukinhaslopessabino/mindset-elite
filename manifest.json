@@ -4,12 +4,16 @@
   "description": "Elite não nasce. Elite se constrói. Plataforma oficial de networking e mentalidade de alto nível.",
   "start_url": "/index.html",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#050a15",
   "theme_color": "#00e0ff",
-  "orientation": "portrait",
   "scope": "/",
   "lang": "pt-BR",
-  "categories": ["productivity", "education", "business"],
+  "categories": [
+    "productivity",
+    "education",
+    "business"
+  ],
   "icons": [
     {
       "src": "icon-192.png",
