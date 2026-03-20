@@ -12,18 +12,19 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
     <link rel="stylesheet" href="global.css">
 
     <style>
-        /* Estilo específico para o topo da Index */
+        /* Ajustes específicos da Página Inicial */
         .hero {
-            min-height: auto; /* Ajustado para caber o banner */
+            min-height: auto;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 20px 20px 40px 20px;
+            padding: 40px 20px 60px 20px;
             position: relative;
         }
 
@@ -32,7 +33,7 @@
             color: var(--text-dim);
             margin-bottom: 30px;
             font-size: 1.1rem;
-            margin-top: -10px; /* Aproxima o texto do banner */
+            margin-top: 10px;
         }
 
         .features-grid {
@@ -40,7 +41,7 @@
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
             margin-bottom: 120px;
-            padding: 0 15px;
+            padding: 0 20px;
         }
 
         .feature-card {
@@ -50,6 +51,7 @@
             border-radius: var(--radius-lg);
             transition: var(--transition);
             backdrop-filter: var(--glass-blur);
+            text-align: center;
         }
 
         .feature-card:hover {
@@ -65,12 +67,14 @@
             background: var(--primary-soft);
             padding: 20px;
             border-radius: var(--radius-md);
+            display: inline-block;
         }
 
         .feature-card h3 {
             margin-bottom: 15px;
             font-family: 'Orbitron', sans-serif;
             letter-spacing: 1px;
+            color: #fff;
         }
 
         .elite-badge {
@@ -80,7 +84,7 @@
             border-radius: 100px;
             font-size: 10px;
             font-family: 'Orbitron', sans-serif;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             text-transform: uppercase;
             letter-spacing: 3px;
             animation: pulse 2s infinite;
@@ -94,7 +98,8 @@
         }
 
         @media(max-width: 850px) {
-            .features-grid { grid-template-columns: 1fr; margin-bottom: 80px; }
+            .features-grid { grid-template-columns: 1fr; margin-bottom: 100px; }
+            .hero { padding-top: 20px; }
         }
     </style>
 </head>
