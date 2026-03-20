@@ -48,6 +48,12 @@
             text-shadow: 0 0 15px var(--primary-glow);
         }
 
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
         .vagas-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; }
 
         /* LISTA DE PARTICIPANTES */
@@ -204,13 +210,12 @@
             const num = data.vagas ?? 0;
             display.innerText = num.toString().padStart(2, '0');
             
-            // Alerta visual se as vagas estiverem acabando
             if(num <= 3) {
                 display.style.color = "#ff4c4c";
                 display.style.animation = "pulse 1.5s infinite";
             }
         } catch (error) {
-            console.log("Servidor em standby. Exibindo valor offline.");
+            console.log("HQ Offline. Usando Backup.");
             display.innerText = "08"; 
             display.style.opacity = "0.8";
         }
