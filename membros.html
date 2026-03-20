@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Membros • Mindset Elite</title>
 
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050a15">
+    <link rel="icon" type="image/png" href="logo.png">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -19,7 +23,8 @@
         }
 
         .page-header { text-align: center; margin-bottom: 50px; }
-        .page-header p { letter-spacing: 3px; font-size: 12px; opacity: 0.7; }
+        .page-header h1 { font-family: 'Orbitron', sans-serif; }
+        .page-header p { letter-spacing: 3px; font-size: 11px; opacity: 0.7; font-weight: 700; }
 
         /* GRID RESPONSIVO DE MEMBROS */
         .membros-grid {
@@ -33,7 +38,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border-glass);
             border-radius: var(--radius-lg);
-            padding: 30px;
+            padding: 40px 30px;
             text-align: center;
             transition: var(--transition);
             backdrop-filter: var(--glass-blur);
@@ -47,10 +52,11 @@
             box-shadow: var(--shadow-neon);
         }
 
+        /* Detalhe de linha no topo do card ao passar o mouse */
         .membro-card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 4px;
+            top: 0; left: 0; width: 100%; height: 3px;
             background: var(--primary);
             opacity: 0;
             transition: 0.3s;
@@ -59,20 +65,22 @@
         .membro-card:hover::before { opacity: 1; }
 
         .membro-img {
-            width: 100px;
-            height: 100px;
+            width: 110px;
+            height: 110px;
             border-radius: 50%;
             border: 3px solid var(--primary);
             margin-bottom: 20px;
             object-fit: cover;
-            box-shadow: 0 0 15px var(--primary-glow);
+            box-shadow: 0 0 20px var(--primary-glow);
+            padding: 3px;
+            background: var(--bg-dark);
         }
 
         .membro-nome {
             font-family: 'Orbitron', sans-serif;
             font-size: 18px;
             color: #fff;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
 
         .membro-cargo {
@@ -82,6 +90,7 @@
             font-weight: 800;
             letter-spacing: 2px;
             margin-bottom: 15px;
+            display: block;
         }
 
         .membro-bio {
@@ -91,10 +100,10 @@
         }
 
         /* AJUSTES MOBILE */
-        @media (max-width: 768px) {
+        @media (max-width: 850px) {
             .container { padding-top: 110px; }
-            .membros-grid { grid-template-columns: 1fr; } /* Coluna única no celular */
-            .membro-card { padding: 20px; }
+            .membros-grid { grid-template-columns: 1fr; gap: 20px; }
+            .membro-card { padding: 30px 20px; }
         }
     </style>
 </head>
@@ -102,14 +111,18 @@
 <body>
 
 <nav class="navbar">
-    <div class="nav-brand">ME</div>
+    <div class="nav-brand">
+        <a href="index.html">
+            <img src="logo.png" alt="Mindset Elite Logo">
+        </a>
+    </div>
     <div class="nav-links">
         <a href="index.html">Início</a>
         <a href="membros.html" class="active">Membros</a>
         <a href="participantes.html">Participantes</a>
         <a href="videos.html">Vídeos</a>
         <a href="links.html">Links</a>
-        <a href="formulario.html" class="btn" style="padding: 10px 25px; margin-left: 15px;">Entrar</a>
+        <a href="formulario.html" class="btn">Entrar</a>
     </div>
 </nav>
 
@@ -123,22 +136,22 @@
         <div class="membro-card">
             <img src="https://ui-avatars.com/api/?name=Guilherme+Raya&background=050a15&color=00e0ff&size=128" class="membro-img" alt="Líder">
             <div class="membro-nome">Guilherme Raya</div>
-            <div class="membro-cargo">Fundador / Recrutador</div>
-            <p class="membro-bio">Visão estratégica e liderança focada em alta performance e expansão do ecossistema Mindset.</p>
+            <span class="membro-cargo">Fundador / Recrutador</span>
+            <p class="membro-bio">Visão estratégica e liderança focada em alta performance e expansão do ecossistema Mindset Elite.</p>
         </div>
 
         <div class="membro-card">
             <img src="https://ui-avatars.com/api/?name=Admin+Elite&background=050a15&color=00e0ff&size=128" class="membro-img" alt="Admin">
             <div class="membro-nome">Conselho Interno</div>
-            <div class="membro-cargo">Administração</div>
-            <p class="membro-bio">Gestão de infraestrutura e suporte operacional para todos os membros ativos.</p>
+            <span class="membro-cargo">Administração</span>
+            <p class="membro-bio">Gestão de infraestrutura e suporte operacional garantindo a fluidez para todos os membros ativos.</p>
         </div>
 
         <div class="membro-card">
             <img src="https://ui-avatars.com/api/?name=Mod+Elite&background=050a15&color=00e0ff&size=128" class="membro-img" alt="Moderador">
             <div class="membro-nome">Moderação</div>
-            <div class="membro-cargo">Segurança</div>
-            <p class="membro-bio">Garantindo a ordem e o cumprimento dos protocolos de elite em todos os canais.</p>
+            <span class="membro-cargo">Segurança</span>
+            <p class="membro-bio">Garantindo a ordem e o estrito cumprimento dos protocolos de elite em todos os nossos canais oficiais.</p>
         </div>
     </div>
 </div>
