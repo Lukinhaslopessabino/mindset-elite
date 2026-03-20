@@ -1,9 +1,9 @@
 /* ============================================================
-   🔥 MINDSET ELITE - GLOBAL FRAMEWORK v3.0 (2026 Edition)
+    🔥 MINDSET ELITE - GLOBAL FRAMEWORK v3.0 (2026 Edition)
    ============================================================ */
 
 /* Importação de Fontes Premium */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Orbitron:wght@400;600;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;600;800;900&display=swap');
 
 :root {
     /* PALETA DE CORES (DEEP SPACE NEON) */
@@ -13,6 +13,7 @@
     
     --primary: #00e0ff;
     --primary-glow: rgba(0, 224, 255, 0.4);
+    --primary-soft: rgba(0, 224, 255, 0.2);
     --secondary: #7000ff;
     
     --text-main: #f8fafc;
@@ -45,7 +46,7 @@ html {
 }
 
 body {
-    font-family: 'Inter', sans-serif; /* Fonte base para leitura */
+    font-family: 'Inter', sans-serif;
     background: var(--bg-body);
     background-image: 
         radial-gradient(circle at 0% 0%, rgba(0, 224, 255, 0.05) 0%, transparent 30%),
@@ -72,32 +73,38 @@ h1, h2, h3, .elite-title {
     left: 0;
     width: 100%;
     height: 80px;
-    background: rgba(5, 10, 21, 0.8);
+    background: rgba(5, 10, 21, 0.85);
     backdrop-filter: var(--glass-blur);
     border-bottom: 1px solid var(--border-glass);
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
-    padding: 0 5%;
+    padding: 0 8%;
     z-index: 2000;
-    transition: var(--transition);
+}
+
+.nav-brand {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 1.5rem;
+    color: var(--primary);
+    text-shadow: 0 0 10px var(--primary-glow);
 }
 
 .navbar a {
     text-decoration: none;
     color: var(--text-muted);
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     transition: var(--transition);
     padding: 8px 16px;
-    border-radius: var(--radius-sm);
+    margin: 0 5px;
 }
 
 .navbar a:hover, .navbar a.active {
     color: var(--primary);
-    background: rgba(0, 224, 255, 0.05);
 }
 
 /* ===============================
@@ -109,31 +116,31 @@ h1, h2, h3, .elite-title {
     left: 0;
     width: 100%;
     height: 70px;
-    background: rgba(10, 15, 28, 0.95);
+    background: rgba(10, 15, 28, 0.98);
     backdrop-filter: var(--glass-blur);
     border-top: 1px solid var(--border-glass);
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 0 10px;
+    padding-bottom: env(safe-area-inset-bottom);
     z-index: 2000;
 }
 
 .app-footer a {
     color: var(--text-muted);
     text-decoration: none;
-    font-size: 11px;
+    font-size: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
     transition: var(--transition);
+    flex: 1;
 }
 
-.app-footer a i { font-size: 20px; }
+.app-footer a i { font-size: 22px; }
 .app-footer a:hover, .app-footer a.active { color: var(--primary); }
 
-/* Responsividade de Menus */
 @media(min-width: 769px) { .app-footer { display: none; } }
 @media(max-width: 768px) { .navbar { display: none; } }
 
@@ -143,57 +150,66 @@ h1, h2, h3, .elite-title {
 .container {
     max-width: 1200px;
     margin: auto;
-    padding: 120px 20px 100px;
+    padding: 100px 20px 100px;
 }
 
 .card-elite {
     background: var(--bg-card);
     border: 1px solid var(--border-glass);
     border-radius: var(--radius-lg);
-    padding: 25px;
+    padding: 30px;
     backdrop-filter: var(--glass-blur);
     transition: var(--transition);
-}
-
-.card-elite:hover {
-    border-color: var(--primary);
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-neon);
 }
 
 /* ===============================
    BOTÕES (ELITE STYLE)
 ================================ */
 .btn {
-    font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, var(--primary), #00b4d8);
+    font-family: 'Orbitron', sans-serif;
+    background: var(--primary);
     color: #050a15;
-    padding: 14px 32px;
+    padding: 14px 28px;
     border-radius: var(--radius-md);
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    font-weight: 700;
-    font-size: 15px;
+    font-weight: 800;
+    font-size: 13px;
     border: none;
     cursor: pointer;
     transition: var(--transition);
-    box-shadow: 0 4px 15px rgba(0, 224, 255, 0.2);
+    text-transform: uppercase;
 }
 
 .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 224, 255, 0.4);
-    filter: brightness(1.1);
+    transform: scale(1.05);
+    box-shadow: 0 0 20px var(--primary-glow);
 }
 
-.btn:active { transform: translateY(0); }
-
-/* Utilitários */
+/* ===============================
+   UTILITÁRIOS E ANIMAÇÕES
+================================ */
 .text-gradient {
     background: linear-gradient(to right, #fff, var(--primary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.float-animation {
+    animation: float 4s ease-in-out infinite;
+}
+
+/* Esconder barra de rolagem (opcional para look de App) */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-body); }
+::-webkit-scrollbar-thumb { background: var(--bg-card); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
