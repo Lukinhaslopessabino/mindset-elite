@@ -1,5 +1,5 @@
 /* ============================================================
-    🔥 MINDSET ELITE - ULTRA VISUAL ENGINE v3.6 (RESPONSIVE)
+    🔥 MINDSET ELITE - ULTRA VISUAL ENGINE v3.8 (ESTÁVEL)
     Partículas, Clima Real, PWA & Performance Mobile
    ============================================================ */
 
@@ -19,18 +19,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     async function updateWeatherTheme() {
         try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 5000);
+            const timeoutId = setTimeout(() => controller.abort(), 4000); // Timeout mais curto para não travar o carregamento
 
             const response = await fetch(
                 `https://api.openweathermap.org/data/2.5/weather?q=${WEATHER_CONFIG.city},${WEATHER_CONFIG.country}&appid=${WEATHER_CONFIG.key}`,
                 { signal: controller.signal }
             );
+            
             const data = await response.json();
+            clearTimeout(timeoutId);
+
             if (data.weather && data.weather[0]) {
                 weatherStatus = data.weather[0].main;
             }
         } catch (err) {
-            console.warn("Mindset Engine: Usando tema padrão (Offline/API Limit).");
+            console.warn("Mindset Engine: Usando tema padrão (Offline ou API Limitada).");
         }
 
         const themes = {
@@ -45,11 +48,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         accentColor = themes[weatherStatus] || WEATHER_CONFIG.defaultColor;
 
-        // Aplica a cor do clima nas variáveis do CSS Global
+        // Aplica a cor do clima nas variáveis do CSS Global com segurança
         document.documentElement.style.setProperty('--primary', accentColor);
         document.documentElement.style.setProperty('--primary-glow', `${accentColor}66`);
     }
 
+    // Executa o tema antes de iniciar as partículas
     await updateWeatherTheme();
 
     // --- 2. SISTEMA DE PARTÍCULAS NEON (OTIMIZADO) ---
@@ -57,23 +61,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     const ctx = canvas.getContext("2d", { alpha: true });
     document.body.appendChild(canvas);
 
-    canvas.style.position = "fixed";
-    canvas.style.top = "0";
-    canvas.style.left = "0";
-    canvas.style.width = "100%";
-    canvas.style.height = "100%";
-    canvas.style.zIndex = "-1"; // Atrás de tudo
-    canvas.style.pointerEvents = "none";
-    canvas.style.opacity = "0.4"; 
+    Object.assign(canvas.style, {
+        position: "fixed",
+        top: "0",
+        left: "0",
+        width: "100%",
+        height: "100%",
+        zIndex: "-1",
+        pointerEvents: "none",
+        opacity: "0.4"
+    });
 
     let particles = [];
-    // Reduz partículas no mobile para economizar bateria
-    let particleCount = window.innerWidth < 768 ? 25 : 60;
+    let particleCount = window.innerWidth < 768 ? 20 : 55; // Menos partículas para fluidez total
 
     function initCanvas() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        particleCount = window.innerWidth < 768 ? 25 : 60;
+        particleCount = window.innerWidth < 768 ? 20 : 55;
         particles = [];
         for (let i = 0; i < particleCount; i++) {
             particles.push(new Particle());
@@ -84,9 +89,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         constructor() {
             this.x = Math.random() * canvas.width;
             this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 1.2 + 0.5;
-            this.speedX = (Math.random() - 0.5) * 0.4;
-            this.speedY = (Math.random() - 0.5) * 0.4;
+            this.size = Math.random() * 1.5 + 0.5;
+            this.speedX = (Math.random() - 0.5) * 0.3;
+            this.speedY = (Math.random() - 0.5) * 0.3;
         }
 
         update() {
@@ -107,7 +112,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     function connectParticles() {
-        const maxDistance = window.innerWidth < 768 ? 90 : 120;
+        const maxDistance = window.innerWidth < 768 ? 80 : 110;
         for (let a = 0; a < particles.length; a++) {
             for (let b = a + 1; b < particles.length; b++) {
                 const dx = particles[a].x - particles[b].x;
@@ -117,7 +122,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (distance < maxDistance) {
                     const opacity = 1 - (distance / maxDistance);
                     ctx.strokeStyle = accentColor;
-                    ctx.globalAlpha = opacity * 0.12;
+                    ctx.globalAlpha = opacity * 0.1;
                     ctx.lineWidth = 0.5;
                     ctx.beginPath();
                     ctx.moveTo(particles[a].x, particles[a].y);
@@ -150,14 +155,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // --- 3. REGISTRO DO SERVICE WORKER (PWA) ---
     if ('serviceWorker' in navigator) {
-        try {
-            // Caminho relativo para funcionar em qualquer subpasta
-            await navigator.serviceWorker.register('sw.js');
-            console.log('%c Mindset Elite PWA: Ativo ✅', 'color: #00ffaa; font-weight: bold;');
-        } catch (err) {
-            console.warn('PWA: Rodando em modo local ou erro de SW.');
-        }
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('%c Mindset Elite PWA: Ativo ✅', 'color: #00ffaa; font-weight: bold;'))
+                .catch(err => console.warn('PWA: Service Worker não encontrado no diretório.'));
+        });
     }
 
-    console.log(`%c Engine v3.6 Ativa | Clima: ${weatherStatus}`, `color: ${accentColor}; font-weight: bold;`);
+    console.log(`%c Engine v3.8 Ativa | Clima: ${weatherStatus}`, `color: ${accentColor}; font-weight: bold;`);
 });
