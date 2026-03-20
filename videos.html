@@ -5,15 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Streaming • Mindset Elite</title>
 
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#050a15">
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="/logo.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
-    <link rel="stylesheet" href="global.css">
+    <link rel="stylesheet" href="/global.css">
 
     <style>
         .container { 
@@ -205,17 +205,17 @@
 
 <nav class="navbar">
     <div class="nav-brand">
-        <a href="index.html">
-            <img src="logo.png" alt="Mindset Elite Logo">
+        <a href="/">
+            <img src="/logo.png" alt="Mindset Elite Logo">
         </a>
     </div>
     <div class="nav-links">
-        <a href="index.html">Início</a>
-        <a href="membros.html">Membros</a>
-        <a href="participantes.html">Participantes</a>
-        <a href="videos.html" class="active">Vídeos</a>
-        <a href="links.html">Links</a>
-        <a href="formulario.html" class="btn">Entrar</a>
+        <a href="/">Início</a>
+        <a href="/membros.html">Membros</a>
+        <a href="/participantes.html">Participantes</a>
+        <a href="/videos.html" class="active">Vídeos</a>
+        <a href="/links.html">Links</a>
+        <a href="/formulario.html" class="btn">Entrar</a>
     </div>
 </nav>
 
@@ -236,10 +236,10 @@
 </div>
 
 <div class="app-footer">
-    <a href="index.html"><i class="fa-solid fa-house"></i><span>Início</span></a>
-    <a href="membros.html"><i class="fa-solid fa-crown"></i><span>Membros</span></a>
-    <a href="participantes.html"><i class="fa-solid fa-users"></i><span>Inscritos</span></a>
-    <a href="videos.html" class="active"><i class="fa-solid fa-play"></i><span>Vídeos</span></a>
+    <a href="/"><i class="fa-solid fa-house"></i><span>Início</span></a>
+    <a href="/membros.html"><i class="fa-solid fa-crown"></i><span>Membros</span></a>
+    <a href="/participantes.html"><i class="fa-solid fa-users"></i><span>Inscritos</span></a>
+    <a href="/videos.html" class="active"><i class="fa-solid fa-play"></i><span>Vídeos</span></a>
 </div>
 
 <script>
@@ -279,18 +279,15 @@ function createVideoCard(video) {
         </div>
     `;
 
-    // Preview On Hover (Só carrega o iframe se for Desktop e hover)
     card.onmouseenter = () => {
         if(window.innerWidth > 850) {
             const preview = document.getElementById(`preview-${video.id}`);
-            // Evita carregar múltiplas vezes o mesmo iframe
             if (!preview.innerHTML) {
                 preview.innerHTML = `<iframe src="https://www.youtube.com/embed/${video.id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${video.id}&rel=0&modestbranding=1" allow="autoplay"></iframe>`;
             }
         }
     };
 
-    // Limpa para economizar RAM
     card.onmouseleave = () => {
         if(window.innerWidth > 850) {
             const preview = document.getElementById(`preview-${video.id}`);
@@ -298,21 +295,18 @@ function createVideoCard(video) {
         }
     };
 
-    // Abrir Shorts/Vídeo
     card.onclick = () => window.open(`https://www.youtube.com/shorts/${video.id}`, '_blank');
 
     return card;
 }
 
-// Inicia Renderização
 videoLinks.forEach(video => container.appendChild(createVideoCard(video)));
 
-// Scroll Lógica
 document.getElementById("btnLeft").onclick = () => container.scrollBy({left: -container.clientWidth * 0.7, behavior: "smooth"});
 document.getElementById("btnRight").onclick = () => container.scrollBy({left: container.clientWidth * 0.7, behavior: "smooth"});
 </script>
 
-<script src="layout.v3.js" defer></script>
+<script src="/layout.v3.js" defer></script>
 
 </body>
 </html>
