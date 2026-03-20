@@ -7,7 +7,7 @@
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#050a15">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" href="logo.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
@@ -33,11 +33,12 @@
         .page-header h1 {
             font-size: clamp(24px, 6vw, 32px);
             margin-bottom: 10px;
+            font-family: 'Orbitron', sans-serif;
         }
 
         .page-header p {
             color: var(--text-dim);
-            font-size: 12px;
+            font-size: 11px;
             letter-spacing: 2px;
             font-weight: 700;
         }
@@ -131,7 +132,7 @@
 <nav class="navbar">
     <div class="nav-brand">
         <a href="index.html">
-            <img src="favicon.ico" alt="Logo">
+            <img src="logo.png" alt="Mindset Elite Logo">
         </a>
     </div>
     <div class="nav-links">
@@ -185,13 +186,13 @@
 </div>
 
 <script>
-    // Animação de revelação sequencial
+    // Animação de revelação sequencial otimizada
     document.addEventListener("DOMContentLoaded", () => {
         const cards = document.querySelectorAll(".link-card");
         cards.forEach((card, index) => {
             setTimeout(() => {
                 card.classList.add("show");
-            }, index * 120);
+            }, index * 150);
         });
     });
 </script>
