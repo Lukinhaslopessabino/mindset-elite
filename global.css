@@ -1,5 +1,44 @@
 /* ===============================
-    NAVBAR (DESKTOP) - CORRIGIDA
+    VARIÁVEIS E BASE
+================================ */
+:root {
+    --primary: #00e0ff;
+    --primary-glow: rgba(0, 224, 255, 0.4);
+    --primary-soft: rgba(0, 224, 255, 0.1);
+    --bg-dark: #050a15;
+    --bg-card: rgba(10, 20, 40, 0.6);
+    --text-main: #ffffff;
+    --text-dim: #a0aec0;
+    --border-glass: rgba(255, 255, 255, 0.08);
+    --glass-blur: blur(12px);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-neon: 0 0 20px rgba(0, 224, 255, 0.2);
+    --radius-lg: 16px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.text-gradient {
+    background: linear-gradient(90deg, #fff, var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: 'Orbitron', sans-serif;
+}
+
+/* ===============================
+    NAVBAR (DESKTOP)
 ================================ */
 .navbar {
     position: fixed;
@@ -17,6 +56,14 @@
     z-index: 2000;
 }
 
+.nav-brand {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 24px;
+    color: var(--primary);
+    letter-spacing: 2px;
+}
+
 .nav-links {
     display: flex;
     align-items: center;
@@ -25,19 +72,94 @@
 
 .navbar a {
     text-decoration: none;
-    color: var(--text-muted);
+    color: var(--text-dim);
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     transition: var(--transition);
-    padding: 10px 20px; /* Espaçamento interno para o fundo aparecer */
-    border-radius: 8px; /* Arredondamento igual da foto */
+    padding: 10px 20px;
+    border-radius: 8px;
 }
 
-/* ESTILO DO ITEM ATIVO (O que você pediu) */
 .navbar a:hover, 
 .navbar a.active {
     color: var(--primary);
-    background: rgba(0, 224, 255, 0.1); /* Fundo azul suave igual à imagem */
+    background: var(--primary-soft);
+}
+
+.btn {
+    background: var(--primary);
+    color: #000 !important;
+    font-weight: 900 !important;
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+/* ===============================
+    APP FOOTER (MOBILE ONLY)
+================================ */
+.app-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: rgba(5, 10, 21, 0.95);
+    backdrop-filter: var(--glass-blur);
+    border-top: 1px solid var(--border-glass);
+    display: none; /* Escondido no Desktop */
+    justify-content: space-around;
+    align-items: center;
+    z-index: 2000;
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+.app-footer a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-dim);
+    font-size: 10px;
+    font-weight: 700;
+    gap: 5px;
+    transition: var(--transition);
+}
+
+.app-footer a i { font-size: 20px; }
+
+.app-footer a.active {
+    color: var(--primary);
+    text-shadow: 0 0 10px var(--primary-glow);
+}
+
+/* ===============================
+    RESPONSIVIDADE (MEDIA QUERIES)
+================================ */
+
+/* Celulares e Tablets pequenos */
+@media (max-width: 850px) {
+    .navbar .nav-links {
+        display: none; /* Esconde os links do topo no mobile */
+    }
+
+    .navbar {
+        justify-content: center; /* Centraliza a logo no topo */
+        height: 60px;
+    }
+
+    .app-footer {
+        display: flex; /* Mostra o menu de baixo no mobile */
+    }
+
+    .container {
+        width: 90%;
+        padding-top: 100px; /* Ajusta o respiro do topo */
+    }
+}
+
+/* Ajuste para telas muito pequenas */
+@media (max-width: 480px) {
+    .text-gradient { font-size: 28px; }
+    .app-footer span { font-size: 9px; }
 }
