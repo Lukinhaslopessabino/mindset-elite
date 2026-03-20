@@ -144,12 +144,14 @@
 <body>
 
 <nav class="navbar">
-    <div class="nav-brand">MINDSET ELITE</div>
+    <div class="nav-brand">ME</div>
     <div class="nav-links">
         <a href="index.html">Início</a>
         <a href="membros.html">Membros</a>
         <a href="participantes.html">Participantes</a>
         <a href="videos.html">Vídeos</a>
+        <a href="links.html">Links</a>
+        <a href="formulario.html" class="btn" style="padding: 10px 25px; margin-left: 15px;">Entrar</a>
     </div>
 </nav>
 
@@ -191,14 +193,13 @@
 </div>
 
 <div class="app-footer">
-    <a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="index.html"><i class="fa-solid fa-house"></i><span>Início</span></a>
     <a href="membros.html"><i class="fa-solid fa-crown"></i><span>Membros</span></a>
+    <a href="participantes.html"><i class="fa-solid fa-users"></i><span>Inscritos</span></a>
     <a href="videos.html"><i class="fa-solid fa-play"></i><span>Vídeos</span></a>
-    <a href="links.html"><i class="fa-solid fa-link"></i><span>Links</span></a>
 </div>
 
 <script>
-// --- CONFIGURAÇÃO DA CENTRAL ELITE ---
 const API_BASE_URL = "https://mindset-elite.onrender.com";
 let enviando = false;
 
@@ -222,11 +223,9 @@ async function carregarVagas() {
         }
     } catch (err) {
         el.innerText = "HQ Offline (Verifique Conexão)";
-        console.error("Erro ao conectar na API:", err);
     }
 }
 
-// Inicializa vagas
 carregarVagas();
 
 const form = document.getElementById("signupForm");
@@ -259,7 +258,6 @@ form.addEventListener("submit", async (e) => {
         return;
     }
 
-    // Estado de Envio
     loader.style.display = "block";
     btn.disabled = true;
     enviando = true;
