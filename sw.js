@@ -1,9 +1,9 @@
 /* ============================================================
     🚀 MINDSET ELITE - PWA SERVICE WORKER v1.2
-    Cache Inteligente & Offline de Alta Performance
+    Cache de Alta Disponibilidade & Performance Offline
    ============================================================ */
 
-const CACHE_NAME = 'mindset-elite-v1.2'; // Mude a versão sempre que alterar o CSS/JS
+const CACHE_NAME = 'mindset-elite-v1.2';
 const ASSETS = [
     '/',
     '/index.html',
@@ -17,55 +17,54 @@ const ASSETS = [
     '/layout.v3.js'
 ];
 
-// INSTALAÇÃO: Armazena os arquivos no cache local
+// 1. INSTALAÇÃO: Armazena os ativos essenciais
 self.addEventListener('install', (e) => {
-    self.skipWaiting(); // Força o novo SW a assumir o controle imediatamente
+    self.skipWaiting(); 
     e.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            console.log(' [SW] Sincronizando Ativos Elite no Cache...');
+            console.log(' [SW] Sincronizando Ativos Elite...');
             return cache.addAll(ASSETS);
         })
     );
 });
 
-// ATIVAÇÃO: Remove caches antigos para evitar conflitos de estilo
+// 2. ATIVAÇÃO: Limpa versões obsoletas para evitar bugs visuais
 self.addEventListener('activate', (e) => {
     e.waitUntil(
         caches.keys().then((keys) => {
             return Promise.all(
                 keys.map((key) => {
                     if (key !== CACHE_NAME) {
-                        console.log(' [SW] Removendo Cache Obsoleto:', key);
+                        console.log(' [SW] Removendo Cache Antigo:', key);
                         return caches.delete(key);
                     }
                 })
             );
-        }).then(() => self.clients.claim()) // Assume o controle de todas as abas abertas
+        }).then(() => self.clients.claim())
     );
 });
 
-// INTERCEPTAÇÃO: Estratégia "Stale-While-Revalidate" (Velocidade Máxima)
+// 3. INTERCEPTAÇÃO (FETCH): Estratégia Híbrida Inteligente
 self.addEventListener('fetch', (e) => {
-    // Ignora requisições de API (o formulário deve ser sempre via rede real)
-    if (e.request.url.includes('/vagas') || e.request.url.includes('/inscrever') || e.request.url.includes('api.openweathermap.org')) {
+    const url = e.request.url;
+
+    // IGNORAR: Requisições de API (Vagas, Clima, etc) devem ser sempre em tempo real
+    if (url.includes('/vagas') || url.includes('/inscrever') || url.includes('api.openweathermap.org')) {
         return e.respondWith(fetch(e.request));
     }
 
+    // ESTRATÉGIA: Stale-While-Revalidate
+    // Entrega o cache (velocidade) e atualiza em background (frescor)
     e.respondWith(
         caches.open(CACHE_NAME).then((cache) => {
             return cache.match(e.request).then((cachedResponse) => {
                 const fetchedResponse = fetch(e.request).then((networkResponse) => {
-                    // Atualiza o cache com a versão nova da rede
                     if (networkResponse.ok) {
                         cache.put(e.request, networkResponse.clone());
                     }
                     return networkResponse;
-                }).catch(() => {
-                    // Se falhar a rede totalmente, já temos o cache
-                    return cachedResponse;
-                });
+                }).catch(() => cachedResponse); // Se cair a net, volta pro cache
 
-                // Retorna o cache IMEDIATAMENTE ou espera a rede se não houver cache
                 return cachedResponse || fetchedResponse;
             });
         })
