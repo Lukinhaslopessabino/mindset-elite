@@ -21,10 +21,9 @@ const wss = new WebSocketServer({ server });
 const DB_FILE = path.join(__dirname, "database.json");
 const LOG_FILE = path.join(__dirname, "logs.json");
 
-app.use(cors({
-  origin: ["https://mindset-elite-fcmg.com.br", "https://www.mindset-elite-fcmg.com.br"],
-  methods: ["GET", "POST"]
-}));
+// CORS Corrigido para aceitar conexões de qualquer domínio durante os testes
+app.use(cors()); 
+
 app.use(express.json({ limit: "60kb" }));
 app.use(express.static(__dirname));
 
@@ -35,11 +34,13 @@ const SESSION_EXPIRATION = 30 * 60 * 1000;
 
 /* --- BANCO DE DADOS --- */
 function lerBanco() {
-  if (!fs.existsSync(DB_FILE)) fs.writeFileSync(DB_FILE, JSON.stringify({ vagas: 1, inscritos: [] }));
+  if (!fs.existsSync(DB_FILE)) {
+    fs.writeFileSync(DB_FILE, JSON.stringify({ vagas: 10, inscritos: [] }));
+  }
   try {
     return JSON.parse(fs.readFileSync(DB_FILE, "utf-8"));
   } catch (e) {
-    return { vagas: 1, inscritos: [] };
+    return { vagas: 10, inscritos: [] };
   }
 }
 
@@ -73,8 +74,23 @@ function broadcast(data) {
 }
 
 /* --- ROTAS --- */
+
+// Rota de Vagas
 app.get("/vagas", (req, res) => res.json({ vagas: lerBanco().vagas }));
 
+// ROTA DE RANKING / PARTICIPANTES (ADICIONADA)
+app.get("/ranking", (req, res) => {
+  try {
+    const banco = lerBanco();
+    const lista = banco.inscritos || [];
+    // Retorna os dados no formato que seu Front-end espera
+    res.json({ success: true, ranking: lista });
+  } catch (e) {
+    res.status(500).json({ success: false, erro: "Erro ao ler banco" });
+  }
+});
+
+// Rota de Inscrição
 app.post("/inscrever", async (req, res) => {
   const { nome, idade, telegram, hp } = req.body;
   if (hp) return res.status(403).end();
@@ -88,7 +104,9 @@ app.post("/inscrever", async (req, res) => {
     idade: Number(idade) || 0,
     telegram: telegram?.trim() || "N/A",
     data: new Date().toISOString(),
-    xp: 200, nivel: "Bronze"
+    xp: 200, 
+    nivel: "Bronze",
+    foto: "" // Pode ser preenchido futuramente
   };
 
   banco.inscritos.push(novo);
