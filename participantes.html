@@ -7,6 +7,7 @@
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#050a15">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
@@ -14,12 +15,17 @@
     <link rel="stylesheet" href="global.css">
 
     <style>
-        .container { padding-top: 150px; max-width: 800px; padding-bottom: 120px; }
+        .container { 
+            padding-top: 140px; 
+            max-width: 800px; 
+            margin: 0 auto;
+            padding-bottom: 120px; 
+        }
 
         .page-header { text-align: center; margin-bottom: 40px; }
-        .page-header p { letter-spacing: 4px; font-weight: 700; opacity: 0.7; font-size: 12px; }
+        .page-header p { letter-spacing: 4px; font-weight: 700; opacity: 0.7; font-size: 11px; }
 
-        /* VAGAS COUNTER - HUD STYLE */
+        /* VAGAS COUNTER */
         .vagas-banner {
             background: rgba(0, 224, 255, 0.03);
             border: 1px dashed var(--primary-soft);
@@ -31,7 +37,16 @@
             backdrop-filter: blur(10px);
         }
 
-        .vagas-number { font-size: 32px; color: var(--primary); font-weight: 900; display: block; line-height: 1; margin-bottom: 5px; }
+        .vagas-number { 
+            font-size: clamp(32px, 8vw, 42px); 
+            color: var(--primary); 
+            font-weight: 900; 
+            display: block; 
+            line-height: 1; 
+            margin-bottom: 8px;
+            text-shadow: 0 0 15px var(--primary-glow);
+        }
+
         .vagas-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); font-weight: 700; }
 
         /* LISTA DE PARTICIPANTES */
@@ -39,6 +54,7 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
+            padding: 0 10px;
         }
 
         .participant-row {
@@ -49,7 +65,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: var(--transition);
             position: relative;
             overflow: hidden;
         }
@@ -57,47 +73,43 @@
         .participant-row::before {
             content: '';
             position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 4px;
+            left: 0; top: 0;
+            height: 100%; width: 4px;
             background: transparent;
         }
 
         .participant-row:hover {
             background: rgba(255, 255, 255, 0.05);
-            transform: translateX(8px);
+            transform: translateX(5px);
             border-color: var(--primary-soft);
         }
 
-        .p-name { font-weight: 600; font-size: 16px; color: #fff; display: flex; align-items: center; gap: 12px; font-family: 'Inter', sans-serif; }
-        .p-name i { font-size: 14px; opacity: 0.5; }
+        .p-name { font-weight: 600; font-size: 15px; color: #fff; display: flex; align-items: center; gap: 12px; }
 
         /* STATUS BADGES */
         .status {
             padding: 6px 12px;
             border-radius: 6px;
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        /* Variações de Status */
-        .row-confirmado::before { background: #00ffaa; box-shadow: 0 0 15px #00ffaa; }
+        .row-confirmado::before { background: #00ffaa; box-shadow: 0 0 10px #00ffaa; }
         .status.confirmado { background: rgba(0, 255, 170, 0.1); color: #00ffaa; border: 1px solid rgba(0, 255, 170, 0.2); }
 
-        .row-indefinido::before { background: #ffcc00; box-shadow: 0 0 15px #ffcc00; }
+        .row-indefinido::before { background: #ffcc00; box-shadow: 0 0 10px #ffcc00; }
         .status.indefinido { background: rgba(255, 204, 0, 0.1); color: #ffcc00; border: 1px solid rgba(255, 204, 0, 0.2); }
 
         .row-nao::before { background: #ff4c4c; }
         .status.nao { background: rgba(255, 76, 76, 0.1); color: #ff4c4c; border: 1px solid rgba(255, 76, 76, 0.2); opacity: 0.6; }
 
-        @media(max-width: 768px) {
-            .container { padding-top: 110px; width: 92%; }
+        @media(max-width: 850px) {
+            .container { padding-top: 110px; }
             .participant-row { padding: 15px; }
-            .p-name { font-size: 14px; }
-            .status { font-size: 9px; padding: 4px 8px; }
+            .p-name { font-size: 13px; gap: 8px; }
+            .vagas-banner { padding: 20px; margin: 0 10px 30px 10px; }
         }
     </style>
 </head>
@@ -105,14 +117,18 @@
 <body>
 
 <nav class="navbar">
-    <div class="nav-brand">ME</div>
+    <div class="nav-brand">
+        <a href="index.html">
+            <img src="favicon.ico" alt="Logo">
+        </a>
+    </div>
     <div class="nav-links">
         <a href="index.html">Início</a>
         <a href="membros.html">Membros</a>
         <a href="participantes.html" class="active">Participantes</a>
         <a href="videos.html">Vídeos</a>
         <a href="links.html">Links</a>
-        <a href="formulario.html" class="btn" style="padding: 10px 25px; margin-left: 15px;">Entrar</a>
+        <a href="formulario.html" class="btn">Entrar</a>
     </div>
 </nav>
 
@@ -178,15 +194,21 @@
     async function carregarVagas() {
         const display = document.getElementById("vagasInfo");
         try {
-            const res = await fetch("https://mindset-elite.onrender.com/vagas", { cache: "no-store" });
+            // Tenta buscar no servidor Render
+            const res = await fetch("https://mindset-elite.onrender.com/vagas", { 
+                method: 'GET',
+                mode: 'cors',
+                cache: "no-store" 
+            });
             const data = await res.json();
             const num = data.vagas ?? 0;
             display.innerText = num.toString().padStart(2, '0');
             
             if(num <= 3) display.style.color = "#ff4c4c"; 
-        } catch {
-            display.innerText = "08"; 
-            display.style.opacity = "0.5";
+        } catch (error) {
+            console.log("Servidor em standby. Exibindo valor offline.");
+            display.innerText = "08"; // Valor padrão caso o Render esteja offline
+            display.style.opacity = "0.8";
         }
     }
     carregarVagas();
