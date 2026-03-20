@@ -1,183 +1,210 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Streaming - Mindset Elite</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Streaming • Mindset Elite</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="global.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#050a15">
 
-<style>
-/* CONTAINER E TÍTULO */
-.container { padding-top: 140px; overflow-x: hidden; }
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="global.css">
 
-.header-section {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    padding: 0 5%;
-}
+    <style>
+        /* CONTAINER E TÍTULO */
+        .container { padding-top: 140px; padding-bottom: 100px; overflow-x: hidden; }
 
-.page-title {
-    font-size: clamp(24px, 4vw, 34px);
-    font-weight: 900;
-    color: var(--primary);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 0 5%;
+        }
 
-/* CARROSSEL STYLE NETFLIX */
-.row-wrapper {
-    position: relative;
-    padding: 20px 0 60px 0;
-}
+        .page-title {
+            font-size: clamp(24px, 4vw, 34px);
+            font-weight: 900;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
 
-.row {
-    display: flex;
-    gap: 20px;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    padding: 20px 5%;
-    scrollbar-width: none; /* Firefox */
-}
-.row::-webkit-scrollbar { display: none; }
+        .badge-live {
+            font-size: 10px;
+            font-weight: 800;
+            color: #00ffaa;
+            border: 1px solid #00ffaa;
+            padding: 5px 12px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
-/* CONTROLES */
-.scroll-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 60px;
-    height: 100px;
-    background: rgba(0, 0, 0, 0.8);
-    border: 1px solid rgba(0, 224, 255, 0.2);
-    color: #fff;
-    font-size: 30px;
-    cursor: pointer;
-    z-index: 100;
-    opacity: 0;
-    transition: 0.3s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+        .badge-live i { font-size: 8px; animation: pulse-red 1.5s infinite; }
 
-.row-wrapper:hover .scroll-btn { opacity: 1; }
-.scroll-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-soft); }
+        @keyframes pulse-red {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
 
-.scroll-left { left: 0; border-radius: 0 15px 15px 0; }
-.scroll-right { right: 0; border-radius: 15px 0 0 15px; }
+        /* CARROSSEL STYLE NETFLIX */
+        .row-wrapper {
+            position: relative;
+            padding: 20px 0 60px 0;
+        }
 
-/* CARD DE VÍDEO */
-.card {
-    min-width: 280px;
-    position: relative;
-    cursor: pointer;
-    transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
-}
+        .row {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 20px 5%;
+            scrollbar-width: none; 
+        }
+        .row::-webkit-scrollbar { display: none; }
 
-.card:hover {
-    transform: scale(1.15);
-    z-index: 50;
-}
+        /* CONTROLES */
+        .scroll-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 60px;
+            height: 100px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(0, 224, 255, 0.2);
+            color: #fff;
+            font-size: 30px;
+            cursor: pointer;
+            z-index: 100;
+            opacity: 0;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.card-inner {
-    background: #111827;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.05);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-}
+        .row-wrapper:hover .scroll-btn { opacity: 1; }
+        .scroll-btn:hover { background: var(--primary); color: #000; }
 
-.card:hover .card-inner {
-    border-color: var(--primary);
-    box-shadow: 0 0 30px rgba(0, 224, 255, 0.3);
-}
+        .scroll-left { left: 0; border-radius: 0 15px 15px 0; }
+        .scroll-right { right: 0; border-radius: 15px 0 0 15px; }
 
-/* THUMB E PREVIEW */
-.thumb-box {
-    aspect-ratio: 16/9;
-    position: relative;
-    background: #000;
-}
+        /* CARD DE VÍDEO */
+        .card {
+            min-width: 280px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+        }
 
-.thumb-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: opacity 0.3s;
-}
+        .card:hover {
+            transform: scale(1.1);
+            z-index: 50;
+        }
 
-.video-preview {
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.5s ease;
-}
+        .card-inner {
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-glass);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
 
-.card:hover .video-preview {
-    opacity: 1;
-}
+        .card:hover .card-inner {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-neon);
+        }
 
-.video-preview iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    transform: scale(1.35); /* Remove bordas pretas do shorts */
-}
+        /* THUMB E PREVIEW */
+        .thumb-box {
+            aspect-ratio: 16/9;
+            position: relative;
+            background: #000;
+        }
 
-/* INFOS */
-.video-info {
-    padding: 12px;
-    background: linear-gradient(to top, #0f172a, #111827);
-}
+        .thumb-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s;
+        }
 
-.video-tag {
-    font-size: 10px;
-    color: var(--primary);
-    text-transform: uppercase;
-    font-weight: 800;
-    margin-bottom: 4px;
-}
+        .video-preview {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            overflow: hidden;
+        }
 
-.video-title {
-    font-size: 13px;
-    color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+        .card:hover .video-preview {
+            opacity: 1;
+        }
 
-/* MOBILE */
-@media(max-width:768px){
-    .container { padding-top: 100px; }
-    .scroll-btn { display: none; }
-    .card { min-width: 200px; }
-    .card:hover { transform: none; }
-}
-</style>
+        .video-preview iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            transform: scale(1.4); /* Ajuste para preencher o card */
+        }
+
+        /* INFOS */
+        .video-info {
+            padding: 15px;
+            background: rgba(15, 23, 42, 0.9);
+        }
+
+        .video-tag {
+            font-size: 10px;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-weight: 800;
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+
+        .video-title {
+            font-size: 13px;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: 600;
+        }
+
+        /* MOBILE */
+        @media(max-width:768px){
+            .container { padding-top: 100px; }
+            .scroll-btn { display: none; }
+            .card { min-width: 220px; }
+            .card:hover { transform: none; }
+            .video-preview { display: none; } /* Desativa preview no mobile para poupar dados */
+        }
+    </style>
 </head>
 
 <body>
 
 <nav class="navbar">
-    <div class="nav-brand">MINDSET ELITE</div>
+    <div class="nav-brand">ME</div>
     <div class="nav-links">
         <a href="index.html">Início</a>
         <a href="membros.html">Membros</a>
         <a href="videos.html" class="active">Vídeos</a>
-        <a href="formulario.html">Entrar</a>
+        <a href="formulario.html">Participar</a>
     </div>
 </nav>
 
 <div class="container">
     <div class="header-section">
-        <h1 class="page-title text-gradient">Conteúdo Exclusivo</h1>
+        <h1 class="page-title text-gradient">Streaming Elite</h1>
         <div class="badge-live"><i class="fa-solid fa-circle"></i> ON DEMAND</div>
     </div>
 
@@ -194,56 +221,69 @@
 <div class="app-footer">
     <a href="index.html"><i class="fa-solid fa-house"></i><span>Home</span></a>
     <a href="membros.html"><i class="fa-solid fa-crown"></i><span>Membros</span></a>
-    <a href="videos.html"><i class="fa-solid fa-play"></i><span>Vídeos</span></a>
+    <a href="videos.html" class="active"><i class="fa-solid fa-play"></i><span>Vídeos</span></a>
     <a href="links.html"><i class="fa-solid fa-link"></i><span>Links</span></a>
 </div>
 
 <script>
 const videoLinks = [
-    "lS8Sdam5pEA", "v_s2bz8T3a8", "g-BJOYE_Zj8", "OJMOJnKw77g",
-    "NSSgs-AH9vc", "pX0lkVI1dkg", "CWGaPBbQI6M", "QTNoH8Gpho8",
-    "lxOMW7GOn44", "wYi4Zvc6uuk", "tfh5HmCJS0w", "37D3nHE0Eac"
+    {id: "lS8Sdam5pEA", title: "Mentalidade Inabalável"},
+    {id: "v_s2bz8T3a8", title: "Estratégia de Poder"},
+    {id: "g-BJOYE_Zj8", title: "Disciplina de Elite"},
+    {id: "OJMOJnKw77g", title: "Foco Total"},
+    {id: "NSSgs-AH9vc", title: "Visão de Túnel"},
+    {id: "pX0lkVI1dkg", title: "O Jogo Psicológico"},
+    {id: "CWGaPBbQI6M", title: "Alta Performance"},
+    {id: "QTNoH8Gpho8", title: "Rotina de Reis"},
+    {id: "lxOMW7GOn44", title: "Networking Real"},
+    {id: "wYi4Zvc6uuk", title: "Soberania Mental"},
+    {id: "tfh5HmCJS0w", title: "A Arte da Guerra"},
+    {id: "37D3nHE0Eac", title: "O Próximo Nível"}
 ];
 
 const container = document.getElementById("videoContainer");
 
-function createVideoCard(id) {
+function createVideoCard(video) {
     const card = document.createElement("div");
     card.className = "card";
     
-    // O Iframe só ganha o SRC quando o mouse entra (economia de recursos)
     card.innerHTML = `
         <div class="card-inner">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="Thumbnail">
-                <div class="video-preview" id="preview-${id}"></div>
+                <img src="https://img.youtube.com/vi/${video.id}/hqdefault.jpg" alt="Thumbnail">
+                <div class="video-preview" id="preview-${video.id}"></div>
             </div>
             <div class="video-info">
-                <div class="video-tag">Mindset Elite • Shorts</div>
-                <div class="video-title">Aula Estratégica #${id.substring(0,4)}</div>
+                <div class="video-tag">Mindset Elite • Exclusive</div>
+                <div class="video-title">${video.title}</div>
             </div>
         </div>
     `;
 
+    // Carrega vídeo no Hover (apenas Desktop)
     card.onmouseenter = () => {
-        const preview = document.getElementById(`preview-${id}`);
-        if(!preview.innerHTML) {
-            preview.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${id}" allow="autoplay"></iframe>`;
+        if(window.innerWidth > 768) {
+            const preview = document.getElementById(`preview-${video.id}`);
+            preview.innerHTML = `<iframe src="https://www.youtube.com/embed/${video.id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${video.id}&rel=0" allow="autoplay"></iframe>`;
         }
     };
 
-    // Ao clicar, abre o vídeo em tela cheia no YouTube
-    card.onclick = () => window.open(`https://youtube.com/shorts/${id}`, '_blank');
+    // Limpa vídeo ao sair para poupar memória/CPU
+    card.onmouseleave = () => {
+        const preview = document.getElementById(`preview-${video.id}`);
+        preview.innerHTML = "";
+    };
+
+    card.onclick = () => window.open(`https://youtube.com/shorts/${video.id}`, '_blank');
 
     return card;
 }
 
-videoLinks.forEach(id => container.appendChild(createVideoCard(id)));
+videoLinks.forEach(video => container.appendChild(createVideoCard(video)));
 
 // Controles de Scroll
-document.getElementById("btnLeft").onclick = () => container.scrollBy({left: -400, behavior: "smooth"});
-document.getElementById("btnRight").onclick = () => container.scrollBy({left: 400, behavior: "smooth"});
-
+document.getElementById("btnLeft").onclick = () => container.scrollBy({left: -container.offsetWidth * 0.8, behavior: "smooth"});
+document.getElementById("btnRight").onclick = () => container.scrollBy({left: container.offsetWidth * 0.8, behavior: "smooth"});
 </script>
 
 <script src="layout.v3.js" defer></script>
