@@ -1,6 +1,6 @@
 /* ============================================================
-    🔥 MINDSET ELITE - ULTRA VISUAL ENGINE v3.5
-    Partículas Inteligentes & Integração Meteorológica
+    🔥 MINDSET ELITE - ULTRA VISUAL ENGINE v3.6
+    Partículas, Clima Real, PWA & Registro de Service Worker
    ============================================================ */
 
 const WEATHER_CONFIG = {
@@ -12,13 +12,12 @@ const WEATHER_CONFIG = {
 
 document.addEventListener("DOMContentLoaded", async () => {
     
-    // --- 1. GESTÃO DE CLIMA & CORES ---
+    // --- 1. GESTÃO DE CLIMA & CORES DINÂMICAS ---
     let weatherStatus = "Clear";
     let accentColor = WEATHER_CONFIG.defaultColor;
 
     async function updateWeatherTheme() {
         try {
-            // timeout de 5s para não travar o carregamento se a API demorar
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000);
 
@@ -35,20 +34,20 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         const themes = {
-            'Rain': '#3b82f6',         // Azul Chuva
-            'Drizzle': '#60a5fa',      // Azul Claro
-            'Clouds': '#94a3b8',       // Cinza Azulado
-            'Clear': '#00e0ff',        // Ciano Neon (Padrão)
-            'Thunderstorm': '#a855f7', // Roxo Trovão
-            'Snow': '#ffffff',         // Branco Neve
-            'Mist': '#5eead4'          // Turquesa Neblina
+            'Rain': '#3b82f6',         
+            'Drizzle': '#60a5fa',      
+            'Clouds': '#94a3b8',       
+            'Clear': '#00e0ff',        
+            'Thunderstorm': '#a855f7', 
+            'Snow': '#ffffff',         
+            'Mist': '#5eead4'          
         };
 
         accentColor = themes[weatherStatus] || WEATHER_CONFIG.defaultColor;
 
-        // APLICAÇÃO DA COR NO CSS GLOBAL (Sobrescreve a variável :root)
+        // Aplica a cor do clima nas variáveis do CSS Global
         document.documentElement.style.setProperty('--primary', accentColor);
-        document.documentElement.style.setProperty('--primary-glow', `${accentColor}66`); // 40% opacidade
+        document.documentElement.style.setProperty('--primary-glow', `${accentColor}66`);
     }
 
     await updateWeatherTheme();
@@ -68,7 +67,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     canvas.style.opacity = "0.4"; 
 
     let particles = [];
-    // Menos partículas no mobile para salvar bateria
     const particleCount = window.innerWidth < 768 ? 30 : 70;
 
     function initCanvas() {
@@ -92,7 +90,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         update() {
             this.x += this.speedX;
             this.y += this.speedY;
-
             if (this.x > canvas.width) this.x = 0;
             else if (this.x < 0) this.x = canvas.width;
             if (this.y > canvas.height) this.y = 0;
@@ -118,7 +115,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 if (distance < maxDistance) {
                     const opacity = 1 - (distance / maxDistance);
                     ctx.strokeStyle = accentColor;
-                    ctx.globalAlpha = opacity * 0.15; // Linhas bem sutis
+                    ctx.globalAlpha = opacity * 0.15;
                     ctx.lineWidth = 0.5;
                     ctx.beginPath();
                     ctx.moveTo(particles[a].x, particles[a].y);
@@ -140,7 +137,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         requestAnimationFrame(animate);
     }
 
-    // Debounce no resize para não travar o navegador
     let resizeTimer;
     window.addEventListener("resize", () => {
         clearTimeout(resizeTimer);
@@ -150,5 +146,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     initCanvas();
     animate();
 
-    console.log(`%c Mindset Elite Engine v3.5 | Clima: ${weatherStatus} | Cor: ${accentColor}`, `color: ${accentColor}; font-weight: bold; background: #000; padding: 4px; border-radius: 4px;`);
+    // --- 3. REGISTRO DO SERVICE WORKER (PWA) ---
+    if ('serviceWorker' in navigator) {
+        try {
+            const reg = await navigator.serviceWorker.register('/sw.js');
+            console.log('%c Mindset Elite PWA: Ativo ✅', 'color: #00ffaa; font-weight: bold;');
+        } catch (err) {
+            console.error('Mindset Elite PWA: Falha no registro ❌', err);
+        }
+    }
+
+    // --- 4. LÓGICA DE INSTALAÇÃO (PROMPT) ---
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        console.log('Prompt de instalação pronto para a Elite.');
+    });
+
+    console.log(`%c Engine v3.6 Ativa | Clima: ${weatherStatus}`, `color: ${accentColor}; font-weight: bold;`);
 });
