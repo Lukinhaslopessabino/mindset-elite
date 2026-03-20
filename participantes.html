@@ -7,7 +7,7 @@
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#050a15">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" href="logo.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
@@ -23,6 +23,7 @@
         }
 
         .page-header { text-align: center; margin-bottom: 40px; }
+        .page-header h1 { font-family: 'Orbitron', sans-serif; }
         .page-header p { letter-spacing: 4px; font-weight: 700; opacity: 0.7; font-size: 11px; }
 
         /* VAGAS COUNTER */
@@ -30,11 +31,11 @@
             background: rgba(0, 224, 255, 0.03);
             border: 1px dashed var(--primary-soft);
             padding: 25px;
-            border-radius: 15px;
+            border-radius: var(--radius-lg);
             text-align: center;
             margin-bottom: 40px;
             font-family: 'Orbitron', sans-serif;
-            backdrop-filter: blur(10px);
+            backdrop-filter: var(--glass-blur);
         }
 
         .vagas-number { 
@@ -54,14 +55,14 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            padding: 0 10px;
+            padding: 0 15px;
         }
 
         .participant-row {
             background: var(--bg-card);
             border: 1px solid var(--border-glass);
             padding: 18px 25px;
-            border-radius: 12px;
+            border-radius: var(--radius-md);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -107,9 +108,9 @@
 
         @media(max-width: 850px) {
             .container { padding-top: 110px; }
-            .participant-row { padding: 15px; }
-            .p-name { font-size: 13px; gap: 8px; }
-            .vagas-banner { padding: 20px; margin: 0 10px 30px 10px; }
+            .participant-row { padding: 15px 20px; }
+            .p-name { font-size: 14px; gap: 10px; }
+            .vagas-banner { margin: 0 15px 30px 15px; }
         }
     </style>
 </head>
@@ -119,7 +120,7 @@
 <nav class="navbar">
     <div class="nav-brand">
         <a href="index.html">
-            <img src="favicon.ico" alt="Logo">
+            <img src="logo.png" alt="Mindset Elite Logo">
         </a>
     </div>
     <div class="nav-links">
@@ -194,7 +195,6 @@
     async function carregarVagas() {
         const display = document.getElementById("vagasInfo");
         try {
-            // Tenta buscar no servidor Render
             const res = await fetch("https://mindset-elite.onrender.com/vagas", { 
                 method: 'GET',
                 mode: 'cors',
@@ -204,10 +204,14 @@
             const num = data.vagas ?? 0;
             display.innerText = num.toString().padStart(2, '0');
             
-            if(num <= 3) display.style.color = "#ff4c4c"; 
+            // Alerta visual se as vagas estiverem acabando
+            if(num <= 3) {
+                display.style.color = "#ff4c4c";
+                display.style.animation = "pulse 1.5s infinite";
+            }
         } catch (error) {
             console.log("Servidor em standby. Exibindo valor offline.");
-            display.innerText = "08"; // Valor padrão caso o Render esteja offline
+            display.innerText = "08"; 
             display.style.opacity = "0.8";
         }
     }
