@@ -1,6 +1,6 @@
 /* ============================================================
-    🔥 MINDSET ELITE - CORE ENGINE CSS
-    Versão: 3.8 (Estabilidade de Logo & Layout)
+   🔥 MINDSET ELITE - CORE ENGINE CSS
+   Versão: 3.8 (Estabilidade de Logo & Layout)
 ============================================================ */
 
 :root {
@@ -30,12 +30,15 @@
 
 body {
     background-color: var(--bg-dark);
+    background-image: radial-gradient(circle at 50% 30%, rgba(0, 224, 255, 0.03), transparent 60%);
     color: var(--text-main);
     line-height: 1.6;
     overflow-x: hidden;
     padding-top: 80px; 
+    min-height: 100vh;
 }
 
+/* Utilitários */
 .text-gradient {
     background: linear-gradient(90deg, #fff, var(--primary));
     -webkit-background-clip: text;
@@ -44,7 +47,7 @@ body {
 }
 
 /* ===============================
-    NAVBAR (TRAVA DEFINITIVA)
+   NAVBAR (TRAVA DEFINITIVA)
 ================================ */
 .navbar {
     position: fixed;
@@ -60,6 +63,7 @@ body {
     align-items: center;
     padding: 0 8%;
     z-index: 2000;
+    transition: var(--transition);
 }
 
 .nav-brand {
@@ -76,6 +80,11 @@ body {
     transition: var(--transition);
     object-fit: contain;
     display: block !important;
+}
+
+.nav-brand img:hover {
+    transform: scale(1.02);
+    filter: drop-shadow(0 0 12px var(--primary));
 }
 
 .nav-links {
@@ -100,6 +109,7 @@ body {
 .navbar a.active {
     color: var(--primary);
     background: var(--primary-soft);
+    text-shadow: 0 0 6px var(--primary-glow);
 }
 
 /* Botão de Ação */
@@ -118,20 +128,23 @@ body {
     gap: 8px;
     border: none;
     transition: var(--transition);
+    text-decoration: none;
 }
 
 .btn:hover {
-    transform: scale(1.05);
+    transform: translateY(-2px) scale(1.02);
     box-shadow: 0 0 25px var(--primary);
+    filter: brightness(1.1);
 }
 
 /* ===============================
-    CONTEÚDO E BANNER
+   CONTEÚDO E BANNER
 ================================ */
 .container {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
+    padding: 20px 20px 100px 20px;
 }
 
 .hero-banner {
@@ -139,6 +152,7 @@ body {
     max-width: 700px;
     margin: 20px auto;
     padding: 0 20px;
+    position: relative;
 }
 
 .hero-banner img {
@@ -147,10 +161,18 @@ body {
     max-height: 320px;
     object-fit: contain;
     filter: drop-shadow(0 0 15px rgba(0, 224, 255, 0.2));
+    border-radius: var(--radius-lg);
+    transition: var(--transition);
+    border: 1px solid var(--border-glass);
+}
+
+.hero-banner img:hover {
+    border-color: var(--primary);
+    box-shadow: 0 0 30px rgba(0, 224, 255, 0.25);
 }
 
 /* ===============================
-    APP FOOTER (MOBILE)
+   APP FOOTER (MOBILE)
 ================================ */
 .app-footer {
     position: fixed;
@@ -181,14 +203,22 @@ body {
     transition: var(--transition);
 }
 
-.app-footer a i { font-size: 18px; }
+.app-footer a i { 
+    font-size: 18px; 
+    transition: var(--transition);
+}
 
-.app-footer a.active {
+.app-footer a.active, 
+.app-footer a:hover {
     color: var(--primary);
 }
 
+.app-footer a.active i {
+    filter: drop-shadow(0 0 8px var(--primary-glow));
+}
+
 /* ===============================
-    RESPONSIVIDADE ACESSÍVEL
+   RESPONSIVIDADE ACESSÍVEL
 ================================ */
 @media (max-width: 850px) {
     body { padding-top: 70px; }
