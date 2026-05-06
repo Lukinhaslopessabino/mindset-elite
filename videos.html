@@ -16,27 +16,129 @@
     <link rel="stylesheet" href="/global.css">
 
     <style>
+        :root {
+            --primary: #00e0ff;
+            --primary-glow: rgba(0, 224, 255, 0.4);
+            --primary-soft: rgba(0, 224, 255, 0.08);
+            --bg-card: rgba(15, 23, 42, 0.7);
+            --border-glass: rgba(255, 255, 255, 0.1);
+            --glass-blur: blur(16px);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-neon: 0 20px 40px -15px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            --text-dim: #94a3b8;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 20%, #0d162a, #050914);
+            background-attachment: fixed;
+            font-family: 'Inter', sans-serif;
+            color: #ffffff;
+            margin: 0;
+            min-height: 100vh;
+            padding-top: 140px;
+            padding-bottom: 120px;
+        }
+
+        /* Premium Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 50px;
+            background: rgba(5, 10, 21, 0.6);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .nav-brand img {
+            height: 35px;
+            filter: drop-shadow(0 0 10px rgba(0, 224, 255, 0.4));
+            transition: var(--transition);
+        }
+
+        .nav-brand img:hover {
+            transform: scale(1.02);
+            filter: drop-shadow(0 0 16px var(--primary));
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #a0aec0;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            transition: var(--transition);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary);
+            background: var(--primary-soft);
+            text-shadow: 0 0 8px rgba(0, 224, 255, 0.4);
+        }
+
+        .nav-links .btn {
+            background: var(--primary);
+            color: #050a15;
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-weight: 900;
+            font-family: 'Orbitron', sans-serif;
+            box-shadow: 0 4px 15px rgba(0, 224, 255, 0.2);
+            text-shadow: none;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .nav-links .btn:hover {
+            filter: brightness(1.15);
+            box-shadow: 0 8px 20px var(--primary-glow);
+            transform: translateY(-1px);
+        }
+
         .container { 
-            padding-top: 140px; 
+            padding-top: 20px; 
             padding-bottom: 120px; 
             max-width: 1400px;
             margin: 0 auto;
+            padding-left: 20px;
+            padding-right: 20px;
         }
 
         .header-section {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
             padding: 0 5%;
         }
 
         .page-title {
-            font-size: clamp(22px, 5vw, 34px);
+            font-size: clamp(24px, 5vw, 36px);
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(90deg, #ffffff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .badge-live {
@@ -44,16 +146,20 @@
             font-weight: 800;
             color: #00ffaa;
             border: 1px solid rgba(0, 255, 170, 0.3);
-            padding: 5px 12px;
-            border-radius: 4px;
+            padding: 6px 16px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             background: rgba(0, 255, 170, 0.05);
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 0 15px rgba(0, 255, 170, 0.1);
         }
 
-        .badge-live i { font-size: 8px; animation: pulse-live 1.5s infinite; }
+        .badge-live i { 
+            font-size: 8px; 
+            animation: pulse-live 1.5s infinite; 
+        }
 
         @keyframes pulse-live {
             0% { opacity: 1; transform: scale(1); }
@@ -64,18 +170,19 @@
         /* CARROSSEL STYLE NETFLIX */
         .row-wrapper {
             position: relative;
-            padding: 10px 0;
+            padding: 20px 0;
         }
 
         .row {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             overflow-x: auto;
             scroll-behavior: smooth;
             padding: 20px 5%;
             scrollbar-width: none; 
             -webkit-overflow-scrolling: touch;
         }
+        
         .row::-webkit-scrollbar { display: none; }
 
         /* CONTROLES */
@@ -83,12 +190,12 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            width: 45px;
-            height: 80px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
+            width: 50px;
+            height: 100px;
+            background: rgba(5, 10, 21, 0.8);
+            backdrop-filter: blur(12px);
             border: 1px solid var(--border-glass);
-            color: #fff;
+            color: var(--primary);
             cursor: pointer;
             z-index: 100;
             opacity: 0;
@@ -96,24 +203,33 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
         }
 
         .row-wrapper:hover .scroll-btn { opacity: 1; }
-        .scroll-btn:hover { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
+        
+        .scroll-btn:hover { 
+            background: var(--primary); 
+            color: #050a15; 
+            border-color: var(--primary); 
+            box-shadow: 0 0 25px var(--primary-glow); 
+            transform: translateY(-50%) scale(1.05);
+        }
 
-        .scroll-left { left: 0; border-radius: 0 12px 12px 0; }
-        .scroll-right { right: 0; border-radius: 12px 0 0 12px; }
+        .scroll-left { left: 0; border-radius: 0 16px 16px 0; }
+        .scroll-right { right: 0; border-radius: 16px 0 0 16px; }
 
         /* CARD DE VÍDEO */
         .card {
-            min-width: 280px;
+            min-width: 290px;
             position: relative;
             cursor: pointer;
-            transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+            transition: var(--transition);
+            transform-origin: center center;
         }
 
         .card:hover {
-            transform: scale(1.06);
+            transform: scale(1.05);
             z-index: 50;
         }
 
@@ -122,7 +238,8 @@
             border-radius: var(--radius-md);
             overflow: hidden;
             border: 1px solid var(--border-glass);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            transition: var(--transition);
         }
 
         .card:hover .card-inner {
@@ -141,7 +258,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: opacity 0.3s;
+            transition: opacity 0.4s;
         }
 
         .video-preview {
@@ -166,8 +283,8 @@
 
         /* INFOS */
         .video-info {
-            padding: 15px;
-            background: linear-gradient(to bottom, rgba(10, 20, 40, 0.4), rgba(5, 10, 21, 0.9));
+            padding: 18px;
+            background: linear-gradient(to bottom, rgba(10, 20, 40, 0.3), rgba(5, 10, 21, 0.95));
         }
 
         .video-tag {
@@ -175,28 +292,83 @@
             color: var(--primary);
             text-transform: uppercase;
             font-weight: 800;
-            margin-bottom: 6px;
-            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .video-title {
-            font-size: 14px;
+            font-size: 15px;
             color: #fff;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        /* Premium Footer */
+        .app-footer {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(5, 10, 21, 0.98);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 14px 20px;
+            justify-content: space-around;
+            z-index: 1000;
+        }
+
+        .app-footer a {
+            color: var(--text-dim);
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .app-footer a.active, .app-footer a:hover {
+            color: var(--primary);
+        }
+
+        .app-footer a i {
+            font-size: 18px;
+            color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .app-footer a.active i {
+            filter: drop-shadow(0 0 8px var(--primary-glow));
         }
 
         /* MOBILE OPTIMIZATION */
-        @media(max-width:850px){
-            .container { padding-top: 100px; }
+        @media(max-width: 850px){
+            body { padding-top: 70px; }
+            .navbar { padding: 20px 30px; height: 70px; }
+            .nav-links { display: none; }
+            .app-footer { display: flex; }
+            .container { padding-top: 30px; padding-bottom: 100px; }
+            .header-section { flex-direction: column; align-items: flex-start; gap: 14px; padding: 0 5%; }
             .scroll-btn { display: none; }
-            .card { min-width: 220px; }
+            .card { min-width: 240px; }
             .card:hover { transform: none; }
             .video-preview { display: none !important; }
-            .row { gap: 12px; padding: 15px 5%; }
-            .header-section { margin-bottom: 15px; padding: 0 6%; }
+            .row { gap: 16px; padding: 15px 5%; }
+            .video-title { font-size: 14px; }
+        }
+
+        @media (max-width: 480px) {
+            .navbar { height: 65px; padding: 0 15px; }
+            .badge-live { padding: 5px 12px; }
+            .video-info { padding: 14px; }
         }
     </style>
 </head>
@@ -228,19 +400,18 @@
     <div class="row-wrapper">
         <button class="scroll-btn scroll-left" id="btnLeft"><i class="fa-solid fa-chevron-left"></i></button>
         
-        <div class="row" id="videoContainer">
-            </div>
+        <div class="row" id="videoContainer"></div>
 
         <button class="scroll-btn scroll-right" id="btnRight"><i class="fa-solid fa-chevron-right"></i></button>
     </div>
 </div>
 
-<div class="app-footer">
+<footer class="app-footer">
     <a href="/"><i class="fa-solid fa-house"></i><span>Início</span></a>
     <a href="/membros.html"><i class="fa-solid fa-crown"></i><span>Membros</span></a>
     <a href="/participantes.html"><i class="fa-solid fa-users"></i><span>Inscritos</span></a>
     <a href="/videos.html" class="active"><i class="fa-solid fa-play"></i><span>Vídeos</span></a>
-</div>
+</footer>
 
 <script>
 const videoLinks = [
@@ -273,7 +444,9 @@ function createVideoCard(video) {
                 <div class="video-preview" id="preview-${video.id}"></div>
             </div>
             <div class="video-info">
-                <div class="video-tag">Mindset Elite • Exclusive</div>
+                <div class="video-tag">
+                    <i class="fa-solid fa-bolt"></i> Mindset Elite &bull; Exclusive
+                </div>
                 <div class="video-title">${video.title}</div>
             </div>
         </div>
@@ -282,7 +455,7 @@ function createVideoCard(video) {
     card.onmouseenter = () => {
         if(window.innerWidth > 850) {
             const preview = document.getElementById(`preview-${video.id}`);
-            if (!preview.innerHTML) {
+            if (preview && !preview.innerHTML) {
                 preview.innerHTML = `<iframe src="https://www.youtube.com/embed/${video.id}?autoplay=1&mute=1&controls=0&loop=1&playlist=${video.id}&rel=0&modestbranding=1" allow="autoplay"></iframe>`;
             }
         }
@@ -291,7 +464,9 @@ function createVideoCard(video) {
     card.onmouseleave = () => {
         if(window.innerWidth > 850) {
             const preview = document.getElementById(`preview-${video.id}`);
-            preview.innerHTML = "";
+            if (preview) {
+                preview.innerHTML = "";
+            }
         }
     };
 
