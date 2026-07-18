@@ -10,7 +10,7 @@
     <link rel="icon" type="image/png" href="/logo.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     
     <link rel="stylesheet" href="/global.css">
@@ -31,6 +31,9 @@
             --text-dim: #94a3b8;
         }
 
+        *{box-sizing:border-box;}
+        :focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:4px;}
+
         body {
             background: radial-gradient(circle at 50% 30%, #0d162a, #050914);
             background-attachment: fixed;
@@ -40,9 +43,30 @@
             min-height: 100vh;
             padding-top: 140px;
             padding-bottom: 120px;
+            overflow-x: hidden;
         }
 
-        /* Premium Navigation */
+        .text-gradient{
+            background:linear-gradient(120deg,#fff 10%,var(--primary) 65%,#7fe9ff 100%);
+            -webkit-background-clip:text;background-clip:text;color:transparent;
+        }
+
+        /* ---------- Ambient backdrop: HUD grid + glow (consistente com o resto do site) ---------- */
+        .bg-grid{
+            position:fixed;inset:0;z-index:-2;pointer-events:none;
+            background-image:
+                linear-gradient(rgba(0,224,255,.045) 1px,transparent 1px),
+                linear-gradient(90deg,rgba(0,224,255,.045) 1px,transparent 1px);
+            background-size:42px 42px;
+            mask-image:radial-gradient(ellipse 75% 55% at 50% 0%,#000 40%,transparent 85%);
+        }
+        .bg-glow{
+            position:fixed;top:-220px;left:50%;transform:translateX(-50%);
+            width:900px;height:600px;z-index:-1;pointer-events:none;
+            background:radial-gradient(closest-side,rgba(0,224,255,.14),transparent 70%);
+        }
+
+        /* Premium Navigation (sticky + reação ao scroll) */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -56,14 +80,25 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            transition: var(--transition);
+            transition: var(--transition), padding .3s ease, transform .35s ease, box-shadow .35s ease;
         }
+
+        .navbar.scrolled {
+            padding: 14px 50px;
+            background: rgba(5, 10, 21, 0.88);
+            border-bottom-color: var(--border-glass);
+            box-shadow: 0 10px 30px -14px rgba(0,0,0,.6);
+        }
+
+        .navbar.hide-nav { transform: translateY(-100%); }
 
         .nav-brand img {
             height: 35px;
             filter: drop-shadow(0 0 10px rgba(0, 224, 255, 0.4));
             transition: var(--transition);
         }
+
+        .navbar.scrolled .nav-brand img { height: 30px; }
 
         .nav-brand img:hover {
             transform: scale(1.02);
@@ -127,9 +162,6 @@
             font-family: 'Orbitron', sans-serif; 
             margin-bottom: 15px; 
             font-size: 2.5rem;
-            background: linear-gradient(90deg, #ffffff, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         .page-header p { 
@@ -142,6 +174,7 @@
             padding: 6px 16px;
             border-radius: 20px;
             border: 1px solid var(--border-glass);
+            font-family: 'JetBrains Mono', monospace;
         }
 
         /* GRID DE MEMBROS */
@@ -285,6 +318,7 @@
 
         @media (max-width: 991px) {
             .navbar { padding: 20px 30px; }
+            .navbar.scrolled { padding: 14px 30px; }
             .nav-links { display: none; }
             .app-footer { display: flex; }
             .container { padding-top: 40px; padding-bottom: 100px; }
@@ -296,6 +330,11 @@
             .membros-grid { grid-template-columns: 1fr; gap: 25px; }
             .navbar { height: 65px; padding: 0 15px; }
             .page-header { margin-bottom: 40px; }
+        }
+
+        @media (prefers-reduced-motion: reduce){
+            .membro-card { animation: none; opacity: 1; transform: none; }
+            .navbar { transition: none; }
         }
 
         /* ============================================================
@@ -559,6 +598,7 @@
             color: var(--text-dim);
             font-size: 11px;
             margin: 14px 0;
+            font-family: 'JetBrains Mono', monospace;
         }
 
         .apk-modal-meta span { display: flex; align-items: center; gap: 5px; }
@@ -610,7 +650,10 @@
 
 <body>
 
-<nav class="navbar">
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<nav class="navbar" id="navbar">
     <div class="nav-brand">
         <a href="/">
             <img src="/logo.png" alt="Mindset Elite Logo">
@@ -668,6 +711,7 @@
     <a href="/membros.html" class="active"><i class="fa-solid fa-crown"></i><span>Membros</span></a>
     <a href="/participantes.html"><i class="fa-solid fa-users"></i><span>Inscritos</span></a>
     <a href="/videos.html"><i class="fa-solid fa-play"></i><span>Vídeos</span></a>
+    <a href="/links.html"><i class="fa-solid fa-link"></i><span>Links</span></a>
     <a href="/baixar-apk.html"><i class="fa-solid fa-download"></i><span>APP</span></a>
 </div>
 
@@ -705,6 +749,23 @@
         </a>
     </div>
 </div>
+
+<script>
+(function () {
+    var navbar = document.getElementById('navbar');
+    var lastY = window.scrollY;
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.addEventListener('scroll', function () {
+        var y = window.scrollY;
+        navbar.classList.toggle('scrolled', y > 20);
+        if (!reduceMotion) {
+            if (y > lastY && y > 140) navbar.classList.add('hide-nav');
+            else navbar.classList.remove('hide-nav');
+        }
+        lastY = y;
+    }, { passive: true });
+})();
+</script>
 
 <script>
 (function () {
