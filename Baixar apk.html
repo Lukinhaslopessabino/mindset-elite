@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baixar o APP | Mindset Elite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="global.css">
+<style>
+    /* ============================================================
+       BAIXAR APK — estilos específicos desta página
+       Usa os tokens definidos em global.css (:root)
+    ============================================================ */
+
+    .apk-hero {
+        max-width: 900px;
+        margin: 40px auto 0;
+        padding: 0 20px;
+        text-align: center;
+    }
+
+    .apk-hero .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--primary);
+        background: var(--primary-soft);
+        border: 1px solid var(--border-glass);
+        padding: 6px 16px;
+        border-radius: 999px;
+        margin-bottom: 20px;
+    }
+
+    .apk-hero .eyebrow i { font-size: 10px; }
+
+    .apk-hero h1 {
+        font-family: 'Orbitron', sans-serif;
+        font-size: clamp(28px, 5vw, 46px);
+        font-weight: 900;
+        line-height: 1.15;
+        margin-bottom: 16px;
+    }
+
+    .apk-hero p.subtitle {
+        color: var(--text-dim);
+        font-size: 16px;
+        max-width: 560px;
+        margin: 0 auto 32px;
+    }
+
+    /* Cartão principal de download */
+    .apk-card {
+        max-width: 620px;
+        margin: 0 auto 60px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-glass);
+        backdrop-filter: var(--glass-blur);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-neon);
+        padding: 36px;
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        text-align: left;
+    }
+
+    .apk-icon {
+        flex-shrink: 0;
+        width: 76px;
+        height: 76px;
+        border-radius: var(--radius-md);
+        background: linear-gradient(145deg, var(--primary-soft), rgba(0, 224, 255, 0.02));
+        border: 1px solid var(--border-glass);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        color: var(--primary);
+        filter: drop-shadow(0 0 10px var(--primary-glow));
+    }
+
+    .apk-info { flex: 1; }
+
+    .apk-info h3 {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 18px;
+        margin-bottom: 6px;
+    }
+
+    .apk-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        color: var(--text-dim);
+        font-size: 12px;
+        margin-bottom: 18px;
+    }
+
+    .apk-meta span { display: flex; align-items: center; gap: 6px; }
+    .apk-meta i { color: var(--primary); font-size: 12px; }
+
+    .apk-card .btn {
+        width: 100%;
+        justify-content: center;
+        font-size: 13px;
+        padding: 14px 22px;
+    }
+
+    /* Passo a passo de instalação */
+    .steps {
+        max-width: 620px;
+        margin: 0 auto 80px;
+        display: grid;
+        gap: 14px;
+    }
+
+    .steps h2 {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 22px;
+    }
+
+    .step-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-glass);
+        border-radius: var(--radius-md);
+        padding: 18px 20px;
+        transition: var(--transition);
+    }
+
+    .step-item:hover {
+        border-color: var(--primary);
+        box-shadow: var(--shadow-neon);
+    }
+
+    .step-num {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 900;
+        font-size: 15px;
+        color: var(--bg-dark);
+        background: var(--primary);
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .step-text h4 {
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+
+    .step-text p {
+        color: var(--text-dim);
+        font-size: 13px;
+    }
+
+    .apk-note {
+        max-width: 620px;
+        margin: 0 auto 60px;
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        background: rgba(255, 200, 0, 0.06);
+        border: 1px solid rgba(255, 200, 0, 0.2);
+        border-radius: var(--radius-md);
+        padding: 16px 18px;
+        font-size: 13px;
+        color: var(--text-dim);
+    }
+
+    .apk-note i { color: #ffc800; font-size: 16px; margin-top: 2px; }
+
+    @media (max-width: 600px) {
+        .apk-card {
+            flex-direction: column;
+            text-align: center;
+            padding: 28px 22px;
+        }
+        .apk-meta { justify-content: center; }
+    }
+</style>
+</head>
+<body>
+
+<!-- ===============================
+     NAVBAR
+================================ -->
+<nav class="navbar">
+    <div class="nav-brand">
+        <span class="text-gradient" style="font-size:20px; font-weight:900;">MINDSET ELITE</span>
+    </div>
+    <div class="nav-links">
+        <a href="index.html">Início</a>
+        <a href="videos.html">Vídeos</a>
+        <a href="participantes.html">Participantes</a>
+        <a href="links.html">Links</a>
+        <a href="membros.html">Membros</a>
+        <a href="formulario.html">Formulário</a>
+        <a href="baixar-apk.html" class="active">Baixar APP</a>
+    </div>
+</nav>
+
+<!-- ===============================
+     CONTEÚDO
+================================ -->
+<main class="container">
+
+    <section class="apk-hero">
+        <span class="eyebrow"><i class="fa-solid fa-bolt"></i> Acesso rápido pelo app</span>
+        <h1 class="text-gradient">Leve o Mindset Elite<br>no seu bolso</h1>
+        <p class="subtitle">Baixe o aplicativo oficial e tenha acesso aos treinos, vídeos e conteúdos exclusivos direto do seu celular, sem depender do navegador.</p>
+    </section>
+
+    <section class="apk-card">
+        <div class="apk-icon"><i class="fa-brands fa-android"></i></div>
+        <div class="apk-info">
+            <h3>Mindset Elite <span style="color:var(--text-dim); font-weight:400;">.apk</span></h3>
+            <div class="apk-meta">
+                <span><i class="fa-solid fa-code-branch"></i> v1.0.0</span>
+                <span><i class="fa-solid fa-hard-drive"></i> ~25 MB</span>
+                <span><i class="fa-solid fa-mobile-screen"></i> Android 8.0+</span>
+            </div>
+            <a href="#" id="apk-download-link" class="btn" download>
+                <i class="fa-solid fa-download"></i> Baixar APK agora
+            </a>
+        </div>
+    </section>
+
+    <section class="steps">
+        <h2>Como instalar</h2>
+
+        <div class="step-item">
+            <div class="step-num">1</div>
+            <div class="step-text">
+                <h4>Baixe o arquivo .apk</h4>
+                <p>Toque no botão acima para iniciar o download direto no seu celular.</p>
+            </div>
+        </div>
+
+        <div class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-text">
+                <h4>Permita instalação de fontes desconhecidas</h4>
+                <p>O Android vai pedir permissão. Vá em Configurações e libere a instalação para o app usado no download.</p>
+            </div>
+        </div>
+
+        <div class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-text">
+                <h4>Abra o arquivo baixado</h4>
+                <p>Toque no arquivo .apk na sua lista de downloads e confirme a instalação.</p>
+            </div>
+        </div>
+
+        <div class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-text">
+                <h4>Pronto!</h4>
+                <p>Abra o app Mindset Elite e faça login com seus dados de acesso.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="apk-note">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span>O Android pode exibir um aviso padrão de segurança por o app não estar na Play Store. Isso é normal — o arquivo é seguro e distribuído oficialmente pela Mindset Elite.</span>
+    </div>
+
+</main>
+
+<!-- ===============================
+     APP FOOTER (MOBILE)
+================================ -->
+<footer class="app-footer">
+    <a href="index.html"><i class="fa-solid fa-house"></i>Início</a>
+    <a href="videos.html"><i class="fa-solid fa-video"></i>Vídeos</a>
+    <a href="participantes.html"><i class="fa-solid fa-users"></i>Time</a>
+    <a href="links.html"><i class="fa-solid fa-link"></i>Links</a>
+    <a href="baixar-apk.html" class="active"><i class="fa-solid fa-download"></i>APP</a>
+</footer>
+
+<script>
+    // Troque a URL abaixo pelo link real do seu arquivo .apk
+    document.getElementById('apk-download-link').href = "SUBSTITUA_PELO_LINK_DO_SEU_APK.apk";
+</script>
+
+</body>
+</html>
