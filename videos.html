@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
+
     <link rel="stylesheet" href="/global.css">
 
     <style>
@@ -31,8 +31,14 @@
             --text-dim: #94a3b8;
         }
 
+        * { box-sizing: border-box; }
+
+        ::selection { background: var(--primary); color: #050a15; }
+
         body {
-            background: radial-gradient(circle at 50% 20%, #0d162a, #050914);
+            background:
+                radial-gradient(circle at 50% 0%, rgba(0, 224, 255, 0.06), transparent 55%),
+                radial-gradient(circle at 50% 20%, #0d162a, #050914);
             background-attachment: fixed;
             font-family: 'Inter', sans-serif;
             color: #ffffff;
@@ -40,6 +46,26 @@
             min-height: 100vh;
             padding-top: 140px;
             padding-bottom: 120px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+            background-size: 42px 42px;
+            mask-image: radial-gradient(circle at 50% 10%, black, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 3px;
+            border-radius: 4px;
         }
 
         /* Premium Navigation */
@@ -48,7 +74,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 24px 50px;
-            background: rgba(5, 10, 21, 0.6);
+            background: rgba(5, 10, 21, 0.55);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             position: fixed;
@@ -59,11 +85,20 @@
             transition: var(--transition);
         }
 
+        .navbar.scrolled {
+            padding: 14px 50px;
+            background: rgba(5, 10, 21, 0.92);
+            border-bottom-color: rgba(0, 224, 255, 0.12);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+        }
+
         .nav-brand img {
             height: 35px;
             filter: drop-shadow(0 0 10px rgba(0, 224, 255, 0.4));
             transition: var(--transition);
         }
+
+        .navbar.scrolled .nav-brand img { height: 28px; }
 
         .nav-brand img:hover {
             transform: scale(1.02);
@@ -77,6 +112,7 @@
         }
 
         .nav-links a {
+            position: relative;
             color: #a0aec0;
             text-decoration: none;
             font-size: 13px;
@@ -88,11 +124,27 @@
             border-radius: var(--radius-sm);
         }
 
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 16px;
+            right: 16px;
+            bottom: 2px;
+            height: 2px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition);
+            box-shadow: 0 0 8px var(--primary-glow);
+        }
+
         .nav-links a:hover, .nav-links a.active {
             color: var(--primary);
             background: var(--primary-soft);
             text-shadow: 0 0 8px rgba(0, 224, 255, 0.4);
         }
+
+        .nav-links a.active::after { transform: scaleX(1); }
 
         .nav-links .btn {
             background: var(--primary);
@@ -107,19 +159,23 @@
             transition: var(--transition);
         }
 
+        .nav-links .btn::after { display: none; }
+
         .nav-links .btn:hover {
             filter: brightness(1.15);
             box-shadow: 0 8px 20px var(--primary-glow);
             transform: translateY(-1px);
         }
 
-        .container { 
-            padding-top: 20px; 
-            padding-bottom: 120px; 
+        .container {
+            padding-top: 20px;
+            padding-bottom: 120px;
             max-width: 1400px;
             margin: 0 auto;
             padding-left: 20px;
             padding-right: 20px;
+            position: relative;
+            z-index: 1;
         }
 
         .header-section {
@@ -156,9 +212,9 @@
             box-shadow: 0 0 15px rgba(0, 255, 170, 0.1);
         }
 
-        .badge-live i { 
-            font-size: 8px; 
-            animation: pulse-live 1.5s infinite; 
+        .badge-live i {
+            font-size: 8px;
+            animation: pulse-live 1.5s infinite;
         }
 
         @keyframes pulse-live {
@@ -179,10 +235,10 @@
             overflow-x: auto;
             scroll-behavior: smooth;
             padding: 20px 5%;
-            scrollbar-width: none; 
+            scrollbar-width: none;
             -webkit-overflow-scrolling: touch;
         }
-        
+
         .row::-webkit-scrollbar { display: none; }
 
         /* CONTROLES */
@@ -207,12 +263,12 @@
         }
 
         .row-wrapper:hover .scroll-btn { opacity: 1; }
-        
-        .scroll-btn:hover { 
-            background: var(--primary); 
-            color: #050a15; 
-            border-color: var(--primary); 
-            box-shadow: 0 0 25px var(--primary-glow); 
+
+        .scroll-btn:hover {
+            background: var(--primary);
+            color: #050a15;
+            border-color: var(--primary);
+            box-shadow: 0 0 25px var(--primary-glow);
             transform: translateY(-50%) scale(1.05);
         }
 
@@ -226,6 +282,13 @@
             cursor: pointer;
             transition: var(--transition);
             transform-origin: center center;
+            opacity: 0;
+            transform: translateY(16px);
+            animation: card-in 0.5s ease forwards;
+        }
+
+        @keyframes card-in {
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .card:hover {
@@ -261,6 +324,29 @@
             transition: opacity 0.4s;
         }
 
+        .thumb-box::after {
+            content: '\f04b';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: #050a15;
+            background: var(--primary);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin: auto;
+            opacity: 0;
+            transition: var(--transition);
+            box-shadow: 0 0 25px var(--primary-glow);
+        }
+
+        .card:hover .thumb-box::after { opacity: 0.95; }
+
         .video-preview {
             position: absolute;
             inset: 0;
@@ -278,7 +364,7 @@
             width: 100%;
             height: 100%;
             border: none;
-            transform: scale(1.35); 
+            transform: scale(1.35);
         }
 
         /* INFOS */
@@ -319,7 +405,7 @@
             background: rgba(5, 10, 21, 0.98);
             backdrop-filter: blur(16px);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 14px 20px;
+            padding: 14px 12px;
             justify-content: space-around;
             z-index: 1000;
         }
@@ -330,9 +416,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-size: 10px;
+            font-size: 9.5px;
             gap: 6px;
             transition: var(--transition);
+            flex: 1;
         }
 
         .app-footer a.active, .app-footer a:hover {
@@ -340,19 +427,21 @@
         }
 
         .app-footer a i {
-            font-size: 18px;
+            font-size: 17px;
             color: var(--primary);
             transition: var(--transition);
         }
 
         .app-footer a.active i {
             filter: drop-shadow(0 0 8px var(--primary-glow));
+            transform: translateY(-2px);
         }
 
         /* MOBILE OPTIMIZATION */
         @media(max-width: 850px){
             body { padding-top: 70px; }
             .navbar { padding: 20px 30px; height: 70px; }
+            .navbar.scrolled { padding: 14px 30px; }
             .nav-links { display: none; }
             .app-footer { display: flex; }
             .container { padding-top: 30px; padding-bottom: 100px; }
@@ -369,6 +458,11 @@
             .navbar { height: 65px; padding: 0 15px; }
             .badge-live { padding: 5px 12px; }
             .video-info { padding: 14px; }
+            .app-footer a span { font-size: 8.5px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .card { animation: none; opacity: 1; transform: none; }
         }
 
         /* ============================================================
@@ -683,7 +777,7 @@
 
 <body>
 
-<nav class="navbar">
+<nav class="navbar" id="navbar">
     <div class="nav-brand">
         <a href="/">
             <img src="/logo.png" alt="Mindset Elite Logo">
@@ -708,7 +802,7 @@
 
     <div class="row-wrapper">
         <button class="scroll-btn scroll-left" id="btnLeft"><i class="fa-solid fa-chevron-left"></i></button>
-        
+
         <div class="row" id="videoContainer"></div>
 
         <button class="scroll-btn scroll-right" id="btnRight"><i class="fa-solid fa-chevron-right"></i></button>
@@ -720,6 +814,7 @@
     <a href="/membros.html"><i class="fa-solid fa-crown"></i><span>Membros</span></a>
     <a href="/participantes.html"><i class="fa-solid fa-users"></i><span>Inscritos</span></a>
     <a href="/videos.html" class="active"><i class="fa-solid fa-play"></i><span>Vídeos</span></a>
+    <a href="/links.html"><i class="fa-solid fa-link"></i><span>Links</span></a>
     <a href="/baixar-apk.html"><i class="fa-solid fa-download"></i><span>APP</span></a>
 </footer>
 
@@ -838,15 +933,16 @@ const videoLinks = [
 
 const container = document.getElementById("videoContainer");
 
-function createVideoCard(video) {
+function createVideoCard(video, index) {
     const card = document.createElement("div");
     card.className = "card";
-    
+    card.style.animationDelay = `${Math.min(index * 0.06, 0.6)}s`;
+
     card.innerHTML = `
         <div class="card-inner">
             <div class="thumb-box">
-                <img src="https://img.youtube.com/vi/${video.id}/maxresdefault.jpg" 
-                     onerror="this.src='https://img.youtube.com/vi/${video.id}/hqdefault.jpg'" 
+                <img src="https://img.youtube.com/vi/${video.id}/maxresdefault.jpg"
+                     onerror="this.src='https://img.youtube.com/vi/${video.id}/hqdefault.jpg'"
                      alt="Thumbnail" loading="lazy">
                 <div class="video-preview" id="preview-${video.id}"></div>
             </div>
@@ -882,10 +978,20 @@ function createVideoCard(video) {
     return card;
 }
 
-videoLinks.forEach(video => container.appendChild(createVideoCard(video)));
+videoLinks.forEach((video, index) => container.appendChild(createVideoCard(video, index)));
 
 document.getElementById("btnLeft").onclick = () => container.scrollBy({left: -container.clientWidth * 0.7, behavior: "smooth"});
 document.getElementById("btnRight").onclick = () => container.scrollBy({left: container.clientWidth * 0.7, behavior: "smooth"});
+
+// Sticky header com reação ao scroll
+(function () {
+    const navbar = document.getElementById('navbar');
+    function onScroll() {
+        navbar.classList.toggle('scrolled', window.scrollY > 24);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+})();
 </script>
 
 <script src="/layout.v3.js" defer></script>
