@@ -9,202 +9,332 @@
 <link rel="icon" type="image/png" href="/logo.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="/global.css">
+
 <style>
-    /* ============================================================
-       BAIXAR APK — estilos específicos desta página
-       Usa os tokens definidos em global.css (:root)
-    ============================================================ */
+/* ============================================================
+   TOKENS — mantém compatibilidade com nomes usados em global.css,
+   mas define fallback completo para esta página funcionar sozinha.
+============================================================ */
+:root{
+    --bg-dark:#050a15;
+    --bg-darker:#03060d;
+    --bg-panel:#0a1424;
+    --bg-panel-2:#0d1a30;
+    --primary:#00e5ff;
+    --primary-glow:rgba(0,229,255,.55);
+    --primary-soft:rgba(0,229,255,.10);
+    --accent-ok:#2bffb0;
+    --accent-warn:#ffc247;
+    --text:#eaf6ff;
+    --text-dim:#8496b0;
+    --border-glass:rgba(0,229,255,.16);
+    --glass-blur:blur(14px);
+    --radius-lg:22px;
+    --radius-md:14px;
+    --shadow-neon:0 0 0 1px rgba(0,229,255,.08),0 20px 60px -20px rgba(0,229,255,.25);
+    --transition:.25s cubic-bezier(.4,0,.2,1);
+}
 
-    .apk-hero {
-        max-width: 900px;
-        margin: 40px auto 0;
-        padding: 0 20px;
-        text-align: center;
-    }
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+    margin:0;
+    background:var(--bg-dark);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none;}
+:focus-visible{outline:2px solid var(--primary);outline-offset:3px;border-radius:4px;}
 
-    .apk-hero .eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        font-family: 'Orbitron', sans-serif;
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        color: var(--primary);
-        background: var(--primary-soft);
-        border: 1px solid var(--border-glass);
-        padding: 6px 16px;
-        border-radius: 999px;
-        margin-bottom: 20px;
-    }
+.container{max-width:1100px;margin:0 auto;padding:0 20px;}
+.text-gradient{
+    background:linear-gradient(120deg,var(--text) 10%,var(--primary) 60%,var(--accent-ok) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+}
 
-    .apk-hero .eyebrow i { font-size: 10px; }
+/* ---------- Ambient background: HUD grid + drifting glow ---------- */
+.bg-grid{
+    position:fixed;inset:0;z-index:-2;
+    background-image:
+        linear-gradient(rgba(0,229,255,.05) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(0,229,255,.05) 1px,transparent 1px);
+    background-size:42px 42px;
+    mask-image:radial-gradient(ellipse 80% 55% at 50% 0%,#000 40%,transparent 85%);
+}
+.bg-glow{
+    position:fixed;top:-200px;left:50%;transform:translateX(-50%);
+    width:900px;height:600px;z-index:-1;
+    background:radial-gradient(closest-side,rgba(0,229,255,.16),transparent 70%);
+    filter:blur(10px);
+}
 
-    .apk-hero h1 {
-        font-family: 'Orbitron', sans-serif;
-        font-size: clamp(28px, 5vw, 46px);
-        font-weight: 900;
-        line-height: 1.15;
-        margin-bottom: 16px;
-    }
+/* ---------- Download progress readout (signature element) ---------- */
+#scroll-readout{
+    position:fixed;top:0;left:0;right:0;z-index:1001;
+    height:3px;background:rgba(255,255,255,.05);
+}
+#scroll-readout-fill{
+    height:100%;width:0%;
+    background:linear-gradient(90deg,var(--primary),var(--accent-ok));
+    box-shadow:0 0 12px var(--primary-glow);
+    transition:width .08s linear;
+}
+#scroll-readout-label{
+    position:fixed;top:8px;right:16px;z-index:1001;
+    font-family:'JetBrains Mono',monospace;
+    font-size:10px;letter-spacing:1px;
+    color:var(--primary);
+    background:rgba(5,10,21,.7);
+    border:1px solid var(--border-glass);
+    padding:3px 8px;border-radius:6px;
+    backdrop-filter:var(--glass-blur);
+    opacity:0;transition:opacity .3s ease;
+    pointer-events:none;
+}
+#scroll-readout-label.visible{opacity:1;}
 
-    .apk-hero p.subtitle {
-        color: var(--text-dim);
-        font-size: 16px;
-        max-width: 560px;
-        margin: 0 auto 32px;
-    }
+/* ---------- NAVBAR (sticky + auto-hide) ---------- */
+.navbar{
+    position:sticky;top:0;z-index:1000;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 24px;
+    background:rgba(5,10,21,.55);
+    border-bottom:1px solid transparent;
+    backdrop-filter:var(--glass-blur);
+    transition:transform .35s ease, background .35s ease, border-color .35s ease, padding .35s ease, box-shadow .35s ease;
+}
+.navbar.scrolled{
+    background:rgba(5,10,21,.85);
+    border-bottom-color:var(--border-glass);
+    box-shadow:0 10px 30px -12px rgba(0,0,0,.6);
+    padding:10px 24px;
+}
+.navbar.hide-nav{transform:translateY(-100%);}
+.nav-brand img{height:34px;display:block;transition:height .35s ease;}
+.navbar.scrolled .nav-brand img{height:28px;}
+.nav-links{display:flex;align-items:center;gap:26px;font-size:13.5px;font-weight:500;}
+.nav-links a{color:var(--text-dim);position:relative;padding:4px 0;transition:color var(--transition);}
+.nav-links a:hover{color:var(--text);}
+.nav-links a.active{color:var(--primary);}
+.nav-links a.active::after{
+    content:'';position:absolute;left:0;right:0;bottom:-4px;height:2px;
+    background:var(--primary);box-shadow:0 0 8px var(--primary-glow);border-radius:2px;
+}
+.nav-links a.btn{
+    color:var(--bg-dark);background:var(--primary);
+    padding:8px 18px;border-radius:999px;font-weight:700;
+}
+@media (max-width:820px){ .nav-links{display:none;} }
 
-    /* Cartão principal de download */
-    .apk-card {
-        max-width: 620px;
-        margin: 0 auto 60px;
-        background: var(--bg-card);
-        border: 1px solid var(--border-glass);
-        backdrop-filter: var(--glass-blur);
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-neon);
-        padding: 36px;
-        display: flex;
-        align-items: center;
-        gap: 24px;
-        text-align: left;
-    }
+/* ---------- In-page scroll-spy pills ---------- */
+.spy-bar{
+    position:sticky;top:0;z-index:900;
+    display:flex;justify-content:center;gap:8px;
+    padding:12px 20px;
+    margin-top:-1px;
+    background:rgba(5,10,21,.4);
+    backdrop-filter:var(--glass-blur);
+    border-bottom:1px solid var(--border-glass);
+    flex-wrap:wrap;
+}
+.spy-bar a{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;letter-spacing:.5px;
+    color:var(--text-dim);
+    border:1px solid var(--border-glass);
+    padding:6px 14px;border-radius:999px;
+    transition:var(--transition);
+    display:flex;align-items:center;gap:6px;
+}
+.spy-bar a .dot{width:5px;height:5px;border-radius:50%;background:var(--text-dim);transition:var(--transition);}
+.spy-bar a:hover{color:var(--text);border-color:var(--primary);}
+.spy-bar a.active{color:var(--primary);border-color:var(--primary);background:var(--primary-soft);}
+.spy-bar a.active .dot{background:var(--primary);box-shadow:0 0 6px var(--primary-glow);}
 
-    .apk-icon {
-        flex-shrink: 0;
-        width: 76px;
-        height: 76px;
-        border-radius: var(--radius-md);
-        background: linear-gradient(145deg, var(--primary-soft), rgba(0, 224, 255, 0.02));
-        border: 1px solid var(--border-glass);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 32px;
-        color: var(--primary);
-        filter: drop-shadow(0 0 10px var(--primary-glow));
-    }
+/* ---------- HERO ---------- */
+.apk-hero{
+    max-width:900px;margin:64px auto 0;padding:0 20px;text-align:center;
+    scroll-margin-top:120px;
+}
+.apk-hero .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;
+    letter-spacing:2px;text-transform:uppercase;color:var(--primary);
+    background:var(--primary-soft);border:1px solid var(--border-glass);
+    padding:6px 16px;border-radius:999px;margin-bottom:22px;
+}
+.apk-hero .eyebrow i{font-size:10px;}
+.apk-hero h1{
+    font-family:'Orbitron',sans-serif;font-size:clamp(30px,5.4vw,50px);
+    font-weight:900;line-height:1.14;margin-bottom:18px;letter-spacing:.5px;
+}
+.apk-hero p.subtitle{
+    color:var(--text-dim);font-size:16px;max-width:560px;margin:0 auto 8px;
+}
+.hero-stats{
+    display:flex;justify-content:center;gap:34px;margin:34px 0 8px;
+    font-family:'JetBrains Mono',monospace;
+}
+.hero-stats div{text-align:center;}
+.hero-stats strong{display:block;font-size:20px;color:var(--primary);}
+.hero-stats span{font-size:10px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;}
 
-    .apk-info { flex: 1; }
+/* ---------- APK CARD ---------- */
+.apk-card{
+    max-width:620px;margin:52px auto 20px;position:relative;
+    background:linear-gradient(160deg,var(--bg-panel),var(--bg-panel-2));
+    border:1px solid var(--border-glass);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-neon);
+    padding:38px;
+    display:flex;align-items:center;gap:26px;text-align:left;
+    overflow:hidden;
+    scroll-margin-top:140px;
+}
+.apk-card::before{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(115deg,transparent 40%,rgba(0,229,255,.06) 50%,transparent 60%);
+    background-size:250% 250%;
+    animation:sheen 7s ease-in-out infinite;
+    pointer-events:none;
+}
+@keyframes sheen{
+    0%,100%{background-position:200% 0%;}
+    50%{background-position:0% 0%;}
+}
+.apk-icon{
+    flex-shrink:0;width:80px;height:80px;border-radius:var(--radius-md);
+    background:radial-gradient(circle at 30% 30%,var(--primary-soft),rgba(0,229,255,.02));
+    border:1px solid var(--border-glass);
+    display:flex;align-items:center;justify-content:center;
+    font-size:34px;color:var(--primary);
+    filter:drop-shadow(0 0 12px var(--primary-glow));
+    position:relative;
+}
+.apk-icon::after{
+    content:'';position:absolute;inset:-1px;border-radius:inherit;
+    border:1px solid var(--primary);opacity:.35;
+    animation:pulse-ring 2.6s ease-out infinite;
+}
+@keyframes pulse-ring{
+    0%{transform:scale(1);opacity:.45;}
+    100%{transform:scale(1.35);opacity:0;}
+}
+.apk-info{flex:1;position:relative;z-index:1;}
+.apk-info h3{font-family:'Orbitron',sans-serif;font-size:19px;margin-bottom:8px;}
+.apk-meta{
+    display:flex;flex-wrap:wrap;gap:14px;color:var(--text-dim);
+    font-size:11.5px;font-family:'JetBrains Mono',monospace;margin-bottom:20px;
+}
+.apk-meta span{display:flex;align-items:center;gap:6px;}
+.apk-meta i{color:var(--primary);font-size:12px;}
 
-    .apk-info h3 {
-        font-family: 'Orbitron', sans-serif;
-        font-size: 18px;
-        margin-bottom: 6px;
-    }
+.btn{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:'Orbitron',sans-serif;font-weight:700;font-size:13px;
+    letter-spacing:.5px;
+    color:var(--bg-dark);background:var(--primary);
+    border:none;border-radius:999px;
+    padding:14px 22px;cursor:pointer;
+    transition:transform var(--transition), box-shadow var(--transition), background var(--transition);
+    position:relative;overflow:hidden;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px -10px var(--primary-glow);}
+.apk-card .btn{width:100%;justify-content:center;position:relative;z-index:1;}
+.btn .progress-fill{
+    position:absolute;inset:0;left:0;width:0%;
+    background:rgba(5,10,21,.28);
+    transition:width .05s linear;
+}
+.btn span.btn-label{position:relative;z-index:1;display:flex;align-items:center;gap:10px;}
 
-    .apk-meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 14px;
-        color: var(--text-dim);
-        font-size: 12px;
-        margin-bottom: 18px;
-    }
+/* ---------- STEPS (timeline — sequência real, numeração se justifica) ---------- */
+.steps{max-width:620px;margin:70px auto 60px;position:relative;scroll-margin-top:140px;}
+.steps h2{font-family:'Orbitron',sans-serif;font-size:21px;text-align:center;margin-bottom:36px;letter-spacing:.5px;}
+.steps-track{position:relative;display:grid;gap:16px;}
+.steps-track::before{
+    content:'';position:absolute;left:15px;top:8px;bottom:8px;width:1px;
+    background:linear-gradient(var(--primary),transparent 96%);
+    opacity:.3;
+}
+.step-item{
+    display:flex;align-items:flex-start;gap:18px;
+    background:var(--bg-panel);
+    border:1px solid var(--border-glass);
+    border-radius:var(--radius-md);
+    padding:18px 20px;
+    transition:var(--transition);
+    position:relative;
+    opacity:0;transform:translateY(14px);
+}
+.step-item.in-view{opacity:1;transform:translateY(0);}
+.step-item:hover{border-color:var(--primary);box-shadow:var(--shadow-neon);}
+.step-num{
+    font-family:'Orbitron',sans-serif;font-weight:900;font-size:14px;
+    color:var(--bg-dark);background:var(--primary);
+    width:31px;height:31px;min-width:31px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 4px var(--bg-dark);
+    z-index:1;
+}
+.step-text h4{font-size:14.5px;margin-bottom:4px;}
+.step-text p{color:var(--text-dim);font-size:13px;line-height:1.5;}
 
-    .apk-meta span { display: flex; align-items: center; gap: 6px; }
-    .apk-meta i { color: var(--primary); font-size: 12px; }
+/* ---------- NOTE ---------- */
+.apk-note{
+    max-width:620px;margin:0 auto 80px;display:flex;gap:12px;align-items:flex-start;
+    background:rgba(255,194,71,.06);border:1px solid rgba(255,194,71,.22);
+    border-radius:var(--radius-md);padding:18px 20px;font-size:13px;color:var(--text-dim);
+    scroll-margin-top:140px;
+}
+.apk-note i{color:var(--accent-warn);font-size:16px;margin-top:2px;}
 
-    .apk-card .btn {
-        width: 100%;
-        justify-content: center;
-        font-size: 13px;
-        padding: 14px 22px;
-    }
+/* ---------- APP FOOTER (mobile) ---------- */
+.app-footer{
+    position:fixed;bottom:0;left:0;right:0;z-index:1000;
+    display:flex;justify-content:space-around;align-items:center;
+    background:rgba(5,10,21,.9);
+    border-top:1px solid var(--border-glass);
+    backdrop-filter:var(--glass-blur);
+    padding:10px 0 calc(10px + env(safe-area-inset-bottom));
+}
+.app-footer a{
+    display:flex;flex-direction:column;align-items:center;gap:3px;
+    color:var(--text-dim);font-size:10px;transition:color var(--transition);
+}
+.app-footer a i{font-size:16px;}
+.app-footer a.active{color:var(--primary);}
 
-    /* Passo a passo de instalação */
-    .steps {
-        max-width: 620px;
-        margin: 0 auto 80px;
-        display: grid;
-        gap: 14px;
-    }
+@media (max-width:600px){
+    .apk-card{flex-direction:column;text-align:center;padding:28px 22px;}
+    .apk-meta{justify-content:center;}
+    .hero-stats{gap:22px;}
+    main{padding-bottom:70px;}
+}
 
-    .steps h2 {
-        font-family: 'Orbitron', sans-serif;
-        font-size: 20px;
-        text-align: center;
-        margin-bottom: 22px;
-    }
-
-    .step-item {
-        display: flex;
-        align-items: flex-start;
-        gap: 16px;
-        background: var(--bg-card);
-        border: 1px solid var(--border-glass);
-        border-radius: var(--radius-md);
-        padding: 18px 20px;
-        transition: var(--transition);
-    }
-
-    .step-item:hover {
-        border-color: var(--primary);
-        box-shadow: var(--shadow-neon);
-    }
-
-    .step-num {
-        font-family: 'Orbitron', sans-serif;
-        font-weight: 900;
-        font-size: 15px;
-        color: var(--bg-dark);
-        background: var(--primary);
-        width: 30px;
-        height: 30px;
-        min-width: 30px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .step-text h4 {
-        font-size: 14px;
-        margin-bottom: 4px;
-    }
-
-    .step-text p {
-        color: var(--text-dim);
-        font-size: 13px;
-    }
-
-    .apk-note {
-        max-width: 620px;
-        margin: 0 auto 60px;
-        display: flex;
-        gap: 12px;
-        align-items: flex-start;
-        background: rgba(255, 200, 0, 0.06);
-        border: 1px solid rgba(255, 200, 0, 0.2);
-        border-radius: var(--radius-md);
-        padding: 16px 18px;
-        font-size: 13px;
-        color: var(--text-dim);
-    }
-
-    .apk-note i { color: #ffc800; font-size: 16px; margin-top: 2px; }
-
-    @media (max-width: 600px) {
-        .apk-card {
-            flex-direction: column;
-            text-align: center;
-            padding: 28px 22px;
-        }
-        .apk-meta { justify-content: center; }
-    }
+@media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .apk-card::before,.apk-icon::after{animation:none;}
+    .step-item{opacity:1;transform:none;}
+}
 </style>
 </head>
 <body>
 
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<div id="scroll-readout"><div id="scroll-readout-fill"></div></div>
+<div id="scroll-readout-label">0% LIDO</div>
+
 <!-- ===============================
-     NAVBAR
+     NAVBAR (sticky)
 ================================ -->
-<nav class="navbar">
+<nav class="navbar" id="navbar">
     <div class="nav-brand">
         <a href="/">
             <img src="/logo.png" alt="Mindset Elite Logo">
@@ -222,17 +352,32 @@
 </nav>
 
 <!-- ===============================
+     SCROLL SPY (seções desta página)
+================================ -->
+<div class="spy-bar" id="spy-bar">
+    <a href="#visao-geral" data-target="visao-geral"><span class="dot"></span>Visão geral</a>
+    <a href="#download" data-target="download"><span class="dot"></span>Download</a>
+    <a href="#instalacao" data-target="instalacao"><span class="dot"></span>Instalação</a>
+    <a href="#aviso" data-target="aviso"><span class="dot"></span>Aviso</a>
+</div>
+
+<!-- ===============================
      CONTEÚDO
 ================================ -->
 <main class="container">
 
-    <section class="apk-hero">
+    <section class="apk-hero" id="visao-geral">
         <span class="eyebrow"><i class="fa-solid fa-bolt"></i> Acesso rápido pelo app</span>
         <h1 class="text-gradient">Leve o Mindset Elite<br>no seu bolso</h1>
         <p class="subtitle">Baixe o aplicativo oficial e tenha acesso aos treinos, vídeos e conteúdos exclusivos direto do seu celular, sem depender do navegador.</p>
+        <div class="hero-stats">
+            <div><strong>v1.0.0</strong><span>Versão</span></div>
+            <div><strong>~25 MB</strong><span>Tamanho</span></div>
+            <div><strong>8.0+</strong><span>Android</span></div>
+        </div>
     </section>
 
-    <section class="apk-card">
+    <section class="apk-card" id="download">
         <div class="apk-icon"><i class="fa-brands fa-android"></i></div>
         <div class="apk-info">
             <h3>Mindset Elite <span style="color:var(--text-dim); font-weight:400;">.apk</span></h3>
@@ -241,49 +386,51 @@
                 <span><i class="fa-solid fa-hard-drive"></i> ~25 MB</span>
                 <span><i class="fa-solid fa-mobile-screen"></i> Android 8.0+</span>
             </div>
-            <a href="#" id="apk-download-link" class="btn" download>
-                <i class="fa-solid fa-download"></i> Baixar APK agora
-            </a>
+            <button type="button" id="apk-download-link" class="btn">
+                <span class="progress-fill" id="progress-fill"></span>
+                <span class="btn-label" id="btn-label"><i class="fa-solid fa-download"></i> Baixar APK agora</span>
+            </button>
         </div>
     </section>
 
-    <section class="steps">
+    <section class="steps" id="instalacao">
         <h2>Como instalar</h2>
-
-        <div class="step-item">
-            <div class="step-num">1</div>
-            <div class="step-text">
-                <h4>Baixe o arquivo .apk</h4>
-                <p>Toque no botão acima para iniciar o download direto no seu celular.</p>
+        <div class="steps-track">
+            <div class="step-item">
+                <div class="step-num">1</div>
+                <div class="step-text">
+                    <h4>Baixe o arquivo .apk</h4>
+                    <p>Toque no botão acima para iniciar o download direto no seu celular.</p>
+                </div>
             </div>
-        </div>
 
-        <div class="step-item">
-            <div class="step-num">2</div>
-            <div class="step-text">
-                <h4>Permita instalação de fontes desconhecidas</h4>
-                <p>O Android vai pedir permissão. Vá em Configurações e libere a instalação para o app usado no download.</p>
+            <div class="step-item">
+                <div class="step-num">2</div>
+                <div class="step-text">
+                    <h4>Permita instalação de fontes desconhecidas</h4>
+                    <p>O Android vai pedir permissão. Vá em Configurações e libere a instalação para o app usado no download.</p>
+                </div>
             </div>
-        </div>
 
-        <div class="step-item">
-            <div class="step-num">3</div>
-            <div class="step-text">
-                <h4>Abra o arquivo baixado</h4>
-                <p>Toque no arquivo .apk na sua lista de downloads e confirme a instalação.</p>
+            <div class="step-item">
+                <div class="step-num">3</div>
+                <div class="step-text">
+                    <h4>Abra o arquivo baixado</h4>
+                    <p>Toque no arquivo .apk na sua lista de downloads e confirme a instalação.</p>
+                </div>
             </div>
-        </div>
 
-        <div class="step-item">
-            <div class="step-num">4</div>
-            <div class="step-text">
-                <h4>Pronto!</h4>
-                <p>Abra o app Mindset Elite e faça login com seus dados de acesso.</p>
+            <div class="step-item">
+                <div class="step-num">4</div>
+                <div class="step-text">
+                    <h4>Pronto!</h4>
+                    <p>Abra o app Mindset Elite e faça login com seus dados de acesso.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <div class="apk-note">
+    <div class="apk-note" id="aviso">
         <i class="fa-solid fa-triangle-exclamation"></i>
         <span>O Android pode exibir um aviso padrão de segurança por o app não estar na Play Store. Isso é normal — o arquivo é seguro e distribuído oficialmente pela Mindset Elite.</span>
     </div>
@@ -302,8 +449,104 @@
 </footer>
 
 <script>
+(function(){
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---------- Sticky navbar: shrink + auto-hide on scroll ---------- */
+    var navbar = document.getElementById('navbar');
+    var lastY = window.scrollY;
+    window.addEventListener('scroll', function(){
+        var y = window.scrollY;
+        navbar.classList.toggle('scrolled', y > 30);
+        if (!reduceMotion) {
+            if (y > lastY && y > 140) navbar.classList.add('hide-nav');
+            else navbar.classList.remove('hide-nav');
+        }
+        lastY = y;
+    }, { passive: true });
+
+    /* ---------- Scroll readout (progresso de leitura da página) ---------- */
+    var fill = document.getElementById('scroll-readout-fill');
+    var label = document.getElementById('scroll-readout-label');
+    var labelTimeout;
+    function updateReadout(){
+        var h = document.documentElement;
+        var scrolled = h.scrollTop;
+        var max = h.scrollHeight - h.clientHeight;
+        var pct = max > 0 ? Math.min(100, Math.round((scrolled / max) * 100)) : 0;
+        fill.style.width = pct + '%';
+        label.textContent = pct + '% LIDO';
+        label.classList.add('visible');
+        clearTimeout(labelTimeout);
+        labelTimeout = setTimeout(function(){ label.classList.remove('visible'); }, 900);
+    }
+    window.addEventListener('scroll', updateReadout, { passive: true });
+    updateReadout();
+
+    /* ---------- Scroll spy ---------- */
+    var spyLinks = Array.prototype.slice.call(document.querySelectorAll('.spy-bar a'));
+    var sections = spyLinks.map(function(a){ return document.getElementById(a.dataset.target); });
+    var spyObserver = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry){
+            var link = spyLinks.find(function(a){ return a.dataset.target === entry.target.id; });
+            if (!link) return;
+            if (entry.isIntersecting) {
+                spyLinks.forEach(function(l){ l.classList.remove('active'); });
+                link.classList.add('active');
+            }
+        });
+    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+    sections.forEach(function(s){ if (s) spyObserver.observe(s); });
+
+    /* ---------- Reveal steps on scroll ---------- */
+    var stepObserver = new IntersectionObserver(function(entries){
+        entries.forEach(function(entry, i){
+            if (entry.isIntersecting) {
+                setTimeout(function(){ entry.target.classList.add('in-view'); }, i * 60);
+                stepObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
+    document.querySelectorAll('.step-item').forEach(function(el){ stepObserver.observe(el); });
+    if (reduceMotion) document.querySelectorAll('.step-item').forEach(function(el){ el.classList.add('in-view'); });
+
+    /* ---------- Download button: progresso simulado antes do download real ---------- */
     // Troque a URL abaixo pelo link real do seu arquivo .apk
-    document.getElementById('apk-download-link').href = "mindset-elite.apk";
+    var APK_URL = "mindset-elite.apk";
+    var downloadBtn = document.getElementById('apk-download-link');
+    var progressFill = document.getElementById('progress-fill');
+    var btnLabel = document.getElementById('btn-label');
+    var downloading = false;
+
+    downloadBtn.addEventListener('click', function(){
+        if (downloading) return;
+        downloading = true;
+        var pct = 0;
+        btnLabel.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Preparando download…';
+        var interval = setInterval(function(){
+            pct += Math.random() * 18 + 8;
+            if (pct >= 100) {
+                pct = 100;
+                clearInterval(interval);
+                progressFill.style.width = '100%';
+                btnLabel.innerHTML = '<i class="fa-solid fa-check"></i> Iniciando…';
+                setTimeout(function(){
+                    var a = document.createElement('a');
+                    a.href = APK_URL;
+                    a.download = '';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    progressFill.style.width = '0%';
+                    btnLabel.innerHTML = '<i class="fa-solid fa-download"></i> Baixar APK agora';
+                    downloading = false;
+                }, 350);
+                return;
+            }
+            progressFill.style.width = pct + '%';
+        }, 140);
+    });
+})();
 </script>
 
 </body>
