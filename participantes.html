@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Membros • Mindset Elite</title>
+    <title>Participantes • Mindset Elite</title>
 
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#050a15">
@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    
+
     <link rel="stylesheet" href="/global.css">
 
     <style>
@@ -20,19 +20,26 @@
             --primary: #00e0ff;
             --primary-glow: rgba(0, 224, 255, 0.4);
             --primary-soft: rgba(0, 224, 255, 0.08);
+            --accent: #7c5cff;
             --bg-card: rgba(15, 23, 42, 0.7);
             --border-glass: rgba(255, 255, 255, 0.1);
             --glass-blur: blur(16px);
             --radius-lg: 24px;
             --radius-md: 16px;
             --radius-sm: 10px;
-            --transition: all 0.3s ease-in-out;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --shadow-neon: 0 20px 40px -15px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
             --text-dim: #94a3b8;
         }
 
+        * { box-sizing: border-box; }
+
+        ::selection { background: var(--primary); color: #050a15; }
+
         body {
-            background: radial-gradient(circle at 50% 30%, #0d162a, #050914);
+            background:
+                radial-gradient(circle at 50% 0%, rgba(0, 224, 255, 0.06), transparent 55%),
+                radial-gradient(circle at 50% 30%, #0d162a, #050914);
             background-attachment: fixed;
             font-family: 'Inter', sans-serif;
             color: #ffffff;
@@ -40,6 +47,27 @@
             min-height: 100vh;
             padding-top: 140px;
             padding-bottom: 120px;
+            position: relative;
+        }
+
+        /* Textura sutil de grade — reforça a identidade "elite/tech" sem pesar */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+            background-size: 42px 42px;
+            mask-image: radial-gradient(circle at 50% 20%, black, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 3px;
+            border-radius: 4px;
         }
 
         /* Premium Navigation */
@@ -48,7 +76,7 @@
             justify-content: space-between;
             align-items: center;
             padding: 24px 50px;
-            background: rgba(5, 10, 21, 0.6);
+            background: rgba(5, 10, 21, 0.55);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             position: fixed;
@@ -59,11 +87,20 @@
             transition: var(--transition);
         }
 
+        .navbar.scrolled {
+            padding: 14px 50px;
+            background: rgba(5, 10, 21, 0.92);
+            border-bottom-color: rgba(0, 224, 255, 0.12);
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+        }
+
         .nav-brand img {
             height: 35px;
             filter: drop-shadow(0 0 10px rgba(0, 224, 255, 0.4));
             transition: var(--transition);
         }
+
+        .navbar.scrolled .nav-brand img { height: 28px; }
 
         .nav-brand img:hover {
             transform: scale(1.02);
@@ -77,6 +114,7 @@
         }
 
         .nav-links a {
+            position: relative;
             color: #a0aec0;
             text-decoration: none;
             font-size: 13px;
@@ -88,11 +126,27 @@
             border-radius: var(--radius-sm);
         }
 
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            left: 16px;
+            right: 16px;
+            bottom: 2px;
+            height: 2px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition);
+            box-shadow: 0 0 8px var(--primary-glow);
+        }
+
         .nav-links a:hover, .nav-links a.active {
             color: var(--primary);
             background: var(--primary-soft);
             text-shadow: 0 0 8px rgba(0, 224, 255, 0.4);
         }
+
+        .nav-links a.active::after { transform: scaleX(1); }
 
         .nav-links .btn {
             background: var(--primary);
@@ -104,7 +158,10 @@
             box-shadow: 0 4px 15px rgba(0, 224, 255, 0.2);
             text-shadow: none;
             text-decoration: none;
+            transition: var(--transition);
         }
+
+        .nav-links .btn::after { display: none; }
 
         .nav-links .btn:hover {
             filter: brightness(1.15);
@@ -113,29 +170,31 @@
         }
 
         .container {
-            max-width: 1100px;
-            margin: auto;
-            padding: 0 20px;
+            padding-top: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-bottom: 120px;
+            padding-left: 20px;
+            padding-right: 20px;
+            position: relative;
+            z-index: 1;
         }
 
-        .page-header { 
-            text-align: center; 
-            margin-bottom: 60px; 
-        }
+        .page-header { text-align: center; margin-bottom: 40px; }
 
-        .page-header h1 { 
-            font-family: 'Orbitron', sans-serif; 
-            margin-bottom: 15px; 
+        .page-header h1 {
+            font-family: 'Orbitron', sans-serif;
+            margin-bottom: 15px;
             font-size: 2.5rem;
             background: linear-gradient(90deg, #ffffff, var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .page-header p { 
-            letter-spacing: 3px; 
-            font-size: 11px; 
-            font-weight: 700; 
+        .page-header p {
+            letter-spacing: 4px;
+            font-size: 11px;
+            font-weight: 700;
             color: var(--text-dim);
             background: rgba(255, 255, 255, 0.03);
             display: inline-block;
@@ -144,109 +203,189 @@
             border: 1px solid var(--border-glass);
         }
 
-        /* GRID DE MEMBROS */
-        .membros-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            padding: 0 10px;
-        }
-
-        .membro-card {
+        /* VAGAS COUNTER */
+        .vagas-banner {
             background: var(--bg-card);
-            border: 1px solid var(--border-glass);
+            border: 1px dashed var(--primary);
+            padding: 30px;
             border-radius: var(--radius-lg);
-            padding: 45px 30px;
             text-align: center;
-            transition: var(--transition);
+            margin-bottom: 40px;
+            font-family: 'Orbitron', sans-serif;
             backdrop-filter: var(--glass-blur);
+            margin-left: 15px;
+            margin-right: 15px;
+            box-shadow: 0 0 20px rgba(0, 224, 255, 0.1);
+            transition: var(--transition);
             position: relative;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: slideUp 0.6s forwards;
         }
 
-        @keyframes slideUp {
+        .vagas-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 224, 255, 0.08), transparent 30%);
+            animation: rotate-glow 8s linear infinite;
+        }
+
+        @keyframes rotate-glow { to { transform: rotate(360deg); } }
+
+        .vagas-banner:hover {
+            box-shadow: 0 0 30px var(--primary-glow);
+            border-color: var(--primary);
+        }
+
+        .vagas-number {
+            font-size: clamp(32px, 8vw, 48px);
+            color: var(--primary);
+            font-weight: 900;
+            display: block;
+            line-height: 1;
+            margin-bottom: 12px;
+            text-shadow: 0 0 15px var(--primary-glow);
+            position: relative;
+        }
+
+        .vagas-label {
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            font-weight: 700;
+            position: relative;
+        }
+
+        /* LISTA DE PARTICIPANTES */
+        .participants-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 0 15px;
+        }
+
+        .participant-row {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            padding: 20px 28px;
+            border-radius: var(--radius-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: var(--glass-blur);
+            opacity: 0;
+            transform: translateY(14px);
+            animation: row-in 0.5s ease forwards;
+        }
+
+        @keyframes row-in {
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .membro-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--primary);
-            box-shadow: var(--shadow-neon);
-        }
-
-        /* Detalhe Superior */
-        .membro-card::before {
+        .participant-row::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 3px;
-            background: var(--primary);
-            opacity: 0.3;
-            transition: 0.3s;
-        }
-
-        .membro-card:hover::before { opacity: 1; box-shadow: 0 0 15px var(--primary-glow); }
-
-        .membro-img-wrapper {
-            position: relative;
-            margin-bottom: 25px;
-        }
-
-        .membro-img {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            border: 2px solid var(--primary-soft);
-            object-fit: cover;
-            padding: 5px;
-            background: #050914;
+            left: 0; top: 0;
+            height: 100%; width: 4px;
+            background: transparent;
             transition: var(--transition);
         }
 
-        .membro-card:hover .membro-img {
-            border-color: var(--primary);
-            box-shadow: 0 0 25px var(--primary-glow);
-            transform: scale(1.05);
+        .participant-row:hover {
+            background: rgba(255, 255, 255, 0.03);
+            transform: translateX(5px);
+            border-color: rgba(0, 224, 255, 0.3);
+            box-shadow: var(--shadow-neon);
         }
 
-        .membro-nome {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 19px;
+        .p-name {
+            font-weight: 600;
+            font-size: 15px;
             color: #fff;
-            margin-bottom: 8px;
-            font-weight: 700;
-            text-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 14px;
         }
 
-        .membro-cargo {
-            font-size: 10px;
-            text-transform: uppercase;
+        .p-name i {
             color: var(--primary);
+            font-size: 16px;
+            filter: drop-shadow(0 0 4px var(--primary-glow));
+        }
+
+        /* AVATARES DOS PARTICIPANTES */
+        .p-avatar-wrap {
+            position: relative;
+            flex-shrink: 0;
+            width: 38px;
+            height: 38px;
+        }
+
+        .p-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-soft);
+            transition: var(--transition);
+            display: block;
+        }
+
+        .participant-row:hover .p-avatar {
+            border-color: var(--primary);
+            box-shadow: 0 0 12px var(--primary-glow);
+        }
+
+        .p-avatar-fallback {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--primary-soft);
+            color: var(--primary);
+            font-family: 'Orbitron', sans-serif;
             font-weight: 900;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
+            font-size: 14px;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--border-glass);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .participant-row:hover .p-avatar-fallback {
+            border-color: var(--primary);
+            box-shadow: 0 0 12px var(--primary-glow);
+        }
+
+        /* STATUS BADGES */
+        .status {
             padding: 6px 14px;
-            background: rgba(0, 224, 255, 0.06);
-            border-radius: 20px;
-            border: 1px solid rgba(0, 224, 255, 0.1);
+            border-radius: 8px;
+            font-size: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
         }
 
-        .membro-bio {
-            font-size: 13.5px;
-            color: var(--text-dim);
-            line-height: 1.7;
-            max-width: 260px;
-        }
+        .row-confirmado::before { background: #00ffaa; box-shadow: 0 0 10px #00ffaa; }
+        .status.confirmado { background: rgba(0, 255, 170, 0.1); color: #00ffaa; border: 1px solid rgba(0, 255, 170, 0.2); }
 
-        /* DELAY NAS ANIMAÇÕES */
-        .membro-card:nth-child(1) { animation-delay: 0.1s; }
-        .membro-card:nth-child(2) { animation-delay: 0.2s; }
-        .membro-card:nth-child(3) { animation-delay: 0.3s; }
+        .row-indefinido::before { background: #ffcc00; box-shadow: 0 0 10px #ffcc00; }
+        .status.indefinido { background: rgba(255, 204, 0, 0.1); color: #ffcc00; border: 1px solid rgba(255, 204, 0, 0.2); }
+
+        .row-nao::before { background: #ff4c4c; }
+        .status.nao { background: rgba(255, 76, 76, 0.1); color: #ff4c4c; border: 1px solid rgba(255, 76, 76, 0.2); opacity: 0.7; }
+
+        @keyframes pulse-vagas {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.03); opacity: 0.85; }
+            100% { transform: scale(1); opacity: 1; }
+        }
 
         /* Premium Footer */
         .app-footer {
@@ -258,7 +397,7 @@
             background: rgba(5, 10, 21, 0.98);
             backdrop-filter: blur(16px);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 12px 20px;
+            padding: 12px 12px;
             justify-content: space-around;
             z-index: 1000;
         }
@@ -269,9 +408,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            font-size: 10px;
+            font-size: 9.5px;
             gap: 6px;
             transition: var(--transition);
+            flex: 1;
         }
 
         .app-footer a.active, .app-footer a:hover {
@@ -279,23 +419,38 @@
         }
 
         .app-footer a i {
-            font-size: 18px;
+            font-size: 17px;
             color: var(--primary);
+            transition: var(--transition);
         }
 
-        @media (max-width: 991px) {
-            .navbar { padding: 20px 30px; }
+        .app-footer a.active i {
+            filter: drop-shadow(0 0 8px var(--primary-glow));
+            transform: translateY(-2px);
+        }
+
+        @media(max-width: 850px) {
+            body { padding-top: 70px; }
+            .navbar { padding: 20px 30px; height: 70px; }
+            .navbar.scrolled { padding: 14px 30px; }
             .nav-links { display: none; }
             .app-footer { display: flex; }
             .container { padding-top: 40px; padding-bottom: 100px; }
-            body { padding-top: 70px; padding-bottom: 0; }
+            .participant-row { padding: 16px 20px; }
+            .p-name { font-size: 14px; gap: 12px; }
             .page-header h1 { font-size: 2rem; }
         }
 
         @media (max-width: 480px) {
-            .membros-grid { grid-template-columns: 1fr; gap: 25px; }
+            .vagas-banner { padding: 20px; }
             .navbar { height: 65px; padding: 0 15px; }
-            .page-header { margin-bottom: 40px; }
+            .page-header { margin-bottom: 30px; }
+            .app-footer a span { font-size: 8.5px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .participant-row { animation: none; opacity: 1; transform: none; }
+            .vagas-banner::before { animation: none; }
         }
 
         /* ============================================================
@@ -337,7 +492,7 @@
             50% { box-shadow: 0 0 32px var(--primary-glow), 0 4px 14px rgba(0,0,0,0.4); }
         }
 
-        @media (max-width: 991px) {
+        @media (max-width: 850px) {
             .apk-float {
                 right: 16px;
                 bottom: 82px;
@@ -610,7 +765,7 @@
 
 <body>
 
-<nav class="navbar">
+<nav class="navbar" id="navbar">
     <div class="nav-brand">
         <a href="/">
             <img src="/logo.png" alt="Mindset Elite Logo">
@@ -618,8 +773,8 @@
     </div>
     <div class="nav-links">
         <a href="/">Início</a>
-        <a href="/membros.html" class="active">Membros</a>
-        <a href="/participantes.html">Participantes</a>
+        <a href="/membros.html">Membros</a>
+        <a href="/participantes.html" class="active">Participantes</a>
         <a href="/videos.html">Vídeos</a>
         <a href="/links.html">Links</a>
         <a href="/baixar-apk.html">Baixar APK</a>
@@ -629,128 +784,138 @@
 
 <div class="container">
     <header class="page-header">
-        <h1 class="text-gradient">Conselho de Elite</h1>
-        <p>LIDERANÇA E ESTRATÉGIA</p>
+        <h1 class="text-gradient">Mindset 2029</h1>
+        <p>LISTA OFICIAL DE CONVOCADOS</p>
     </header>
 
-    <section class="membros-grid">
-        <div class="membro-card">
-            <div class="membro-img-wrapper">
-                <img src="/images/Luqueta.jpg" class="membro-img" alt="Luqueta" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Luqueta&background=050a15&color=00e0ff&size=128'">
-            </div>
-            <div class="membro-nome">Luqueta</div>
-            <span class="membro-cargo">Ancião</span>
-            <p class="membro-bio">Ancião do Mindset.</p>
+    <div class="vagas-banner">
+        <span class="vagas-label">Vagas Estratégicas Disponíveis</span>
+        <span class="vagas-number" id="vagasInfo">--</span>
+    </div>
+
+    <section class="participants-list">
+        <div class="participant-row row-confirmado">
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/Tuzin.jpg" alt="Tuzin" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">T</span>
+                </span>
+                Tuzin
+            </span>
+            <span class="status confirmado">Confirmado</span>
+        </div>
+        <div class="participant-row row-confirmado">
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/Luqueta.jpg" alt="Luqueta" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">L</span>
+                </span>
+                Luqueta
+            </span>
+            <span class="status confirmado">Confirmado</span>
+        </div>
+        <div class="participant-row row-confirmado">
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/Vini.jpg" alt="Vini" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">V</span>
+                </span>
+                Vini
+            </span>
+            <span class="status confirmado">Confirmado</span>
+        </div>
+        <div class="participant-row row-indefinido">
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/THZIN.jpg" alt="THZIN" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">T</span>
+                </span>
+                THZIN
+            </span>
+            <span class="status indefinido">Pendente</span>
+        </div>
+        <div class="participant-row row-confirmado">
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/Danilo.jpg" alt="Danilo" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">D</span>
+                </span>
+                Danilo
+            </span>
+            <span class="status confirmado">Confirmado</span>
+        </div>
+        <div class="participant-row row-nao">
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <span class="p-avatar-fallback" style="display:flex;">E</span>
+                </span>
+                Elizeu
+            </span>
+            <span class="status nao">Ausente</span>
+        </div>
+        <div class="participant-row row-confirmado">
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/misterio.jpg" alt="Mistério" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">M</span>
+                </span>
+                Mistério
+            </span>
+            <span class="status confirmado">Confirmado</span>
+        </div>
+        <div class="participant-row row-confirmado">
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/Pandinha.jpg" alt="Pandinha" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">P</span>
+                </span>
+                Pandinha
+            </span>
+            <span class="status confirmado">Confirmado</span>
+        </div>
+        <div class="participant-row row-confirmado">
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/Daniel.jpg" alt="Daniel Nascimento" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">D</span>
+                </span>
+                Daniel Nascimento
+            </span>
+            <span class="status confirmado">Confirmado</span>
         </div>
 
-        <div class="membro-card">
-            <div class="membro-img-wrapper">
-                <img src="/images/Tuzin.jpg" class="membro-img" alt="Tuzin" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Tuzin&background=050a15&color=00e0ff&size=128'">
-            </div>
-            <div class="membro-nome">Tuzin</div>
-            <span class="membro-cargo">Líder</span>
-            <p class="membro-bio">Líder do Mindset.</p>
+        <div class="participant-row row-confirmado">
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/Caio.jpg" alt="Caio" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">C</span>
+                </span>
+                Caio
+            </span>
+            <span class="status confirmado">Confirmado</span>
         </div>
 
-        <div class="membro-card">
-            <div class="membro-img-wrapper">
-                <img src="/images/misterio.jpg" class="membro-img" alt="Mistério" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Misterio&background=050a15&color=00e0ff&size=128'">
-            </div>
-            <div class="membro-nome">Mistério</div>
-            <span class="membro-cargo">Membro</span>
-            <p class="membro-bio">Membro do Mindset.</p>
-        </div>
-
-        <div class="membro-card">
-            <div class="membro-img-wrapper">
-                <img src="/images/Vini.jpg" class="membro-img" alt="Vini" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Vini&background=050a15&color=00e0ff&size=128'">
-            </div>
-            <div class="membro-nome">Vini</div>
-            <span class="membro-cargo">Membro</span>
-            <p class="membro-bio">Membro do Mindset.</p>
-        </div>
-
-        <div class="membro-card">
-            <div class="membro-img-wrapper">
-                <img src="/images/leandro.jpg" class="membro-img" alt="Leandro" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Leandro&background=050a15&color=00e0ff&size=128'">
-            </div>
-            <div class="membro-nome">Leandro</div>
-            <span class="membro-cargo">Ex-Membro</span>
-            <p class="membro-bio">Ex-Membro do Mindset, expulso por votação oficial de 4x1.</p>
-        </div>
-
-        <div class="membro-card">
-            <div class="membro-img-wrapper">
-                <img src="/images/Daniel.jpg" class="membro-img" alt="Daniel Nascimento" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Daniel+Nascimento&background=050a15&color=00e0ff&size=128'">
-            </div>
-            <div class="membro-nome">Daniel Nascimento</div>
-            <span class="membro-cargo">Membro</span>
-            <p class="membro-bio">Membro do Mindset.</p>
-        </div>
-
-        <div class="membro-card">
-            <div class="membro-img-wrapper">
-                <img src="/images/Pandinha.jpg" class="membro-img" alt="Pandinha" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Pandinha&background=050a15&color=00e0ff&size=128'">
-            </div>
-            <div class="membro-nome">Pandinha</div>
-            <span class="membro-cargo">Membro</span>
-            <p class="membro-bio">Membro do Mindset.</p>
-        </div>
-
-        <div class="membro-card">
-            <div class="membro-img-wrapper">
-                <img src="/images/Danilo.jpg" class="membro-img" alt="Danilo" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Danilo&background=050a15&color=00e0ff&size=128'">
-            </div>
-            <div class="membro-nome">Danilo</div>
-            <span class="membro-cargo">Membro</span>
-            <p class="membro-bio">Membro do Mindset.</p>
-        </div>
-
-        <div class="membro-card">
-            <div class="membro-img-wrapper">
-                <img src="/images/Matheus%20Coelho.jpg" class="membro-img" alt="Matheus Coelho" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Matheus+Coelho&background=050a15&color=00e0ff&size=128'">
-            </div>
-            <div class="membro-nome">Matheus Coelho</div>
-            <span class="membro-cargo">Novo Membro</span>
-            <p class="membro-bio">Novo membro nos próximos meses.</p>
-        </div>
-
-        <div class="membro-card">
-            <div class="membro-img-wrapper">
-                <img src="/images/Caio.jpg" class="membro-img" alt="Caio" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Caio&background=050a15&color=00e0ff&size=128'">
-            </div>
-            <div class="membro-nome">Caio 🍷🗿</div>
-            <span class="membro-cargo">Novo Membro</span>
-            <p class="membro-bio">Novo membro do Mindset.</p>
-        </div>
-
-        <div class="membro-card">
-            <div class="membro-img-wrapper">
-                <img src="/images/Victor.jpg" class="membro-img" alt="Victor" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Victor&background=050a15&color=00e0ff&size=128'">
-            </div>
-            <div class="membro-nome">Victor</div>
-            <span class="membro-cargo">Suporte</span>
-            <p class="membro-bio">Suporte oficial do Mindset.</p>
-        </div>
-
-        <div class="membro-card">
-            <div class="membro-img-wrapper">
-                <img src="/images/Dinho%20DK.jpg" class="membro-img" alt="Dinho DK" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Dinho+DK&background=050a15&color=00e0ff&size=128'">
-            </div>
-            <div class="membro-nome">Dinho DK</div>
-            <span class="membro-cargo">Novo Membro</span>
-            <p class="membro-bio">Novo membro do Mindset.</p>
+        <div class="participant-row row-confirmado">
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/Matheus%20Coelho.jpg" alt="Matheus Coelho" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">M</span>
+                </span>
+                Matheus Coelho
+            </span>
+            <span class="status confirmado">Confirmado</span>
         </div>
     </section>
 </div>
 
-<div class="app-footer">
+<footer class="app-footer">
     <a href="/"><i class="fa-solid fa-house"></i><span>Início</span></a>
-    <a href="/membros.html" class="active"><i class="fa-solid fa-crown"></i><span>Membros</span></a>
-    <a href="/participantes.html"><i class="fa-solid fa-users"></i><span>Inscritos</span></a>
+    <a href="/membros.html"><i class="fa-solid fa-crown"></i><span>Membros</span></a>
+    <a href="/participantes.html" class="active"><i class="fa-solid fa-users"></i><span>Inscritos</span></a>
     <a href="/videos.html"><i class="fa-solid fa-play"></i><span>Vídeos</span></a>
+    <a href="/links.html"><i class="fa-solid fa-link"></i><span>Links</span></a>
     <a href="/baixar-apk.html"><i class="fa-solid fa-download"></i><span>APP</span></a>
-</div>
+</footer>
 
 <a href="/baixar-apk.html" class="apk-float">
     <i class="fa-solid fa-download"></i>
@@ -850,13 +1015,56 @@
 </script>
 
 <script>
-    // Stagger na entrada dos cards de membros
-    document.querySelectorAll('.membro-card').forEach((card, i) => {
-        card.style.animationDelay = `${Math.min(i * 0.08, 0.8)}s`;
+    async function carregarVagas() {
+        const display = document.getElementById("vagasInfo");
+        try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 8000);
+
+            // Adicionado bypass para evitar conflitos de cache do Service Worker na API
+            const res = await fetch("https://mindset-elite.onrender.com/vagas?t=" + new Date().getTime(), {
+                method: 'GET',
+                mode: 'cors',
+                signal: controller.signal,
+                cache: "no-store"
+            });
+
+            const data = await res.json();
+            clearTimeout(timeoutId);
+
+            const num = data.vagas ?? 0;
+            display.innerText = num.toString().padStart(2, '0');
+
+            if(num <= 3 && num > 0) {
+                display.style.color = "#ff4c4c";
+                display.style.animation = "pulse-vagas 1.5s infinite";
+            }
+        } catch (error) {
+            console.log("HQ Offline ou Timeout. Usando Backup.");
+            display.innerText = "08";
+            display.style.opacity = "0.8";
+        }
+    }
+    window.addEventListener('load', carregarVagas);
+</script>
+
+<script>
+    // Sticky header com reação ao scroll
+    (function () {
+        const navbar = document.getElementById('navbar');
+        function onScroll() {
+            navbar.classList.toggle('scrolled', window.scrollY > 24);
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+    })();
+
+    // Stagger na entrada das linhas de participantes
+    document.querySelectorAll('.participant-row').forEach((row, i) => {
+        row.style.animationDelay = `${Math.min(i * 0.05, 0.6)}s`;
     });
 </script>
 
 <script src="/layout.v3.js" defer></script>
-
 </body>
 </html>
