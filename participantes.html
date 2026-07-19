@@ -21,6 +21,7 @@
             --primary-glow: rgba(0, 224, 255, 0.4);
             --primary-soft: rgba(0, 224, 255, 0.08);
             --accent: #7c5cff;
+            --gold: #ffd166;
             --bg-card: rgba(15, 23, 42, 0.7);
             --border-glass: rgba(255, 255, 255, 0.1);
             --glass-blur: blur(16px);
@@ -121,7 +122,7 @@
 
         .page-header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 36px;
         }
 
         .page-header h1 {
@@ -149,10 +150,10 @@
         .vagas-banner {
             background: var(--bg-card);
             border: 1px dashed var(--primary);
-            padding: 30px;
+            padding: 28px;
             border-radius: var(--radius-lg);
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 24px;
             font-family: 'Orbitron', sans-serif;
             backdrop-filter: var(--glass-blur);
             box-shadow: 0 0 20px rgba(0, 224, 255, 0.1);
@@ -203,11 +204,84 @@
             100% { transform: scale(1); opacity: 1; }
         }
 
+        /* STATS BAR */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .stat-pill {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            backdrop-filter: var(--glass-blur);
+            padding: 16px 10px;
+            text-align: center;
+        }
+
+        .stat-pill .stat-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .stat-pill.confirmados .stat-num { color: #00ffaa; }
+        .stat-pill.pendentes .stat-num { color: #ffcc00; }
+        .stat-pill.ausentes .stat-num { color: #ff4c4c; }
+
+        .stat-pill .stat-label {
+            font-size: 9.5px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            font-weight: 700;
+        }
+
+        /* FILTROS */
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            color: var(--text-dim);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 9px 18px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .filter-btn:hover {
+            color: #fff;
+            border-color: var(--primary);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: #050a15;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
         /* GRID DE PARTICIPANTES */
         .membros-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 26px;
             padding: 0 10px;
         }
 
@@ -215,7 +289,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border-glass);
             border-radius: var(--radius-lg);
-            padding: 45px 30px;
+            padding: 34px 26px 30px;
             text-align: center;
             transition: var(--transition);
             backdrop-filter: var(--glass-blur);
@@ -234,12 +308,11 @@
         }
 
         .membro-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-8px);
             border-color: var(--primary);
             box-shadow: var(--shadow-neon);
         }
 
-        /* Detalhe Superior — cor muda conforme o status de convocação */
         .membro-card::before {
             content: '';
             position: absolute;
@@ -260,11 +333,21 @@
         .card-nao::before { background: #ff4c4c; opacity: 0.6; }
         .card-nao { opacity: 0.85; }
 
-        /* Selo de status no canto do card */
+        /* Destaque hierárquico para Líder/Ancião */
+        .membro-card.rank-alta {
+            border-color: rgba(255, 209, 102, 0.35);
+            background: linear-gradient(180deg, rgba(255, 209, 102, 0.06), var(--bg-card) 40%);
+        }
+
+        .membro-card.rank-alta::before { background: var(--gold); opacity: 0.9; }
+        .membro-card.rank-alta:hover { border-color: var(--gold); box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5), 0 0 25px rgba(255, 209, 102, 0.25); }
+        .membro-card.rank-alta .membro-img { border-color: rgba(255, 209, 102, 0.4); }
+        .membro-card.rank-alta:hover .membro-img { border-color: var(--gold); box-shadow: 0 0 25px rgba(255, 209, 102, 0.4); }
+
         .status-pill {
             position: absolute;
-            top: 18px;
-            right: 18px;
+            top: 16px;
+            right: 16px;
             padding: 5px 12px;
             border-radius: 8px;
             font-size: 8.5px;
@@ -279,12 +362,12 @@
 
         .membro-img-wrapper {
             position: relative;
-            margin-bottom: 25px;
+            margin-bottom: 18px;
         }
 
         .membro-img {
-            width: 120px;
-            height: 120px;
+            width: 108px;
+            height: 108px;
             border-radius: 50%;
             border: 2px solid var(--primary-soft);
             object-fit: cover;
@@ -299,42 +382,43 @@
             transform: scale(1.05);
         }
 
-        .membro-nome {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 19px;
-            color: #fff;
-            margin-bottom: 8px;
-            font-weight: 700;
-            text-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
-        }
-
         .membro-cargo {
             font-size: 10px;
             text-transform: uppercase;
             color: var(--primary);
             font-weight: 900;
             letter-spacing: 2px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             padding: 6px 14px;
             background: rgba(0, 224, 255, 0.06);
             border-radius: 20px;
             border: 1px solid rgba(0, 224, 255, 0.1);
         }
 
-        .membro-bio {
-            font-size: 13.5px;
-            color: var(--text-dim);
-            line-height: 1.7;
-            max-width: 260px;
+        .rank-alta .membro-cargo {
+            color: var(--gold);
+            background: rgba(255, 209, 102, 0.08);
+            border-color: rgba(255, 209, 102, 0.18);
         }
 
-        /* DELAY NAS ANIMAÇÕES */
-        .membro-card:nth-child(1) { animation-delay: 0.05s; }
-        .membro-card:nth-child(2) { animation-delay: 0.1s; }
-        .membro-card:nth-child(3) { animation-delay: 0.15s; }
-        .membro-card:nth-child(4) { animation-delay: 0.2s; }
-        .membro-card:nth-child(5) { animation-delay: 0.25s; }
-        .membro-card:nth-child(6) { animation-delay: 0.3s; }
+        .membro-nome {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 18px;
+            color: #fff;
+            margin-bottom: 6px;
+            font-weight: 700;
+            text-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+        }
+
+        .membro-bio {
+            font-size: 12.5px;
+            color: var(--text-dim);
+            line-height: 1.6;
+            max-width: 240px;
+            margin: 0;
+        }
+
+        .membro-card.hidden-filter { display: none; }
 
         /* Premium Footer */
         .app-footer {
@@ -381,10 +465,12 @@
         }
 
         @media (max-width: 480px) {
-            .membros-grid { grid-template-columns: 1fr; gap: 25px; }
+            .membros-grid { grid-template-columns: 1fr; gap: 20px; }
             .navbar { height: 65px; padding: 0 15px; }
-            .page-header { margin-bottom: 30px; }
+            .page-header { margin-bottom: 26px; }
             .vagas-banner { padding: 20px; }
+            .stats-bar { gap: 8px; }
+            .stat-pill { padding: 12px 6px; }
         }
 
         /* ============================================================
@@ -727,38 +813,60 @@
         <span class="vagas-number" id="vagasInfo">--</span>
     </div>
 
-    <section class="membros-grid">
-        <div class="membro-card card-confirmado">
+    <div class="stats-bar">
+        <div class="stat-pill confirmados">
+            <span class="stat-num" id="statConfirmados">0</span>
+            <span class="stat-label">Confirmados</span>
+        </div>
+        <div class="stat-pill pendentes">
+            <span class="stat-num" id="statPendentes">0</span>
+            <span class="stat-label">Pendentes</span>
+        </div>
+        <div class="stat-pill ausentes">
+            <span class="stat-num" id="statAusentes">0</span>
+            <span class="stat-label">Ausentes</span>
+        </div>
+    </div>
+
+    <div class="filter-bar" id="filterBar">
+        <button class="filter-btn active" data-filter="all">Todos</button>
+        <button class="filter-btn" data-filter="confirmado">Confirmados</button>
+        <button class="filter-btn" data-filter="indefinido">Pendentes</button>
+        <button class="filter-btn" data-filter="nao">Ausentes</button>
+    </div>
+
+    <section class="membros-grid" id="membrosGrid">
+        <div class="membro-card card-confirmado rank-alta" data-status="confirmado">
             <span class="status-pill confirmado">Confirmado</span>
             <div class="membro-img-wrapper">
                 <img src="/images/Tuzin.jpg" class="membro-img" alt="Tuzin" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Tuzin&background=050a15&color=00e0ff&size=128'">
             </div>
-            <div class="membro-nome">Tuzin</div>
             <span class="membro-cargo">Líder</span>
+            <div class="membro-nome">Tuzin</div>
             <p class="membro-bio">Líder do Mindset.</p>
         </div>
 
-        <div class="membro-card card-confirmado">
+        <div class="membro-card card-confirmado rank-alta" data-status="confirmado">
             <span class="status-pill confirmado">Confirmado</span>
             <div class="membro-img-wrapper">
                 <img src="/images/Luqueta.jpg" class="membro-img" alt="Luqueta" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Luqueta&background=050a15&color=00e0ff&size=128'">
             </div>
-            <div class="membro-nome">Luqueta</div>
             <span class="membro-cargo">Ancião</span>
+            <div class="membro-nome">Luqueta</div>
             <p class="membro-bio">Ancião do Mindset.</p>
         </div>
 
-        <div class="membro-card card-confirmado">
+        <div class="membro-card card-confirmado" data-status="confirmado">
             <span class="status-pill confirmado">Confirmado</span>
             <div class="membro-img-wrapper">
                 <img src="/images/Vini.jpg" class="membro-img" alt="Vini" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Vini&background=050a15&color=00e0ff&size=128'">
             </div>
-            <div class="membro-nome">Vini</div>
             <span class="membro-cargo">Membro</span>
+            <div class="membro-nome">Vini</div>
             <p class="membro-bio">Membro do Mindset.</p>
         </div>
 
-        <div class="membro-card card-indefinido">
+        <div class="membro-card card-indefinido" data-status="indefinido">
             <span class="status-pill indefinido">Pendente</span>
             <div class="membro-img-wrapper">
                 <img src="/images/THZIN.jpg" class="membro-img" alt="THZIN" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=THZIN&background=050a15&color=00e0ff&size=128'">
@@ -766,17 +874,17 @@
             <div class="membro-nome">THZIN</div>
         </div>
 
-        <div class="membro-card card-confirmado">
+        <div class="membro-card card-confirmado" data-status="confirmado">
             <span class="status-pill confirmado">Confirmado</span>
             <div class="membro-img-wrapper">
                 <img src="/images/Danilo.jpg" class="membro-img" alt="Danilo" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Danilo&background=050a15&color=00e0ff&size=128'">
             </div>
-            <div class="membro-nome">Danilo</div>
             <span class="membro-cargo">Membro</span>
+            <div class="membro-nome">Danilo</div>
             <p class="membro-bio">Membro do Mindset.</p>
         </div>
 
-        <div class="membro-card card-nao">
+        <div class="membro-card card-nao" data-status="nao">
             <span class="status-pill nao">Ausente</span>
             <div class="membro-img-wrapper">
                 <img src="https://ui-avatars.com/api/?name=Elizeu&background=050a15&color=00e0ff&size=128" class="membro-img" alt="Elizeu" loading="lazy">
@@ -784,83 +892,83 @@
             <div class="membro-nome">Elizeu</div>
         </div>
 
-        <div class="membro-card card-confirmado">
+        <div class="membro-card card-confirmado" data-status="confirmado">
             <span class="status-pill confirmado">Confirmado</span>
             <div class="membro-img-wrapper">
                 <img src="/images/misterio.jpg" class="membro-img" alt="Mistério" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Misterio&background=050a15&color=00e0ff&size=128'">
             </div>
-            <div class="membro-nome">Mistério</div>
             <span class="membro-cargo">Membro</span>
+            <div class="membro-nome">Mistério</div>
             <p class="membro-bio">Membro do Mindset.</p>
         </div>
 
-        <div class="membro-card card-confirmado">
+        <div class="membro-card card-confirmado" data-status="confirmado">
             <span class="status-pill confirmado">Confirmado</span>
             <div class="membro-img-wrapper">
                 <img src="/images/Pandinha.jpg" class="membro-img" alt="Pandinha" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Pandinha&background=050a15&color=00e0ff&size=128'">
             </div>
-            <div class="membro-nome">Pandinha</div>
             <span class="membro-cargo">Membro</span>
+            <div class="membro-nome">Pandinha</div>
             <p class="membro-bio">Membro do Mindset.</p>
         </div>
 
-        <div class="membro-card card-confirmado">
+        <div class="membro-card card-confirmado" data-status="confirmado">
             <span class="status-pill confirmado">Confirmado</span>
             <div class="membro-img-wrapper">
                 <img src="/images/Daniel.jpg" class="membro-img" alt="Daniel Nascimento" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Daniel+Nascimento&background=050a15&color=00e0ff&size=128'">
             </div>
-            <div class="membro-nome">Daniel Nascimento</div>
             <span class="membro-cargo">Membro</span>
+            <div class="membro-nome">Daniel Nascimento</div>
             <p class="membro-bio">Membro do Mindset.</p>
         </div>
 
-        <div class="membro-card card-confirmado">
+        <div class="membro-card card-confirmado" data-status="confirmado">
             <span class="status-pill confirmado">Confirmado</span>
             <div class="membro-img-wrapper">
                 <img src="/images/Caio.jpg" class="membro-img" alt="Caio" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Caio&background=050a15&color=00e0ff&size=128'">
             </div>
-            <div class="membro-nome">Caio 🍷🗿</div>
             <span class="membro-cargo">Novo Membro</span>
+            <div class="membro-nome">Caio 🍷🗿</div>
             <p class="membro-bio">Novo membro do Mindset.</p>
         </div>
 
-        <div class="membro-card card-confirmado">
+        <div class="membro-card card-confirmado" data-status="confirmado">
             <span class="status-pill confirmado">Confirmado</span>
             <div class="membro-img-wrapper">
                 <img src="/images/Matheus%20Coelho.jpg" class="membro-img" alt="Matheus Coelho" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Matheus+Coelho&background=050a15&color=00e0ff&size=128'">
             </div>
-            <div class="membro-nome">Matheus Coelho</div>
             <span class="membro-cargo">Novo Membro</span>
+            <div class="membro-nome">Matheus Coelho</div>
             <p class="membro-bio">Novo membro nos próximos meses.</p>
         </div>
 
-        <div class="membro-card card-confirmado">
+        <div class="membro-card card-confirmado" data-status="confirmado">
             <span class="status-pill confirmado">Confirmado</span>
             <div class="membro-img-wrapper">
                 <img src="/images/Victor.jpg" class="membro-img" alt="Victor" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Victor&background=050a15&color=00e0ff&size=128'">
             </div>
-            <div class="membro-nome">Victor</div>
             <span class="membro-cargo">Suporte</span>
+            <div class="membro-nome">Victor</div>
             <p class="membro-bio">Suporte oficial do Mindset.</p>
         </div>
 
-        <div class="membro-card card-confirmado">
+        <div class="membro-card card-confirmado" data-status="confirmado">
             <span class="status-pill confirmado">Confirmado</span>
             <div class="membro-img-wrapper">
                 <img src="/images/Dinho%20DK.jpg" class="membro-img" alt="Dinho DK" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Dinho+DK&background=050a15&color=00e0ff&size=128'">
             </div>
-            <div class="membro-nome">Dinho DK</div>
             <span class="membro-cargo">Novo Membro</span>
+            <div class="membro-nome">Dinho DK</div>
             <p class="membro-bio">Novo membro do Mindset.</p>
         </div>
 
-        <div class="membro-card card-nao">
+        <div class="membro-card card-nao" data-status="nao">
             <span class="status-pill nao">Expulso 4x1</span>
             <div class="membro-img-wrapper">
                 <img src="/images/leandro.jpg" class="membro-img" alt="Leandro" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=Leandro&background=050a15&color=00e0ff&size=128'">
             </div>
-            <div class="membro-nome">Leandro</div>
             <span class="membro-cargo">Ex-Membro</span>
+            <div class="membro-nome">Leandro</div>
             <p class="membro-bio">Ex-Membro do Mindset, expulso por votação oficial de 4x1.</p>
         </div>
     </section>
@@ -1006,10 +1114,39 @@
 </script>
 
 <script>
-    // Stagger na entrada dos cards de participantes
-    document.querySelectorAll('.membro-card').forEach((card, i) => {
-        card.style.animationDelay = `${Math.min(i * 0.06, 0.8)}s`;
-    });
+    // Stagger na entrada dos cards + contagem de status + filtros
+    (function () {
+        const cards = Array.from(document.querySelectorAll('.membro-card'));
+
+        cards.forEach((card, i) => {
+            card.style.animationDelay = `${Math.min(i * 0.06, 0.8)}s`;
+        });
+
+        const counts = { confirmado: 0, indefinido: 0, nao: 0 };
+        cards.forEach(card => {
+            const status = card.dataset.status;
+            if (counts[status] !== undefined) counts[status]++;
+        });
+
+        document.getElementById('statConfirmados').textContent = counts.confirmado;
+        document.getElementById('statPendentes').textContent = counts.indefinido;
+        document.getElementById('statAusentes').textContent = counts.nao;
+
+        const filterBar = document.getElementById('filterBar');
+        filterBar.addEventListener('click', (e) => {
+            const btn = e.target.closest('.filter-btn');
+            if (!btn) return;
+
+            filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const filter = btn.dataset.filter;
+            cards.forEach(card => {
+                const show = filter === 'all' || card.dataset.status === filter;
+                card.classList.toggle('hidden-filter', !show);
+            });
+        });
+    })();
 </script>
 
 <script src="/layout.v3.js" defer></script>
