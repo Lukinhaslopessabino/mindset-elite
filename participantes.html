@@ -308,13 +308,58 @@
             color: #fff;
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
         }
 
         .p-name i {
             color: var(--primary);
             font-size: 16px;
             filter: drop-shadow(0 0 4px var(--primary-glow));
+        }
+
+        /* AVATARES DOS PARTICIPANTES */
+        .p-avatar-wrap {
+            position: relative;
+            flex-shrink: 0;
+            width: 38px;
+            height: 38px;
+        }
+
+        .p-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-soft);
+            transition: var(--transition);
+            display: block;
+        }
+
+        .participant-row:hover .p-avatar {
+            border-color: var(--primary);
+            box-shadow: 0 0 12px var(--primary-glow);
+        }
+
+        .p-avatar-fallback {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--primary-soft);
+            color: var(--primary);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 14px;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--border-glass);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .participant-row:hover .p-avatar-fallback {
+            border-color: var(--primary);
+            box-shadow: 0 0 12px var(--primary-glow);
         }
 
         /* STATUS BADGES */
@@ -750,49 +795,114 @@
 
     <section class="participants-list">
         <div class="participant-row row-confirmado">
-            <span class="p-name"><i class="fa-solid fa-user-check"></i> Tuzin</span>
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/Tuzin.jpg" alt="Tuzin" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">T</span>
+                </span>
+                Tuzin
+            </span>
             <span class="status confirmado">Confirmado</span>
         </div>
         <div class="participant-row row-confirmado">
-            <span class="p-name"><i class="fa-solid fa-user-check"></i> Luqueta</span>
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/Luqueta.jpg" alt="Luqueta" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">L</span>
+                </span>
+                Luqueta
+            </span>
             <span class="status confirmado">Confirmado</span>
         </div>
         <div class="participant-row row-confirmado">
-            <span class="p-name"><i class="fa-solid fa-user-check"></i> Vini</span>
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/Vini.jpg" alt="Vini" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">V</span>
+                </span>
+                Vini
+            </span>
             <span class="status confirmado">Confirmado</span>
         </div>
         <div class="participant-row row-indefinido">
-            <span class="p-name"><i class="fa-solid fa-user-clock"></i> THZIN</span>
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/THZIN.jpg" alt="THZIN" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">T</span>
+                </span>
+                THZIN
+            </span>
             <span class="status indefinido">Pendente</span>
         </div>
         <div class="participant-row row-confirmado">
-            <span class="p-name"><i class="fa-solid fa-user-check"></i> Danilo</span>
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/Danilo.jpg" alt="Danilo" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">D</span>
+                </span>
+                Danilo
+            </span>
             <span class="status confirmado">Confirmado</span>
         </div>
         <div class="participant-row row-nao">
-            <span class="p-name"><i class="fa-solid fa-user-xmark"></i> Elizeu</span>
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <span class="p-avatar-fallback" style="display:flex;">E</span>
+                </span>
+                Elizeu
+            </span>
             <span class="status nao">Ausente</span>
         </div>
         <div class="participant-row row-confirmado">
-            <span class="p-name"><i class="fa-solid fa-user-check"></i> Mistério</span>
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/misterio.jpg" alt="Mistério" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">M</span>
+                </span>
+                Mistério
+            </span>
             <span class="status confirmado">Confirmado</span>
         </div>
         <div class="participant-row row-confirmado">
-            <span class="p-name"><i class="fa-solid fa-user-check"></i> Pandinha</span>
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/Pandinha.jpg" alt="Pandinha" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">P</span>
+                </span>
+                Pandinha
+            </span>
             <span class="status confirmado">Confirmado</span>
         </div>
         <div class="participant-row row-confirmado">
-            <span class="p-name"><i class="fa-solid fa-user-check"></i> Daniel Nascimento</span>
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/Daniel.jpg" alt="Daniel Nascimento" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">D</span>
+                </span>
+                Daniel Nascimento
+            </span>
             <span class="status confirmado">Confirmado</span>
         </div>
 
         <div class="participant-row row-confirmado">
-            <span class="p-name"><i class="fa-solid fa-user-check"></i> Caio</span>
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/Caio.jpg" alt="Caio" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">C</span>
+                </span>
+                Caio
+            </span>
             <span class="status confirmado">Confirmado</span>
         </div>
 
         <div class="participant-row row-confirmado">
-            <span class="p-name"><i class="fa-solid fa-user-check"></i> Matheus Coelho</span>
+            <span class="p-name">
+                <span class="p-avatar-wrap">
+                    <img src="/images/Matheus%20Coelho.jpg" alt="Matheus Coelho" class="p-avatar" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <span class="p-avatar-fallback" style="display:none;">M</span>
+                </span>
+                Matheus Coelho
+            </span>
             <span class="status confirmado">Confirmado</span>
         </div>
     </section>
